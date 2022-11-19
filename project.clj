@@ -5,5 +5,6 @@
             :url "https://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/data.priority-map "1.1.0"]
-                 [org.clojure/math.combinatorics "0.1.6"]]
+                 [org.clojure/math.combinatorics "0.1.6"]
+                 [cheshire "5.10.0"]]
   :repl-options {:init-ns aoc-clj.core})
