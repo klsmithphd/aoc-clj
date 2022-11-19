@@ -3,5 +3,7 @@
   :url "https://github.com/Ken-2scientists/aoc-clj"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0"}
-  :dependencies [[org.clojure/clojure "1.11.1"]]
+  :dependencies [[org.clojure/clojure "1.11.1"]
+                 [org.clojure/data.priority-map "1.1.0"]
+                 [org.clojure/math.combinatorics "0.1.6"]]
   :repl-options {:init-ns aoc-clj.core})

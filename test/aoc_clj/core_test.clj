@@ -2,6 +2,6 @@
   (:require [clojure.test :refer :all]
             [aoc-clj.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest useless-test
+  (testing "Does nothing at the moment"
+    (is (= 1 1))))
