@@ -1,6 +1,5 @@
 (ns aoc-clj.core-test
-  (:require [clojure.test :refer :all]
-            [aoc-clj.core :refer :all]))
+  (:require [clojure.test :refer [deftest testing is]]))
 
 (deftest useless-test
   (testing "Does nothing at the moment"
