@@ -20,7 +20,9 @@
   (testing "Computes the number of steps until no more changes occur"
     (is (= 58 (first (t/evolve-until-stop day25-sample))))))
 
-(deftest day25-part1-soln
+;; FIXME: 2021.day25 solution is too slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/9
+(deftest ^:slow day25-part1-soln
   (testing "Reproduces the answer for day25, part1"
     (is (= 429 (t/day25-part1-soln)))))
 

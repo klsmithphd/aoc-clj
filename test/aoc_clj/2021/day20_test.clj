@@ -21,6 +21,8 @@
   (testing "Reproduces the answer for day20, part1"
     (is (= 5097 (t/day20-part1-soln)))))
 
-(deftest day20-part2-soln
+;; FIXME: 2021.day20 part 2 is too slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/10
+(deftest ^:slow day20-part2-soln
   (testing "Reproduces the answer for day20, part2"
     (is (= 17987 (t/day20-part2-soln)))))

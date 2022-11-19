@@ -11,17 +11,19 @@
            (:offset (t/orient-sensor-to-known (get day19-sample1 0) (get day19-sample1 1)))))))
 
 (deftest count-all-beacons
-  (testing "Counts all the beaconsin the sample data"
+  (testing "Counts all the beacons in the sample data"
     (is (= 79 (count (t/all-beacons day19-sample1))))))
 
 (deftest max-sensor-distance
   (testing "Finds the maximum (Manhattan) distance between any two sensors"
     (is (= 3621 (t/max-sensor-distance day19-sample1)))))
 
-(deftest day19-part1-soln
+;; FIXME: 2021.day19 is too slow to unit test
+;; https://github.com/Ken-2scientists/aoc-clj/issues/7
+(deftest ^:slow day19-part1-soln
   (testing "Reproduces the answer for day19, part1"
     (is (= 449 (t/day19-part1-soln)))))
 
-(deftest day19-part2-soln
+(deftest ^:slow day19-part2-soln
   (testing "Reproduces the answer for day19, part2"
     (is (= 13128 (t/day19-part2-soln)))))
