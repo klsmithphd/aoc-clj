@@ -53,6 +53,8 @@ wseweeenwnesenwwwswnew" #"\n")))
   (testing "Reproduces the answer for day24, part1"
     (is (= 436 (t/day24-part1-soln)))))
 
-(deftest day24-part2-soln
+;; FIXME: 2020.day24 part 2 too slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/14
+(deftest ^:slow day24-part2-soln
   (testing "Reproduces the answer for day24, part2"
     (is (= 4133 (t/day24-part2-soln)))))
