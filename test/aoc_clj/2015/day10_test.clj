@@ -15,6 +15,6 @@
 
 ;; FIXME: 2015.day10 solution is slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/5
-;; (deftest day10-part2-soln
-;;   (testing "Reproduces the answer for day10, part2"
-;;     (is (= 3579328 (t/day10-part2-soln)))))
+(deftest ^:slow day10-part2-soln
+  (testing "Reproduces the answer for day10, part2"
+    (is (= 3579328 (t/day10-part2-soln)))))

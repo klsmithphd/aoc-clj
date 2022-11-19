@@ -7,4 +7,6 @@
                  [org.clojure/data.priority-map "1.1.0"]
                  [org.clojure/math.combinatorics "0.1.6"]
                  [cheshire "5.10.0"]]
+  :test-selectors {:default (complement :slow)
+                   :slow :slow}
   :repl-options {:init-ns aoc-clj.core})

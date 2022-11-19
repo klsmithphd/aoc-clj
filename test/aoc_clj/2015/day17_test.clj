@@ -12,10 +12,12 @@
   (testing "Identifies the correct minimal combinations"
     (is (= '((20 5) (20 5) (15 10)) (t/minimal-combinations 25 day17-sample)))))
 
-(deftest day17-part1-soln
+;; FIXME: 2015.day17 solution is slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/6
+(deftest ^:slow day17-part1-soln
   (testing "Reproduces the answer for day17, part1"
     (is (= 654 (t/day17-part1-soln)))))
 
-(deftest day17-part2-soln
+(deftest ^:slow day17-part2-soln
   (testing "Reproduces the answer for day17, part2"
     (is (= 57 (t/day17-part2-soln)))))
