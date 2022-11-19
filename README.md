@@ -1,5 +1,6 @@
 # aoc-clj
-Solutions to Advent of Code challenges implemented in Clojure
+Solutions to [Advent of Code](https://adventofcode.com) challenges 
+implemented in Clojure
 
 # License
 Copyright 2022 Ken Smith
