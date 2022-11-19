@@ -13,6 +13,8 @@
   (testing "Reproduces the answer for day10, part1"
     (is (= 252594 (t/day10-part1-soln)))))
 
-(deftest day10-part2-soln
-  (testing "Reproduces the answer for day10, part2"
-    (is (= 3579328 (t/day10-part2-soln)))))
+;; FIXME: 2015.day10 solution is slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/5
+;; (deftest day10-part2-soln
+;;   (testing "Reproduces the answer for day10, part2"
+;;     (is (= 3579328 (t/day10-part2-soln)))))

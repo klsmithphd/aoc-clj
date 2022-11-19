@@ -10,9 +10,9 @@
 
 ;; FIXME: 2015.day04 solution is too slow to unit test
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/1
-(deftest day04-part1-soln
-  (testing "Reproduces the answer for day04, part1"
-    (is (= 282749 (t/day04-part1-soln)))))
+;; (deftest day04-part1-soln
+;;   (testing "Reproduces the answer for day04, part1"
+;;     (is (= 282749 (t/day04-part1-soln)))))
 
 ; ULTRA SLOW!
 ; (deftest day04-part2-soln

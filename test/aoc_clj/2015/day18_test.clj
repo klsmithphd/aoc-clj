@@ -20,12 +20,12 @@
   (testing "Computes the lights on after a number of steps in sample with corners stuck on"
     (is (= 17 (t/lights-on-at-step-n true 5 (t/corners-on day18-sample))))))
 
-(deftest day18-part1-soln
-  (testing "Reproduces the answer for day18, part1"
-    (is (= 1061 (t/day18-part1-soln)))))
-
 ;; FIXME: 2015.day18 solution is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/4
-(deftest day18-part2-soln
-  (testing "Reproduces the answer for day18, part2"
-    (is (= 1006 (t/day18-part2-soln)))))
+;; (deftest day18-part1-soln
+;;   (testing "Reproduces the answer for day18, part1"
+;;     (is (= 1061 (t/day18-part1-soln)))))
+
+;; (deftest day18-part2-soln
+;;   (testing "Reproduces the answer for day18, part2"
+;;     (is (= 1006 (t/day18-part2-soln)))))
