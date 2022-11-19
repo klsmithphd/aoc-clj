@@ -48,6 +48,8 @@
   (testing "Reproduces the answer for day11, part1"
     (is (= "hxbxxyzz" (t/day11-part1-soln)))))
 
+;; FIXME: 2015.day11 solution is too slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/3
 (deftest day11-part2-soln
   (testing "Reproduces the answer for day11, part2"
     (is (= "hxcaabcc" (t/day11-part2-soln)))))
