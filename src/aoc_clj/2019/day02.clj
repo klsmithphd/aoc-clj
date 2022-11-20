@@ -17,6 +17,7 @@
   [intcode [noun verb]]
   (->> (override-intcode intcode noun verb)
        intcode/intcode-exec
+       :intcode
        first))
 
 (defn day02-part1-soln

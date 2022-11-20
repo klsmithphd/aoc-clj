@@ -1,0 +1,7 @@
+(ns aoc-clj.2019.day05-test
+  (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.2019.day05 :as t]))
+
+(deftest day05-part1-soln-test
+  (testing "Can reproduce the answer for part1"
+    (is (= 12234644 (t/day05-part1-soln)))))
