@@ -97,6 +97,20 @@
        ;; the second value of the pair is the number of steps
        second))
 
+;; Sketch of alternative implementation
+;; (defn shortest-steps-to-intersection
+;;   "Find the minimum number of steps to an intersection point for two wires
+;;    each described by their segments"
+;;   [[wire1 wire2]]
+;;   (let [path1 (wire-path wire1)
+;;         path2 (wire-path wire2)
+;;         path1-dists (shortest-distance-to-point path1)
+;;         path2-dists (filter #((set (keys path1-dists)) (first %))
+;;                             (map-indexed (fn [a b] [b a]) path2))
+;;         dists (map #(+ (second %)
+;;                        (get path1-dists (first %))) path2-dists)]
+;;     (second (sort dists))))
+
 (defn day03-part2-soln
   []
   (shortest-steps-to-intersection day03-input))
