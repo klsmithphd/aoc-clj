@@ -5,12 +5,15 @@
 (def day02-input (u/firstv (u/puzzle-input "2019/day02-input.txt")))
 
 (defn override-intcode
+  "Replace `intcode` with `noun` in position 1 and `verb` in position 2"
   [intcode noun verb]
   (-> intcode
       (assoc 1 noun)
       (assoc 2 verb)))
 
 (defn intcode-output
+  "Execute `intcode` program after overriding `noun` and `verb` in
+   positions 1 and 2 respectively. Return the value in position 0."
   [intcode [noun verb]]
   (->> (override-intcode intcode noun verb)
        intcode/intcode-exec
@@ -21,6 +24,8 @@
   (intcode-output day02-input [12 2]))
 
 (defn pair-produces-output
+  "Find the noun/verb pair that will produce the `output` value for
+   `intcode` program."
   [intcode output]
   (let [candidates (for [noun (range 100)
                          verb (range 100)]
