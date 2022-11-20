@@ -25,7 +25,9 @@
   (let [candidates (for [noun (range 100)
                          verb (range 100)]
                      [noun verb])]
-    (first (drop-while #(not= output (intcode-output intcode %)) candidates))))
+    (first (drop-while
+            #(not= output (intcode-output intcode %))
+            candidates))))
 
 (defn day02-part2-soln
   []
