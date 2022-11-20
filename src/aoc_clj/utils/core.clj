@@ -11,6 +11,12 @@
        io/reader
        line-seq))
 
+(defn firstv
+  "Treats the first element of a seq as a string representing a vector
+   of values"
+  [xs]
+  (read-string (str "[" (first xs) "]")))
+
 (defn split-at-blankline
   "Splits a seq of lines (e.g. produced by `puzzle-input`) into
    a collection of chunks, each chunk with a seq of lines"
