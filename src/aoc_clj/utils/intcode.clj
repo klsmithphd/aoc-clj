@@ -3,11 +3,15 @@
             [aoc-clj.utils.intcode.ops :as ops]))
 
 (def opcodes
-  {1  {:op ops/add      :width 4}
-   2  {:op ops/multiply :width 4}
-   3  {:op ops/input    :width 2}
-   4  {:op ops/output   :width 2}
-   99 {:op ops/halt     :width 1}})
+  {1  {:op ops/add           :width 4}
+   2  {:op ops/multiply      :width 4}
+   3  {:op ops/input         :width 2}
+   4  {:op ops/output        :width 2}
+   5  {:op ops/jump-if-true  :width 3}
+   6  {:op ops/jump-if-false :width 3}
+   7  {:op ops/less-than     :width 4}
+   8  {:op ops/equals        :width 4}
+   99 {:op ops/halt          :width 1}})
 
 (defn parameter-mode
   [mode]
@@ -34,6 +38,8 @@
   "Execute an Intcode program `intcode` until it terminates"
   ([intcode]
    (intcode-exec intcode [] []))
+  ([intcode in]
+   (intcode-exec intcode in []))
   ([intcode in out]
    (loop [state {:intcode intcode
                  :iptr 0

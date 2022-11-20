@@ -43,3 +43,46 @@
     (is (= s5-out (:intcode (intcode/intcode-exec s5))))
     (is (= s6-out (:intcode (intcode/intcode-exec s6))))))
 
+(deftest equals-test
+  (testing "Equals operator produces the correct output"
+    ;; Using position mode, consider whether the input is equal to 8; output 1 (if it is).
+    (is (= 1 (last (:out (intcode/intcode-exec [3 9 8 9 10 9 4 9 99 -1 8] [8])))))
+    ;; Using position mode, consider whether the input is equal to 8; output 0 (if it is not).
+    (is (= 0 (last (:out (intcode/intcode-exec [3 9 8 9 10 9 4 9 99 -1 8] [5])))))
+    ;; Using immediate mode, consider whether the input is less than 8; output 1 (if it is).
+    (is (= 1 (last (:out (intcode/intcode-exec [3 3 1108 -1 8 3 4 3 99] [8])))))
+    ;; Using immediate mode, consider whether the input is less than 8; output 0 (if it is not).
+    (is (= 0 (last (:out (intcode/intcode-exec [3 3 1108 -1 8 3 4 3 99] [4])))))))
+
+(deftest less-than-test
+  (testing "Less-than operator produces the correct output"
+    ;; Using position mode, consider whether the input is less than 8; output 1 (if it is).
+    (is (= 1 (last (:out (intcode/intcode-exec [3 9 7 9 10 9 4 9 99 -1 8] [7])))))
+    ;; Using position mode, consider whether the input is less than 8; output 0 (if it is not).
+    (is (= 0 (last (:out (intcode/intcode-exec [3 9 7 9 10 9 4 9 99 -1 8] [9])))))
+    ;; Using immediate mode, consider whether the input is less than 8; output 1 (if it is).
+    (is (= 1 (last (:out (intcode/intcode-exec [3 3 1107 -1 8 3 4 3 99] [6])))))
+    ;; Using immediate mode, consider whether the input is less than 8; output 0 (if it is not).
+    (is (= 0 (last (:out (intcode/intcode-exec [3 3 1107 -1 8 3 4 3 99] [12])))))))
+
+(deftest jump-test
+  (testing "Jump operators produce the correct output"
+    ;; output 0 if the input was zero or 1 if the input was non-zero:
+    (is (= 0 (last (:out (intcode/intcode-exec [3 12 6 12 15 1 13 14 13 4 13 99 -1 0 1 9] [0])))))
+    (is (= 1 (last (:out (intcode/intcode-exec [3 12 6 12 15 1 13 14 13 4 13 99 -1 0 1 9] [8])))))
+    (is (= 0 (last (:out (intcode/intcode-exec [3 3 1105 -1 9 1101 0 0 12 4 12 99 1] [0])))))
+    (is (= 1 (last (:out (intcode/intcode-exec [3 3 1105 -1 9 1101 0 0 12 4 12 99 1] [-5])))))))
+
+
+(def s7 [3 21 1008 21 8 20 1005 20 22 107 8 21 20 1006 20 31
+         1106 0 36 98 0 0 1002 21 125 20 4 20 1105 1 46 104
+         999 1105 1 46 1101 1000 1 20 4 20 1105 1 46 98 99])
+
+(deftest day05-complex-test
+  (testing "Correct behavior from more complex scenario from day05"
+    ;; The program will then output 999 if the input value is below 8
+    (is (=  999 (last (:out (intcode/intcode-exec s7 [7])))))
+    ;; output 1000 if the input value is equal to 8
+    (is (= 1000 (last (:out (intcode/intcode-exec s7 [8])))))
+    ;; or output 1001 if the input value is greater than 8
+    (is (= 1001 (last (:out (intcode/intcode-exec s7 [9])))))))

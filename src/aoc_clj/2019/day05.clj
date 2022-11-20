@@ -7,3 +7,7 @@
 (defn day05-part1-soln
   []
   (peek (:out (intcode/intcode-exec day05-input [1] []))))
+
+(defn day05-part2-soln
+  []
+  (peek (:out (intcode/intcode-exec day05-input [5] []))))
