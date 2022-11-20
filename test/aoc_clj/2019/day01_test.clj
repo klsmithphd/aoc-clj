@@ -2,14 +2,14 @@
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.2019.day01 :as t]))
 
-(deftest part1-test
+(deftest fuel-test
   (testing "Part 1 fuel calculation"
     (is (= 2 (t/fuel 12)))
     (is (= 2 (t/fuel 14)))
     (is (= 654 (t/fuel 1969)))
     (is (= 33583 (t/fuel 100756)))))
 
-(deftest part2-test
+(deftest total-fuel-test
   (testing "Part 2 recursive fuel calculation"
     (is (= 2 (t/total-fuel 14)))
     (is (= 966 (t/total-fuel 1969)))
