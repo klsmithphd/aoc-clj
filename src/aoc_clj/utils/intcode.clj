@@ -14,12 +14,15 @@
    99 {:op ops/halt          :width 1}})
 
 (defn parameter-mode
+  "Determine the parameter mode (either immediate or position) based on 
+   the character `mode` provided"
   [mode]
   (case mode
     \1 :immediate
     :position))
 
 (defn parse-instruction
+  "Identify the opcode and the parameter modes for the given integer `instruction`"
   [instruction]
   (let [opcode (opcodes (mod instruction 100))
         pstr   (format (str "%0" (dec (:width opcode)) "d") ;; e.g. "%03d" 
