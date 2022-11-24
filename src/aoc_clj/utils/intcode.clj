@@ -1,5 +1,6 @@
 (ns aoc-clj.utils.intcode
   (:require [clojure.string :as str]
+            [manifold.stream :as s]
             [aoc-clj.utils.intcode.ops :as ops]))
 
 (def opcodes
@@ -40,22 +41,24 @@
 (defn intcode-exec
   "Execute an Intcode program `intcode` until it terminates"
   ([intcode]
-   (intcode-exec intcode [] []))
+   (intcode-exec intcode (s/stream) (s/stream)))
   ([intcode in]
-   (intcode-exec intcode in []))
+   (intcode-exec intcode (if (s/stream? in) in (s/->source in)) (s/stream)))
   ([intcode in out]
    (loop [state {:intcode intcode
                  :iptr 0
                  :in in
                  :out out}]
      (if (= 99 ((:intcode state) (:iptr state)))
-       state
+       (do
+         (s/close! (:out state))
+         state)
        (recur (apply-inst state))))))
 
 (defn out-seq
   "Return a seq of the output of an Intcode execution"
   [intcode-state]
-  (:out intcode-state))
+  (s/stream->seq (:out intcode-state)))
 
 (defn last-out
   "Return the very last value output from an Intcode execution"

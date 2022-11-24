@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/data.priority-map "1.1.0"]
                  [org.clojure/math.combinatorics "0.1.6"]
-                 [cheshire "5.10.0"]]
+                 [cheshire "5.10.0"]
+                 [manifold "0.2.4"]]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core})

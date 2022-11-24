@@ -1,5 +1,6 @@
 (ns aoc-clj.utils.intcode-test
   (:require [clojure.test :refer [deftest testing is]]
+            [manifold.stream :as s]
             [aoc-clj.utils.intcode :as intcode]))
 
 (def s1     [1 9 10  3 2 3 11 0 99 30 40 50])
@@ -86,3 +87,10 @@
     (is (= 1000 (intcode/last-out (intcode/intcode-exec s7 [8]))))
     ;; or output 1001 if the input value is greater than 8
     (is (= 1001 (intcode/last-out (intcode/intcode-exec s7 [9]))))))
+
+(deftest stream-input-test
+  (testing "Can handle streaming inputs"
+    (is (= 999
+           (let [in (s/stream)
+                 _  (s/put! in 7)]
+             (intcode/last-out (intcode/intcode-exec s7 in)))))))

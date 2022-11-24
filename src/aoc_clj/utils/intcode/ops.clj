@@ -1,4 +1,5 @@
-(ns aoc-clj.utils.intcode.ops)
+(ns aoc-clj.utils.intcode.ops
+  (:require [manifold.stream :as s]))
 
 (defn read-parameter
   "Right now, your ship computer already understands parameter mode 0, 
@@ -47,9 +48,8 @@
     [p1] :params
     :as state}]
   (assoc state
-         :intcode (assoc intcode p1 (first in))
-         :iptr    (+ iptr 2)
-         :in      (rest in)))
+         :intcode (assoc intcode p1 @(s/take! in))
+         :iptr    (+ iptr 2)))
 
 (defn output
   "Opcode 4 outputs the value of its only parameter. 
@@ -58,9 +58,8 @@
     [m1] :modes
     [p1] :params
     :as state}]
-  (assoc state
-         :iptr (+ iptr 2)
-         :out  (conj out (read-parameter intcode m1 p1))))
+  (s/put! out (read-parameter intcode m1 p1))
+  (assoc state :iptr (+ iptr 2)))
 
 (defn jump-if-true
   "Opcode 5 is jump-if-true: if the first parameter is non-zero, it sets 
