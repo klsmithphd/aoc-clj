@@ -51,3 +51,13 @@
      (if (= 99 ((:intcode state) (:iptr state)))
        state
        (recur (apply-inst state))))))
+
+(defn out-seq
+  "Return a seq of the output of an Intcode execution"
+  [intcode-state]
+  (:out intcode-state))
+
+(defn last-out
+  "Return the very last value output from an Intcode execution"
+  [intcode-state]
+  (last (out-seq intcode-state)))
