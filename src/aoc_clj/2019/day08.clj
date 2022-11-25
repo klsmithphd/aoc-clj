@@ -33,7 +33,7 @@
 
 (defn day08-part2-soln
   []
-  (pprint-image (decode-image day08-input 25 6) 25)
+  ;; (pprint-image (decode-image day08-input 25 6) 25)
   ;; Displays:
   ;; *  * ****  **  **** *  *
   ;; *  *    * *  *    * *  *
