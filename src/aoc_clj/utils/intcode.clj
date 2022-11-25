@@ -12,6 +12,7 @@
    6  {:op ops/jump-if-false :width 3}
    7  {:op ops/less-than     :width 4}
    8  {:op ops/equals        :width 4}
+   9  {:op ops/offset        :width 2}
    99 {:op ops/halt          :width 1}})
 
 (defn parameter-mode
@@ -19,6 +20,7 @@
    the character `mode` provided"
   [mode]
   (case mode
+    \2 :relative
     \1 :immediate
     :position))
 
@@ -38,6 +40,10 @@
         params (subvec intcode (inc iptr) (+ iptr width))]
     (op (assoc state :params params :modes modes))))
 
+(defn vec->map
+  [v]
+  (into {} (map-indexed vector v)))
+
 (defn intcode-exec
   "Execute an Intcode program `intcode` until it terminates"
   ([intcode]
@@ -47,6 +53,7 @@
   ([intcode in out]
    (loop [state {:intcode intcode
                  :iptr 0
+                 :base 0
                  :in in
                  :out out}]
      (if (= 99 ((:intcode state) (:iptr state)))

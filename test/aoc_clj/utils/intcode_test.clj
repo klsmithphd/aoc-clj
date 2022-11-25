@@ -94,3 +94,14 @@
            (let [in (s/stream)
                  _  (s/put! in 7)]
              (intcode/last-out (intcode/intcode-exec s7 in)))))))
+
+;; ;; A quine: https://en.wikipedia.org/wiki/Quine_(computing)
+(def s8 [109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99])
+(deftest offset-test
+  (testing "Handles relative parameters and writing beyond the length of the program"
+    (is (= s8 (intcode/out-seq (intcode/intcode-exec s8))))))
+
+(deftest supports-bignum-test
+  (testing "Can handle large numbers"
+    (is (= 1219070632396864 (intcode/last-out (intcode/intcode-exec [1102,34915192,34915192,7,4,7,99,0]))))
+    (is (= 1125899906842624 (intcode/last-out (intcode/intcode-exec [104 1125899906842624 99]))))))
