@@ -40,10 +40,6 @@
         params (subvec intcode (inc iptr) (+ iptr width))]
     (op (assoc state :params params :modes modes))))
 
-(defn vec->map
-  [v]
-  (into {} (map-indexed vector v)))
-
 (defn intcode-exec
   "Execute an Intcode program `intcode` until it terminates"
   ([intcode]
