@@ -55,20 +55,23 @@
   (count (keys (:hull (paint-bot day11-input 0)))))
 
 (defn- derive-day11-part2-soln
-  "Prints out:
-    **** *    **** ***  *  *   ** ***   **    
-       * *    *    *  * * *     * *  * *  *   
-      *  *    ***  ***  **      * *  * *  *   
-     *   *    *    *  * * *     * ***  ****   
-    *    *    *    *  * * *  *  * * *  *  *   
-    **** **** **** ***  *  *  **  *  * *  *   "
   []
   (->> (paint-bot day11-input 1)
        :hull
        grid/mapgrid->vectors
        ->VecGrid2D
        (grid/Grid2D->ascii {\  0 \* 1})
-       println))
+       print))
+
+(comment
+  (derive-day11-part2-soln)
+  "Prints out:
+    **** *    **** ***  *  *   ** ***   **    
+       * *    *    *  * * *     * *  * *  *   
+      *  *    ***  ***  **      * *  * *  *   
+     *   *    *    *  * * *     * ***  ****   
+    *    *    *    *  * * *  *  * * *  *  *   
+    **** **** **** ***  *  *  **  *  * *  *   ")
 
 (defn day11-part2-soln
   []
