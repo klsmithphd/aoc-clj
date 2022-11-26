@@ -40,3 +40,23 @@
                                x (range w)]
                            (chars (value grid2d [x y]))))]
     (str/join "\n" (mapv #(apply str %) rep))))
+
+(defn mapgrid->vectors
+  "Convert a (sparse) mapgrid `m` (a map with [x y] coordinates as keys) 
+   to a 2D vector of vectors. The new vectors will span the coordinate
+   space of the keys of the mapgrid. Missing values will be filled in
+   by the `not-found` arg or 0 by default."
+  ([m]
+   (mapgrid->vectors m 0))
+  ([m not-found]
+   (let [xs     (map first (keys m))
+         ys     (map second (keys m))
+         minx   (apply min xs)
+         maxx   (apply max xs)
+         miny   (apply min ys)
+         maxy   (apply max ys)
+         width  (- maxx minx -1)
+         values (for [y (range maxy (dec miny) -1)
+                      x (range minx (inc maxx))]
+                  (get m [x y] not-found))]
+     (mapv vec (partition width values)))))
