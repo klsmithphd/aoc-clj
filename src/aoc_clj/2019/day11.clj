@@ -1,7 +1,7 @@
 (ns aoc-clj.2019.day11
   (:require [manifold.stream :as s]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.grid :as grid]
+            [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.grid.vecgrid :refer [->VecGrid2D]]
             [aoc-clj.utils.intcode :as intcode]))
 
@@ -54,11 +54,14 @@
   []
   (count (keys (:hull (paint-bot day11-input 0)))))
 
-
-
-(sort [[-1 -8] [0 1] [3 3] [-1 4]])
-
-(defn day11-part2-soln
+(defn- derive-day11-part2-soln
+  "Prints out:
+    **** *    **** ***  *  *   ** ***   **    
+       * *    *    *  * * *     * *  * *  *   
+      *  *    ***  ***  **      * *  * *  *   
+     *   *    *    *  * * *     * ***  ****   
+    *    *    *    *  * * *  *  * * *  *  *   
+    **** **** **** ***  *  *  **  *  * *  *   "
   []
   (->> (paint-bot day11-input 1)
        :hull
@@ -66,3 +69,7 @@
        ->VecGrid2D
        (grid/Grid2D->ascii {\  0 \* 1})
        println))
+
+(defn day11-part2-soln
+  []
+  "ZLEBKJRA")
