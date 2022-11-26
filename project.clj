@@ -7,6 +7,7 @@
                  [org.clojure/data.priority-map "1.1.0"]
                  [org.clojure/math.combinatorics "0.1.6"]
                  [cheshire "5.10.0"]
+                 [clojure-lanterna "0.9.7"]
                  [manifold "0.2.4"]]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
