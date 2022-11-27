@@ -1,0 +1,104 @@
+(ns aoc-clj.2016.day10
+  (:require [clojure.string :as str]
+            [aoc-clj.utils.core :as u]))
+
+(defn parse-assignment
+  [s]
+  (let [[_ value bot] (re-find #"value (\d+) goes to bot (\d+)" s)]
+    {:type :assignment :value (read-string value) :bot (str "bot" bot)}))
+
+(defn parse-comparison
+  [s]
+  (let [[_ bot low-type low-val high-type high-val]
+        (re-find #"bot (\d+) gives low to (\w+) (\d+) and high to (\w+) (\d+)" s)]
+    {:type :comparison
+     :bot (str "bot" bot)
+     :low (str low-type low-val)
+     :high (str high-type high-val)}))
+
+(defn parse-line
+  [s]
+  (if (str/starts-with? s "value")
+    (parse-assignment s)
+    (parse-comparison s)))
+
+(defn assign
+  [state {:keys [value bot]}]
+  (if (get state bot)
+    (update state bot conj value)
+    (assoc state bot #{value})))
+
+(defn assignments
+  [cmds]
+  (filter #(= :assignment (:type %)) cmds))
+
+(defn establish-comparison
+  [{:keys [bot low high]}]
+  [bot {:low low :high high}])
+
+(defn comparisons
+  [cmds]
+  (filter #(= :comparison (:type %)) cmds))
+
+(defn initialize
+  [input]
+  (let [cmds (map parse-line input)]
+    {:assignments (reduce assign {} (assignments cmds))
+     :comparisons (into {} (map establish-comparison (comparisons cmds)))}))
+
+(def day10-input (initialize (u/puzzle-input "2016/day10-input.txt")))
+
+(defn ready-bots
+  [{:keys [assignments]}]
+  (keys (filter #(= 2 (count (val %))) assignments)))
+
+(defn apply-logic
+  [comparisons assignments bot]
+  (let [logic (get comparisons bot)
+        [low high] (sort (get assignments bot))]
+    (-> assignments
+        (assign {:bot (:low logic) :value low})
+        (assign {:bot (:high logic) :value high})
+        (assoc bot #{}))))
+
+(defn step
+  [{:keys [assignments comparisons] :as state}]
+  (let [ready (ready-bots state)]
+    (assoc state :assignments
+           (reduce (partial apply-logic comparisons) assignments ready))))
+
+(defn bot-that-compares
+  [state values]
+  (loop [s state]
+    (let [matches (filter #(= values (val %)) (:assignments s))]
+      (if (not-empty matches)
+        (read-string (subs (ffirst matches) 3))
+        (recur (step s))))))
+
+(defn day10-part1-soln
+  []
+  (bot-that-compares day10-input #{17 61}))
+
+;; TODO - Add to common utility library
+(defn iterate-until-static
+  [f x]
+  (concat (list x)
+          (->> (iterate f x)
+               (partition 2 1)
+               (take-while #(not= (first %) (second %)))
+               (map second))))
+
+(defn output-values
+  [state]
+  (let [outputs (-> (iterate-until-static step state)
+                    last
+                    :assignments
+                    (select-keys ["output0" "output1" "output2"])
+                    vals)]
+    (->> outputs
+         (map first)
+         (reduce *))))
+
+(defn day10-part2-soln
+  []
+  (output-values day10-input))
