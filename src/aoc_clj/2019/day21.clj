@@ -27,18 +27,14 @@
    "AND T J"
    "RUN"])
 
-(defn cmds->ascii
-  [cmds]
-  (map (comp int char) (str (str/join "\n" cmds) "\n")))
-
 (defn day21-part1-soln
   []
-  (->> (cmds->ascii spring-codes-part1)
+  (->> (intcode/cmds->ascii spring-codes-part1)
        (intcode/intcode-exec day21-input)
        intcode/last-out))
 
 (defn day21-part2-soln
   []
-  (->> (cmds->ascii spring-codes-part2)
+  (->> (intcode/cmds->ascii spring-codes-part2)
        (intcode/intcode-exec day21-input)
        intcode/last-out))

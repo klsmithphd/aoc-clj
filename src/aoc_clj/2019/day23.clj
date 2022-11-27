@@ -6,7 +6,7 @@
 ;; TODO Complete implementation and documentation
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/23
 
-(def day23-input (u/firstv (u/puzzle-input "day23-input.txt")))
+(def day23-input (u/firstv (u/puzzle-input "2019/day23-input.txt")))
 
 (defn computer
   [intcode in out]

@@ -67,3 +67,26 @@
   "Return the very last value output from an Intcode execution"
   [intcode-state]
   (last (out-seq intcode-state)))
+
+(defn cmd->ascii
+  [cmd]
+  (map (comp int char) (str cmd "\n")))
+
+(defn cmds->ascii
+  [cmds]
+  (cmd->ascii (str/join "\n" cmds)))
+
+(defn read-ascii-output
+  [ascii]
+  (str/join (map char ascii)))
+
+(defn interactive-asciicode
+  [intcode starter-cmds]
+  (let [in (s/stream)
+        out (s/stream)
+        program (future (intcode-exec intcode in out))]
+    (when (> (count starter-cmds) 0)
+      (s/put-all! in (cmds->ascii starter-cmds)))
+    (while (not (realized? program))
+      (println (read-ascii-output (s/stream->seq out 100)))
+      (s/put-all! in (cmd->ascii (read-line))))))
