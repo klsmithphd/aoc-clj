@@ -16,3 +16,4 @@ Many of the 2019 collection of Advent of Code puzzles involved running
 * [Day 15](day15.clj)
 * [Day 17](day17.clj)
 * [Day 19](day19.clj)
+* [Day 21](day21.clj)
