@@ -1,6 +1,6 @@
-;; (ns aoc-clj.2016.day13-test
+;; (ns aoc-clj.2022.day13-test
 ;;   (:require [clojure.test :refer [deftest testing is]]
-;;             [aoc-clj.2016.day13 :as t]))
+;;             [aoc-clj.2022.day13 :as t]))
 
 ;; (deftest day13-part1-soln
 ;;   (testing "Reproduces the answer for day13, part1"
