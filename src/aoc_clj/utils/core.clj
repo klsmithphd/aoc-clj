@@ -35,6 +35,18 @@
   [f m]
   (zipmap (map f (keys m)) (vals m)))
 
+(defn max-val
+  "Returns the key in a map m for which the value is the greatest.
+   If there are multiple such keys, the first is returned"
+  [m]
+  (key (apply max-key val m)))
+
+(defn min-val
+  "Returns the key in a map m for which the value is the least.
+   If there are multiple such keys, the first is returned"
+  [m]
+  (key (apply min-key val m)))
+
 (defn without-keys
   "Returns a map with only the entries in map whose key isn't in keyseq"
   [map keyseq]

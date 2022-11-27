@@ -20,6 +20,14 @@
   (testing "Demonstration of kmap: applying a function to keys of a map"
     (is (= {1 :a 2 :b 3 :c} (u/kmap inc {0 :a 1 :b 2 :c})))))
 
+(deftest max-val-test
+  (testing "Demonstration of max-val: find the key corresponding to the largest value"
+    (is (= :c (u/max-val {:a 1 :b 4 :c 9})))))
+
+(deftest min-val-test
+  (testing "Demonstration of max-val: find the key corresponding to the smallest value"
+    (is (= :a (u/min-val {:a 1 :b 4 :c 9})))))
+
 (deftest without-keys-test
   (testing "Demonstration of without-keys: returning a map excluding keys. See `select-keys`"
     (is (= {:a 1 :b 2} (u/without-keys {:a 1 :b 2} [])))
