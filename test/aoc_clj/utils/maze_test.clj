@@ -2,16 +2,17 @@
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.maze :as m]))
 
-(deftest relative-directions-test
-  (testing "Can translate from cardinal to relative directions"
-    (is (= (m/relative-directions :north) {:forward :north :left :west :backward :south :right :east}))
-    (is (= (m/relative-directions :west)  {:forward :west :left :south :backward :east :right :north}))
-    (is (= (m/relative-directions :south) {:forward :south :left :east :backward :north :right :west}))
-    (is (= (m/relative-directions :east)  {:forward :east :left :north :backward :west :right :south}))))
-
-(deftest one-step-test
-  (testing "Can take one step in any direction"
-    (is (= [0 -1] (m/one-step [0 0] :north)))
-    (is (= [-1 0] (m/one-step [0 0] :west)))
-    (is (= [0 1]  (m/one-step [0 0] :south)))
-    (is (= [1 0]  (m/one-step [0 0] :east)))))
+(deftest next-move-attempt-test
+  (testing "Tests the direction logic for selecting the next space to try"
+    ;; If we know nothing, check the west wall first (when facing north)
+    (is (= :w (m/next-move-attempt
+               {:pos [0 0] :dir :n :maze {}})))
+    ;; If the position to the west is a wall, check north (when facing north)
+    (is (= :n (m/next-move-attempt
+               {:pos [0 0] :dir :n :maze {[-1 0] :wall}})))
+    ;; West/North are walls, try east
+    (is (= :e (m/next-move-attempt
+               {:pos [0 0] :dir :n :maze {[-1 0] :wall [0 1] :wall}})))
+    ;; Dead-end, try south
+    (is (= :s (m/next-move-attempt
+               {:pos [0 0] :dir :n :maze {[-1 0] :wall [0 1] :wall [1 0] :wall}})))))

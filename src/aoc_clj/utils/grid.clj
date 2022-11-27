@@ -62,6 +62,12 @@
   [grid pos & {:keys [include-diagonals]}]
   (select-keys grid (adj-coords-2d pos :include-diagonals include-diagonals)))
 
+(defn neighbor-pos
+  "Find the position of the neighbor in the cardinal direction `dir` 
+   relative to position `pos`"
+  [pos dir]
+  (mapv + pos (cardinal->offset dir)))
+
 (defn neighbor-value
   "Find the value of the `grid` map at the cardinal direction `dir` 
    relative to position `pos`"

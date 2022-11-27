@@ -14,6 +14,13 @@
     (is (= 2 (grid/neighbor-value sample [1 1] :s)))
     (is (= 4 (grid/neighbor-value sample [1 1] :w)))))
 
+(deftest neighbor-pos-test
+  (testing "Retrieves the position of the neighbor in the given direction"
+    (is (= [0 1] (grid/neighbor-pos [1 1] :w)))
+    (is (= [2 1] (grid/neighbor-pos [2 0] :n)))
+    (is (= [1 0] (grid/neighbor-pos [1 1] :s)))
+    (is (= [2 2] (grid/neighbor-pos [1 2] :e)))))
+
 (deftest rel-neighbors-test
   (testing "Returns a map of the relative-direction neighboring values"
     (is (= {:forward 8 :right 6 :backward 2 :left 4}
