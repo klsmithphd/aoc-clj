@@ -1,6 +1,5 @@
 (ns aoc-clj.2019.day21
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
+  (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
 ;; FIXME Add code or documentation for where the springcode came from
