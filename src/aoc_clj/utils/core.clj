@@ -66,3 +66,13 @@
   "Find the count of items in coll that satisfy predicate pred"
   [coll pred]
   (count (filter pred coll)))
+
+(defn rev-range
+  "A shorthand for a reverse range, i.e. one that counts down.
+   Logically equivalent to `(reverse (range end))` or
+   `(reverse (range start end))`, so it follows that `end` is
+   excluded while `start` is included in the seq"
+  ([end]
+   (range (dec end) -1 -1))
+  ([start end]
+   (range (dec end) (dec start) -1)))

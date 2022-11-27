@@ -2,20 +2,17 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(defn adj-coords-2d
-  "Coordinates of adjacent points. If include-diagonals is not set or false, 
-   returns the four adjacent points (of the von Neumann neighborhood), 
-   always in the order N W S E. If include-diagonals is set to true,
-   return the eight adjacent coordinates (of the Moore neighborhood)"
-  [[x y] & {:keys [include-diagonals]}]
-  (if include-diagonals
-    ;; including diagonals
-    (->> (for [ny (range (dec y) (+ y 2))
-               nx (range (dec x) (+ x 2))]
-           [nx ny])
-         (filter #(not= [x y] %)))
-    ;; only directly adjacent
-    [[x (dec y)] [(dec x) y] [x (inc y)] [(inc x) y]]))
+(def relative->cardinal
+  {:n {:forward :n :left :w :backward :s :right :e}
+   :e {:forward :e :left :n :backward :w :right :s}
+   :s {:forward :s :left :e :backward :n :right :w}
+   :w {:forward :w :left :s :backward :e :right :n}})
+
+(def cardinal->offset
+  {:n [0 1]
+   :e [1 0]
+   :s [0 -1]
+   :w [-1 0]})
 
 (defprotocol Grid2D
   "A two-dimensional grid of values"
@@ -31,15 +28,52 @@
    
    charmap is a map where the keys are ASCII chars and
    the values are expected to be symbols to use in
-   your application. Ex.: (def charmap {\\. :space \\# :wall})"
-  [charmap grid2d]
+   your application. Ex.: (def charmap {\\. :space \\# :wall})
+   
+   If `down` is specified, the first row represents zero and the
+   y coordinate increases in the down direction, i.e the way
+   screen coordinates typically work."
+  [charmap grid2d & {:keys [down]}]
   (let [chars (u/invert-map charmap)
         w (width grid2d)
         h (height grid2d)
-        rep (partition w (for [y (range h)
+        rep (partition w (for [y (if down (range h) (u/rev-range h))
                                x (range w)]
                            (chars (value grid2d [x y]))))]
     (str/join "\n" (mapv #(apply str %) rep))))
+
+(defn adj-coords-2d
+  "Coordinates of adjacent points. If include-diagonals is not set or false, 
+   returns the four adjacent points (of the von Neumann neighborhood), 
+   always in the order N E S W. If include-diagonals is set to true,
+   return the eight adjacent coordinates (of the Moore neighborhood)"
+  [[x y] & {:keys [include-diagonals]}]
+  (if include-diagonals
+    ;; including diagonals
+    (->> (for [ny (range (dec y) (+ y 2))
+               nx (range (dec x) (+ x 2))]
+           [nx ny])
+         (filter #(not= [x y] %)))
+    ;; only directly adjacent
+    [[x (inc y)] [(inc x) y] [x (dec y)] [(dec x) y]]))
+
+(defn neighbors-2d
+  "Map of the positions and values of the nearest neighbors to pos"
+  [grid pos & {:keys [include-diagonals]}]
+  (select-keys grid (adj-coords-2d pos :include-diagonals include-diagonals)))
+
+(defn neighbor-value
+  "Find the value of the `grid` map at the cardinal direction `dir` 
+   relative to position `pos`"
+  [grid pos dir]
+  (grid (mapv + pos (cardinal->offset dir))))
+
+(defn rel-neighbors
+  "Return a map of the relative directions (forward, backward, left, right)
+   to the value of the value of the respective neighbor on the `grid`
+   at position `pos` and facing cardinal direction `dir`"
+  [grid pos dir]
+  (u/fmap (partial neighbor-value grid pos) (relative->cardinal dir)))
 
 (defn mapgrid->vectors
   "Convert a (sparse) mapgrid `m` (a map with [x y] coordinates as keys) 
@@ -60,3 +94,5 @@
                       x (range minx (inc maxx))]
                   (get m [x y] not-found))]
      (mapv vec (partition width values)))))
+
+

@@ -31,4 +31,5 @@
            (vg/ascii->VecGrid2D
             {\. :space \# :wall}
             ["..#"
-             ".#."])))))
+             ".#."]
+            :down true)))))

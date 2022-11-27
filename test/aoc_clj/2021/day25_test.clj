@@ -14,7 +14,8 @@
     ">.>>..v..."
     ".vv..>.>v."
     "v.v..>>v.v"
-    "....v..v.>"]))
+    "....v..v.>"]
+   :down true))
 
 (deftest steps-until-done-changing
   (testing "Computes the number of steps until no more changes occur"

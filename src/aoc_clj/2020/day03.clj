@@ -8,7 +8,7 @@
   [ascii-lines]
   (let [forest-mapping {\. :space
                         \# :tree}]
-    (mapgrid/ascii->MapGrid2D forest-mapping ascii-lines)))
+    (mapgrid/ascii->MapGrid2D forest-mapping ascii-lines :down true)))
 
 (defn get-position
   [{:keys [height width grid]} [x y]]

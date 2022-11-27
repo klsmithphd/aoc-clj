@@ -51,3 +51,12 @@
 (deftest count-if-test
   (testing "Demonstration of count-if: find the number of elements of coll that satisfy pred"
     (is (= 5 (u/count-if (range 10) odd?)))))
+
+(deftest rev-range-test
+  (testing "Demonstration of rev-range: returns a countdown range"
+    (is (= '(4 3 2 1 0)
+           (u/rev-range 5)
+           (reverse (range 5))))
+    (is (= '(9 8 7 6 5)
+           (u/rev-range 5 10)
+           (reverse (range 5 10))))))

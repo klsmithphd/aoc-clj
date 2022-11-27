@@ -16,7 +16,7 @@
   [input]
   (let [[part1 part2] (split-at-blankline input)]
     {:algorithm (mapv char-map (first part1))
-     :image (mapgrid/ascii->MapGrid2D char-map part2)}))
+     :image (mapgrid/ascii->MapGrid2D char-map part2 :down true)}))
 
 (def day20-input (parse (u/puzzle-input "2021/day20-input.txt")))
 

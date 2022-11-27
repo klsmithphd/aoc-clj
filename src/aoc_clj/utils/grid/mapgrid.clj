@@ -1,5 +1,6 @@
 (ns aoc-clj.utils.grid.mapgrid
-  (:require [aoc-clj.utils.grid :as grid :refer [Grid2D]]))
+  (:require [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.grid :as grid :refer [Grid2D]]))
 
 (defrecord MapGrid2D [width height grid]
   Grid2D
@@ -37,15 +38,19 @@
    
    charmap is a map where the keys are ASCII chars and
    the values are expected to be symbols to use in
-   your application. Ex.: (def codes {\\. :space \\# :wall})"
-  [charmap lines]
+   your application. Ex.: (def codes {\\. :space \\# :wall})
+   
+   If `down` is specified, the first row represents zero and the
+   y coordinate increases in the down direction, i.e the way
+   screen coordinates typically work."
+  [charmap lines & {:keys [down]}]
   (let [height  (count lines)
         width   (count (first lines))
         symbols (mapcat #(map charmap %) lines)]
     (->MapGrid2D
      width
      height
-     (zipmap (for [y (range height)
+     (zipmap (for [y (if down (range height) (u/rev-range height))
                    x (range width)]
                [x y])
              symbols))))

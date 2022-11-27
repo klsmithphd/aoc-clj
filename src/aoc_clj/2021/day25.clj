@@ -5,7 +5,10 @@
 (def charmap {\v :down \> :right \. :open})
 
 (def day25-input
-  (mapgrid/ascii->MapGrid2D charmap (u/puzzle-input "2021/day25-input.txt")))
+  (mapgrid/ascii->MapGrid2D
+   charmap
+   (u/puzzle-input "2021/day25-input.txt")
+   :down true))
 
 (defn available?
   [grid pos]

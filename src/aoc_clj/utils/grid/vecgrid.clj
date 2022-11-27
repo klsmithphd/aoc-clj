@@ -27,6 +27,11 @@
    
    charmap is a map where the keys are ASCII chars and
    the values are expected to be symbols to use in
-   your application. Ex.: (def codes {\\. :space \\# :wall})"
-  [charmap lines]
-  (->VecGrid2D (mapv #(mapv charmap %) lines)))
+   your application. Ex.: (def codes {\\. :space \\# :wall})
+   
+   If `down` is specified, the first row represents zero and the
+   y coordinate increases in the down direction, i.e the way
+   screen coordinates typically work."
+  [charmap lines & {:keys [down]}]
+  (->VecGrid2D (mapv #(mapv charmap %)
+                     (if down lines (reverse lines)))))

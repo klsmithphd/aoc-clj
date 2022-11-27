@@ -41,4 +41,5 @@
            (mg/ascii->MapGrid2D
             {\. :space \# :wall}
             ["..#"
-             ".#."])))))
+             ".#."]
+            :down true)))))

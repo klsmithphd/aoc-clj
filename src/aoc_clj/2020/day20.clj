@@ -9,7 +9,8 @@
         charmap
         ["                  # "
          "#    ##    ##    ###"
-         " #  #  #  #  #  #   "])
+         " #  #  #  #  #  #   "]
+        :down true)
        :grid
        (filter (comp some? second))
        (map first)))
@@ -20,7 +21,8 @@
         tile-id (read-string (subs header 5 9))]
     [tile-id (mapgrid/ascii->MapGrid2D
               charmap
-              (str/split grid #"\n"))]))
+              (str/split grid #"\n")
+              :down true)]))
 
 (defn parse
   [input]
