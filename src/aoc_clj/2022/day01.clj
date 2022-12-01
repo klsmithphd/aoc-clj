@@ -1,29 +1,36 @@
 (ns aoc-clj.2022.day01
   (:require [aoc-clj.utils.core :as u]))
 
+(defn parse-segment
+  [segment]
+  (map read-string segment))
+
 (defn parse
   [input]
-  (map read-string input))
+  (->> input u/split-at-blankline (map parse-segment)))
 
-(def day01-input (->> (u/puzzle-input "2022/day01-input.txt")
-                      (u/split-at-blankline)
-                      (map parse)))
-(defn elf-capacity
+(def day01-input (parse (u/puzzle-input "2022/day01-input.txt")))
+
+(defn sorted-sums
   [calorie-counts]
-  (map-indexed (fn [idx cals] [idx (reduce + cals)]) calorie-counts))
+  (sort > (map #(reduce + %) calorie-counts)))
 
 (defn max-capacity
   [input]
-  (apply max (map second (elf-capacity input))))
+  (first (sorted-sums input)))
 
 (defn day01-part1-soln
+  "Find the Elf carrying the most Calories. 
+   How many total Calories is that Elf carrying?"
   []
   (max-capacity day01-input))
 
 (defn top-three-max-capacity
   [input]
-  (reduce + (take 3 (sort > (map second (elf-capacity input))))))
+  (reduce + (take 3 (sorted-sums input))))
 
 (defn day01-part2-soln
+  "Find the top three Elves carrying the most Calories. 
+   How many Calories are those Elves carrying in total?"
   []
   (top-three-max-capacity day01-input))
