@@ -11,26 +11,24 @@
 
 (def day01-input (parse (u/puzzle-input "2022/day01-input.txt")))
 
-(defn sorted-sums
-  [calorie-counts]
-  (sort > (map #(reduce + %) calorie-counts)))
+(defn sorted-totals
+  "Return a collection of all the `calorie` totals, sorted in descending order"
+  [calories]
+  (sort > (map #(reduce + %) calories)))
 
-(defn max-capacity
-  [input]
-  (first (sorted-sums input)))
+(defn top-n-capacity-sum
+  "Return the sum of the top `n` totals"
+  [n input]
+  (reduce + (take n (sorted-totals input))))
 
 (defn day01-part1-soln
   "Find the Elf carrying the most Calories. 
    How many total Calories is that Elf carrying?"
   []
-  (max-capacity day01-input))
-
-(defn top-three-max-capacity
-  [input]
-  (reduce + (take 3 (sorted-sums input))))
+  (top-n-capacity-sum 1 day01-input))
 
 (defn day01-part2-soln
   "Find the top three Elves carrying the most Calories. 
    How many Calories are those Elves carrying in total?"
   []
-  (top-three-max-capacity day01-input))
+  (top-n-capacity-sum 3 day01-input))

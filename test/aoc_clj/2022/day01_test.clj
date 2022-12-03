@@ -19,13 +19,10 @@
     ""
     "10000"]))
 
-(deftest max-capacity-test
-  (testing "Find the max calorie capacity of any elf"
-    (is (= 24000 (t/max-capacity s01-01)))))
-
-(deftest top-three-max-capacity-test
-  (testing "Find the max calorie capacity of top 3 elves"
-    (is (= 45000 (t/top-three-max-capacity s01-01)))))
+(deftest top-n-capacity-sum-test
+  (testing "Find the max calorie capacity of top elf and top 3 elves"
+    (is (= 24000 (t/top-n-capacity-sum 1 s01-01)))
+    (is (= 45000 (t/top-n-capacity-sum 3 s01-01)))))
 
 (deftest day01-part1-soln
   (testing "Reproduces the answer for day01, part1"
