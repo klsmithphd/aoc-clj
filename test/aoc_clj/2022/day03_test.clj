@@ -11,11 +11,11 @@
    "CrZsJsPPZsGzwwsLwLmpwMDw"])
 
 (deftest overlaps-test
-  (testing "finds the overlapping items in the first/second halves"
+  (testing "Finds the overlapping items in the first/second halves"
     (is (= [\p \L \P \v \t \s]
-           (t/overlaps d03-s01)))
+           (t/overlaps ::t/halfway d03-s01)))
     (is (= [\r \Z]
-           (t/overlaps d03-s01 :thirds)))))
+           (t/overlaps ::t/thirds d03-s01)))))
 
 (deftest priority-test
   (testing "Computes the priority for a given character"
@@ -28,8 +28,8 @@
 
 (deftest overlaps-priority-test
   (testing "Finds the sum of the priorities of the overlapping items"
-    (is (= 157 (t/overlaps-priority d03-s01)))
-    (is (= 70 (t/overlaps-priority d03-s01 :thirds)))))
+    (is (= 157 (t/overlap-priority-sum ::t/halfway d03-s01)))
+    (is (= 70  (t/overlap-priority-sum ::t/thirds d03-s01)))))
 
 (deftest day03-part1-soln
   (testing "Reproduces the answer for day03, part1"
