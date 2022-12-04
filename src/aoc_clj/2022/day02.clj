@@ -1,4 +1,5 @@
 (ns aoc-clj.2022.day02
+  "Solution to https://adventofcode.com/2022/day/2"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 

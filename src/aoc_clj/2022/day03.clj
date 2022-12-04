@@ -1,4 +1,5 @@
 (ns aoc-clj.2022.day03
+  "Solution to https://adventofcode.com/2022/day/3"
   (:require [clojure.set :as set]
             [aoc-clj.utils.core :as u]))
 
