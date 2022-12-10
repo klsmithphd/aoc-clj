@@ -58,6 +58,23 @@
   [m]
   (zipmap (vals m) (keys m)))
 
+(defn keys-in
+  "Returns a sequence of all key paths in a nested map `m` using DFS walk.
+   
+   Adapted from https://dnaeon.github.io/clojure-map-ks-paths/, viewed on
+   2022-12-10"
+  [m]
+  (letfn [(children [node]
+            (let [v (get-in m node)]
+              (if (map? v)
+                (map #(conj node %) (keys v))
+                [])))
+          (branch? [node] (-> (children node) seq boolean))]
+    (->> (keys m)
+         (map vector)
+         (mapcat #(tree-seq branch? children %)))))
+
+
 (defn rotate
   "Rotate the collection by n. Positive values of n rotate to the left,
    meaning that values are taken from the beginning of coll and moved to

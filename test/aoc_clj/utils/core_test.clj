@@ -37,6 +37,11 @@
   (testing "Demonstration of invert-map: swaps the keys and vals of a 1:1 map"
     (is (= {0 :a 1 :b 2 :c} (u/invert-map {:a 0 :b 1 :c 2})))))
 
+(deftest keys-in-test
+  (testing "Demonstration of keys-in: finds all key-paths in a nested map"
+    (is (= [[:a] [:b] [:c] [:d] [:d :e] [:d :f] [:d :f :g] [:d :f :g :h]]
+           (u/keys-in {:a 1 :b 2 :c 3 :d {:e 4 :f {:g {:h 5}}}})))))
+
 (deftest rotate-test
   (testing "Demonstration of rotate: return a seq of same size, but with elements rotated by n"
     (is (= '(0 1 2 3 4) (u/rotate 0 (range 5))))
