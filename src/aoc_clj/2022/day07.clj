@@ -3,30 +3,8 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def d07-s01
-  ["$ cd /"
-   "$ ls"
-   "dir a"
-   "14848514 b.txt"
-   "8504156 c.dat"
-   "dir d"
-   "$ cd a"
-   "$ ls"
-   "dir e"
-   "29116 f"
-   "2557 g"
-   "62596 h.lst"
-   "$ cd e"
-   "$ ls"
-   "584 i"
-   "$ cd .."
-   "$ cd .."
-   "$ cd d"
-   "$ ls"
-   "4060174 j"
-   "8033020 d.log"
-   "5626152 d.ext"
-   "7214296 k"])
+(def total-disk-space 70000000)
+(def min-free-space   30000000)
 
 (defn cd-command?
   [cmd]
@@ -114,8 +92,25 @@
        (filter #(<= % 100000))
        (reduce +)))
 
+(defn smallest-dir-size-to-remove
+  [tree]
+  (let [sizes        (dir-sizes tree)
+        used         (apply max sizes)
+        min-required (- min-free-space (- total-disk-space used))]
+    (->> sizes
+         sort
+         (filter #(>= % min-required))
+         first)))
+
 (defn day07-part1-soln
+  "Find all of the directories with a total size of at most 100000. 
+   What is the sum of the total sizes of those directories?"
   []
   (dir-total-below-100k day07-input))
 
-
+(defn day07-part2-soln
+  "Find the smallest directory that, if deleted, would free up enough space 
+   on the filesystem to run the update. What is the total size of that 
+   directory?"
+  []
+  (smallest-dir-size-to-remove day07-input))

@@ -63,10 +63,15 @@
   (testing "Finds the sum of the sizes of directories smaller than 100k"
     (is (= 95437 (t/dir-total-below-100k d07-s01)))))
 
+(deftest smallest-dir-size-to-remove-test
+  (testing "Find the size of the smallest directory that can be removed
+            to free up the necessary disk space"
+    (is (= 24933642 (t/smallest-dir-size-to-remove d07-s01)))))
+
 (deftest day07-part1-soln
   (testing "Reproduces the answer for day07, part1"
     (is (= 1306611 (t/day07-part1-soln)))))
 
-;; (deftest day07-part2-soln
-;;   (testing "Reproduces the answer for day07, part2"
-;;     (is (= 0 (t/day07-part2-soln)))))
+(deftest day07-part2-soln
+  (testing "Reproduces the answer for day07, part2"
+    (is (= 13210366 (t/day07-part2-soln)))))
