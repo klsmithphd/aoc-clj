@@ -28,32 +28,56 @@
    "5626152 d.ext"
    "7214296 k"])
 
-[["/"] ["a" {} "b.txt" 14848514 "c.dat" 8504156 "d" {}]
- ["/" "a"] ["e" {} "f"]]
-
-(update-in
- (update-in {} [:a :b :c] #(assoc % :d 2557))
- [:a :b] #(assoc % :e {}))
-
 (def day07-input (u/puzzle-input "2022/day07-input.txt"))
 
+(defn cd-command?
+  [cmd]
+  (str/starts-with? cmd "$ cd"))
+
+(defn ls-command?
+  [cmd]
+  (= cmd "$ ls"))
+
 (defn change-dir
-  [tree node cmds]
-  (let [line (first cmds)
-        newdir (subs line 5)])
-  [tree])
+  [{:keys [node cmds] :as state}]
+  (let [newdir (subs (first cmds) 5)]
+    (assoc state
+           :node (if (= ".." newdir)
+                   (pop node)
+                   (conj node newdir))
+           :cmds (rest cmds))))
+
+(defn add-dir
+  [{:keys [tree node cmds] :as state}]
+  (let [dirname (subs (first cmds) 4)]
+    (assoc state
+           :tree (assoc-in tree (conj node dirname) {})
+           :cmds (rest cmds))))
+
+(defn add-file
+  [{:keys [tree node cmds] :as state}]
+  (let [[size name] (str/split (first cmds) #" ")]
+    (assoc state
+           :tree (assoc-in tree (conj node name) (read-string size))
+           :cmds (rest cmds))))
+
+(defn list-dir
+  [{:keys [cmds] :as state}]
+  (if (ls-command? (first cmds))
+    (assoc state :cmds (rest cmds))
+    (if (str/starts-with? (first cmds) "dir")
+      (add-dir state)
+      (add-file state))))
 
 (defn process
-  [tree node cmds]
-  (let [line (first cmds)]
-    (if (str/starts-with? line "$ cd")
-      (change-dir tree node cmds)
-      (list-dir tree node cmds))))
+  [{:keys [cmds] :as state}]
+  (if (cd-command? (first cmds))
+    (change-dir state)
+    (list-dir state)))
 
 (defn crawl-tree
   [terminal]
-  (loop [tree {} node nil cmds terminal]
-    (if (empty? cmds)
-      tree
-      (let [[t n c] (process tree node cmds)]
-        (recur t n c)))))
+  (loop [state {:tree {} :node [] :cmds terminal}]
+    (if (empty? (:cmds state))
+      (:tree state)
+      (recur (process state)))))
