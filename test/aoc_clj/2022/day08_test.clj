@@ -14,10 +14,14 @@
   (testing "Counts the number of visible trees in the sample data"
     (is (= 21 (t/visible-trees d08-s01)))))
 
+(deftest max-scenic-score-test
+  (testing "Finds the maximum scenic score in the sample data"
+    (is (= 8 (t/max-scenic-score d08-s01)))))
+
 (deftest day08-part1-soln
   (testing "Reproduces the answer for day08, part1"
     (is (= 1538 (t/day08-part1-soln)))))
 
-;; (deftest day08-part2-soln
-;;   (testing "Reproduces the answer for day08, part2"
-;;     (is (= 0 (t/day08-part2-soln)))))
+(deftest day08-part2-soln
+  (testing "Reproduces the answer for day08, part2"
+    (is (= 496125 (t/day08-part2-soln)))))

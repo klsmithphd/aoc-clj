@@ -12,18 +12,6 @@
 
 (def day08-input (parse (u/puzzle-input "2022/day08-input.txt")))
 
-(def d08-s01
-  (parse
-   ["30373"
-    "25512"
-    "65332"
-    "33549"
-    "35390"]))
-
-(defn transpose
-  [m]
-  (apply map vector m))
-
 (defn visible?
   [s]
   (loop [nxt (rest s) mx (first s) acc [1]]
@@ -52,10 +40,42 @@
   [input]
   (reduce + (map bit-or
                  (flatten (grid-visibility input))
-                 (flatten (transpose (grid-visibility (transpose input)))))))
+                 (flatten (u/transpose (grid-visibility (u/transpose input)))))))
 
+(defn view-distance
+  [row i]
+  (let [[l [x & r]] (split-at i row)]
+    [x l r]
+    (* (min (count l) (inc (count (take-while #(> x %) (reverse l)))))
+       (min (count r) (inc (count (take-while #(> x %) r)))))))
 
+(defn row-view-distance
+  [row]
+  (map #(view-distance row %) (range (count row))))
+
+(defn grid-view-distance
+  [grid]
+  (map row-view-distance grid))
+
+(defn scenic-score
+  "A tree's scenic score is found by multiplying together its viewing distance 
+   in each of the four directions."
+  [grid]
+  (map *
+       (flatten (grid-view-distance grid))
+       (flatten (u/transpose (grid-view-distance (u/transpose grid))))))
+
+(defn max-scenic-score
+  [input]
+  (apply max (scenic-score input)))
 
 (defn day08-part1-soln
+  "Consider your map; how many trees are visible from outside the grid?"
   []
   (visible-trees day08-input))
+
+(defn day08-part2-soln
+  "Consider each tree on your map. What is the highest scenic score 
+   possible for any tree?"
+  []
+  (max-scenic-score day08-input))
