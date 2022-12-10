@@ -88,3 +88,8 @@
    (range (dec end) -1 -1))
   ([start end]
    (range (dec end) (dec start) -1)))
+
+(defn transpose
+  "Transpose a vector of vectors, i.e., v[i,j] -> v[j,i]"
+  [v]
+  (apply mapv vector v))
