@@ -3,8 +3,13 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def total-disk-space 70000000)
-(def min-free-space   30000000)
+(def total-disk-space
+  "The total disk space available to the filesystem is 70000000"
+  70000000)
+
+(def min-free-space
+  "To run the update, you need unused space of at least 30000000"
+  30000000)
 
 (defn cd-command?
   [cmd]
@@ -61,6 +66,10 @@
 (def day07-input (crawl-tree (u/puzzle-input "2022/day07-input.txt")))
 
 (defn node-size
+  "Find the size of a given node identified by its `path`.
+   For a file, the file's size is returned.
+   For a directory, the total of all files, directly or indirectly contained
+   in the directory is returned."
   [tree path]
   (let [contents (get-in tree path)]
     (if (number? contents)
@@ -82,17 +91,20 @@
          (mapcat #(tree-seq branch? children %)))))
 
 (defn dir-sizes
+  "Return the sizes of all directories in the tree"
   [tree]
   (let [size (memoize (partial node-size tree))]
     (map size (dir-paths tree))))
 
 (defn dir-total-below-100k
+  "Return the sum of the sizes of directories no larger than 100000"
   [tree]
   (->> (dir-sizes tree)
        (filter #(<= % 100000))
        (reduce +)))
 
 (defn smallest-dir-size-to-remove
+  "Find the size of the smallest directory to remove that frees up enough space"
   [tree]
   (let [sizes        (dir-sizes tree)
         used         (apply max sizes)
