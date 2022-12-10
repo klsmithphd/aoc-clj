@@ -28,8 +28,6 @@
    "5626152 d.ext"
    "7214296 k"])
 
-(def day07-input (u/puzzle-input "2022/day07-input.txt"))
-
 (defn cd-command?
   [cmd]
   (str/starts-with? cmd "$ cd"))
@@ -81,3 +79,43 @@
     (if (empty? (:cmds state))
       (:tree state)
       (recur (process state)))))
+
+(def day07-input (crawl-tree (u/puzzle-input "2022/day07-input.txt")))
+
+(defn node-size
+  [tree path]
+  (let [contents (get-in tree path)]
+    (if (number? contents)
+      contents
+      (reduce + (map #(node-size tree (conj path %)) (keys contents))))))
+
+(defn dir-paths
+  "Finds the path to all of the directory nodes in map `m`"
+  [m]
+  (letfn [(children [node]
+            (let [v (get-in m node)]
+              (if (map? v)
+                (remove #(number? (get-in m %))
+                        (map (fn [x] (conj node x)) (keys v)))
+                [])))
+          (branch? [node] (-> (children node) seq boolean))]
+    (->> (keys m)
+         (map vector)
+         (mapcat #(tree-seq branch? children %)))))
+
+(defn dir-sizes
+  [tree]
+  (let [size (memoize (partial node-size tree))]
+    (map size (dir-paths tree))))
+
+(defn dir-total-below-100k
+  [tree]
+  (->> (dir-sizes tree)
+       (filter #(<= % 100000))
+       (reduce +)))
+
+(defn day07-part1-soln
+  []
+  (dir-total-below-100k day07-input))
+
+

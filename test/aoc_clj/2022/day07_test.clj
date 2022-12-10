@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.2022.day07 :as t]))
 
-(def d07-s01
+(def d07-s01-raw
   ["$ cd /"
    "$ ls"
    "dir a"
@@ -27,7 +27,7 @@
    "5626152 d.ext"
    "7214296 k"])
 
-(def d07-s01-parsed
+(def d07-s01
   {"/"
    {"a"
     {"e"
@@ -45,12 +45,27 @@
 
 (deftest crawl-tree-test
   (testing "Parses the terminal commands to construct the directory tree"
-    (is (= d07-s01-parsed (t/crawl-tree d07-s01)))))
+    (is (= d07-s01 (t/crawl-tree d07-s01-raw)))))
 
+(deftest node-size-test
+  (testing "Returns the size of the node in the directory tree"
+    (is (= 584 (t/node-size d07-s01 ["/" "a" "e"])))
+    (is (= 94853 (t/node-size d07-s01 ["/" "a"])))
+    (is (= 24933642 (t/node-size d07-s01 ["/" "d"])))
+    (is (= 48381165 (t/node-size d07-s01 ["/"])))))
 
-;; (deftest day07-part1-soln
-;;   (testing "Reproduces the answer for day07, part1"
-;;     (is (= 0 (t/day07-part1-soln)))))
+(deftest dir-path-test
+  (testing "Returns the paths to all the directory nodes"
+    (is (= [["/"] ["/" "a"] ["/" "a" "e"] ["/" "d"]]
+           (t/dir-paths d07-s01)))))
+
+(deftest dir-total-below-100k-test
+  (testing "Finds the sum of the sizes of directories smaller than 100k"
+    (is (= 95437 (t/dir-total-below-100k d07-s01)))))
+
+(deftest day07-part1-soln
+  (testing "Reproduces the answer for day07, part1"
+    (is (= 1306611 (t/day07-part1-soln)))))
 
 ;; (deftest day07-part2-soln
 ;;   (testing "Reproduces the answer for day07, part2"
