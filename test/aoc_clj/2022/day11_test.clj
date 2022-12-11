@@ -61,25 +61,21 @@
            (t/counts (nth (iterate t/round d11-s01) 20))))
     ;; part 2
     (is (= [2 4 3 6]
-           (t/counts (nth (iterate t/round-part2 d11-s01) 1))))
+           (t/counts (nth (iterate t/round-2 (t/part2-augment d11-s01)) 1))))
     (is (= [99 97 8 103]
-           (t/counts (nth (iterate t/round-part2 d11-s01) 20))))
-    ;; Currently too prohibitively expensive to test
-    ;; (is (= [5204 1792 199 5192]
-    ;;        (t/counts (nth (iterate t/round-part2 d11-s01) 1000))))
-    ;; (is (= [26075 23921 974 26000]
-    ;;        (t/counts (nth (iterate t/round-part2 d11-s01) 5000))))
-    ;; (is (= [52166 47830 1938 52013]
-    ;;        (t/counts (nth (iterate t/round-part2 d11-s01) 10000))))
-    ))
+           (t/counts (nth (iterate t/round-2 (t/part2-augment d11-s01)) 20))))
+    (is (= [5204 4792 199 5192]
+           (t/counts (nth (iterate t/round-2 (t/part2-augment d11-s01)) 1000))))
+    (is (= [26075 23921 974 26000]
+           (t/counts (nth (iterate t/round-2 (t/part2-augment d11-s01)) 5000))))
+    (is (= [52166 47830 1938 52013]
+           (t/counts (nth (iterate t/round-2 (t/part2-augment d11-s01)) 10000))))))
 
 (deftest monkey-business-test
   (testing "Computes the monkey business score (product of top two 
             inspection counts)"
     (is (= 10605 (t/monkey-business-1 d11-s01 20)))
-    ;; Currently too prohibitively expensive to test
-    ;; (is (= 2713310158 (t/monkey-business-2 d11-s01 10000)))
-    ))
+    (is (= 2713310158 (t/monkey-business-2 (t/part2-augment d11-s01) 10000)))))
 
 (deftest day11-part1-soln
   (testing "Reproduces the answer for day11, part1"
