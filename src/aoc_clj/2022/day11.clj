@@ -70,50 +70,61 @@
     "    If true: throw to monkey 0"
     "    If false: throw to monkey 1"]))
 
+(defn divides?
+  [num div]
+  (zero? (rem num div)))
+
 (defn monkey-do
+  "Process a single item by the monkey identified by `monkey-id`"
   ([monkeys monkey-id]
-   (monkey-do false monkeys monkey-id))
-  ([worry? monkeys monkey-id]
+   (monkey-do true monkeys monkey-id))
+  ([relief? monkeys monkey-id]
    (let [monkey (get monkeys monkey-id)
          {:keys [items operation test true-op false-op]} monkey
          item   (first items)
-         foo    (try (operation item)
-                     (catch Exception e (println monkey-id item)))
-         worry  (if worry? foo (quot foo 3))
-         dest   (if (zero? (rem worry test))
-                  true-op
-                  false-op)]
+         worry  (operation item)
+         ;; In part 2, the worry doesn't go down by three
+         relief (if relief? (quot worry 3) worry)
+         dest   (if (divides? relief test) true-op false-op)]
      (-> monkeys
          (update-in [monkey-id :items] (comp vec rest))
          (update-in [monkey-id :counts] inc)
-         (update-in [dest :items] conj worry)))))
+         (update-in [dest :items] conj relief)))))
 
 (defn monkey-turn
+  "Process all the items held by the monkey identified by `monkey-id`"
   ([monkeys monkey-id]
-   (monkey-turn false monkeys monkey-id))
-  ([worry? monkeys monkey-id]
+   (monkey-turn true monkeys monkey-id))
+  ([relief? monkeys monkey-id]
    (loop [ms monkeys]
      (if (empty? (get-in ms [monkey-id :items]))
        ms
-       (recur (monkey-do worry? ms monkey-id))))))
+       (recur (monkey-do relief? ms monkey-id))))))
 
 (defn round
+  "Have every monkey in turn process their items"
   [monkeys]
   (reduce monkey-turn monkeys (range (count monkeys))))
 
 (defn round-part2
+  "Have every monkey in turn process their items, but the worry levels
+   have no relief (aren't divided by three)"
   [monkeys]
-  (reduce (partial monkey-turn true) monkeys (range (count monkeys))))
+  (reduce (partial monkey-turn false) monkeys (range (count monkeys))))
 
 (defn items
+  "The items held by each monkey"
   [monkeys]
   (map :items monkeys))
 
 (defn counts
+  "The counts of items that each monkey has processed"
   [monkeys]
   (map :counts monkeys))
 
 (defn monkey-business
+  "The product of the number of items inspected by the two most active 
+   monkeys after `rounds`"
   [round-fn monkeys rounds]
   (let [cnts (-> (iterate round-fn monkeys)
                  (nth rounds)
