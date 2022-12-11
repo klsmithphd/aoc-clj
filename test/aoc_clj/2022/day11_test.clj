@@ -38,27 +38,27 @@
             [2080 25 167 207 401 1046]
             []
             []]
-           (t/items (t/round d11-s01))))
+           (t/items (t/round-1 d11-s01))))
     (is (= [[695 10 71 135 350]
             [43 49 58 55 362]
             []
             []]
-           (t/items (t/round (t/round d11-s01)))))
+           (t/items (t/round-1 (t/round-1 d11-s01)))))
     (is (= [[83, 44, 8, 184, 9, 20, 26, 102]
             [110, 36]
             []
             []]
-           (t/items (nth (iterate t/round d11-s01) 15))))
+           (t/items (nth (iterate t/round-1 d11-s01) 15))))
     (is (= [[10, 12, 14, 26, 34]
             [245, 93, 53, 199, 115]
             []
             []]
-           (t/items (nth (iterate t/round d11-s01) 20))))))
+           (t/items (nth (iterate t/round-1 d11-s01) 20))))))
 
 (deftest counts-test
   (testing "Counts the number of items inspected by each monkey"
     (is (= [101 95 7 105]
-           (t/counts (nth (iterate t/round d11-s01) 20))))
+           (t/counts (nth (iterate t/round-1 d11-s01) 20))))
     ;; part 2
     (is (= [2 4 3 6]
            (t/counts (nth (iterate t/round-2 (t/part2-augment d11-s01)) 1))))
@@ -81,6 +81,6 @@
   (testing "Reproduces the answer for day11, part1"
     (is (= 112221 (t/day11-part1-soln)))))
 
-;; (deftest day11-part2-soln
-;;   (testing "Reproduces the answer for day11, part2"
-;;     (is (= 0 (t/day11-part2-soln)))))
+(deftest day11-part2-soln
+  (testing "Reproduces the answer for day11, part2"
+    (is (= 25272176808 (t/day11-part2-soln)))))

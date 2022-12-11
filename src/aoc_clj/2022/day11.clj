@@ -20,7 +20,8 @@
 (defn parse-false [s] (parse-num s false-str-len))
 (defn parse-oper
   [s]
-  (str/split (subs s oper-str-len) #" "))
+  (let [[op arg] (str/split (subs s oper-str-len) #" ")]
+    [op (if (= "old" arg) arg (read-string arg))]))
 
 (defn parse-monkey
   [[_ items oper test true-op false-op]]
@@ -37,35 +38,31 @@
 
 (def day11-input (parse (u/puzzle-input "2022/day11-input.txt")))
 
-(def d11-s01
-  (parse
-   ["Monkey 0:"
-    "  Starting items: 79, 98"
-    "  Operation: new = old * 19"
-    "  Test: divisible by 23"
-    "    If true: throw to monkey 2"
-    "    If false: throw to monkey 3"
-    ""
-    "Monkey 1:"
-    "  Starting items: 54, 65, 75, 74"
-    "  Operation: new = old + 6"
-    "  Test: divisible by 19"
-    "    If true: throw to monkey 2"
-    "    If false: throw to monkey 0"
-    ""
-    "Monkey 2:"
-    "  Starting items: 79, 60, 97"
-    "  Operation: new = old * old"
-    "  Test: divisible by 13"
-    "    If true: throw to monkey 1"
-    "    If false: throw to monkey 3"
-    ""
-    "Monkey 3:"
-    "  Starting items: 74"
-    "  Operation: new = old + 3"
-    "  Test: divisible by 17"
-    "    If true: throw to monkey 0"
-    "    If false: throw to monkey 1"]))
+(defn remainders
+  "Creates a map, where the keys are the first ten prime numbers
+   and the values are the mods of `item` relative to those prime numbers"
+  [item]
+  (let [rems [2 3 5 7 9 11 13 17 19 23]]
+    (zipmap rems (map #(mod item %) rems))))
+
+(defn remainderize
+  "Replaces the worry value of each of a monkey's items with a map of
+   the mods of that worry value relative to the first ten prime numbers"
+  [{:keys [items] :as monkey}]
+  (assoc monkey :items (map remainders items)))
+
+(defn part2-augment
+  "In part 2, working with the actual result of applying the operations
+   becomes too prohibitively expensive. All we actually need to know is
+   whether the worry value is divisible by one of the first ten prime
+   numbers. As such, we can make the problem tractable by only keeping
+   track of the mods of the worry values and applying mod arithmetic
+   appropriately. This function will replace the numeric items worry value
+   with a map, where the keys are the first ten prime numbers and the
+   values are the mods of the worry value relative to those primes. This
+   bootstraps the rest of the changes for part 2."
+  [monkeys]
+  (mapv remainderize monkeys))
 
 (defn items
   "The items held by each monkey"
@@ -78,42 +75,44 @@
   (map :counts monkeys))
 
 (defn operate
+  "Apply the monkey's operation rule to the item"
   [[op arg] item]
-  (if (= "+" op)
-    (+' item (read-string arg))
-    (if (= "old" arg)
-      (*' item item)
-      (*' item (read-string arg)))))
-
-(defn update-2
-  [[op arg] [mod rem]]
   (case op
-    "+" [mod (math/mod-add mod rem (read-string arg))]
-    "*" [mod (math/mod-mul mod rem (if (= "old" arg) rem (read-string arg)))]))
+    "+" (+' item arg)
+    "*" (*' item (if (= "old" arg) item arg))))
 
 (defn operate-2
+  [[op arg] [mod rem]]
+  (case op
+    "+" [mod (math/mod-add mod rem arg)]
+    "*" [mod (math/mod-mul mod rem (if (= "old" arg) rem arg))]))
+
+
+(defn worry-1
   [operation item]
-  (into {} (map #(update-2 operation %) item)))
+  (quot (operate operation item) 3))
 
-(defn monkey-do-1
-  [monkeys monkey-id]
+(defn worry-2
+  "Apply the monkey's operation rule to the item, only keeping track of
+   mod remainders"
+  [operation item]
+  (into {} (map #(operate-2 operation %) item)))
+
+(defn divides?-1
+  [worry test]
+  (zero? (rem worry test)))
+
+(defn divides?-2
+  [worry test]
+  (zero? (worry test)))
+
+(defn monkey-do
+  [worry-fn divides?-fn monkeys monkey-id]
   (let [monkey (get monkeys monkey-id)
         {:keys [items operation test true-op false-op]} monkey
         item   (first items)
-        worry  (quot (operate operation item) 3)
-        dest   (if (zero? (rem worry test)) true-op false-op)]
-    (-> monkeys
-        (update-in [monkey-id :items] (comp vec rest))
-        (update-in [monkey-id :counts] inc)
-        (update-in [dest :items] conj worry))))
-
-(defn monkey-do-2
-  [monkeys monkey-id]
-  (let [monkey (get monkeys monkey-id)
-        {:keys [items operation test true-op false-op]} monkey
-        item   (first items)
-        worry  (operate-2 operation item)
-        dest   (if (zero? (worry test)) true-op false-op)]
+        worry  (worry-fn operation item)
+        dest   (if (divides?-fn worry test) true-op false-op)]
     (-> monkeys
         (update-in [monkey-id :items] (comp vec rest))
         (update-in [monkey-id :counts] inc)
@@ -129,31 +128,8 @@
 
 (defn round
   "Have every monkey in turn process their items"
-  [monkeys]
-  (reduce (partial monkey-turn monkey-do-1) monkeys (range (count monkeys))))
-
-(defn remainders
-  [item]
-  (let [rems [2 3 5 7 9 11 13 17 19 23]]
-    (zipmap rems (map #(mod item %) rems))))
-
-(defn remainderize
-  [{:keys [items] :as monkey}]
-  (assoc monkey :items (map remainders items)))
-
-(defn part2-augment
-  [monkeys]
-  (mapv remainderize monkeys))
-
-(defn round-2
-  "Have every monkey in turn process their items, but the worry levels
-   have no relief (aren't divided by three)"
-  [monkeys]
-  (reduce (partial monkey-turn monkey-do-2) monkeys (range (count monkeys))))
-
-(part2-augment d11-s01)
-(round d11-s01)
-(round-2 (round-2 (part2-augment d11-s01)))
+  [monkey-do-fn monkeys]
+  (reduce (partial monkey-turn monkey-do-fn) monkeys (range (count monkeys))))
 
 (defn monkey-business
   "The product of the number of items inspected by the two most active 
@@ -166,7 +142,13 @@
          (take 2)
          (reduce *))))
 
-(def monkey-business-1 (partial monkey-business round))
+(def monkey-do-1 (partial monkey-do worry-1 divides?-1))
+(def monkey-do-2 (partial monkey-do worry-2 divides?-2))
+
+(def round-1 (partial round monkey-do-1))
+(def round-2 (partial round monkey-do-2))
+
+(def monkey-business-1 (partial monkey-business round-1))
 (def monkey-business-2 (partial monkey-business round-2))
 
 (defn day11-part1-soln
