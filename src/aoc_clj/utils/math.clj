@@ -1,10 +1,15 @@
 (ns aoc-clj.utils.math)
 
 (defn manhattan
-  "Computes the Manhattan distance (L1 norm) between two points"
-  [p1 p2]
-  (->> (map (comp abs -) p2 p1)
+  "Computes the Manhattan distance (L1 norm) between two vectors"
+  [v1 v2]
+  (->> (map (comp abs -) v2 v1)
        (reduce +)))
+
+(defn l1-norm
+  "Computes the L1 norm of a vector"
+  [v]
+  (reduce + (map abs v)))
 
 (defn gcd
   "Greatest common divisor between a and b"
