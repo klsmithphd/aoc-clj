@@ -1,6 +1,8 @@
 (ns aoc-clj.2022.day11
   "Solution to https://adventofcode.com/2022/day/11"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [clojure.string :as str]
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.math :as math]))
 
 (def start-str-len  (count "  Starting items: "))
 (def oper-str-len   (count "  Operation: new = old "))
@@ -18,11 +20,7 @@
 (defn parse-false [s] (parse-num s false-str-len))
 (defn parse-oper
   [s]
-  (let [op      (subs s oper-str-len)
-        safe-op (str (subs op 0 1) "' " (subs op 1))]
-    (-> (str "(fn [old] (" safe-op " old))")
-        read-string
-        eval)))
+  (str/split (subs s oper-str-len) #" "))
 
 (defn parse-monkey
   [[_ items oper test true-op false-op]]
@@ -73,6 +71,14 @@
   [num div]
   (zero? (rem num div)))
 
+(defn operate
+  [[op arg] item]
+  (if (= "+" op)
+    (+' item (read-string arg))
+    (if (= "old" arg)
+      (*' item item)
+      (*' item (read-string arg)))))
+
 (defn monkey-do
   "Process a single item by the monkey identified by `monkey-id`"
   ([monkeys monkey-id]
@@ -81,7 +87,7 @@
    (let [monkey (get monkeys monkey-id)
          {:keys [items operation test true-op false-op]} monkey
          item   (first items)
-         worry  (operation item)
+         worry  (operate operation item)
          ;; In part 2, the worry doesn't go down by three
          relief (if relief? (quot worry 3) worry)
          dest   (if (divides? relief test) true-op false-op)]
@@ -140,4 +146,3 @@
    simian shenanigans?"
   []
   (monkey-business-1 day11-input 20))
-
