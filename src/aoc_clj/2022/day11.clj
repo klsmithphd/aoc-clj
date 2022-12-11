@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day11
   "Solution to https://adventofcode.com/2022/day/11"
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.utils.core :as u]))
 
 (def start-str-len  (count "  Starting items: "))
 (def oper-str-len   (count "  Operation: new = old "))
