@@ -15,23 +15,12 @@
   [input]
   (mapgrid/lists->MapGrid2D (map (partial map translate) input)))
 
-(def d12-s01
-  (parse
-   ["Sabqponm"
-    "abcryxxl"
-    "accszExk"
-    "acctuvwj"
-    "abdefghi"]))
-
 (def day12-input (parse (u/puzzle-input "2022/day12-input.txt")))
 
 (defn find-matches
   "Given the `grid`, find the coordinates of the location with `value`"
   [{:keys [grid]} value]
   (map first (filter #(= value (second %)) grid)))
-
-(def start (find-matches d12-s01 -1))
-(def end   (find-matches d12-s01 26))
 
 (defn transitions
   [grid pos]
@@ -68,9 +57,13 @@
     (apply min lengths)))
 
 (defn day12-part1-soln
+  "What is the fewest steps required to move from your current position to the 
+   location that should get the best signal?"
   []
   (shortest-path-from-start day12-input))
 
 (defn day12-part2-soln
+  "What is the fewest steps required to move starting from any square with 
+   elevation `a` to the location that should get the best signal?"
   []
   (shortest-path-from-any-a day12-input))
