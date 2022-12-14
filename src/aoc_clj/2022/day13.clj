@@ -28,15 +28,13 @@
 
 (defn in-order-vector?
   [a b]
-  (let [size-check  (size-check a b)
-        order-check (map in-order? a b)]
-    (if (= :noop size-check)
-      (if (some false? order-check)
-        false
-        (if (some true? order-check)
-          true
-          :noop))
-      size-check)))
+  (let [order-check (first (remove #{:noop} (map in-order? a b)))
+        size-check  (size-check a b)]
+    (if (= :noop order-check size-check)
+      :noop
+      (if (nil? order-check)
+        size-check
+        order-check))))
 
 (defn in-order?
   [a b]
@@ -61,6 +59,3 @@
    What is the sum of the indices of those pairs?"
   []
   (right-order-packet-id-sum day13-input))
-
-(count day13-input)
-(count (filter true? (map (partial apply in-order?) day13-input)))

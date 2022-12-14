@@ -29,12 +29,11 @@
     "[1,[2,[3,[4,[5,6,0]]]],8,9]"]))
 
 
-
 (deftest in-order?-test
   (testing "Follows the correct in-order logic for the sample data"
     ;; If the right list runs out of items first, 
     ;; the inputs are not in the right order.
-    (is (false? (t/in-order? [1 2] [2])))
+    (is (true? (t/in-order? [1 2] [2])))
     (is (true?  (apply t/in-order? (nth d13-s01 0))))
     (is (true?  (apply t/in-order? (nth d13-s01 1))))
     (is (false? (apply t/in-order? (nth d13-s01 2))))
@@ -48,9 +47,9 @@
   (testing "The sum of the packet pair ids for in-order packets"
     (is (= 13 (t/right-order-packet-id-sum d13-s01)))))
 
-;; (deftest day13-part1-soln
-;;   (testing "Reproduces the answer for day13, part1"
-;;     (is (= 0 (t/day13-part1-soln)))))
+(deftest day13-part1-soln
+  (testing "Reproduces the answer for day13, part1"
+    (is (= 5503 (t/day13-part1-soln)))))
 
 ;; (deftest day13-part2-soln
 ;;   (testing "Reproduces the answer for day13, part2"
