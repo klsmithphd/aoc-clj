@@ -17,21 +17,26 @@
     (< a b) true
     (= a b) :noop))
 
+(defn size-check
+  [a b]
+  (let [lena (count a)
+        lenb (count b)]
+    (cond
+      (> lena lenb) false
+      (< lena lenb) true
+      (= lena lenb) :noop)))
+
 (defn in-order-vector?
   [a b]
-  (let [in-order-check (map in-order? a b)
-        some-false? (some false? in-order-check)
-        some-true?  (some true? in-order-check)]
-    (if some-false?
-      false
-      (if some-true?
-        true
-        (let [lena (count a)
-              lenb (count b)]
-          (cond
-            (> lena lenb) false
-            (< lena lenb) true
-            (= lena lenb) :noop))))))
+  (let [size-check  (size-check a b)
+        order-check (map in-order? a b)]
+    (if (= :noop size-check)
+      (if (some false? order-check)
+        false
+        (if (some true? order-check)
+          true
+          :noop))
+      size-check)))
 
 (defn in-order?
   [a b]

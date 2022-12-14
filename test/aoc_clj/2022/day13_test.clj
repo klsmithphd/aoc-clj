@@ -28,8 +28,13 @@
     "[1,[2,[3,[4,[5,6,7]]]],8,9]"
     "[1,[2,[3,[4,[5,6,0]]]],8,9]"]))
 
+
+
 (deftest in-order?-test
   (testing "Follows the correct in-order logic for the sample data"
+    ;; If the right list runs out of items first, 
+    ;; the inputs are not in the right order.
+    (is (false? (t/in-order? [1 2] [2])))
     (is (true?  (apply t/in-order? (nth d13-s01 0))))
     (is (true?  (apply t/in-order? (nth d13-s01 1))))
     (is (false? (apply t/in-order? (nth d13-s01 2))))
