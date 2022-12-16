@@ -28,6 +28,27 @@
     "[1,[2,[3,[4,[5,6,7]]]],8,9]"
     "[1,[2,[3,[4,[5,6,0]]]],8,9]"]))
 
+(count (apply concat (concat t/divider-packets d13-s01)))
+
+(def d13-s01-sorted
+  [[]
+   [[]]
+   [[[]]]
+   [1,1,3,1,1]
+   [1,1,5,1,1]
+   [[1],[2,3,4]]
+   [1,[2,[3,[4,[5,6,0]]]],8,9]
+   [1,[2,[3,[4,[5,6,7]]]],8,9]
+   [[1],4]
+   [[2]]
+   [3]
+   [[4,4],4,4]
+   [[4,4],4,4,4]
+   [[6]]
+   [7,7,7]
+   [7,7,7,7]
+   [[8,7,6]]
+   [9]])
 
 (deftest in-order?-test
   (testing "Follows the correct in-order logic for the sample data"
@@ -46,6 +67,15 @@
 (deftest right-order-packet-id-sum-test
   (testing "The sum of the packet pair ids for in-order packets"
     (is (= 13 (t/right-order-packet-id-sum d13-s01)))))
+
+(deftest sorted-test
+  (testing "Returns the packets in-order, with the divider packets"
+    (is (= d13-s01-sorted (t/sorted d13-s01)))))
+
+(deftest decoder-key-test
+  (testing "Computes the decoder key (product of indices of two divider 
+            packets)"
+    (is (= 140 (t/decoder-key d13-s01)))))
 
 (deftest day13-part1-soln
   (testing "Reproduces the answer for day13, part1"
