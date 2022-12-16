@@ -81,6 +81,6 @@
   (testing "Reproduces the answer for day13, part1"
     (is (= 5503 (t/day13-part1-soln)))))
 
-;; (deftest day13-part2-soln
-;;   (testing "Reproduces the answer for day13, part2"
-;;     (is (= 0 (t/day13-part2-soln)))))
+(deftest day13-part2-soln
+  (testing "Reproduces the answer for day13, part2"
+    (is (= 20952 (t/day13-part2-soln)))))
