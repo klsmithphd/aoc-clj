@@ -6,7 +6,7 @@
 (defn parse-line
   [line]
   (let [[x y bx by] (map read-string (re-seq #"\-?\d+" line))]
-    {:sensor [x y] :beacon [bx by] :range (math/manhattan [x y] [bx by])}))
+    {:sensor [x y] :beacon [bx by] :radius (math/manhattan [x y] [bx by])}))
 
 (defn parse
   [input]
@@ -31,38 +31,21 @@
 
 (def day15-input (parse (u/puzzle-input "2022/day15-input.txt")))
 
-(defn in-range?
-  "Is the given position `pos` within the detection `range` of the sensor
-   at position given by `sensor`"
-  [{:keys [sensor range]} pos]
-  (<= (math/manhattan sensor pos) range))
-
-(defn any-in-range?
-  [sensors pos]
-  (some true? (map #(in-range? % pos) sensors)))
-
-(defn sensor-x
-  [{:keys [sensor]}]
-  (first sensor))
-
-(defn leftmost
-  [sensors]
-  (apply min (map #(- (sensor-x %) (:range %)) sensors)))
-
-(defn rightmost
-  [sensors]
-  (apply max (map #(+ (sensor-x %) (:range %)) sensors)))
+(defn visible-in-line
+  [y {:keys [sensor radius]}]
+  (let [[sx sy] sensor
+        xwidth (- radius (abs (- y sy)))]
+    (for [x (range (- sx xwidth) (+ sx xwidth 1))] [x y])))
 
 (defn no-beacon-points-in-line
   [sensors y]
-  (let [xmin (leftmost sensors)
-        xmax (rightmost sensors)
-        points (for [x (range xmin (inc xmax))] [x y])
-        seen?  (partial any-in-range? sensors)
+  (let [points (distinct (mapcat #(visible-in-line y %) sensors))
         beacons (set (map :beacon sensors))]
-    (->> points
-         (filter seen?)
-         (remove beacons))))
+    (remove beacons points)))
+
+(defn tuning-frequency
+  [[x y]]
+  (+ (* 4000000 x) y))
 
 (defn day15-part1-soln
   []
