@@ -1,5 +1,4 @@
-(ns aoc-clj.utils.intervals
-  (:require [aoc-clj.utils.core :as u]))
+(ns aoc-clj.utils.intervals)
 
 (defn fully-contained?
   "Return true if one of the ranges (determined by inclusive left/right bounds)
