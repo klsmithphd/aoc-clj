@@ -31,11 +31,6 @@
   [input]
   (rocks (map parse-line input)))
 
-(def d14-s01
-  (parse
-   ["498,4 -> 498,6 -> 496,6"
-    "503,4 -> 502,4 -> 502,9 -> 494,9"]))
-
 (def day14-input (parse (u/puzzle-input "2022/day14-input.txt")))
 
 (defn lowest
