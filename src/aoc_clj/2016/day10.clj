@@ -79,18 +79,9 @@
   []
   (bot-that-compares day10-input #{17 61}))
 
-;; TODO - Add to common utility library
-(defn iterate-until-static
-  [f x]
-  (concat (list x)
-          (->> (iterate f x)
-               (partition 2 1)
-               (take-while #(not= (first %) (second %)))
-               (map second))))
-
 (defn output-values
   [state]
-  (let [outputs (-> (iterate-until-static step state)
+  (let [outputs (-> (u/converge step state)
                     last
                     :assignments
                     (select-keys ["output0" "output1" "output2"])

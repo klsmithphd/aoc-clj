@@ -110,3 +110,14 @@
   "Transpose a vector of vectors, i.e., v[i,j] -> v[j,i]"
   [v]
   (apply mapv vector v))
+
+(defn converge
+  "Like `iterate`, returns a lazy sequence of x, (f x), (f (f x)) etc.,
+   until there are no longer any changes in continued applications of the
+   function to the output of the previous invocation."
+  [f x]
+  (concat (list x)
+          (->> (iterate f x)
+               (partition 2 1)
+               (take-while #(not= (first %) (second %)))
+               (map second))))

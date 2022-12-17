@@ -88,3 +88,10 @@
            (u/transpose [[0 3 6]
                          [1 4 7]
                          [2 5 8]])))))
+
+(deftest converge-test
+  (testing "Demonstration of converge: returns a lazy seq of repeatedly
+            applying a function to itself until there are no further
+            changes"
+    (is (= [128 64 32 16 8 4 2 1 0]
+           (u/converge #(quot % 2) 128)))))
