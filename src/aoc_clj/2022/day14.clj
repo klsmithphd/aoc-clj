@@ -1,5 +1,5 @@
 (ns aoc-clj.2022.day14
- "Solution to https://adventofcode.com/2022/day/14"
+  "Solution to https://adventofcode.com/2022/day/14"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -41,7 +41,7 @@
   ((complement #{:rock :sand}) (get grid pos :air)))
 
 (defn move
-  [grid [x y]] 
+  [grid [x y]]
   (let [moves [;; straight down
                [x (inc y)]
                ;; down to the left
@@ -63,5 +63,5 @@
 
 (sand-cells
  (deposit-sand-grain
-  (deposit-sand-grain (rocks d14-s01))))
+  (deposit-sand-grain d14-s01)))
 

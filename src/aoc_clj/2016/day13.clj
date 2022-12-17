@@ -42,4 +42,4 @@
     (println graph)
     (g/path-distance graph path)))
 
-(path-distance 10 [7 4])
+;; (path-distance 10 [7 4])
