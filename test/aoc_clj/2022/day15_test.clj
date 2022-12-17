@@ -22,7 +22,7 @@
 (deftest no-beacon-points-in-line-test
   (testing "Finds the right number of points that can't contain a beacon
             at a given line"
-    (is (= 26 (count (t/no-beacon-points-in-line d15-s01 10))))))
+    (is (= 26 (t/no-beacon-points-in-line d15-s01 10)))))
 
 (deftest day15-part1-soln
   (testing "Reproduces the answer for day15, part1"

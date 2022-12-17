@@ -19,3 +19,28 @@
     (is (true?  (ivs/overlap? [2 8] [3 7])))
     (is (true?  (ivs/overlap? [6 6] [4 6])))
     (is (true?  (ivs/overlap? [2 6] [4 8])))))
+
+(deftest contained?-test
+  (testing "Whether the point is contained within the given interval"
+    (is (false? (ivs/contained? 0 [1 5])))
+    (is (true?  (ivs/contained? 1 [1 5])))
+    (is (true?  (ivs/contained? 4 [1 5])))
+    (is (true?  (ivs/contained? 5 [1 5])))
+    (is (false? (ivs/contained? 6 [1 5])))))
+
+(deftest in-intervals?-test
+  (testing "Whether the point is contained within any interval in 
+            `intervals`"
+    (is (false? (ivs/in-intervals? 0 [[1 3] [5 7]])))
+    (is (true?  (ivs/in-intervals? 1 [[1 3] [5 7]])))
+    (is (false? (ivs/in-intervals? 4 [[1 3] [5 7]])))
+    (is (true?  (ivs/in-intervals? 7 [[1 3] [5 7]])))))
+
+(deftest simplify-test
+  (testing "Collapses overlapping intervals into a simpler representation"
+    (is (= [[1 5]]
+           (ivs/simplify [[1 3] [3 5]])))
+    (is (= [[1 3] [4 5]]
+           (ivs/simplify [[1 3] [4 5]])))
+    (is (= [[1 5] [7 9] [10 14]]
+           (ivs/simplify [[1 3] [3 5] [7 9] [10 12] [11 14]])))))
