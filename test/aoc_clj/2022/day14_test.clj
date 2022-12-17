@@ -19,13 +19,40 @@
 
 (deftest deposit-sand-grain-test
   (testing "Updates the grid with a newly deposited sand grain"
-    (is (= {[500 8] :sand} 
-           (select-keys (t/deposit-sand-grain d14-s01) [[500 8]])))))
+    (is (= [500 8]
+           (second (t/deposit-sand-grain [d14-s01 nil]))))
+    (is (= [499 8]
+           (second
+            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 2))))
+    (is (= [501 8]
+           (second
+            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 3))))
+    (is (= [500 7]
+           (second
+            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 4))))
+    (is (= [498 8]
+           (second
+            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 5))))
+    (is (= [500 2]
+           (second
+            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 22))))
+    (is (= [497 5]
+           (second
+            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 23))))
+    (is (= [495 8]
+           (second
+            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 24))))))
 
-;; (deftest day14-part1-soln
-;;   (testing "Reproduces the answer for day14, part1"
-;;     (is (= 0 (t/day14-part1-soln)))))
+(deftest sand-until-continuous-flow-test
+  (testing "Finds the amount of sand that sticks before continuous flow"
+    (is (= 24 (t/sand-until-continuous-flow d14-s01)))))
 
-;; (deftest day14-part2-soln
-;;   (testing "Reproduces the answer for day14, part2"
-;;     (is (= 0 (t/day14-part2-soln)))))
+(deftest day14-part1-soln
+  (testing "Reproduces the answer for day14, part1"
+    (is (= 913 (t/day14-part1-soln)))))
+
+;; FIXME: The implementation is too slow to test in a reasonable time
+;; https://github.com/Ken-2scientists/aoc-clj/issues/27
+(deftest ^:slow day14-part2-soln
+  (testing "Reproduces the answer for day14, part2"
+    (is (= 30762 (t/day14-part2-soln)))))
