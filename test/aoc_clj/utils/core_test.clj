@@ -12,6 +12,10 @@
                                   "Chunk 2"
                                   "Some other values"])))))
 
+(deftest str->vec-test
+  (testing "Demonstration of str->vec, convert a string into a vec of values"
+    (is (= [1 2 3] (u/str->vec "1,2,3")))))
+
 (deftest fmap-test
   (testing "Demonstration of fmap: applying a function to vals of a map"
     (is (= {:a 2 :b 3 :c 4} (u/fmap inc {:a 1 :b 2 :c 3})))))
