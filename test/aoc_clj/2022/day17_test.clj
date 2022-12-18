@@ -28,9 +28,9 @@
   (testing "Computes the height after a number of rocks have been deposited"
     (is (= 3068 (t/tower-height-after-n d16-s01 2022)))))
 
-;; (deftest day17-part1-soln
-;;   (testing "Reproduces the answer for day17, part1"
-;;     (is (= 0 (t/day17-part1-soln)))))
+(deftest day17-part1-soln
+  (testing "Reproduces the answer for day17, part1"
+    (is (= 3171 (t/day17-part1-soln)))))
 
 ;; (deftest day17-part2-soln
 ;;   (testing "Reproduces the answer for day17, part2"

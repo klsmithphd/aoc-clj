@@ -114,5 +114,7 @@
        tower-height))
 
 (defn day17-part1-soln
+  "How many units tall will the tower of rocks be after 2022 rocks have 
+   stopped falling?"
   []
   (tower-height-after-n day17-input 2022))
