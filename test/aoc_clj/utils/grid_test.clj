@@ -40,6 +40,17 @@
             [-1  1] [0  1] [1  1]]
            (grid/adj-coords-2d [0 0] :include-diagonals true)))))
 
+(deftest adj-coords-3d-test
+  (testing "Returns the directly adjacent coordinates to the given pos"
+    (is (= [[0 0 1]
+            [0 0 -1]
+            [0 1 0]
+            [0 -1 0]
+            [1 0 0]
+            [-1 0 0]]
+           (grid/adj-coords-3d [0 0 0])))))
+
+
 (deftest neighbors-test
   (testing "Returns the position and values of points adjacent to pos"
     (is (= {[0 1] 4 [1 2] 8 [2 1] 6 [1 0] 2}

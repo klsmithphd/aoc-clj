@@ -57,6 +57,16 @@
     ;; only directly adjacent
     [[x (inc y)] [(inc x) y] [x (dec y)] [(dec x) y]]))
 
+(defn adj-coords-3d
+  "Coordinates of adjacent points in 3D"
+  [[x y z]]
+  [[x y (inc z)]
+   [x y (dec z)]
+   [x (inc y) z]
+   [x (dec y) z]
+   [(inc x) y z]
+   [(dec x) y z]])
+
 (defn neighbors-2d
   "Map of the positions and values of the nearest neighbors to pos"
   [grid pos & {:keys [include-diagonals]}]
