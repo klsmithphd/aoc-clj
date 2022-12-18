@@ -14,23 +14,6 @@
   [input]
   (map parse-line input))
 
-(def d15-s01
-  (parse
-   ["Sensor at x=2, y=18: closest beacon is at x=-2, y=15"
-    "Sensor at x=9, y=16: closest beacon is at x=10, y=16"
-    "Sensor at x=13, y=2: closest beacon is at x=15, y=3"
-    "Sensor at x=12, y=14: closest beacon is at x=10, y=16"
-    "Sensor at x=10, y=20: closest beacon is at x=10, y=16"
-    "Sensor at x=14, y=17: closest beacon is at x=10, y=16"
-    "Sensor at x=8, y=7: closest beacon is at x=2, y=10"
-    "Sensor at x=2, y=0: closest beacon is at x=2, y=10"
-    "Sensor at x=0, y=11: closest beacon is at x=2, y=10"
-    "Sensor at x=20, y=14: closest beacon is at x=25, y=17"
-    "Sensor at x=17, y=20: closest beacon is at x=21, y=22"
-    "Sensor at x=16, y=7: closest beacon is at x=15, y=3"
-    "Sensor at x=14, y=3: closest beacon is at x=15, y=3"
-    "Sensor at x=20, y=1: closest beacon is at x=15, y=3"]))
-
 (def day15-input (parse (u/puzzle-input "2022/day15-input.txt")))
 
 (defn visible-intervals
@@ -66,10 +49,15 @@
      (:radius s2)))
 
 (defn sensor-overlap?
+  "If two sensors have a negative or zero (non-positive) gap
+   between them, their coverage overlaps"
   [s1 s2]
   (not (pos? (sensor-gap s1 s2))))
 
 (defn rectangle?
+  "Returns true if a sequence of four sensors forms a rectangle around a 
+   gap. This requires that adjacent sensors overlap, but the opposite 
+   sensors have a gap of exactly 2 units between them"
   [s1 s2 s3 s4]
   (and (sensor-overlap? s1 s2)
        (sensor-overlap? s2 s3)
@@ -78,40 +66,43 @@
        (= 2 (sensor-gap s1 s3))
        (= 2 (sensor-gap s2 s4))))
 
-(defn find-bounding-sensors
+(defn find-gap-bounding-sensors
+  "Given a collection of sensors, find the four sensors that bound a gap
+   in coverage."
   [sensors]
   (->>
    (combo/permuted-combinations sensors 4)
    (filter #(apply rectangle? %))
-   (map #(map :sensor %))
-   (map sort)
-   distinct))
+   (map #(sort-by :sensor (comp - compare) %))
+   distinct
+   first))
 
-(defn bounding-direction
-  [[x1 y1] [x2 y2]]
-  (if (> x2 x1)
-    (if (> y2 y1)
-      :ne
-      :se)
-    (if (> y2 y1)
-      :nw
-      :sw)))
-
-(defn gap-position
-  "s1 is the bottom-right rectangle adjacent to the gap
-   s2 is the bottom-left rectangle adjacent to the gap"
-  [s1 s2]
-  (let [[sx1 sy1] (:sensor s1)
-        [sx2 sy2] (:sensor s2)
-        r1        (:radius s1)
-        r2        (:radius s2)
-        x (/ (+ (+ sx1 sx2) (- sy1 sy2) (- r2 r1)) 2)
+(defn intersection-point
+  "Compute the location of the gap using the information about the 
+   bottom-right and top-right sensors that are known to bound the gap.
+   This formula was derived by writing out the linear equations that represent
+   the line of cells immediately outside a sensor for both the bottom-right
+   and top-right sensors, and then solving for x and y where they intersect."
+  [bottom-right top-right]
+  (let [[sx1 sy1] (:sensor bottom-right)
+        [sx2 sy2] (:sensor top-right)
+        r1        (:radius bottom-right)
+        r2        (:radius top-right)
+        x (/ (- (+ sx1 sx2) (- sy2 sy1) (+ r2 r1) 2) 2)
         y (+ (- sx1 x) sy1 (- (inc r1)))]
     [x y]))
 
-(gap-position {:sensor [20 14] :radius 8} {:sensor [12 14] :radius 4})
-
-
+(defn gap-position
+  "Given a collection of sensors, find the unique position where no sensors
+   have any coverage"
+  [sensors]
+  (->> sensors
+       ;; Will return the four sensors bounding the gap, sorted by
+       ;; descending x, then descending y.
+       find-gap-bounding-sensors
+       ;; Take 2 selects the bottom-right and top-right sensors
+       (take 2)
+       (apply intersection-point)))
 
 (defn tuning-frequency
   "The tuning frequency can be found by multiplying its x coordinate by 4000000
@@ -129,5 +120,4 @@
   "Find the only possible position for the distress beacon. 
    What is its tuning frequency?"
   []
-  12)
-
+  (tuning-frequency (gap-position day15-input)))

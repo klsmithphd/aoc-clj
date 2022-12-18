@@ -24,10 +24,18 @@
             at a given line"
     (is (= 26 (t/no-beacon-points-in-line d15-s01 10)))))
 
+(deftest gap-position
+  (testing "Finds the point where there's no sensor coverage"
+    (is (= [14 11] (t/gap-position d15-s01)))))
+
+(deftest tuning-frequency
+  (testing "Computes the tuning frequency based on [x,y]"
+    (is (= 56000011 (t/tuning-frequency [14 11])))))
+
 (deftest day15-part1-soln
   (testing "Reproduces the answer for day15, part1"
     (is (= 4907780 (t/day15-part1-soln)))))
 
-;; (deftest day15-part2-soln
-;;   (testing "Reproduces the answer for day15, part2"
-;;     (is (= 0 (t/day15-part2-soln)))))
+(deftest day15-part2-soln
+  (testing "Reproduces the answer for day15, part2"
+    (is (= 13639962836448 (t/day15-part2-soln)))))
