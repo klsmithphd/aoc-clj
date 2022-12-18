@@ -90,6 +90,13 @@
   (let [size (count coll)]
     (take size (drop (mod n size) (cycle coll)))))
 
+(defn rotations
+  "Return all rotations of a collection in order. The first rotation
+   is the collection itself, the second is the collection rotated by
+   1, the next by 2, and so on up to n-1."
+  [coll]
+  (map #(rotate % coll) (range (count coll))))
+
 (defn index-of
   "Find the index position of x within coll. Only returns the
    first match, even when there are multiple matches. Returns nil

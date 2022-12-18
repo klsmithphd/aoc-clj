@@ -59,6 +59,15 @@
     (is (= '(2 3 4 0 1) (u/rotate -3 (range 5))))
     (is (= '(1 2 3 4 0) (u/rotate -4 (range 5))))))
 
+(deftest rotations-test
+  (testing "Demonstration of rotations: return all rotations of a collection"
+    (is (= [[0 1 2 3 4]
+            [1 2 3 4 0]
+            [2 3 4 0 1]
+            [3 4 0 1 2]
+            [4 0 1 2 3]]
+           (u/rotations [0 1 2 3 4])))))
+
 (deftest index-of-test
   (testing "Demonstration of index-of: find index in seq of first occurrence "
     (is (= 3 (u/index-of 8 [1 2 4 8 16])))
