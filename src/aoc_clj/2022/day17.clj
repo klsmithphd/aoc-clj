@@ -5,32 +5,33 @@
 (def shapes
   "Each rock appears so that its left edge is two units away from the left wall"
   [;; horizontal line ####
-   {:left 2 :right 5 :bottom 0 :falling? true
-    :cells [[2 0] [3 0] [4 0] [5 0]]}
+   {:left 2 :right 5 :bottom 4 :falling? true
+    :cells [[2 4] [3 4] [4 4] [5 4]]}
    ;;          #
    ;;  plus   ###
    ;;          #
-   {:left 2 :right 4 :bottom 0 :falling? true
-    :cells [[3 0] [2 1] [3 1] [4 1] [3 2]]}
+   {:left 2 :right 4 :bottom 4 :falling? true
+    :cells [[3 4] [2 5] [3 5] [4 5] [3 6]]}
    ;;           #
    ;;   ell     #
    ;;         ###
-   {:left 2 :right 4 :bottom 0 :falling? true
-    :cells [[2 0] [3 0] [4 0] [4 1] [4 2]]}
+   {:left 2 :right 4 :bottom 4 :falling? true
+    :cells [[2 4] [3 4] [4 4] [4 5] [4 6]]}
    ;; vertical line
-   {:left 2 :right 2 :bottom 0 :falling? true
-    :cells [[2 0] [2 1] [2 2] [2 3]]}
+   {:left 2 :right 2 :bottom 4 :falling? true
+    :cells [[2 4] [2 5] [2 6] [2 7]]}
    ;; square
-   {:left 2 :right 3 :bottom 0 :falling? true
-    :cells [[2 0] [3 0] [2 1] [3 1]]}])
+   {:left 2 :right 3 :bottom 4 :falling? true
+    :cells [[2 4] [3 4] [2 5] [3 5]]}])
 
 (def d16-s01 ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>")
 
 (def day17-input (first (u/puzzle-input "2022/day17-input.txt")))
 
-(defn shift-right [[x y]] [(inc x) y])
-(defn shift-left  [[x y]] [(dec x) y])
-(defn shift-down  [[x y]] [x (dec y)])
+(defn shift-right [[x y]]   [(inc x) y])
+(defn shift-left  [[x y]]   [(dec x) y])
+(defn shift-down  [[x y]]   [x (dec y)])
+(defn shift-up    [h [x y]] [x (+ h y)])
 
 (defn push-right
   [grid {:keys [left right cells] :as shape}]
@@ -58,7 +59,7 @@
 
 (defn move-down
   [grid {:keys [bottom cells] :as shape}]
-  (if (= 0 bottom)
+  (if (= 1 bottom)
     (assoc shape :falling? false)
     (let [newcells (mapv shift-down cells)]
       (if (some (complement nil?) (map grid newcells))
@@ -67,24 +68,51 @@
                :cells newcells
                :bottom (dec bottom))))))
 
+(defn tower-height
+  [grid]
+  (if (keys grid)
+    (apply max (map second (keys grid)))
+    0))
+
+(defn init-shape
+  [grid {:keys [bottom cells] :as shape}]
+  (let [height (tower-height grid)]
+    (assoc shape
+           :bottom (+ bottom height)
+           :cells (mapv #(shift-up height %) cells))))
+
 (defn push-move
-  [grid jet shape]
+  [grid shape jet]
   (case jet
     \> (push-right grid shape)
     \< (push-left grid shape)))
 
 (defn move
   [{:keys [grid shape jets] :as state}]
-  (let [shifted (push-move grid shape (first jets))]
+  (let [newshape (push-move grid shape (first jets))]
     (assoc state
            :jets (rest jets)
-           :shape (move-down grid shifted))))
+           :shape (move-down grid newshape))))
 
 (defn deposit-shape
-  [grid shape jets]
-  (loop [state {:grid grid :shape shape :jets jets}]
-    (if (get-in state [:shape :falling])
+  [[grid shapes jets]]
+  (loop [state {:grid grid
+                :shape (init-shape grid (first shapes))
+                :jets jets}]
+    (if (not (get-in state [:shape :falling?]))
       [(into grid (zipmap (get-in state [:shape :cells])
-                          (repeat :rock)))]
+                          (repeat :rock)))
+       (rest shapes)
+       (get state :jets)]
       (recur (move state)))))
 
+(defn tower-height-after-n
+  [input n]
+  (->> (iterate deposit-shape [{} (cycle shapes) (cycle input)])
+       (drop n)
+       ffirst
+       tower-height))
+
+(defn day17-part1-soln
+  []
+  (tower-height-after-n day17-input 2022))
