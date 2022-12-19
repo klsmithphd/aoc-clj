@@ -33,13 +33,11 @@
 
 (defn edges
   [{:keys [valve tunnels]}]
-  {valve (zipmap tunnels (repeat 1))})
-
-(apply merge (map edges d16-s01))
+  [valve (zipmap tunnels (repeat 1))])
 
 (defn raw-graph
   [input]
-  (->MapGraph (apply merge (map edges input))))
+  (->MapGraph (into {} (map edges input))))
 
 (defn keeper?
   [{:keys [valve flow]}]
@@ -63,4 +61,37 @@
          (group-by first)
          (u/fmap #(into {} (map (comp vec rest)) %))
          ->MapGraph)))
+
+(defn greedy-next-move
+  [g valves pos time open]
+  (let [candidates (->> (remove (into #{pos} (keys open)) (keys valves))
+                        (filter #(< (get-in g [:graph pos %]) time)))
+        values     (zipmap candidates
+                           (map #(/ (valves %)
+                                    (get-in g [:graph pos %])) candidates))
+        choice     (key (apply max-key val values))
+        dist       (get-in g [:graph pos choice])
+        now-time   (- time dist 1)]
+    [choice now-time (assoc open choice now-time)]))
+
+(defn greedy-solve
+  [input]
+  (let [valves (valves input)
+        g      (simpler-graph input)]
+    (loop [pos "AA" time 30 open {}]
+      (if (or (zero? time)
+              (= (count open) (count valves)))
+        [pos time open]
+        (let [[p t o] (greedy-next-move g valves pos time open)]
+          (recur p t o))))))
+
+(defn pressure-released
+  [valves open-times]
+  (reduce + (map (fn [[k v]] (* (valves k) v)) open-times)))
+
+(comment
+  (def g (simpler-graph d16-s01))
+  (def v (valves d16-s01))
+  (pressure-released v {"DD" 28, "JJ" 24, "BB" 20, "HH" 13, "EE" 9, "CC" 6, "AA" 3})
+  (greedy-solve d16-s01))
 

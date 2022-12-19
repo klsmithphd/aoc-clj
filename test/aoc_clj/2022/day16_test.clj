@@ -15,6 +15,13 @@
     "Valve II has flow rate=0; tunnels lead to valves AA, JJ"
     "Valve JJ has flow rate=21; tunnel leads to valve II"]))
 
+(deftest pressure-released-test
+  (testing "Computes the total pressure released by opening various valves
+            at specific times"
+    (is (= 1651 (t/pressure-released
+                 (t/valves d16-s01)
+                 {"DD" 28 "BB" 25 "JJ" 21 "HH" 13 "EE" 9 "CC" 6})))))
+
 ;; (deftest day16-part1-soln
 ;;   (testing "Reproduces the answer for day16, part1"
 ;;     (is (= 0 (t/day16-part1-soln)))))
