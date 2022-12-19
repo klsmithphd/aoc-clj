@@ -21,3 +21,29 @@
 
 (def day19-input (parse (u/puzzle-input "2022/day19-input.txt")))
 (def time-limit 24)
+(def init-inventory {:robots {:ore 1}
+                     :materials {:ore 0
+                                 :clay 0
+                                 :obsidian 0
+                                 :geode 0}})
+
+(defn gather-materials
+  [{:keys [robots materials] :as inv}]
+  (assoc inv :materials
+         (apply merge (map (fn [[k v]] (update materials k + v)) robots))))
+
+(defn build-robots
+  [{:keys [robots materials]}])
+
+(defn update-inventory
+  [inventory]
+  (->> inventory
+       gather-materials
+       build-robots))
+
+(defn tick
+  [blueprint]
+  (loop [timer time-limit inv init-inventory]
+    (if (zero? timer)
+      inv
+      (recur (dec timer) (update-inventory inv)))))
