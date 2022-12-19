@@ -28,7 +28,7 @@
 
 (deftest day18-part1-soln
   (testing "Reproduces the answer for day18, part1"
-    (is (= 33900 (t/day18-part1-soln)))))
+    (is (= 3390 (t/day18-part1-soln)))))
 
 ;; (deftest day18-part2-soln
 ;;   (testing "Reproduces the answer for day18, part2"
