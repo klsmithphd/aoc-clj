@@ -22,6 +22,10 @@
                  (t/valves d16-s01)
                  {"DD" 28 "BB" 25 "JJ" 21 "HH" 13 "EE" 9 "CC" 6})))))
 
+(deftest best-pressure-test
+  (testing "Finds the optimum amount of pressure released"
+    (is (= 1651 (t/best-pressure d16-s01)))))
+
 ;; (deftest day16-part1-soln
 ;;   (testing "Reproduces the answer for day16, part1"
 ;;     (is (= 0 (t/day16-part1-soln)))))

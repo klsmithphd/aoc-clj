@@ -85,13 +85,32 @@
         (let [[p t o] (greedy-next-move g valves pos time open)]
           (recur p t o))))))
 
+(defn visit-times
+  [{:keys [graph]} nodes]
+  (let [steps (partition 2 1 nodes)]
+    (->> (map #(inc (get-in graph %)) steps)
+         (reductions +)
+         (map #(- 30 %))
+         (zipmap (rest nodes)))))
+
 (defn pressure-released
   [valves open-times]
   (reduce + (map (fn [[k v]] (* (valves k) v)) open-times)))
 
-(comment
-  (def g (simpler-graph d16-s01))
-  (def v (valves d16-s01))
-  (pressure-released v {"DD" 28, "JJ" 24, "BB" 20, "HH" 13, "EE" 9, "CC" 6, "AA" 3})
-  (greedy-solve d16-s01))
+(defn brute-force-best-path
+  [input]
+  (let [g (simpler-graph input)
+        v (valves input)
+        nodes (keys (:graph g))
+        scenarios (map #(concat ["AA"] %)
+                       (combo/permutations (remove #{"AA"} nodes)))]
+    (->> scenarios
+         (map #(visit-times g %))
+         (map #(pressure-released v %))
+         (apply max))))
 
+(def best-pressure brute-force-best-path)
+
+(defn day16-part1-soln
+  []
+  (best-pressure day16-input))
