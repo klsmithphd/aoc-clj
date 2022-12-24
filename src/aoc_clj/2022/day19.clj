@@ -5,10 +5,10 @@
 (defn parse-line
   [line]
   (let [[a b c d e f g] (map read-string (re-seq #"\d+" line))]
-    [a {:ore      {:ore b}
-        :clay     {:ore c}
+    [a {:geode    {:ore f :obsidian g}
         :obsidian {:ore d :clay e}
-        :geode    {:ore f :obsidian g}}]))
+        :clay     {:ore c}
+        :ore      {:ore b}}]))
 
 (defn parse
   [input]
@@ -22,28 +22,55 @@
 (def day19-input (parse (u/puzzle-input "2022/day19-input.txt")))
 (def time-limit 24)
 (def init-inventory {:robots {:ore 1}
-                     :materials {:ore 0
-                                 :clay 0
+                     :materials {:geode 0
                                  :obsidian 0
-                                 :geode 0}})
+                                 :clay 0
+                                 :ore 0}})
+
+(defn gather-material
+  [inv [type amt]]
+  (update-in inv [:materials type] + amt))
+
+(defn consume-material
+  [inv [type amt]]
+  (update-in inv [:materials type] - amt))
 
 (defn gather-materials
-  [{:keys [robots materials] :as inv}]
-  (assoc inv :materials
-         (apply merge (map (fn [[k v]] (update materials k + v)) robots))))
+  [{:keys [robots] :as inv}]
+  (reduce gather-material inv robots))
+
+(defn not-build-robot-type?
+  [inv ingredients]
+  (let [used-materials (:materials (reduce consume-material inv ingredients))]
+    (some neg? (map second used-materials))))
+
+(defn add-robot
+  [inv type]
+  (assoc-in inv [:robots type] (inc (get-in inv [:robots type] 0))))
+
+(defn build-robot
+  [inv [type ingredients]]
+  (if (not-build-robot-type? inv ingredients)
+    inv
+    (-> (reduce consume-material inv ingredients)
+        (add-robot type))))
 
 (defn build-robots
-  [{:keys [robots materials]}])
+  [blueprint inv]
+  (reduce build-robot inv blueprint))
 
 (defn update-inventory
-  [inventory]
+  [blueprint inventory]
   (->> inventory
        gather-materials
-       build-robots))
+       (build-robots blueprint)))
 
 (defn tick
   [blueprint]
-  (loop [timer time-limit inv init-inventory]
-    (if (zero? timer)
-      inv
-      (recur (dec timer) (update-inventory inv)))))
+  (let [updater (partial update-inventory blueprint)]
+    (loop [timer time-limit inv init-inventory]
+      (if (zero? timer)
+        inv
+        (recur (dec timer) (updater inv))))))
+
+(tick (get d19-s01 1))
