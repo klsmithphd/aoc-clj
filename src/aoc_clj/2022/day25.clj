@@ -36,6 +36,9 @@
                  (fives-places n)))))
 
 (defn round-away
+  "Round away from zero, i.e., positive numbers round up toward 
+   positive infinity and negative numbers round 'up' toward negative
+   infinity. "
   [num]
   (cond
     (<      num -1.5) -2
@@ -45,6 +48,8 @@
     (< 1.5  num)       2))
 
 (defn places
+  "Given a number and a seq of the powers of five in descending
+   order (see `fives-places`), return a seq"
   [num powers]
   (if (= 1 (count powers))
     [num]
@@ -63,6 +68,16 @@
       (str/join (map (u/invert-map snafu-map) (places num powers))))))
 
 (defn requirements-sum
+  "To heat the fuel, Bob needs to know the total amount of fuel that will be 
+   processed ahead of time so it can correctly calibrate heat output and flow 
+   rate. This amount is simply the sum of the fuel requirements of all of the 
+   hot air balloons, and those fuel requirements are even listed clearly on 
+   the side of each hot air balloon's burner.
+   
+   Apparently, the fuel requirements use numbers written in a format the Elves
+   don't recognize; predictably, they'd like your help deciphering them.
+   
+   Bob needs the input value expressed as a SNAFU number, not in decimal."
   [input]
   (->> input
        (map snafu->decimal)
@@ -70,6 +85,7 @@
        decimal->snafu))
 
 (defn day25-part1-soln
+  "What SNAFU number do you supply to Bob's console?"
   []
   (requirements-sum day25-input))
 
