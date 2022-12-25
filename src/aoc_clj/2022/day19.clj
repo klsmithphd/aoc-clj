@@ -39,38 +39,62 @@
   [{:keys [robots] :as inv}]
   (reduce gather-material inv robots))
 
-(defn not-build-robot-type?
+(defn robot-build-possible?
   [inv ingredients]
-  (let [used-materials (:materials (reduce consume-material inv ingredients))]
-    (some neg? (map second used-materials))))
+  (->> (reduce consume-material inv ingredients)
+       :materials
+       (map second)
+       (not-any? neg?)))
+
+(defn build-robot-type?
+  [inv type ingredients]
+  (and
+   (robot-build-possible? inv ingredients)
+   (case type
+     :ore false
+     :clay (< (get-in inv [:robots :clay] 0) 3)
+     :obsidian (< (get-in inv [:robots :obsidian] 0) 2)
+     true)))
 
 (defn add-robot
-  [inv type]
-  (assoc-in inv [:robots type] (inc (get-in inv [:robots type] 0))))
+  [{:keys [pending] :as inv}]
+  (if (nil? pending)
+    inv
+    (-> inv
+        (assoc-in [:robots pending] (inc (get-in inv [:robots pending] 0)))
+        (dissoc :pending))))
 
 (defn build-robot
   [inv [type ingredients]]
-  (if (not-build-robot-type? inv ingredients)
-    inv
+  (if (build-robot-type? inv type ingredients)
     (-> (reduce consume-material inv ingredients)
-        (add-robot type))))
+        (assoc :pending type))
+    inv))
 
-(defn build-robots
+(defn order-new-robots
   [blueprint inv]
   (reduce build-robot inv blueprint))
 
-(defn update-inventory
+(defn step
+  "Each robot can collect 1 of its resource type per minute. 
+   It also takes one minute for the robot factory (also conveniently 
+   from your pack) to construct any type of robot, although it consumes the 
+   necessary resources available when construction begins.
+   
+   In every step (1 minute), 
+   (a) determine what robot(s) can be built, instantly consuming those resources
+   (b) let each active robot gather 1 unit of their resource type
+   (c) add the newly built robots into the inventory"
   [blueprint inventory]
   (->> inventory
+       (order-new-robots blueprint)
        gather-materials
-       (build-robots blueprint)))
+       add-robot))
 
-(defn tick
+(defn run-blueprint
   [blueprint]
-  (let [updater (partial update-inventory blueprint)]
-    (loop [timer time-limit inv init-inventory]
-      (if (zero? timer)
-        inv
-        (recur (dec timer) (updater inv))))))
+  (let [updater (partial step blueprint)]
+    (take 25 (iterate updater init-inventory))))
 
-(tick (get d19-s01 1))
+(clojure.pprint/pprint
+ (run-blueprint (get d19-s01 1)))
