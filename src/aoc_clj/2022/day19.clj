@@ -52,7 +52,9 @@
    (robot-build-possible? inv ingredients)
    (case type
      :ore false
-     :clay (< (get-in inv [:robots :clay] 0) 3)
+     :clay (if (= (get-in inv [:robots :obsidian] 0) 1)
+             (< (get-in inv [:robots :clay] 0) 4)
+             (< (get-in inv [:robots :clay] 0) 3))
      :obsidian (< (get-in inv [:robots :obsidian] 0) 2)
      true)))
 
@@ -93,8 +95,10 @@
 
 (defn run-blueprint
   [blueprint]
-  (let [updater (partial step blueprint)]
-    (take 25 (iterate updater init-inventory))))
+  (->> (iterate (partial step blueprint) init-inventory)
+       (drop time-limit)
+       first))
 
-(clojure.pprint/pprint
- (run-blueprint (get d19-s01 1)))
+(defn max-geodes
+  [blueprint]
+  (get-in (run-blueprint blueprint) [:materials :geode]))
