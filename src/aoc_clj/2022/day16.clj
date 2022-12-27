@@ -16,19 +16,6 @@
   [input]
   (map parse-line input))
 
-(def d16-s01
-  (parse
-   ["Valve AA has flow rate=0; tunnels lead to valves DD, II, BB"
-    "Valve BB has flow rate=13; tunnels lead to valves CC, AA"
-    "Valve CC has flow rate=2; tunnels lead to valves DD, BB"
-    "Valve DD has flow rate=20; tunnels lead to valves CC, AA, EE"
-    "Valve EE has flow rate=3; tunnels lead to valves FF, DD"
-    "Valve FF has flow rate=0; tunnels lead to valves EE, GG"
-    "Valve GG has flow rate=0; tunnels lead to valves FF, HH"
-    "Valve HH has flow rate=22; tunnel leads to valve GG"
-    "Valve II has flow rate=0; tunnels lead to valves AA, JJ"
-    "Valve JJ has flow rate=21; tunnel leads to valve II"]))
-
 (def day16-input (parse (sort (u/puzzle-input "2022/day16-input.txt"))))
 
 (defn edges
@@ -78,7 +65,6 @@
    Returns a vec of `n2`, the new value of the countdown timer, and the
    new cumulative pressure"
   [graph valves [n1 t p] n2]
-  ;; (println n1 t p n2)
   (let [dist      (inc (get-in graph [n1 n2]))
         newt      (- t dist)
         pressure  (+ p (* newt (valves n2)))]
@@ -111,7 +97,6 @@
 
 (defn outcome2
   [graph valves [[_ t1 :as player1] [_ t2 :as player2]] n2]
-  ;; (println "In OUTCOME 2" player1 player2)
   (if (>= t1 t2)
     [(outcome graph valves player1 n2) player2]
     [player1 (outcome graph valves player2 n2)]))
@@ -128,18 +113,14 @@
   "History is now a vec of [[room, time, pressure] [room, time, pressure]]
    representing two players"
   [graph valves history]
-  ;; (println "HISTORY " history)
   (let [candidates (available-nodes2 graph history)]
     (if (empty? candidates)
       history
       (let [last-move (first history)
-            ;; _ (println "LAST MOVE" last-move)
-            trials (->> candidates
-                        (map #(outcome2 graph valves last-move %))
-                        (filter valid-time?))
-            ;; _ (println "TRIALS" trials)
-            ;; _ (println "CONS'D" (first (map #(cons % history) trials)))
-            subpaths (map #(best-subpath-2 graph valves (cons % history)) trials)]
+            subpaths (->> candidates
+                          (map #(outcome2 graph valves last-move %))
+                          (filter valid-time?)
+                          (map #(best-subpath-2 graph valves (cons % history))))]
         (if (empty? subpaths)
           history
           (first (sort-by (comp total-pressure first) > subpaths)))))))
@@ -170,18 +151,3 @@
    most pressure you could release?"
   []
   (best-pressure-2 day16-input))
-
-(comment
-  (def g {"AA" {"BB" 1 "CC" 2}
-          "BB" {"AA" 1 "CC" 1}
-          "CC" {"AA" 2 "BB" 1}})
-  (def v {"AA" 0 "BB" 13 "CC" 2})
-  (available-nodes2 g [[["BB" 24 312] ["AA" 26 0]] [["AA" 30 0] ["AA" 30 0]]])
-  (valid-time? [["BB" 24 312] ["AA" 26 0]])
-  (cons (first (filter valid-time? (map #(outcome2 g v [["AA" 26 0] ["AA" 26 0]] %) ["BB" "CC"])))
-        [[["AA" 30 0] ["AA" 30 0]]])
-  (best-subpath-2 g v [[["AA" 26 0] ["AA" 26 0]]])
-
-  (best-subpath-2 (:graph (simpler-graph day16-input))
-                  (valves day16-input)
-                  [[["AA" 26 0] ["AA" 26 0]]]))

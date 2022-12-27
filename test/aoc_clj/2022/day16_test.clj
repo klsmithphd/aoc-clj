@@ -15,7 +15,6 @@
     "Valve II has flow rate=0; tunnels lead to valves AA, JJ"
     "Valve JJ has flow rate=21; tunnel leads to valve II"]))
 
-
 (deftest best-pressure-subpath-test
   (testing "Finds the optimum path to release the most pressure"
     (is (= [["CC" 6 1651] ["EE" 9 1639] ["HH" 13 1612] ["JJ" 21 1326]
@@ -33,10 +32,12 @@
   (testing "Finds the optimum amount of pressure released"
     (is (= 1707 (t/best-pressure-2 d16-s01)))))
 
-(deftest day16-part1-soln
+(deftest ^:slow day16-part1-soln
   (testing "Reproduces the answer for day16, part1"
     (is (= 1701 (t/day16-part1-soln)))))
 
-;; (deftest day16-part2-soln
-;;   (testing "Reproduces the answer for day16, part2"
-;;     (is (= 0 (t/day16-part2-soln)))))
+;; FIXME: The implementation is too slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/28
+(deftest ^:slow day16-part2-soln
+  (testing "Reproduces the answer for day16, part2"
+    (is (= 2455 (t/day16-part2-soln)))))
