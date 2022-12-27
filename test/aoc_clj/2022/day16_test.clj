@@ -20,7 +20,7 @@
   (testing "Finds the optimum path to release the most pressure"
     (is (= [["CC" 6 1651] ["EE" 9 1639] ["HH" 13 1612] ["JJ" 21 1326]
             ["BB" 25 885] ["DD" 28 560] ["AA" 30 0]]
-           (t/best-pressure-subpath
+           (t/best-subpath
             (:graph (t/simpler-graph d16-s01))
             (t/valves d16-s01)
             [["AA" 30 0]])))))

@@ -62,13 +62,6 @@
          (u/fmap #(into {} (map (comp vec rest)) %))
          ->MapGraph)))
 
-(defn helper
-  [graph valves n1 t p n2]
-  (let [dist      (inc (get-in graph [n1 n2]))
-        newt      (- t dist)
-        pressure  (+ p (* newt (valves n2)))]
-    [n2 newt pressure]))
-
 (defn elapsed-time
   [h]
   (nth h 1))
@@ -77,28 +70,45 @@
   [h]
   (nth h 2))
 
-(defn best-pressure-subpath
+(defn outcome
+  "Computes the outcome of moving from location `n1` to location `n2` and
+   opening the valve at that location, given current countdown timer value
+   `t` and cumulative pressure of all previously opened valves `v`
+   
+   Returns a vec of `n2`, the new value of the countdown timer, and the
+   new cumulative pressure"
+  [graph valves n1 t p n2]
+  (let [dist      (inc (get-in graph [n1 n2]))
+        newt      (- t dist)
+        pressure  (+ p (* newt (valves n2)))]
+    [n2 newt pressure]))
+
+(defn best-subpath
+  "Finds the optimal subpath of moves to open valves sequentially resulting
+   in the maximum cumulative pressure released over time, based on
+   previously visiting the locations in `history`"
   [graph valves history]
   (let [candidates (remove (set (map first history)) (keys graph))]
     (if (empty? candidates)
       history
       (let [[n t p] (first history)
-            trials (->> candidates
-                        (map #(helper graph valves n t p %))
-                        (filter #(pos? (elapsed-time %))))
-            subpaths (map
-                      #(best-pressure-subpath graph valves (cons % history))
-                      trials)]
+            subpaths (->> candidates
+                          (map #(outcome graph valves n t p %))
+                          (filter #(pos? (elapsed-time %)))
+                          (map #(best-subpath graph valves (cons % history))))]
         (if (empty? subpaths)
           history
           (first (sort-by (comp pressure first) > subpaths)))))))
 
 (defn best-pressure
+  "Returns the maximum amount of pressure that can be released in 30 minutes"
   [input]
   (let [g (:graph (simpler-graph input))
         v (valves input)]
-    (pressure (first (best-pressure-subpath g v [["AA" 30 0]])))))
+    (pressure (first (best-subpath g v [["AA" 30 0]])))))
 
 (defn day16-part1-soln
+  "Work out the steps to release the most pressure in 30 minutes. 
+   What is the most pressure you can release?"
   []
   (best-pressure day16-input))
