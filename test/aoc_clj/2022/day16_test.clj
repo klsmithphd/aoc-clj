@@ -29,6 +29,10 @@
   (testing "Finds the optimum amount of pressure released"
     (is (= 1651 (t/best-pressure d16-s01)))))
 
+(deftest best-pressure-2-test
+  (testing "Finds the optimum amount of pressure released"
+    (is (= 1707 (t/best-pressure-2 d16-s01)))))
+
 (deftest day16-part1-soln
   (testing "Reproduces the answer for day16, part1"
     (is (= 1701 (t/day16-part1-soln)))))
