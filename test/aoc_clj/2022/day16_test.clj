@@ -15,20 +15,23 @@
     "Valve II has flow rate=0; tunnels lead to valves AA, JJ"
     "Valve JJ has flow rate=21; tunnel leads to valve II"]))
 
-(deftest pressure-released-test
-  (testing "Computes the total pressure released by opening various valves
-            at specific times"
-    (is (= 1651 (t/pressure-released
-                 (t/valves d16-s01)
-                 {"DD" 28 "BB" 25 "JJ" 21 "HH" 13 "EE" 9 "CC" 6})))))
+
+(deftest best-pressure-subpath-test
+  (testing "Finds the optimum path to release the most pressure"
+    (is (= [["CC" 6 1651] ["EE" 9 1639] ["HH" 13 1612] ["JJ" 21 1326]
+            ["BB" 25 885] ["DD" 28 560] ["AA" 30 0]]
+           (t/best-pressure-subpath
+            (:graph (t/simpler-graph d16-s01))
+            (t/valves d16-s01)
+            [["AA" 30 0]])))))
 
 (deftest best-pressure-test
   (testing "Finds the optimum amount of pressure released"
     (is (= 1651 (t/best-pressure d16-s01)))))
 
-;; (deftest day16-part1-soln
-;;   (testing "Reproduces the answer for day16, part1"
-;;     (is (= 0 (t/day16-part1-soln)))))
+(deftest day16-part1-soln
+  (testing "Reproduces the answer for day16, part1"
+    (is (= 1701 (t/day16-part1-soln)))))
 
 ;; (deftest day16-part2-soln
 ;;   (testing "Reproduces the answer for day16, part2"
