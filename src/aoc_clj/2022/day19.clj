@@ -21,7 +21,10 @@
 
 (def day19-input (parse (u/puzzle-input "2022/day19-input.txt")))
 (def time-limit 24)
-(def init-inventory {:robots {:ore 1}
+(def init-inventory {:robots {:ore 1
+                              :clay 0
+                              :obsidian 0
+                              :geode 0}
                      :materials {:geode 0
                                  :obsidian 0
                                  :clay 0
@@ -35,47 +38,31 @@
   [inv [type amt]]
   (update-in inv [:materials type] - amt))
 
-(defn gather-materials
-  [{:keys [robots] :as inv}]
-  (reduce gather-material inv robots))
-
 (defn robot-build-possible?
-  [inv ingredients]
-  (->> (reduce consume-material inv ingredients)
+  [inventory [_ ingredients]]
+  (->> (reduce consume-material inventory ingredients)
        :materials
        (map second)
        (not-any? neg?)))
 
-(defn build-robot-type?
-  [inv type ingredients]
-  (and
-   (robot-build-possible? inv ingredients)
-   (case type
-     :ore false
-     :clay (if (= (get-in inv [:robots :obsidian] 0) 1)
-             (< (get-in inv [:robots :clay] 0) 4)
-             (< (get-in inv [:robots :clay] 0) 3))
-     :obsidian (< (get-in inv [:robots :obsidian] 0) 2)
-     true)))
+(defn options
+  [blueprint inventory]
+  (concat [:noop]
+          (keys (filter #(robot-build-possible? inventory %) blueprint))))
+
+(options (get d19-s01 1) init-inventory)
+
+(defn consume-materials
+  [inventory ingredients]
+  (reduce consume-material inventory ingredients))
+
+(defn gather-materials
+  [{:keys [robots] :as inv}]
+  (reduce gather-material inv robots))
 
 (defn add-robot
-  [{:keys [pending] :as inv}]
-  (if (nil? pending)
-    inv
-    (-> inv
-        (assoc-in [:robots pending] (inc (get-in inv [:robots pending] 0)))
-        (dissoc :pending))))
-
-(defn build-robot
-  [inv [type ingredients]]
-  (if (build-robot-type? inv type ingredients)
-    (-> (reduce consume-material inv ingredients)
-        (assoc :pending type))
-    inv))
-
-(defn order-new-robots
-  [blueprint inv]
-  (reduce build-robot inv blueprint))
+  [inventory robot]
+  (update-in inventory [:robots robot] inc))
 
 (defn step
   "Each robot can collect 1 of its resource type per minute. 
@@ -87,18 +74,71 @@
    (a) determine what robot(s) can be built, instantly consuming those resources
    (b) let each active robot gather 1 unit of their resource type
    (c) add the newly built robots into the inventory"
-  [blueprint inventory]
-  (->> inventory
-       (order-new-robots blueprint)
-       gather-materials
-       add-robot))
+  [blueprint inventory choice]
+  (if (= :noop choice)
+    (gather-materials inventory)
+    (-> inventory
+        (consume-materials (blueprint choice))
+        gather-materials
+        (add-robot choice))))
 
-(defn run-blueprint
-  [blueprint]
-  (->> (iterate (partial step blueprint) init-inventory)
-       (drop time-limit)
-       first))
+(defn best-subpath
+  "Finds the optimal set of choices to make at each minute so as to maximize
+   the number of geodes collected."
+  [blueprint t history]
+  (if (zero? t)
+    history
+    (let [inventory (peek history)
+          candidates (options blueprint (peek history))
+          choices  (map #(step blueprint inventory %) candidates)
+          subpaths  (map #(best-subpath blueprint (dec t) (conj history %)) choices)]
+      (if (empty? subpaths)
+        history
+        (first (sort-by (comp :geode :materials peek) > subpaths))))))
 
-(defn max-geodes
-  [blueprint]
-  (get-in (run-blueprint blueprint) [:materials :geode]))
+(best-subpath (get d19-s01 1) 19 [init-inventory])
+(gather-materials init-inventory)
+(step (get d19-s01 1) init-inventory :noop)
+
+;; (defn build-robot-type?
+;;   [inv type ingredients]
+;;   (and
+;;    (robot-build-possible? inv ingredients)
+;;    (case type
+;;      :ore false
+;;      :clay (if (= (get-in inv [:robots :obsidian] 0) 1)
+;;              (< (get-in inv [:robots :clay] 0) 4)
+;;              (< (get-in inv [:robots :clay] 0) 3))
+;;      :obsidian (< (get-in inv [:robots :obsidian] 0) 2)
+;;      true)))
+
+;; (defn add-robot
+;;   [{:keys [pending] :as inv}]
+;;   (if (nil? pending)
+;;     inv
+;;     (-> inv
+;;         (assoc-in [:robots pending] (inc (get-in inv [:robots pending] 0)))
+;;         (dissoc :pending))))
+
+;; (defn build-robot
+;;   [inv [type ingredients]]
+;;   (if (build-robot-type? inv type ingredients)
+;;     (-> (reduce consume-material inv ingredients)
+;;         (assoc :pending type))
+;;     inv))
+
+;; (defn order-new-robots
+;;   [blueprint inv]
+;;   (reduce build-robot inv blueprint))
+
+
+
+;; (defn run-blueprint
+;;   [blueprint]
+;;   (->> (iterate (partial step blueprint) init-inventory)
+;;        (drop time-limit)
+;;        first))
+
+;; (defn max-geodes
+;;   [blueprint]
+;;   (get-in (run-blueprint blueprint) [:materials :geode]))
