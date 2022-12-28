@@ -64,18 +64,27 @@
    '+ '-
    '- '+})
 
+(defn inverted
+  [new-eqn op arg knowns]
+  [new-eqn (list op arg knowns)])
+
 (defn invert
   "Given a binary arithmetic expression its equivalent value in `knowns`,
    invert one layer of the arithmetic expression, applying the inverted
    operation to the knowns"
   [[[op left right] knowns]]
+  ;; Subtraction and division need to be handled carefully.
+  ;; x - a = b inverts to x = a + b, but
+  ;; a - x = b inverts to x = a - b (and similarly for division)
   (if (or (= op '/) (= op '-))
+    ;; If division or subtraction
     (if (knowable? left)
-      [right (list op left knowns)]
-      [left  (list (inverse-op op) right knowns)])
+      (inverted right op left knowns)
+      (inverted left (inverse-op op) right knowns))
+    ;; Else multiplication or addition
     (if (knowable? left)
-      [right (list (inverse-op op) knowns left)]
-      [left  (list (inverse-op op) knowns right)])))
+      (inverted right (inverse-op op) knowns left)
+      (inverted left  (inverse-op op) knowns right))))
 
 (defn handle-equality
   [[_ a b]]
