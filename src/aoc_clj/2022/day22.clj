@@ -5,11 +5,44 @@
 
 (def charmap {\  nil \. :open \# :wall})
 
-;; TODO: This isn't yet correct given that the ascii->MapGrid2D implementation
-;; assumes a rectangular grid (of fixed width and height)
+(defn parse-line
+  [y s]
+  (filter #(some? (second %))
+          (map vector
+               (for [x (range (count s))] [(inc x) (inc y)])
+               (map charmap s))))
+
+(defn bounds
+  [dir lines]
+  (let [[minx miny] (-> lines first first)
+        [maxx maxy] (-> lines last last)]
+    (case dir
+      :horiz [[miny maxy] [minx maxx]]
+      :vert  [[minx maxx] [miny maxy]])))
+
+(def dir-lookup
+  {:horiz second
+   :vert  first})
+
+(defn zones
+  [dir points]
+  (->> points
+       (map first)
+       (group-by (dir-lookup dir))
+       sort
+       (map second)
+       (partition-by count)
+       (map (partial bounds dir))))
+
+(def horizontal-zones (partial zones :horiz))
+(def vertical-zones   (partial zones :vert))
+
 (defn parse-map
   [s]
-  (mapgrid/ascii->MapGrid2D charmap s))
+  (let [points (apply concat (map-indexed parse-line s))]
+    {:grid (into {} points)
+     :h-zones (horizontal-zones points)
+     :v-zones (vertical-zones points)}))
 
 (defn parse-path
   [s]
@@ -18,8 +51,8 @@
 (defn parse
   [input]
   (let [[a b] (u/split-at-blankline input)]
-    {:themap  (parse-map a)
-     :path    (parse-path (first b))}))
+    (assoc (parse-map a)
+           :path (parse-path (first b)))))
 
 (def d22-s01
   (parse
