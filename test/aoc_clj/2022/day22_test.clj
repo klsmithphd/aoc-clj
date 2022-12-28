@@ -30,6 +30,10 @@
   (testing "Follows the path and arrives at the correct final position/orientation"
     (is (= {:pos [8 6] :facing :R} (t/follow-path d22-s01)))))
 
+(deftest final-password-test
+  (testing "Computes the final password given the final position/orientation"
+    (is (= 6032 (t/final-password (t/follow-path d22-s01))))))
+
 (deftest day22-part1-soln
   (testing "Reproduces the answer for day22, part1"
     (is (= 1428 (t/day22-part1-soln)))))

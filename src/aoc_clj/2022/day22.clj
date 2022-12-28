@@ -3,6 +3,9 @@
   (:require [aoc-clj.utils.core :as u]))
 
 (def charmap {\  nil \. :open \# :wall})
+(def facing-value {:R 0 :D 1 :L 2 :U 3})
+(def turn-right {:U :R :R :D :D :L :L :U})
+(def turn-left  {:U :L :L :D :D :R :R :U})
 
 (defn parse-line
   [y s]
@@ -115,15 +118,6 @@
       test-pos
       (wrap-around themap facing test-pos))))
 
-(def turn-right {:U :R
-                 :R :D
-                 :D :L
-                 :L :U})
-(def turn-left  {:U :L
-                 :L :D
-                 :D :R
-                 :R :U})
-
 (defn turn
   [state dir]
   (update state :facing (case dir
@@ -147,12 +141,6 @@
 (defn follow-path
   [{:keys [path start] :as themap}]
   (reduce (partial apply-cmd themap) {:pos start :facing :R} path))
-
-(def facing-value
-  {:R 0
-   :D 1
-   :L 2
-   :U 3})
 
 (defn final-password
   [{:keys [pos facing]}]
