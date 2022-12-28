@@ -16,6 +16,8 @@
     "0"
     "4"]))
 
+(def decryption-key 811589153)
+
 (def day20-input (parse (u/puzzle-input "2022/day20-input.txt")))
 
 (defn new-vec
@@ -52,7 +54,16 @@
         mixer   (partial mix input)]
     (mapv input (reduce mixer indices indices))))
 
+(defn mixed-ten
+  [input]
+  (let [n       (count input)
+        indices (vec (range n))
+        mixer   (partial mix input)]
+    (mapv input (reduce mixer indices (take (* n 10) (cycle indices))))))
+
 (defn grove-coordinates
+  "The grove coordinates can be found by looking at the 1000th, 2000th, and 
+   3000th numbers after the value 0, wrapping around the list as necessary."
   [nums]
   (let [n (count nums)
         zero-pos (u/index-of 0 nums)]
@@ -60,7 +71,16 @@
        (nth nums (mod (+ zero-pos 2000) n))
        (nth nums (mod (+ zero-pos 3000) n)))))
 
+(defn decrypt-and-mix-ten
+  [input]
+  (->> (mapv #(* decryption-key %) input)
+       mixed-ten
+       grove-coordinates))
+
 (defn day20-part1-soln
   []
   (grove-coordinates (mixed day20-input)))
 
+(defn day20-part2-soln
+  []
+  (decrypt-and-mix-ten day20-input))

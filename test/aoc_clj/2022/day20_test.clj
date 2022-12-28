@@ -36,10 +36,16 @@
   (testing "Computes the `grove coordinates`"
     (is (= 3 (t/grove-coordinates d20-s01-7)))))
 
+(deftest decrypt-and-mix-ten-test
+  (testing "Applies decryption key and mixes 10 times"
+    (is (= 1623178306 (t/decrypt-and-mix-ten d20-s01)))))
+
 (deftest ^:slow day20-part1-soln
   (testing "Reproduces the answer for day20, part1"
     (is (= 9866 (t/day20-part1-soln)))))
 
-;; (deftest day20-part2-soln
-;;   (testing "Reproduces the answer for day20, part2"
-;;     (is (= 0 (t/day20-part2-soln)))))
+;; FIXME: Implementation is far too slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/29
+(deftest ^:slow day20-part2-soln
+  (testing "Reproduces the answer for day20, part2"
+    (is (= 12374299815791 (t/day20-part2-soln)))))
