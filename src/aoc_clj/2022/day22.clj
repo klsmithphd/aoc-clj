@@ -71,4 +71,37 @@
     ""
     "10R5L5R10L4R5L5"]))
 
+
+
 (def day22-input (parse (u/puzzle-input "2022/day22-input.txt")))
+
+(defn zone-match
+  [[a b] [[mn mx] [vmin vmax]]]
+  (when (<= mn a mx)
+    (if (< b vmin)
+      vmax
+      vmin)))
+
+(defn lookup
+  [zones pos]
+  (first (filter some? (map #(zone-match pos %) zones))))
+
+(defn wrap-around
+  [{:keys [h-zones v-zones]} facing [x y]]
+  (if (or (= facing :L) (= facing :R))
+    [(lookup h-zones [y x]) y]
+    [x (lookup v-zones [x y])]))
+
+(defn next-pos
+  [facing [x y]]
+  (case facing
+    :U [x (dec y)]
+    :R [(inc x) y]
+    :D [x (inc y)]
+    :L [(dec x) y]))
+
+(defn next-position
+  [{:keys [grid] :as themap} facing pos]
+  (if (grid pos)
+    pos
+    (grid (wrap-around themap facing pos))))
