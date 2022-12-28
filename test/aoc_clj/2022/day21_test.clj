@@ -22,7 +22,7 @@
 
 (deftest yell-test
   (testing "Yells out the value for root on the sample data"
-    (is (= 152 (t/yell d21-s01 "root")))))
+    (is (= 152 (t/root-yell d21-s01)))))
 
 (deftest day21-part1-soln
   (testing "Reproduces the answer for day21, part1"
