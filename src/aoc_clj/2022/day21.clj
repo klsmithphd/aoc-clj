@@ -15,27 +15,11 @@
   [input]
   (into {} (map parse-line input)))
 
-(def d21-s01
-  (parse
-   ["root: pppw + sjmn"
-    "dbpl: 5"
-    "cczh: sllz + lgvd"
-    "zczc: 2"
-    "ptdq: humn - dvpt"
-    "dvpt: 3"
-    "lfqf: 4"
-    "humn: 5"
-    "ljgn: 2"
-    "sjmn: drzm * dbpl"
-    "sllz: 4"
-    "pppw: cczh / lfqf"
-    "lgvd: ljgn * ptdq"
-    "drzm: hmdt - zczc"
-    "hmdt: 32"]))
-
 (def day21-input (parse (u/puzzle-input "2022/day21-input.txt")))
 
 (defn equation
+  "Given the input equations in `jobs`, return an equation in prefix
+   notation for the given `monkey` node"
   [jobs monkey]
   (let [value (jobs monkey)]
     (if (vector? value)
@@ -44,109 +28,85 @@
       value)))
 
 (defn root-yell
+  "What value will the monkey named root yell given `jobs`"
   [jobs]
   (eval (equation jobs "root")))
 
 (defn update-jobs
+  "Update `jobs` given the new information in part 2.
+   
+   The correct operation for monkey root should be =, which means that it 
+   still listens for two numbers (from the same two monkeys as before), but 
+   now checks that the two numbers match.
+   
+   Second, you got the wrong monkey for the job starting with humn:. It isn't 
+   a monkey - it's you. Actually, you got the job wrong, too: you need to 
+   figure out what number you need to yell so that root's equality check passes.
+   (The number that appears after humn: in your input is now irrelevant.)"
   [jobs]
   (-> jobs
       (assoc-in ["root" 1] "=")
       (assoc-in ["humn"] :x)))
 
-(defn evalable?
-  [x]
+(defn knowable?
+  "Is the given (sub-expression) computable (i.e. does not contain the 
+   unknown variable"
+  [expr]
   (try
-    (eval x)
-    (not (keyword? x))
+    (eval expr)
+    (not (keyword? expr))
     (catch Exception _ false)))
 
 (def inverse-op
+  "Invert operation map: addition <-> subtraction, multiplication <-> division"
   {'* '/
    '/ '*
    '+ '-
    '- '+})
 
+(defn invert
+  "Given a binary arithmetic expression its equivalent value in `knowns`,
+   invert one layer of the arithmetic expression, applying the inverted
+   operation to the knowns"
+  [[[op left right] knowns]]
+  (if (or (= op '/) (= op '-))
+    (if (knowable? left)
+      [right (list op left knowns)]
+      [left  (list (inverse-op op) right knowns)])
+    (if (knowable? left)
+      [right (list (inverse-op op) knowns left)]
+      [left  (list (inverse-op op) knowns right)])))
+
 (defn handle-equality
   [[_ a b]]
-  (if (evalable? a)
+  (if (knowable? a)
     [b (eval a)]
     [a (eval b)]))
 
-;; (defn invert
-;;   [[[op left right] arg]]
-;;   (if (or (= :x left) (= :x right))
-;;     (if (= :x left)
-;;       (list (inverse-op op) arg right)
-;;       (if (or (= op '/) (= op '-))
-;;         (list op left arg)
-;;         (list (inverse-op op) arg left)))
-;;     (if (evalable? left)
-;;       (if (or (= op '/) (= op '-))
-;;         [right (list op left arg)]
-;;         [right (list (inverse-op op) arg left)])
-;;       (if (or (= op '/) (= op '-))
-;;         [left (list op right arg)]
-;;         [left (list (inverse-op op) arg right)]))))
-
-(defn invert
-  [[[op left right] arg]]
-  (if (or (= op '/) (= op '-))
-    (if (evalable? left)
-      [right (list op left arg)]
-      [left  (list (inverse-op op) right arg)])
-    (if (evalable? left)
-      [right (list (inverse-op op) arg left)]
-      [left  (list (inverse-op op) arg right)])))
-
-(defn safe-invert
-  [[eqn arg]]
-  (try
-    (invert [eqn arg])
-    (catch Exception _ nil)))
-
-(safe-invert '[(- :x 3) 8])
-
-;; (defn solve-for-x
-;;   [equation]
-;;   (->> equation
-;;        handle-equality
-;;        (iterate safe-invert)
-;;        (take-while some?)
-;;        last))
-
 (defn solve-for-x
+  "Find the expression that solves for x"
   [equation]
-  (loop [[eqn known] (handle-equality equation)]
+  (loop [[eqn knowns] (handle-equality equation)]
     (if (keyword? eqn)
-      known
-      (recur (invert [eqn known])))))
+      knowns
+      (recur (invert [eqn knowns])))))
 
-(solve-for-x '(= (+ 6 (- :x 0)) (* 4 (+ 1 1))))
-
-
-(let [foo (filter vector? (vals day21-input))
-      ls  (map first foo)
-      rs  (map #(get % 2) foo)]
-  (filter #(> (val %) 1) (frequencies (concat ls rs))))
-
-(solve-for-x d21-s01)
-(equation (update-jobs d21-s01) "root")
-
-(eval (solve-for-x (equation (update-jobs day21-input) "root")))
-
-(safe-invert (handle-equality (equation (update-jobs d21-s01) "root")))
-(safe-invert '[(+ 4 (* 2 (- :humn 3))) (* 4 150)])
-(safe-invert '[(* 2 (- :humn 3)) (- (* 4 150) 4)])
-(safe-invert '[(- :humn 3) (/ (- (* 4 150) 4) 2)])
-(safe-invert '(+ (/ (- (* 4 150) 4) 2) 3))
-
-(eval (last (take-while some? (iterate safe-invert (handle-equality (equation (update-jobs day21-input) "root"))))))
-;; not 960
-(long 9147294904925473988288299985066581351232/7402433194058496223063861724959835859)
-;; not 1235
-1435841306317776376254144880011006672612027025/1495660230557456757378437572101284033632832
-
+(defn humn-value
+  "Given the jobs and the updated information in part 2, find the
+   value that the human should yell to satisfy the equality"
+  [jobs]
+  (-> jobs
+      update-jobs
+      (equation "root")
+      solve-for-x
+      eval))
 
 (defn day21-part1-soln
+  "What number will the monkey named root yell?"
   []
   (root-yell day21-input))
+
+(defn day21-part2-soln
+  "What number do you yell to pass root's equality test?"
+  []
+  (humn-value day21-input))

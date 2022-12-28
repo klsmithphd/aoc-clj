@@ -36,10 +36,14 @@
     (is (= '(- (/ 60 5) 3) (t/solve-for-x '(= (* (+ :x 3) 5) (* 6 10)))))
     (is (= '(- (/ 60 5) 3) (t/solve-for-x '(= (* (+ 3 :x) 5) (* 6 10)))))))
 
+(deftest humn-value-test
+  (testing "Computes the value the human should yell"
+    (is (= 301 (t/humn-value d21-s01)))))
+
 (deftest day21-part1-soln
   (testing "Reproduces the answer for day21, part1"
     (is (= 63119856257960 (t/day21-part1-soln)))))
 
-;; (deftest day21-part2-soln
-;;   (testing "Reproduces the answer for day21, part2"
-;;     (is (= 0 (t/day21-part2-soln)))))
+(deftest day21-part2-soln
+  (testing "Reproduces the answer for day21, part2"
+    (is (= 3006709232464 (t/day21-part2-soln)))))
