@@ -51,18 +51,14 @@
   [jobs]
   (-> jobs
       (assoc-in ["root" 1] "=")
-      (assoc-in ["humn"] :humn)))
+      (assoc-in ["humn"] :x)))
 
 (defn evalable?
   [x]
   (try
     (eval x)
-    true
+    (not (keyword? x))
     (catch Exception _ false)))
-
-(evalable? (nth (equation (update-jobs d21-s01) "root") 2))
-(str (equation (update-jobs day21-input) "root"))
-(update-jobs d21-s01)
 
 (def inverse-op
   {'* '/
@@ -70,41 +66,81 @@
    '+ '-
    '- '+})
 
-((inverse-op *) 1 2)
-
-(defn handle-root
+(defn handle-equality
   [[_ a b]]
   (if (evalable? a)
     [b (eval a)]
     [a (eval b)]))
 
-(defn unpeel
-  [[[op a b] arg]]
-  (if (or (= :humn a) (= :humn b))
-    (if (= :humn a)
-      (list (inverse-op op) arg b)
-      (if (or (= op '/) (= op '-))
-        (list op arg a)
-        (list (inverse-op op) arg a)))
-    (if (evalable? a)
-      (if (or (= op '/) (= op '-))
-        [b (list op arg (eval a))]
-        [b (list (inverse-op op) (eval a) arg)])
-      [a (list (inverse-op op) (eval b) arg)])))
+;; (defn invert
+;;   [[[op left right] arg]]
+;;   (if (or (= :x left) (= :x right))
+;;     (if (= :x left)
+;;       (list (inverse-op op) arg right)
+;;       (if (or (= op '/) (= op '-))
+;;         (list op left arg)
+;;         (list (inverse-op op) arg left)))
+;;     (if (evalable? left)
+;;       (if (or (= op '/) (= op '-))
+;;         [right (list op left arg)]
+;;         [right (list (inverse-op op) arg left)])
+;;       (if (or (= op '/) (= op '-))
+;;         [left (list op right arg)]
+;;         [left (list (inverse-op op) arg right)]))))
 
-(defn safe-unpeel
+(defn invert
+  [[[op left right] arg]]
+  (if (or (= op '/) (= op '-))
+    (if (evalable? left)
+      [right (list op left arg)]
+      [left  (list (inverse-op op) right arg)])
+    (if (evalable? left)
+      [right (list (inverse-op op) arg left)]
+      [left  (list (inverse-op op) arg right)])))
+
+(defn safe-invert
   [[eqn arg]]
   (try
-    (unpeel [eqn arg])
+    (invert [eqn arg])
     (catch Exception _ nil)))
 
-(safe-unpeel (handle-root (equation (update-jobs d21-s01) "root")))
-(safe-unpeel '[(+ 4 (* 2 (- :humn 3))) (* 4 150)])
-(safe-unpeel '[(* 2 (- :humn 3)) (- (* 4 150) 4)])
-(safe-unpeel '[(- :humn 3) (/ (- (* 4 150) 4) 2)])
-(safe-unpeel '(+ (/ (- (* 4 150) 4) 2) 3))
+(safe-invert '[(- :x 3) 8])
 
-(eval (last (take-while some? (iterate safe-unpeel (handle-root (equation (update-jobs day21-input) "root"))))))
+;; (defn solve-for-x
+;;   [equation]
+;;   (->> equation
+;;        handle-equality
+;;        (iterate safe-invert)
+;;        (take-while some?)
+;;        last))
+
+(defn solve-for-x
+  [equation]
+  (loop [[eqn known] (handle-equality equation)]
+    (if (keyword? eqn)
+      known
+      (recur (invert [eqn known])))))
+
+(solve-for-x '(= (+ 6 (- :x 0)) (* 4 (+ 1 1))))
+
+
+(let [foo (filter vector? (vals day21-input))
+      ls  (map first foo)
+      rs  (map #(get % 2) foo)]
+  (filter #(> (val %) 1) (frequencies (concat ls rs))))
+
+(solve-for-x d21-s01)
+(equation (update-jobs d21-s01) "root")
+
+(eval (solve-for-x (equation (update-jobs day21-input) "root")))
+
+(safe-invert (handle-equality (equation (update-jobs d21-s01) "root")))
+(safe-invert '[(+ 4 (* 2 (- :humn 3))) (* 4 150)])
+(safe-invert '[(* 2 (- :humn 3)) (- (* 4 150) 4)])
+(safe-invert '[(- :humn 3) (/ (- (* 4 150) 4) 2)])
+(safe-invert '(+ (/ (- (* 4 150) 4) 2) 3))
+
+(eval (last (take-while some? (iterate safe-invert (handle-equality (equation (update-jobs day21-input) "root"))))))
 ;; not 960
 (long 9147294904925473988288299985066581351232/7402433194058496223063861724959835859)
 ;; not 1235
