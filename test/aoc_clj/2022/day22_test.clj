@@ -44,10 +44,10 @@
 
 (deftest wrap-around-test
   (testing "Computes the wrap-around positions correctly"
-    (is (= [9 1] (t/wrap-around d22-s01 :R [13 1])))
-    (is (= [12 1] (t/wrap-around d22-s01 :L [8 1])))
-    (is (= [9 12] (t/wrap-around d22-s01 :U [9 0])))
-    (is (= [12 5] (t/wrap-around d22-s01 :L [0 5])))))
+    (is (= [9 1]  (:pos (t/wrap-around d22-s01 :R [13 1]))))
+    (is (= [12 1] (:pos (t/wrap-around d22-s01 :L [8 1]))))
+    (is (= [9 12] (:pos (t/wrap-around d22-s01 :U [9 0]))))
+    (is (= [12 5] (:pos (t/wrap-around d22-s01 :L [0 5]))))))
 
 (deftest follow-path-test
   (testing "Follows the path and arrives at the correct final position/orientation"
