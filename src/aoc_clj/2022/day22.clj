@@ -99,28 +99,6 @@
     {:facing facing :pos [(lookup h-zones [y x]) y]}
     {:facing facing :pos [x (lookup v-zones [x y])]}))
 
-(defn sample-cube-wrap-around
-  [_ facing [x y]]
-  (case facing
-    :U (cond
-         (<= 1 x 4)   {:pos [(+ 9 (- 4 x)) 1]   :facing :D}
-         (<= 5 x 8)   {:pos [9 (+ 1 (- x 5))]   :facing :R}
-         (<= 9 x 12)  {:pos [(+ 4 (- 9 x)) 5]   :facing :D}
-         (<= 13 x 16) {:pos [12 (+ 8 (- 13 x))] :facing :L})
-    :D (cond
-         (<= 1 x 4)   {:pos [(+ 9 (- 4 x)) 12]  :facing :U}
-         (<= 5 x 8)   {:pos [9 (+ 9 (- 8 x))]   :facing :R}
-         (<= 9 x 12)  {:pos [(+ 4 (- 9 x)) 8]   :facing :U}
-         (<= 13 x 16) {:pos [1 (+ 5 (- 16 x))]  :facing :R})
-    :L (cond
-         (<= 1 y 4)   {:pos [(+ 8 (- y 4)) 5]   :facing :D}
-         (<= 5 y 8)   {:pos [(+ 16 (- 5 y)) 12] :facing :U}
-         (<= 9 y 12)  {:pos [(+ 5 (- 12 y)) 8]  :facing :U})
-    :R (cond
-         (<= 1 y 4)   {:pos [16 (+ 9 (- 4 y))]  :facing :L}
-         (<= 5 y 8)   {:pos [(+ 16 (- 5 y)) 9]  :facing :D}
-         (<= 9 y 12)  {:pos [(+ 1 (- 12 y)) 12] :facing :L})))
-
 (defn next-pos
   [facing [x y]]
   (case facing
@@ -171,8 +149,25 @@
 
 (defn cube-wrap-around
   [_ facing [x y]]
-  ;; TODO write impl
-  )
+  (case facing
+    :U (cond
+         (<= 1 x 50)    {:pos [51 (+ 51 (- x 1))]    :facing :R}
+         (<= 51 x 100)  {:pos [1 (+ 151 (- x 51))]   :facing :R}
+         (<= 101 x 150) {:pos [(+ 1 (- x 101)) 200]  :facing :U})
+    :D (cond
+         (<= 1 x 50)    {:pos [(+ 101 (- x 1)) 1]    :facing :D}
+         (<= 51 x 100)  {:pos [50 (+ 151 (- x 51))]  :facing :L}
+         (<= 101 x 150) {:pos [100 (+ 51 (- x 101))] :facing :L})
+    :L (cond
+         (<= 1 y 50)    {:pos [1 (+ 101 (- 50 y))]   :facing :R}
+         (<= 51 y 100)  {:pos [(+ 1 (- y 51)) 101]   :facing :D}
+         (<= 101 y 150) {:pos [51 (+ 1 (- 150 y))]   :facing :R}
+         (<= 151 y 200) {:pos [(+ 51 (- y 151)) 1]   :facing :D})
+    :R (cond
+         (<= 1 y 50)    {:pos [100 (+ 101 (- 50 y))] :facing :L}
+         (<= 51 y 100)  {:pos [(+ 101 (- y 51)) 50]  :facing :U}
+         (<= 101 y 150) {:pos [150 (+ 1 (- 150 y))]  :facing :L}
+         (<= 151 y 200) {:pos [(+ 51 (- y 151)) 150] :facing :U})))
 
 (defn day22-part1-soln
   []
