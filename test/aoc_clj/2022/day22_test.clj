@@ -28,11 +28,15 @@
 
 (deftest follow-path-test
   (testing "Follows the path and arrives at the correct final position/orientation"
-    (is (= {:pos [8 6] :facing :R} (t/follow-path d22-s01)))))
+    (is (= {:pos [8 6] :facing :R}
+           (t/follow-path (assoc d22-s01 :wrap-fn t/wrap-around))))))
 
 (deftest final-password-test
   (testing "Computes the final password given the final position/orientation"
-    (is (= 6032 (t/final-password (t/follow-path d22-s01))))))
+    (is (= 6032 (t/final-password
+                 (t/follow-path (assoc d22-s01 :wrap-fn t/wrap-around)))))
+    (is (= 5031 (t/final-password
+                 (t/follow-path (assoc d22-s01 :wrap-fn t/sample-cube-wrap-around)))))))
 
 (deftest day22-part1-soln
   (testing "Reproduces the answer for day22, part1"

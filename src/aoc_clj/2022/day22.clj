@@ -96,8 +96,30 @@
 (defn wrap-around
   [{:keys [h-zones v-zones]} facing [x y]]
   (if (or (= facing :L) (= facing :R))
-    [(lookup h-zones [y x]) y]
-    [x (lookup v-zones [x y])]))
+    {:facing facing :pos [(lookup h-zones [y x]) y]}
+    {:facing facing :pos [x (lookup v-zones [x y])]}))
+
+(defn sample-cube-wrap-around
+  [_ facing [x y]]
+  (case facing
+    :U (cond
+         (<= 1 x 4)   {:pos [(+ 9 (- 4 x)) 1]   :facing :D}
+         (<= 5 x 8)   {:pos [9 (+ 1 (- x 5))]   :facing :R}
+         (<= 9 x 12)  {:pos [(+ 4 (- 9 x)) 5]   :facing :D}
+         (<= 13 x 16) {:pos [12 (+ 8 (- 13 x))] :facing :L})
+    :D (cond
+         (<= 1 x 4)   {:pos [(+ 9 (- 4 x)) 12]  :facing :U}
+         (<= 5 x 8)   {:pos [9 (+ 9 (- 8 x))]   :facing :R}
+         (<= 9 x 12)  {:pos [(+ 4 (- 9 x)) 8]   :facing :U}
+         (<= 13 x 16) {:pos [1 (+ 5 (- 16 x))]  :facing :R})
+    :L (cond
+         (<= 1 y 4)   {:pos [(+ 8 (- y 4)) 5]   :facing :D}
+         (<= 5 y 8)   {:pos [(+ 16 (- 5 y)) 12] :facing :U}
+         (<= 9 y 12)  {:pos [(+ 5 (- 12 y)) 8]  :facing :U})
+    :R (cond
+         (<= 1 y 4)   {:pos [16 (+ 9 (- 4 y))]  :facing :L}
+         (<= 5 y 8)   {:pos [(+ 16 (- 5 y)) 9]  :facing :D}
+         (<= 9 y 12)  {:pos [(+ 1 (- 12 y)) 12] :facing :L})))
 
 (defn next-pos
   [facing [x y]]
@@ -112,11 +134,11 @@
   (= :wall (grid pos)))
 
 (defn next-cell
-  [{:keys [grid] :as themap} {:keys [facing pos]}]
+  [{:keys [grid wrap-fn] :as themap} {:keys [facing pos]}]
   (let [test-pos (next-pos facing pos)]
     (if (grid test-pos)
-      test-pos
-      (wrap-around themap facing test-pos))))
+      {:facing facing :pos test-pos}
+      (wrap-fn themap facing test-pos))))
 
 (defn turn
   [state dir]
@@ -127,10 +149,10 @@
 (defn walk
   [themap state dist]
   (loop [s state cnt dist]
-    (let [test-pos (next-cell themap s)]
-      (if (or (zero? cnt) (wall? themap test-pos))
+    (let [{:keys [pos] :as new-s} (next-cell themap s)]
+      (if (or (zero? cnt) (wall? themap pos))
         s
-        (recur (assoc s :pos test-pos) (dec cnt))))))
+        (recur new-s (dec cnt))))))
 
 (defn apply-cmd
   [themap state cmd]
@@ -147,6 +169,16 @@
   (let [[x y] pos]
     (+ (* 1000 y) (* 4 x) (facing-value facing))))
 
+(defn cube-wrap-around
+  [_ facing [x y]]
+  ;; TODO write impl
+  )
+
 (defn day22-part1-soln
   []
-  (final-password (follow-path day22-input)))
+  (final-password (follow-path (assoc day22-input :wrap-fn wrap-around))))
+
+(defn day22-part2-soln
+  []
+  (final-password (follow-path (assoc day22-input :wrap-fn cube-wrap-around))))
+
