@@ -70,6 +70,8 @@
   (testing "Reproduces the answer for day23, part1"
     (is (= 4172 (t/day23-part1-soln)))))
 
-(deftest day23-part2-soln
+;; TODO - Investigate whether there's a faster approach to part 2
+;; https://github.com/Ken-2scientists/aoc-clj/issues/30
+(deftest ^:slow day23-part2-soln
   (testing "Reproduces the answer for day23, part2"
     (is (= 942 (t/day23-part2-soln)))))
