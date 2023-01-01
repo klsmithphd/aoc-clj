@@ -167,8 +167,8 @@
            new-state))))))
 
 (defn shortest-distance
-  [graph start finish]
-  (path-distance graph (dijkstra graph start finish)))
+  [graph start finish?]
+  (path-distance graph (dijkstra graph start finish?)))
 
 (defn pruned
   "Prunes the single branches from a graph, excluding any vertices in the exclude-set"
