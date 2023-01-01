@@ -108,3 +108,9 @@
             changes"
     (is (= [128 64 32 16 8 4 2 1 0]
            (u/converge #(quot % 2) 128)))))
+
+(deftest equals?-test
+  (testing "Demonstration of equals: returns a function that
+            returns true when its argument equals the supplied x value"
+    (is ((u/equals? 5) 5))
+    (is (not ((u/equals? :a) 2)))))

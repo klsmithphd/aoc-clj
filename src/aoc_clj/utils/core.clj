@@ -134,3 +134,9 @@
                (partition 2 1)
                (take-while #(not= (first %) (second %)))
                (map second))))
+
+(defn equals?
+  "Returns a predicate function of one argument that returns true when
+   that argument equals `x`"
+  [x]
+  (partial = x))
