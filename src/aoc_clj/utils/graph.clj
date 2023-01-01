@@ -143,7 +143,11 @@
       (recur (prev-steps vertex) (conj chain vertex)))))
 
 (defn dijkstra
-  "Executes Dijkstra's algorithm to identify the shortest path between the start and finish vertices"
+  "Executes Dijkstra's algorithm to identify the shortest path in `graph`
+   starting at `start`. The predicate `finish?` should return true when
+   the destination vertex has been reached or false otherwise. A limit to the
+   number of vertices considered can be optionally supplied using the `:limit`
+   argument."
   [graph start finish? & {:keys [limit]}]
   (let [max-search (or limit (count (vertices graph)))
         init-state {:dist {start 0} :prev {} :queue (priority-map start 0)}]
