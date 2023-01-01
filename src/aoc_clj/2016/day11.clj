@@ -1,6 +1,7 @@
 (ns aoc-clj.2016.day11
   (:require [clojure.math.combinatorics :as combo]
             [clojure.set :as set]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.utils.graph :as g :refer [Graph]]))
 
 "The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip."
@@ -98,7 +99,11 @@ The fourth floor contains nothing relevant."
 
 (defn move-count
   [input]
-  (->> (g/dijkstra (->MoveGraph) input (endstate input) :limit 10000000)
+  (->> (g/dijkstra
+        (->MoveGraph)
+        input
+        (u/equals? (endstate input))
+        :limit 10000000)
        count
        dec))
 

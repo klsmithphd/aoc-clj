@@ -17,6 +17,8 @@
   (testing "Counts the minimum number of moves "
     (is (= 11 (t/move-count day11-sample)))))
 
+;; FIXME: Implementation is too slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/31
 (deftest ^:slow day11-part1-soln
   (testing "Reproduces the answer for day11, part1"
     (is (= 31 (t/day11-part1-soln)))))
