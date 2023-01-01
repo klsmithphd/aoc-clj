@@ -40,7 +40,7 @@
   (let [start [0 0]
         finish (maze/find-target thismaze :oxygen)
         simplified-maze (-> thismaze maze/Maze->Graph (g/pruned #{start finish}))
-        path (g/dijkstra simplified-maze start finish)]
+        path (g/dijkstra simplified-maze start (u/equals? finish))]
     (g/path-distance simplified-maze path)))
 
 (defn day15-part2-soln
