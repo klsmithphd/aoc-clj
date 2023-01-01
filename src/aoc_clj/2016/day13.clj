@@ -1,5 +1,6 @@
 (ns aoc-clj.2016.day13
-  (:require [aoc-clj.utils.binary :as b]
+  (:require [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.binary :as b]
             [aoc-clj.utils.graph :as g]
             [aoc-clj.utils.grid.mapgrid :as mapgrid :refer [->MapGrid2D]]
             [aoc-clj.utils.maze :as maze :refer [->Maze]]))
@@ -38,7 +39,7 @@
         grid  (construct-grid fav 10 7)
         maze  (->Maze (:grid grid) #(= :open %))
         graph (-> maze maze/Maze->Graph (g/pruned #{start finish}))
-        path  (g/dijkstra graph start finish)]
+        path  (g/dijkstra graph start (u/equals? finish))]
     (println graph)
     (g/path-distance graph path)))
 
