@@ -38,7 +38,7 @@
 
 (defn shortest-path-length
   [g s e]
-  (-> (graph/dijkstra g s e) count dec))
+  (-> (graph/dijkstra g s (u/equals? e)) count dec))
 
 (defn shortest-path-from-start
   [input]
@@ -53,7 +53,7 @@
                         (find-matches input 0))
         end     (first (find-matches input 26))
         graph   (grid->graph input)
-        lengths (remove zero? (map #(shortest-path-length graph % end) starts))]
+        lengths (remove neg? (map #(shortest-path-length graph % end) starts))]
     (apply min lengths)))
 
 (defn day12-part1-soln
