@@ -65,4 +65,4 @@
 
 (deftest dijkstra-test
   (testing "Can find the shortest path between two vertices"
-    (is (= [:a :d :c :f] (g/dijkstra t3 :a :f)))))
+    (is (= [:a :d :c :f] (g/dijkstra t3 :a #(= :f %))))))

@@ -144,15 +144,15 @@
 
 (defn dijkstra
   "Executes Dijkstra's algorithm to identify the shortest path between the start and finish vertices"
-  [graph start finish & {:keys [limit]}]
+  [graph start finish? & {:keys [limit]}]
   (let [max-search (or limit (count (vertices graph)))
         init-state {:dist {start 0} :prev {} :queue (priority-map start 0)}]
     (loop [visited #{}
            visited-count 1
            vertex start
            state init-state]
-      (if (or (= max-search visited-count) (= vertex finish))
-        (reverse (dijkstra-retrace (state :prev) finish))
+      (if (or (= max-search visited-count) (finish? vertex))
+        (reverse (dijkstra-retrace (state :prev) vertex))
         (let [neighbors (remove visited (edges graph vertex))
               new-state (-> (reduce (partial dijkstra-update graph vertex) state neighbors)
                             (update :queue dissoc vertex))]
