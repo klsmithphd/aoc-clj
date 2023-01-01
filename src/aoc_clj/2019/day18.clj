@@ -90,7 +90,8 @@
 (defn all-routes-for-node
   [graph vertices node]
   (let [others (filter #(not= node %) vertices)]
-    (zipmap others (map (partial g/shortest-distance graph node) others))))
+    (zipmap others (map (partial g/shortest-distance graph node)
+                        (map u/equals? others)))))
 
 (defn fully-connected-keys-single
   [{:keys [keys entrances] :as graph}]
