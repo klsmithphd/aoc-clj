@@ -136,7 +136,7 @@
   [maze]
   (let [state (maze-with-portals (load-maze maze))
         start (get-in state [:ends "AA"])
-        end (get-in state [:ends "ZZ"])
+        end   (u/equals? (get-in state [:ends "ZZ"]))
         graph (:graph state)]
     (g/path-distance graph (g/dijkstra graph start end))))
 
@@ -200,7 +200,7 @@
   [maze]
   (let [state (load-maze maze)
         start (conj (get-in state [:ends "AA"]) 0)
-        end (conj (get-in state [:ends "ZZ"]) 0)
+        end   (u/equals? (conj (get-in state [:ends "ZZ"]) 0))
         rmaze (recursive-maze state)]
     (g/path-distance rmaze (g/dijkstra rmaze start end :limit 100000))))
 
