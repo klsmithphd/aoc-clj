@@ -11,4 +11,5 @@
                  [manifold "0.2.4"]]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
-  :repl-options {:init-ns aoc-clj.core})
+  :repl-options {:init-ns aoc-clj.core}
+  :jvm-opts ["-Xmx4g"])
