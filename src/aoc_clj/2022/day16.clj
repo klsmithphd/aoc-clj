@@ -42,9 +42,10 @@
   (let [g      (raw-graph input)
         valves (valves input)
         pairs  (combo/combinations (keys valves) 2)
-        dists  (map #(dec (count (apply graph/dijkstra g %))) pairs)
-        pairs2 (concat pairs (map reverse pairs))]
-    (->> (map #(conj (vec %1) %2) pairs2 (cycle dists))
+        all-pairs (concat pairs (map reverse pairs))
+        args   (map (fn [[a b]] [a (u/equals? b)]) all-pairs)
+        dists  (map #(dec (count (apply graph/dijkstra g %))) args)]
+    (->> (map #(conj (vec %1) %2) all-pairs dists)
          (group-by first)
          (u/fmap #(into {} (map (comp vec rest)) %))
          ->MapGraph)))
