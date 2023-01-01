@@ -31,7 +31,7 @@
 (defn find-path-vals
   [{:keys [width height grid] :as input}]
   (let [start  [0 0]
-        end    [(dec width) (dec height)]
+        end    (u/equals? [(dec width) (dec height)])
         path (g/dijkstra (->GridGraph input) start end)]
     (map grid path)))
 
