@@ -3,7 +3,8 @@
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.graph :as graph :refer [Graph]]
             [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+            [aoc-clj.utils.grid.mapgrid :as mapgrid]
+            [aoc-clj.utils.math :as math]))
 
 (def charmap {\. :open \# :wall \> :r \^ :u \< :l \v :d})
 
@@ -15,8 +16,7 @@
   [input]
   (let [{:keys [width height grid]}
         (mapgrid/ascii->MapGrid2D charmap input :down true)]
-    {:time      0
-     :x-bound   (- width 2)
+    {:x-bound   (- width 2)
      :y-bound   (- height 2)
      :blizzards (blizzards grid)}))
 
@@ -52,13 +52,14 @@
 
 (defn step
   [{:keys [blizzards] :as state}]
-  (-> state
-      (assoc :blizzards (map #(blizzard-update state %) blizzards))
-      (update :time inc)))
+  (assoc state :blizzards (map #(blizzard-update state %) blizzards)))
 
-(defn init-state
-  [input]
-  (assoc input :pos [1 0]))
+(def state-at-t
+  (memoize
+   (fn [state t]
+     (if (zero? t)
+       state
+       (step (state-at-t state (dec t)))))))
 
 (defn in-bounds-and-open?
   [{:keys [x-bound y-bound blizzards]} [x y :as pos]]
@@ -67,24 +68,32 @@
        (nil? ((set (map first blizzards)) pos))))
 
 (defn next-possible-states
-  [{:keys [pos] :as state}]
-  (let [future (step state)
+  [state [time pos]]
+  (let [future (state-at-t state (inc time))
         opts (filter #(in-bounds-and-open? future %)
                      (cons pos (grid/adj-coords-2d pos)))]
-    (map #(assoc future :pos %) opts)))
+    (map #(vector (inc time) %) opts)))
 
-(defrecord BlizzardGraph []
+(defrecord BlizzardGraph [state]
   Graph
-  (edges [_ v] (next-possible-states v))
+  (edges [_ v] (next-possible-states state v))
   (distance [_ _ _] 1))
 
 (defn finish?
-  [{:keys [x-bound y-bound pos]}]
+  [{:keys [x-bound y-bound]} [_ pos]]
   (= pos [x-bound y-bound]))
+
+(defn heuristic
+  [{:keys [x-bound y-bound]} [_ pos]]
+  (math/manhattan pos [x-bound y-bound]))
 
 (defn explore-until-destination
   [state]
-  (graph/dijkstra (->BlizzardGraph) (init-state state) finish? :limit 20000))
+  (graph/a-star
+   (->BlizzardGraph state)
+   [0 [1 0]]
+   (partial finish? state)
+   (partial heuristic state)))
 
 (defn shortest-time-to-navigate-blizzards
   [input]
