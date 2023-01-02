@@ -135,12 +135,9 @@
        :prev  (assoc prev neighbor vertex)}
       state)))
 
-(defn dijkstra-retrace
+(defn path-retrace
   [prev-steps finish]
-  (loop [vertex finish chain []]
-    (if (nil? vertex)
-      chain
-      (recur (prev-steps vertex) (conj chain vertex)))))
+  (reverse (take-while some? (iterate prev-steps finish))))
 
 (defn dijkstra
   "Executes Dijkstra's algorithm to identify the shortest path in `graph`
@@ -156,13 +153,42 @@
            vertex start
            state init-state]
       (if (or (= max-search visited-count) (finish? vertex))
-        (reverse (dijkstra-retrace (state :prev) vertex))
+        (path-retrace (state :prev) vertex)
         (let [neighbors (remove visited (edges graph vertex))
               new-state (-> (reduce (partial dijkstra-update graph vertex) state neighbors)
                             (update :queue dissoc vertex))]
           (recur
            (conj visited vertex)
            (if (visited vertex) visited-count (inc visited-count))
+           (ffirst (:queue new-state))
+           new-state))))))
+
+(defn a-star-update
+  [graph vertex h {:keys [dist prev queue] :as state} neighbor]
+  (let [alt (+ (dist vertex) (distance graph vertex neighbor))]
+    (if (or (nil? (dist neighbor)) (< alt (dist neighbor)))
+      {:dist  (assoc dist neighbor alt)
+       :queue (assoc queue neighbor (+ alt (h neighbor)))
+       :prev  (assoc prev neighbor vertex)}
+      state)))
+
+(defn a-star
+  "Executes the A* algorithm to identify the shortest path in `graph`
+   starting at `start`. The predicate `finish?` should return true when the
+   destination vertex has been reached or false otherwise. The heuristic
+   function `h` should be a function of each vertex and should estimate
+   the cost of reaching the target destination."
+  [graph start finish? h]
+  (let [init-state {:dist {start 0} :prev {} :queue (priority-map start (h start))}]
+    (loop [vertex start state init-state]
+      (if (or (finish? vertex) (empty? (:queue state)))
+        (if (finish? vertex)
+          (path-retrace (:prev state) vertex)
+          ["No path was found"])
+        (let [neighbors (edges graph vertex)
+              new-state (-> (reduce #(a-star-update graph vertex h %1 %2) state neighbors)
+                            (update :queue dissoc vertex))]
+          (recur
            (ffirst (:queue new-state))
            new-state))))))
 

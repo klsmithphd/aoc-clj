@@ -164,7 +164,7 @@
            vertex start
            state init-state]
       (if (= max-keys (inc (count (first vertex))))
-        (reverse (g/dijkstra-retrace (:prev state) vertex))
+        (g/path-retrace (:prev state) vertex)
         (let [neighbors (filter (complement visited) (edges graph vertex))
               new-state (reduce (partial g/dijkstra-update graph vertex) state neighbors)]
           (recur (conj visited vertex)

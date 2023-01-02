@@ -1,6 +1,7 @@
 (ns aoc-clj.utils.graph-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.graph :as g :refer [without-vertex rewired-without-vertex ->MapGraph]]))
+            [aoc-clj.utils.graph :as g :refer [without-vertex rewired-without-vertex ->MapGraph]]
+            [aoc-clj.utils.core :as u]))
 
 (def t1 (->MapGraph {:a {:b 1}
                      :b {:a 1 :c 2}
@@ -66,3 +67,15 @@
 (deftest dijkstra-test
   (testing "Can find the shortest path between two vertices"
     (is (= [:a :d :c :f] (g/dijkstra t3 :a #(= :f %))))))
+
+
+(def t5 (->MapGraph {:a {:b 1.5 :e 2}
+                     :b {:c 2}
+                     :c {:d 3}
+                     :d {:g 4}
+                     :e {:f 3}
+                     :f {:g 2}}))
+(def h5 {:a 6.5 :b 4 :c 2 :d 4 :e 4.5 :f 2 :g 0})
+(deftest a-star-test
+  (testing "Can find the shortest path between two vertices using A* alg"
+    (is (= [:a :e :f :g] (g/a-star t5 :a (u/equals? :g) h5)))))
