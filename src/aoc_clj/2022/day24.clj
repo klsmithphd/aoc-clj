@@ -54,46 +54,67 @@
   [{:keys [blizzards] :as state}]
   (assoc state :blizzards (map #(blizzard-update state %) blizzards)))
 
-(def state-at-t
-  (memoize
-   (fn [state t]
-     (if (zero? t)
-       state
-       (step (state-at-t state (dec t)))))))
+(defn blizzard-positions
+  [{:keys [blizzards]}]
+  (into #{} (map first blizzards)))
 
-(defn in-bounds-and-open?
-  [{:keys [x-bound y-bound blizzards]} [x y :as pos]]
+(defn blizzard-sim
+  [{:keys [x-bound y-bound] :as state}]
+  (let [recurrence (math/lcm x-bound y-bound)
+        states (->> (iterate step state)
+                    (take recurrence)
+                    (mapv blizzard-positions))]
+    (fn [time]
+      (nth states (mod time recurrence)))))
+
+(defn in-bounds?
+  [{:keys [x-bound y-bound]} [x y]]
   (and (<= 1 x x-bound)
-       (<= 1 y y-bound)
-       (nil? ((set (map first blizzards)) pos))))
+       (<= 1 y y-bound)))
+
+(defn augment
+  [state]
+  (-> state
+      (dissoc :blizzards)
+      (assoc  :sim (blizzard-sim state))))
 
 (defn next-possible-states
-  [state [time pos]]
-  (let [future (state-at-t state (inc time))
-        opts (filter #(in-bounds-and-open? future %)
-                     (cons pos (grid/adj-coords-2d pos)))]
-    (map #(vector (inc time) %) opts)))
+  [{:keys [sim] :as state} [time pos]]
+  (let [blizzards (sim (inc time))
+        moves     (->> (grid/adj-coords-2d pos)
+                       (cons pos)
+                       (remove blizzards)
+                       (filter #(in-bounds? state %)))]
+    (map #(vector (inc time) %) moves)))
 
 (defrecord BlizzardGraph [state]
   Graph
   (edges [_ v] (next-possible-states state v))
   (distance [_ _ _] 1))
 
-(defn finish?
+(defn entrance?
+  [_ [_ pos]]
+  (= pos [1 1]))
+
+(defn entrance-heuristic
+  [_ [_ pos]]
+  (math/manhattan pos [1 1]))
+
+(defn exit?
   [{:keys [x-bound y-bound]} [_ pos]]
   (= pos [x-bound y-bound]))
 
-(defn heuristic
+(defn exit-heuristic
   [{:keys [x-bound y-bound]} [_ pos]]
   (math/manhattan pos [x-bound y-bound]))
 
 (defn explore-until-destination
   [state]
   (graph/a-star
-   (->BlizzardGraph state)
+   (->BlizzardGraph (augment state))
    [0 [1 0]]
-   (partial finish? state)
-   (partial heuristic state)))
+   (partial exit? state)
+   (partial exit-heuristic state)))
 
 (defn shortest-time-to-navigate-blizzards
   [input]
