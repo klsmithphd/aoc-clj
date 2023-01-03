@@ -108,18 +108,48 @@
   [{:keys [x-bound y-bound]} [_ pos]]
   (math/manhattan pos [x-bound y-bound]))
 
-(defn explore-until-destination
-  [state]
-  (graph/a-star
-   (->BlizzardGraph (augment state))
-   [0 [1 0]]
-   (partial exit? state)
-   (partial exit-heuristic state)))
+(defn destination?
+  [location]
+  (fn [[_ pos]]
+    (= location pos)))
 
-(defn shortest-time-to-navigate-blizzards
+(defn heuristic
+  [location]
+  (fn [[_ pos]]
+    (math/manhattan pos location)))
+
+(defn find-path
+  [graph start dest]
+  (graph/a-star
+   graph
+   start
+   (destination? dest)
+   (heuristic dest)))
+
+(defn path-to-exit
+  [{:keys [x-bound y-bound] :as state} t]
+  (let [g (->BlizzardGraph (augment state))]
+    (find-path g [t [1 0]] [x-bound y-bound])))
+
+(defn path-to-start
+  [{:keys [x-bound y-bound] :as state} t]
+  (let [g (->BlizzardGraph (augment state))]
+    (find-path g [t [x-bound (inc y-bound)]] [1 1])))
+
+(defn move-to-exit
+  [path]
+  (let [[t [x y]] (last path)]
+    [(inc t) [x (inc y)]]))
+
+(defn move-to-start
+  [path]
+  (let [[t [x y]] (last path)]
+    [(inc t) [x (dec y)]]))
+
+(defn shortest-time-to-exit
   [input]
-  (count (explore-until-destination input)))
+  (count (path-to-exit input 0)))
 
 (defn day24-part1-soln
   []
-  (shortest-time-to-navigate-blizzards day24-input))
+  (shortest-time-to-exit day24-input))

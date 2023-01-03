@@ -66,7 +66,7 @@
     (is (= [[7 [3 2]]]
            (t/next-possible-states (t/augment d24-s02) [6 [3 1]])))))
 
-(deftest explore-until-destination-test
+(deftest path-to-exit-test
   (testing "Returns a shortest path that the elves can take, exploring the
             evolving blizzard map until getting one step away from exiting 
             the maze"
@@ -89,12 +89,12 @@
             [6 3] ;; From t= 16, move down to...
             [6 4] ;; This is one move away from the destination 
             ]
-           (map second (t/explore-until-destination d24-s02))))))
+           (map second (t/path-to-exit d24-s02 0))))))
 
-(deftest fewest-minutes-to-avoid-blizzards
+(deftest shortest-time-to-exit-test
   (testing "Computes the shortest amount of time required to navigate
             the evolving blizzard maze"
-    (is (= 18 (t/shortest-time-to-navigate-blizzards d24-s02)))))
+    (is (= 18 (t/shortest-time-to-exit d24-s02)))))
 
 (deftest day24-part1-soln
   (testing "Reproduces the answer for day24, part1"
