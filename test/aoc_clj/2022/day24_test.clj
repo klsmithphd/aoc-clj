@@ -41,14 +41,15 @@
 (deftest next-possible-states-test
   (testing "Given a state of the blizzards and elves at a given position, 
             return the set of next possible states"
-    ;; At t=0, the only possible move at the beginning is to move down to [1 1]
-    (is (= [[1 [1 1]]]
+    ;; At t=0, the only possible move at the beginning is to stay put at the
+    ;; start or to move down to [1 1]
+    (is (= [[1 [1 0]] [1 [1 1]]]
            (t/next-possible-states (t/augment d24-s02) [0 [1 0]])))
     ;; At t=1, at [1 1], the elves can stay at [1 1] or move down to [1 2]
-    (is (= [[2 [1 1]] [2 [1 2]]]
+    (is (= [[2 [1 1]] [2 [1 2]] [2 [1 0]]]
            (t/next-possible-states (t/augment d24-s02) [1 [1 1]])))
     ;; At t=2, if the elves stayed at [1 1], the only option is now [1 2]
-    (is (= [[3 [1 2]]]
+    (is (= [[3 [1 2]] [3 [1 0]]]
            (t/next-possible-states (t/augment d24-s02) [2 [1 1]])))
     ;; At t=2, if the elves were at [1 2], they can only stay put
     (is (= [[3 [1 2]]]
@@ -57,7 +58,7 @@
     (is (= [[4 [1 1]]]
            (t/next-possible-states (t/augment d24-s02) [3 [1 2]])))
     ;; At t=4, at [1 1], elves can only move right to [2 1]
-    (is (= [[5 [2 1]]]
+    (is (= [[5 [2 1]] [5 [1 0]]]
            (t/next-possible-states (t/augment d24-s02) [4 [1 1]])))
     ;; At t=5, at [2 1], elves can only move right to [3 1]
     (is (= [[6 [3 1]]]
@@ -96,10 +97,16 @@
             the evolving blizzard maze"
     (is (= 18 (t/shortest-time-to-exit d24-s02)))))
 
+(deftest shortest-roundtrip-to-exit-test
+  (testing "Computes the shortest amount of time required to navigate
+            the evolving blizzard maze from the start to the exit,
+            back to the start, and back to the exit"
+    (is (= 54 (t/shortest-roundtrip-to-exit d24-s02)))))
+
 (deftest day24-part1-soln
   (testing "Reproduces the answer for day24, part1"
     (is (= 286 (t/day24-part1-soln)))))
 
-;; (deftest day24-part2-soln
-;;   (testing "Reproduces the answer for day24, part2"
-;;     (is (= 0 (t/day24-part2-soln)))))
+(deftest day24-part2-soln
+  (testing "Reproduces the answer for day24, part2"
+    (is (= 820 (t/day24-part2-soln)))))

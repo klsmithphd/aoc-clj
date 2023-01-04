@@ -69,8 +69,10 @@
 
 (defn in-bounds?
   [{:keys [x-bound y-bound]} [x y]]
-  (and (<= 1 x x-bound)
-       (<= 1 y y-bound)))
+  (or (= [x y] [1 0])
+      (= [x y] [x-bound (inc y-bound)])
+      (and (<= 1 x x-bound)
+           (<= 1 y y-bound))))
 
 (defn augment
   [state]
@@ -150,6 +152,25 @@
   [input]
   (count (path-to-exit input 0)))
 
+(defn shortest-roundtrip-to-exit
+  [input]
+  (->> (path-to-exit input 0)
+       last
+       first
+       inc
+       (path-to-start input)
+       last
+       first
+       inc
+       (path-to-exit input)
+       last
+       first
+       inc))
+
 (defn day24-part1-soln
   []
   (shortest-time-to-exit day24-input))
+
+(defn day24-part2-soln
+  []
+  (shortest-roundtrip-to-exit day24-input))
