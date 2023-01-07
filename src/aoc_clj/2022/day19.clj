@@ -14,7 +14,7 @@
 
 (defn parse
   [input]
-  (into {} (map parse-line input)))
+  (into {} (mapv parse-line input)))
 
 (def d19-s01
   (parse
@@ -22,7 +22,6 @@
     "Blueprint 2: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 8 clay. Each geode robot costs 3 ore and 12 obsidian."]))
 
 (def day19-input (parse (u/puzzle-input "2022/day19-input.txt")))
-(def time-limit 24)
 (def init-inventory
   "The initial inventory is one ore robot.
    Everything follows the order: ore, clay, obsidian, geode
@@ -31,14 +30,19 @@
   [[1 0 0 0] [0 0 0 0]])
 
 (defn consume-materials
+  "Use up the materials in `ingredients` in order to make a new robot"
   [[robots materials] ingredients]
   [robots (mapv - materials ingredients)])
 
 (defn gather-materials
+  "Have each robot gather the materials they collect and increase the materials
+   inventory"
   [[robots materials]]
   [robots (mapv + materials robots)])
 
 (defn add-robot
+  "Add a new `robot` of given type 0,1,2,3 (corresponding to ore, clay, obsidian
+   or geode) to the inventory"
   [[robots materials] robot]
   [(update robots robot inc) materials])
 
@@ -72,7 +76,7 @@
   [states]
   (->> states
        (sort-by inventory-score desc-compare)
-       (take 10)))
+       (take 500)))
 
 (defn can-build?
   [[_ materials] spec]
@@ -116,13 +120,23 @@
        (apply max)))
 
 (defn quality-level
-  [[id blueprint] time-limit]
-  (* id (max-geodes blueprint time-limit)))
+  [[id blueprint]]
+  (* id (max-geodes blueprint 24)))
 
 (defn quality-level-sum
-  [blueprints time-limit]
-  (reduce + (map #(quality-level % time-limit) blueprints)))
+  [blueprints]
+  (reduce + (map #(quality-level %) blueprints)))
+
+(defn max-geode-product
+  [blueprints]
+  (->> [(get blueprints 1) (get blueprints 2) (get blueprints 3)]
+       (map #(max-geodes % 32))
+       (reduce *)))
 
 (defn day19-part1-soln
   []
   (quality-level-sum day19-input))
+
+(defn day19-part2-soln
+  []
+  (max-geode-product day19-input))
