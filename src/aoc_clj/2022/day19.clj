@@ -1,14 +1,16 @@
 (ns aoc-clj.2022.day19
   "Solution to https://adventofcode.com/2022/day/19"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [clojure.set :as set]
+            [aoc-clj.utils.core :as u]))
 
 (defn parse-line
   [line]
   (let [[a b c d e f g] (map read-string (re-seq #"\d+" line))]
-    [a {:geode    {:ore f :obsidian g}
-        :obsidian {:ore d :clay e}
-        :clay     {:ore c}
-        :ore      {:ore b}}]))
+    ;; The blueprint requirements are ordered ore, clay, obsidian, geode
+    [a [[b 0 0 0]
+        [c 0 0 0]
+        [d e 0 0]
+        [f 0 g 0]]]))
 
 (defn parse
   [input]
@@ -21,48 +23,24 @@
 
 (def day19-input (parse (u/puzzle-input "2022/day19-input.txt")))
 (def time-limit 24)
-(def init-inventory {:robots {:ore 1
-                              :clay 0
-                              :obsidian 0
-                              :geode 0}
-                     :materials {:geode 0
-                                 :obsidian 0
-                                 :clay 0
-                                 :ore 0}})
-
-(defn gather-material
-  [inv [type amt]]
-  (update-in inv [:materials type] + amt))
-
-(defn consume-material
-  [inv [type amt]]
-  (update-in inv [:materials type] - amt))
-
-(defn robot-build-possible?
-  [inventory [_ ingredients]]
-  (->> (reduce consume-material inventory ingredients)
-       :materials
-       (map second)
-       (not-any? neg?)))
-
-(defn options
-  [blueprint inventory]
-  (concat [:noop]
-          (keys (filter #(robot-build-possible? inventory %) blueprint))))
-
-(options (get d19-s01 1) init-inventory)
+(def init-inventory
+  "The initial inventory is one ore robot.
+   Everything follows the order: ore, clay, obsidian, geode
+   The first vec is the number of robots of each type.
+   The second vec is the amount of each type of material available"
+  [[1 0 0 0] [0 0 0 0]])
 
 (defn consume-materials
-  [inventory ingredients]
-  (reduce consume-material inventory ingredients))
+  [[robots materials] ingredients]
+  [robots (mapv - materials ingredients)])
 
 (defn gather-materials
-  [{:keys [robots] :as inv}]
-  (reduce gather-material inv robots))
+  [[robots materials]]
+  [robots (mapv + materials robots)])
 
 (defn add-robot
-  [inventory robot]
-  (update-in inventory [:robots robot] inc))
+  [[robots materials] robot]
+  [(update robots robot inc) materials])
 
 (defn step
   "Each robot can collect 1 of its resource type per minute. 
@@ -71,7 +49,7 @@
    necessary resources available when construction begins.
    
    In every step (1 minute), 
-   (a) determine what robot(s) can be built, instantly consuming those resources
+   (a) if building a robot, instantly consuming those resources
    (b) let each active robot gather 1 unit of their resource type
    (c) add the newly built robots into the inventory"
   [blueprint inventory choice]
@@ -82,63 +60,69 @@
         gather-materials
         (add-robot choice))))
 
-(defn best-subpath
-  "Finds the optimal set of choices to make at each minute so as to maximize
-   the number of geodes collected."
-  [blueprint t history]
-  (if (zero? t)
-    history
-    (let [inventory (peek history)
-          candidates (options blueprint (peek history))
-          choices  (map #(step blueprint inventory %) candidates)
-          subpaths  (map #(best-subpath blueprint (dec t) (conj history %)) choices)]
-      (if (empty? subpaths)
-        history
-        (first (sort-by (comp :geode :materials peek) > subpaths))))))
+(defn inventory-score
+  [[robots materials]]
+  (-> (interleave materials robots) reverse vec))
 
-(best-subpath (get d19-s01 1) 19 [init-inventory])
-(gather-materials init-inventory)
-(step (get d19-s01 1) init-inventory :noop)
+(def desc-compare
+  "Compare descending instead of ascending"
+  (comp - compare))
 
-;; (defn build-robot-type?
-;;   [inv type ingredients]
-;;   (and
-;;    (robot-build-possible? inv ingredients)
-;;    (case type
-;;      :ore false
-;;      :clay (if (= (get-in inv [:robots :obsidian] 0) 1)
-;;              (< (get-in inv [:robots :clay] 0) 4)
-;;              (< (get-in inv [:robots :clay] 0) 3))
-;;      :obsidian (< (get-in inv [:robots :obsidian] 0) 2)
-;;      true)))
+(defn keep-best
+  [states]
+  (->> states
+       (sort-by inventory-score desc-compare)
+       (take 10)))
 
-;; (defn add-robot
-;;   [{:keys [pending] :as inv}]
-;;   (if (nil? pending)
-;;     inv
-;;     (-> inv
-;;         (assoc-in [:robots pending] (inc (get-in inv [:robots pending] 0)))
-;;         (dissoc :pending))))
+(defn can-build?
+  [[_ materials] spec]
+  (every? true? (map >= materials spec)))
 
-;; (defn build-robot
-;;   [inv [type ingredients]]
-;;   (if (build-robot-type? inv type ingredients)
-;;     (-> (reduce consume-material inv ingredients)
-;;         (assoc :pending type))
-;;     inv))
+(defn options
+  [inventory blueprint]
+  (->> blueprint
+       (map-indexed (fn [i spec] [i (can-build? inventory spec)]))
+       (filter second)
+       (mapv first)
+       (cons :noop)))
 
-;; (defn order-new-robots
-;;   [blueprint inv]
-;;   (reduce build-robot inv blueprint))
+(defn next-states
+  [blueprint state]
+  (->> (options state blueprint)
+       (map #(step blueprint state %))
+       set))
 
+(defn all-next-states
+  [blueprint states]
+  (->> states
+       (map #(next-states blueprint %))
+       (apply clojure.set/union)
+       keep-best))
 
+(defn best-outcomes
+  [blueprint time-limit]
+  (->> (iterate #(all-next-states blueprint %) #{init-inventory})
+       (drop time-limit)
+       first))
 
-;; (defn run-blueprint
-;;   [blueprint]
-;;   (->> (iterate (partial step blueprint) init-inventory)
-;;        (drop time-limit)
-;;        first))
+(defn geode-count
+  [[_ [_ _ _ geodes]]]
+  geodes)
 
-;; (defn max-geodes
-;;   [blueprint]
-;;   (get-in (run-blueprint blueprint) [:materials :geode]))
+(defn max-geodes
+  [blueprint time-limit]
+  (->> (best-outcomes blueprint time-limit)
+       (map geode-count)
+       (apply max)))
+
+(defn quality-level
+  [[id blueprint] time-limit]
+  (* id (max-geodes blueprint time-limit)))
+
+(defn quality-level-sum
+  [blueprints time-limit]
+  (reduce + (map #(quality-level % time-limit) blueprints)))
+
+(defn day19-part1-soln
+  []
+  (quality-level-sum day19-input))
