@@ -23,7 +23,7 @@
   (testing "Computes the sum of all the quality levels of all the blueprints"
     (is (= 33 (t/quality-level-sum d19-s01)))))
 
-(deftest day19-part1-soln
+(deftest ^:slow day19-part1-soln
   (testing "Reproduces the answer for day19, part1"
     (is (= 1395 (t/day19-part1-soln)))))
 
