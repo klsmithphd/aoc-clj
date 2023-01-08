@@ -24,14 +24,14 @@
    {:left 2 :right 3 :bottom 4 :falling? true
     :cells [[2 4] [3 4] [2 5] [3 5]]}])
 
-(def d16-s01 ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>")
+(def d17-s01 ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>")
 
 (def day17-input (first (u/puzzle-input "2022/day17-input.txt")))
 
-(defn shift-right [[x y]]   [(inc x) y])
-(defn shift-left  [[x y]]   [(dec x) y])
-(defn shift-down  [[x y]]   [x (dec y)])
-(defn shift-up    [h [x y]] [x (+ h y)])
+(defn shift-right [pos]   (update pos 0 inc))
+(defn shift-left  [pos]   (update pos 0 dec))
+(defn shift-down  [pos]   (update pos 1 dec))
+(defn shift-up    [h pos] (update pos 1 + h))
 
 (defn push-right
   [grid {:keys [left right cells] :as shape}]
