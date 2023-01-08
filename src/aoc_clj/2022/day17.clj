@@ -39,7 +39,7 @@
   (if (= 6 right)
     shape
     (let [newcells (mapv shift-right cells)]
-      (if (some (complement nil?) (map rocks newcells))
+      (if (some rocks newcells)
         shape
         (assoc shape
                :cells newcells
@@ -51,7 +51,7 @@
   (if (= 0 left)
     shape
     (let [newcells (mapv shift-left cells)]
-      (if (some (complement nil?) (map rocks newcells))
+      (if (some rocks newcells)
         shape
         (assoc shape
                :cells newcells
@@ -63,7 +63,7 @@
   (if (= 1 bottom)
     (assoc shape :falling? false)
     (let [newcells (mapv shift-down cells)]
-      (if (some (complement nil?) (map rocks newcells))
+      (if (some rocks newcells)
         (assoc shape :falling? false)
         (assoc shape
                :cells newcells
@@ -100,8 +100,7 @@
                 :jet-idx jet-idx}]
     (if (not (get-in state [:shape :falling?]))
       {:jets   jets
-       :rocks (into rocks (zipmap (get-in state [:shape :cells])
-                                  (repeat :rock)))
+       :rocks (into rocks (get-in state [:shape :cells]))
        :height (max height
                     (tower-height (get-in state [:shape :cells])))
        :shape-idx (math/mod-add 5 shape-idx 1)
@@ -110,7 +109,7 @@
 
 (defn simulate
   [jets n]
-  (->> {:jets jets :rocks {} :height 0 :shape-idx 0 :jet-idx 0}
+  (->> {:jets jets :rocks #{} :height 0 :shape-idx 0 :jet-idx 0}
        (iterate deposit-shape)
        (drop n)
        first))

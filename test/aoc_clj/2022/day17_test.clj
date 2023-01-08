@@ -4,12 +4,12 @@
 
 (def d17-s01 ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>")
 
-(def step0 {})
-(def step1 (merge step0 {[2 1] :rock [3 1] :rock [4 1] :rock [5 1] :rock}))
-(def step2 (merge step1 {[3 2] :rock [2 3] :rock [3 3] :rock [4 3] :rock [3 4] :rock}))
-(def step3 (merge step2 {[0 4] :rock [1 4] :rock [2 4] :rock [2 5] :rock [2 6] :rock}))
-(def step4 (merge step3 {[4 4] :rock [4 5] :rock [4 6] :rock [4 7] :rock}))
-(def step5 (merge step4 {[4 8] :rock [5 8] :rock [4 9] :rock [5 9] :rock}))
+(def step0 #{})
+(def step1 (into step0 [[2 1] [3 1] [4 1] [5 1]]))
+(def step2 (into step1 [[3 2] [2 3] [3 3] [4 3] [3 4]]))
+(def step3 (into step2 [[0 4] [1 4] [2 4] [2 5] [2 6]]))
+(def step4 (into step3 [[4 4] [4 5] [4 6] [4 7]]))
+(def step5 (into step4 [[4 8] [5 8] [4 9] [5 9]]))
 
 (deftest deposit-shape-test
   (testing "Lowers a new rock into place, as moved around by the jets"
