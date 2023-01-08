@@ -70,17 +70,14 @@
                :bottom (dec bottom))))))
 
 (defn tower-height
-  [rocks]
-  (if (keys rocks)
-    (apply max (map second (keys rocks)))
-    0))
+  [cells]
+  (apply max (map second cells)))
 
 (defn init-shape
-  [rocks {:keys [bottom cells] :as shape}]
-  (let [height (tower-height rocks)]
-    (assoc shape
-           :bottom (+ bottom height)
-           :cells (mapv #(shift-up height %) cells))))
+  [height {:keys [bottom cells] :as shape}]
+  (assoc shape
+         :bottom (+ bottom height)
+         :cells (mapv #(shift-up height %) cells)))
 
 (defn push-move
   [rocks shape jet]
@@ -96,22 +93,24 @@
            :shape   (move-down rocks newshape))))
 
 (defn deposit-shape
-  [{:keys [rocks jets shape-idx jet-idx]}]
+  [{:keys [jets rocks height shape-idx jet-idx]}]
   (loop [state {:rocks rocks
-                :shape (init-shape rocks (get shapes shape-idx))
+                :shape (init-shape height (get shapes shape-idx))
                 :jets jets
                 :jet-idx jet-idx}]
     (if (not (get-in state [:shape :falling?]))
-      {:rocks (into rocks (zipmap (get-in state [:shape :cells])
+      {:jets   jets
+       :rocks (into rocks (zipmap (get-in state [:shape :cells])
                                   (repeat :rock)))
-       :jets   jets
+       :height (max height
+                    (tower-height (get-in state [:shape :cells])))
        :shape-idx (math/mod-add 5 shape-idx 1)
        :jet-idx   (get-in state [:jet-idx])}
       (recur (move state)))))
 
 (defn simulate
   [jets n]
-  (->> {:rocks {} :jets jets :shape-idx 0 :jet-idx 0}
+  (->> {:jets jets :rocks {} :height 0 :shape-idx 0 :jet-idx 0}
        (iterate deposit-shape)
        (drop n)
        first))
@@ -119,8 +118,7 @@
 (defn tower-height-after-n
   [input n]
   (->> (simulate input n)
-       :rocks
-       tower-height))
+       :height))
 
 (defn day17-part1-soln
   "How many units tall will the tower of rocks be after 2022 rocks have 
