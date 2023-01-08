@@ -35,11 +35,11 @@
 (defn shift-up    [h pos] (update pos 1 + h))
 
 (defn push-right
-  [grid {:keys [left right cells] :as shape}]
+  [rocks {:keys [left right cells] :as shape}]
   (if (= 6 right)
     shape
     (let [newcells (mapv shift-right cells)]
-      (if (some (complement nil?) (map grid newcells))
+      (if (some (complement nil?) (map rocks newcells))
         shape
         (assoc shape
                :cells newcells
@@ -47,11 +47,11 @@
                :left  (inc left))))))
 
 (defn push-left
-  [grid {:keys [left right cells] :as shape}]
+  [rocks {:keys [left right cells] :as shape}]
   (if (= 0 left)
     shape
     (let [newcells (mapv shift-left cells)]
-      (if (some (complement nil?) (map grid newcells))
+      (if (some (complement nil?) (map rocks newcells))
         shape
         (assoc shape
                :cells newcells
@@ -59,51 +59,51 @@
                :left  (dec left))))))
 
 (defn move-down
-  [grid {:keys [bottom cells] :as shape}]
+  [rocks {:keys [bottom cells] :as shape}]
   (if (= 1 bottom)
     (assoc shape :falling? false)
     (let [newcells (mapv shift-down cells)]
-      (if (some (complement nil?) (map grid newcells))
+      (if (some (complement nil?) (map rocks newcells))
         (assoc shape :falling? false)
         (assoc shape
                :cells newcells
                :bottom (dec bottom))))))
 
 (defn tower-height
-  [grid]
-  (if (keys grid)
-    (apply max (map second (keys grid)))
+  [rocks]
+  (if (keys rocks)
+    (apply max (map second (keys rocks)))
     0))
 
 (defn init-shape
-  [grid {:keys [bottom cells] :as shape}]
-  (let [height (tower-height grid)]
+  [rocks {:keys [bottom cells] :as shape}]
+  (let [height (tower-height rocks)]
     (assoc shape
            :bottom (+ bottom height)
            :cells (mapv #(shift-up height %) cells))))
 
 (defn push-move
-  [grid shape jet]
+  [rocks shape jet]
   (case jet
-    \> (push-right grid shape)
-    \< (push-left grid shape)))
+    \> (push-right rocks shape)
+    \< (push-left rocks shape)))
 
 (defn move
-  [{:keys [grid shape jets jet-idx] :as state}]
-  (let [newshape (push-move grid shape (get jets jet-idx))]
+  [{:keys [rocks shape jets jet-idx] :as state}]
+  (let [newshape (push-move rocks shape (get jets jet-idx))]
     (assoc state
            :jet-idx (math/mod-add (count jets) jet-idx 1)
-           :shape   (move-down grid newshape))))
+           :shape   (move-down rocks newshape))))
 
 (defn deposit-shape
-  [{:keys [grid shapes jets shape-idx jet-idx]}]
-  (loop [state {:grid grid
-                :shape (init-shape grid (get shapes shape-idx))
+  [{:keys [rocks shapes jets shape-idx jet-idx]}]
+  (loop [state {:rocks rocks
+                :shape (init-shape rocks (get shapes shape-idx))
                 :jets jets
                 :jet-idx jet-idx}]
     (if (not (get-in state [:shape :falling?]))
-      {:grid (into grid (zipmap (get-in state [:shape :cells])
-                                (repeat :rock)))
+      {:rocks (into rocks (zipmap (get-in state [:shape :cells])
+                                  (repeat :rock)))
        :shapes shapes
        :jets   jets
        :shape-idx (math/mod-add 5 shape-idx 1)
@@ -112,7 +112,7 @@
 
 (defn simulate
   [jets n]
-  (->> {:grid {} :shapes shapes :jets jets :shape-idx 0 :jet-idx 0}
+  (->> {:rocks {} :shapes shapes :jets jets :shape-idx 0 :jet-idx 0}
        (iterate deposit-shape)
        (drop n)
        first))
@@ -120,7 +120,7 @@
 (defn tower-height-after-n
   [input n]
   (->> (simulate input n)
-       :grid
+       :rocks
        tower-height))
 
 (defn day17-part1-soln

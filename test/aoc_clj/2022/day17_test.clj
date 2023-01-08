@@ -13,11 +13,11 @@
 
 (deftest deposit-shape-test
   (testing "Lowers a new rock into place, as moved around by the jets"
-    (is (= step1 (:grid (t/simulate d17-s01 1))))
-    (is (= step2 (:grid (t/simulate d17-s01 2))))
-    (is (= step3 (:grid (t/simulate d17-s01 3))))
-    (is (= step4 (:grid (t/simulate d17-s01 4))))
-    (is (= step5 (:grid (t/simulate d17-s01 5))))))
+    (is (= step1 (:rocks (t/simulate d17-s01 1))))
+    (is (= step2 (:rocks (t/simulate d17-s01 2))))
+    (is (= step3 (:rocks (t/simulate d17-s01 3))))
+    (is (= step4 (:rocks (t/simulate d17-s01 4))))
+    (is (= step5 (:rocks (t/simulate d17-s01 5))))))
 
 (deftest tower-height-after-n-test
   (testing "Computes the height after a number of rocks have been deposited"
