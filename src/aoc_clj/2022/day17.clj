@@ -1,6 +1,7 @@
 (ns aoc-clj.2022.day17
   "Solution to https://adventofcode.com/2022/day/17"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.math :as math]))
 
 (def shapes
   "Each rock appears so that its left edge is two units away from the left wall"
@@ -88,27 +89,30 @@
     \< (push-left grid shape)))
 
 (defn move
-  [{:keys [grid shape jets] :as state}]
-  (let [newshape (push-move grid shape (first jets))]
+  [{:keys [grid shape jets jet-idx] :as state}]
+  (let [newshape (push-move grid shape (get jets jet-idx))]
     (assoc state
-           :jets (rest jets)
-           :shape (move-down grid newshape))))
+           :jet-idx (math/mod-add (count jets) jet-idx 1)
+           :shape   (move-down grid newshape))))
 
 (defn deposit-shape
-  [{:keys [grid shapes jets]}]
+  [{:keys [grid shapes jets shape-idx jet-idx]}]
   (loop [state {:grid grid
-                :shape (init-shape grid (first shapes))
-                :jets jets}]
+                :shape (init-shape grid (get shapes shape-idx))
+                :jets jets
+                :jet-idx jet-idx}]
     (if (not (get-in state [:shape :falling?]))
       {:grid (into grid (zipmap (get-in state [:shape :cells])
                                 (repeat :rock)))
-       :shapes (rest shapes)
-       :jets (get state :jets)}
+       :shapes shapes
+       :jets   jets
+       :shape-idx (math/mod-add 5 shape-idx 1)
+       :jet-idx   (get-in state [:jet-idx])}
       (recur (move state)))))
 
 (defn simulate
-  [input n]
-  (->> {:grid {} :shapes (cycle shapes) :jets (cycle input)}
+  [jets n]
+  (->> {:grid {} :shapes shapes :jets jets :shape-idx 0 :jet-idx 0}
        (iterate deposit-shape)
        (drop n)
        first))
