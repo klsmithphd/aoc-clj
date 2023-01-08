@@ -21,12 +21,13 @@
 
 (deftest tower-height-after-n-test
   (testing "Computes the height after a number of rocks have been deposited"
-    (is (= 3068 (t/tower-height-after-n d17-s01 2022)))))
+    (is (= 3068 (t/tower-height-after-n d17-s01 2022)))
+    (is (= 1514285714288 (t/tower-height-after-n d17-s01 1000000000000)))))
 
 (deftest day17-part1-soln
   (testing "Reproduces the answer for day17, part1"
     (is (= 3171 (t/day17-part1-soln)))))
 
-;; (deftest day17-part2-soln
-;;   (testing "Reproduces the answer for day17, part2"
-;;     (is (= 0 (t/day17-part2-soln)))))
+(deftest day17-part2-soln
+  (testing "Reproduces the answer for day17, part2"
+    (is (= 1586627906921 (t/day17-part2-soln)))))
