@@ -96,7 +96,7 @@
            :shape   (move-down rocks newshape))))
 
 (defn deposit-shape
-  [{:keys [rocks shapes jets shape-idx jet-idx]}]
+  [{:keys [rocks jets shape-idx jet-idx]}]
   (loop [state {:rocks rocks
                 :shape (init-shape rocks (get shapes shape-idx))
                 :jets jets
@@ -104,7 +104,6 @@
     (if (not (get-in state [:shape :falling?]))
       {:rocks (into rocks (zipmap (get-in state [:shape :cells])
                                   (repeat :rock)))
-       :shapes shapes
        :jets   jets
        :shape-idx (math/mod-add 5 shape-idx 1)
        :jet-idx   (get-in state [:jet-idx])}
@@ -112,7 +111,7 @@
 
 (defn simulate
   [jets n]
-  (->> {:rocks {} :shapes shapes :jets jets :shape-idx 0 :jet-idx 0}
+  (->> {:rocks {} :jets jets :shape-idx 0 :jet-idx 0}
        (iterate deposit-shape)
        (drop n)
        first))
