@@ -106,11 +106,16 @@
        (get state :jets)]
       (recur (move state)))))
 
-(defn tower-height-after-n
+(defn simulate
   [input n]
   (->> (iterate deposit-shape [{} (cycle shapes) (cycle input)])
        (drop n)
-       ffirst
+       first))
+
+(defn tower-height-after-n
+  [input n]
+  (->> (simulate input n)
+       first
        tower-height))
 
 (defn day17-part1-soln

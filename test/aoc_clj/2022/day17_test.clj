@@ -13,16 +13,11 @@
 
 (deftest deposit-shape-test
   (testing "Lowers a new rock into place, as moved around by the jets"
-    (is (= step1
-           (first (t/deposit-shape [step0 (drop 0 t/shapes) d17-s01]))))
-    (is (= step2
-           (first (t/deposit-shape [step1 (drop 1 t/shapes) (drop 4 d17-s01)]))))
-    (is (= step3
-           (first (t/deposit-shape [step2 (drop 2 t/shapes) (drop 8 d17-s01)]))))
-    (is (= step4
-           (first (t/deposit-shape [step3 (drop 3 t/shapes) (drop 13 d17-s01)]))))
-    (is (= step5
-           (first (t/deposit-shape [step4 (drop 4 t/shapes) (drop 20 d17-s01)]))))))
+    (is (= step1 (first (t/simulate d17-s01 1))))
+    (is (= step2 (first (t/simulate d17-s01 2))))
+    (is (= step3 (first (t/simulate d17-s01 3))))
+    (is (= step4 (first (t/simulate d17-s01 4))))
+    (is (= step5 (first (t/simulate d17-s01 5))))))
 
 (deftest tower-height-after-n-test
   (testing "Computes the height after a number of rocks have been deposited"
