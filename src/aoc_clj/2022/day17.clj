@@ -95,27 +95,28 @@
            :shape (move-down grid newshape))))
 
 (defn deposit-shape
-  [[grid shapes jets]]
+  [{:keys [grid shapes jets]}]
   (loop [state {:grid grid
                 :shape (init-shape grid (first shapes))
                 :jets jets}]
     (if (not (get-in state [:shape :falling?]))
-      [(into grid (zipmap (get-in state [:shape :cells])
-                          (repeat :rock)))
-       (rest shapes)
-       (get state :jets)]
+      {:grid (into grid (zipmap (get-in state [:shape :cells])
+                                (repeat :rock)))
+       :shapes (rest shapes)
+       :jets (get state :jets)}
       (recur (move state)))))
 
 (defn simulate
   [input n]
-  (->> (iterate deposit-shape [{} (cycle shapes) (cycle input)])
+  (->> {:grid {} :shapes (cycle shapes) :jets (cycle input)}
+       (iterate deposit-shape)
        (drop n)
        first))
 
 (defn tower-height-after-n
   [input n]
   (->> (simulate input n)
-       first
+       :grid
        tower-height))
 
 (defn day17-part1-soln
