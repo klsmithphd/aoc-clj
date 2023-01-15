@@ -1,6 +1,6 @@
 {
-  "image": "clojure:lein",
-  "features": {
-  },
+  "build": {
+    "dockerfile": "Dockerfile"
+  },  
   "extensions": ["betterthantomorrow.calva"]
 }
