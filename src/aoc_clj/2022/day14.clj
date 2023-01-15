@@ -25,9 +25,7 @@
 
 (defn rocks
   [input]
-  (zipmap
-   (distinct (mapcat trace-lines input))
-   (repeat :rock)))
+  (set (mapcat trace-lines input)))
 
 (defn parse
   [input]
@@ -39,11 +37,7 @@
 
 (defn lowest
   [grid]
-  (apply max (map second (keys grid))))
-
-(defn open?
-  [grid pos]
-  ((complement #{:rock :sand}) (get grid pos :air)))
+  (apply max (map second grid)))
 
 (defn move
   "A unit of sand always falls down one step if possible. 
@@ -62,7 +56,7 @@
                [(dec x) (inc y)]
                ;; down to the right
                [(inc x) (inc y)]]]
-    (first (filter #(open? grid %) moves))))
+    (first (remove grid moves))))
 
 (defn deposit-sand-grain
   "Deposit one new grain of sand, given the current layout of rock and
@@ -73,7 +67,7 @@
     (loop [pos [500 0]]
       (if (or (nil? (move grid pos))
               (>= (second pos) lowpoint))
-        [(assoc grid pos :sand) pos]
+        [(conj grid pos) pos]
         (recur (move grid pos))))))
 
 (defn flow-check
@@ -110,7 +104,7 @@
   (let [floor (+ 2 (lowest grid))
         width (* 2 floor)]
     (into grid (for [x (range (- 500 width) (+ 500 width))]
-                 [[x floor] :rock]))))
+                 [x floor]))))
 
 (defn sand-until-blocked
   "Let sand deposit until it reaches the source and blocks it, based

@@ -10,36 +10,36 @@
 (deftest parse-test
   (testing "Correctly parses the sample input"
     (is (= d14-s01
-           {[498 4] :rock
-            [498 5] :rock
-            [498 6] :rock
-            [497 6] :rock
-            [496 6] :rock
-            [503 4] :rock
-            [502 4] :rock
-            [502 5] :rock
-            [502 6] :rock
-            [502 7] :rock
-            [502 8] :rock
-            [502 9] :rock
-            [501 9] :rock
-            [500 9] :rock
-            [499 9] :rock
-            [498 9] :rock
-            [497 9] :rock
-            [496 9] :rock
-            [495 9] :rock
-            [494 9] :rock}))))
+           #{[498 4]
+             [498 5]
+             [498 6]
+             [497 6]
+             [496 6]
+             [503 4]
+             [502 4]
+             [502 5]
+             [502 6]
+             [502 7]
+             [502 8]
+             [502 9]
+             [501 9]
+             [500 9]
+             [499 9]
+             [498 9]
+             [497 9]
+             [496 9]
+             [495 9]
+             [494 9]}))))
 
 (deftest move-test
   (testing "Sand moves one tick based on space"
-    (is (= [0 1] (t/move {} [0 0])))
-    (is (= [-1 1] (t/move {[0 1] :rock} [0 0])))
-    (is (= [1 1]  (t/move {[0 1] :rock
-                           [-1 1] :rock} [0 0])))
-    (is (nil? (t/move {[0 1] :rock
-                       [-1 1] :rock
-                       [1 1] :rock} [0 0])))))
+    (is (= [0 1]  (t/move #{} [0 0])))
+    (is (= [-1 1] (t/move #{[0 1]} [0 0])))
+    (is (= [1 1]  (t/move #{[0 1]
+                            [-1 1]} [0 0])))
+    (is (nil? (t/move #{[0 1]
+                        [-1 1]
+                        [1 1]} [0 0])))))
 
 (deftest deposit-sand-grain-test
   (testing "Updates the grid with a newly deposited sand grain"
