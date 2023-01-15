@@ -3,6 +3,12 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
+(defn parse
+  [input]
+  (map #(str/split % #" ") input))
+
+(def day02-input (parse (u/puzzle-input "2022/day02-input.txt")))
+
 (def guide->p1move
   "The first column is what your opponent is going to play: 
    A for Rock, B for Paper, and C for Scissors."
@@ -59,19 +65,16 @@
   "Map from [p1 outcome] to player 2 play"
   (into {} (map (fn [[p1 p2 o]] [[p1 o] p2]) permutations)))
 
-(defn parse-line
-  "Parse a `line` from the strategy guide input using `f` to parse
-   the second column's value"
-  [f line]
-  (let [[p1 p2] (str/split line #" ")]
-    [(guide->p1move p1) (f p2)]))
+(defn interpret
+  "Interpret the input data according to the guidance of part1 or part2,
+   as given by the `interpret-fn` for the second column"
+  [interpret-fn input]
+  (letfn [(interpret [[p1 p2]]
+            [(guide->p1move p1) (interpret-fn p2)])]
+    (map interpret input)))
 
-(def parse-line-part1 (partial parse-line guide->p2move))
-(def parse-line-part2 (partial parse-line guide->p2outcome))
-
-(def day02-input (u/puzzle-input "2022/day02-input.txt"))
-(def day02-input-part1 (map parse-line-part1 day02-input))
-(def day02-input-part2 (map parse-line-part2 day02-input))
+(def interpret-part1 (partial interpret guide->p2move))
+(def interpret-part2 (partial interpret guide->p2outcome))
 
 (defn score-part1
   "Compute the round score using the part1 interpretation of the strategy guide"
@@ -89,10 +92,10 @@
   "What would your total score be if everything goes exactly according to 
    your strategy guide?"
   []
-  (reduce + (map score-part1 day02-input-part1)))
+  (reduce + (map score-part1 (interpret-part1 day02-input))))
 
 (defn day02-part2-soln
   "Following the Elf's instructions for the second column, what would your 
    total score be if everything goes exactly according to your strategy guide?"
   []
-  (reduce + (map score-part2 day02-input-part2)))
+  (reduce + (map score-part2 (interpret-part2 day02-input))))

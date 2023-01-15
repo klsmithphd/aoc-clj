@@ -3,20 +3,26 @@
             [aoc-clj.2022.day02 :as t]))
 
 (def d02-s01
-  ["A Y"
-   "B X"
-   "C Z"])
-(def d02-s01-1 (mapv t/parse-line-part1 d02-s01))
-(def d02-s01-2 (mapv t/parse-line-part2 d02-s01))
+  (t/parse
+   ["A Y"
+    "B X"
+    "C Z"]))
 
 (deftest parse-test
-  (testing "Parses letter codes to plays"
-    (is (= [[::t/rock ::t/paper]
-            [::t/paper ::t/rock]
+  (testing "Correctly parses the sample input"
+    (is (= d02-s01 [["A" "Y"] ["B" "X"] ["C" "Z"]]))))
+
+(def d02-s01-1 (t/interpret-part1 d02-s01))
+(def d02-s01-2 (t/interpret-part2 d02-s01))
+
+(deftest interpret-test
+  (testing "Interprets the letter codes according to the guidance"
+    (is (= [[::t/rock     ::t/paper]
+            [::t/paper    ::t/rock]
             [::t/scissors ::t/scissors]]
            d02-s01-1))
-    (is (= [[::t/rock ::t/draw]
-            [::t/paper ::t/lose]
+    (is (= [[::t/rock     ::t/draw]
+            [::t/paper    ::t/lose]
             [::t/scissors ::t/win]]
            d02-s01-2))))
 
