@@ -15,7 +15,9 @@
             [::t/paper ::t/rock]
             [::t/scissors ::t/scissors]]
            d02-s01-1))
-    (is (= [[::t/rock ::t/draw] [::t/paper ::t/lose] [::t/scissors ::t/win]]
+    (is (= [[::t/rock ::t/draw]
+            [::t/paper ::t/lose]
+            [::t/scissors ::t/win]]
            d02-s01-2))))
 
 (deftest round-score

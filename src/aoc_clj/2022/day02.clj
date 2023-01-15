@@ -4,26 +4,37 @@
             [aoc-clj.utils.core :as u]))
 
 (def guide->p1move
+  "The first column is what your opponent is going to play: 
+   A for Rock, B for Paper, and C for Scissors."
   {"A" ::rock
    "B" ::paper
    "C" ::scissors})
 
 (def guide->p2move
+  "The second column, you reason, must be what you should play in response: 
+   X for Rock, Y for Paper, and Z for Scissors."
   {"X" ::rock
    "Y" ::paper
    "Z" ::scissors})
 
 (def guide->p2outcome
+  "Anyway, the second column says how the round needs to end: 
+   X means you need to lose, Y means you need to end the round in a draw, and 
+   Z means you need to win."
   {"X" ::lose
    "Y" ::draw
    "Z" ::win})
 
 (def shape-score
+  "the score for the shape you selected 
+   (1 for Rock, 2 for Paper, and 3 for Scissors)"
   {::rock     1
    ::paper    2
    ::scissors 3})
 
 (def outcome-score
+  "the score for the outcome of the round 
+   (0 if you lost, 3 if the round was a draw, and 6 if you won)"
   {::lose 0
    ::draw 3
    ::win  6})
