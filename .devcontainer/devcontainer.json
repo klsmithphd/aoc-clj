@@ -1,5 +1,6 @@
 {
   "image": "clojure:lein",
   "features": {
-  }
+  },
+  "extensions": ["betterthantomorrow.calva"]
 }
