@@ -3,10 +3,12 @@
   (:require [aoc-clj.utils.core :as u]))
 
 (defn parse-segment
+  "Parse each string in the collection as a number"
   [segment]
   (map read-string segment))
 
 (defn parse
+  "Parse the day01 input"
   [input]
   (->> input u/split-at-blankline (map parse-segment)))
 
