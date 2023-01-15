@@ -32,6 +32,34 @@
     "    If true: throw to monkey 0"
     "    If false: throw to monkey 1"]))
 
+(deftest parse-test
+  (testing "Correctly parses the input sample"
+    (is (= d11-s01
+           [{:counts    0
+             :items     [79 98]
+             :operation ["*" 19]
+             :test      23
+             :true-op   2
+             :false-op  3}
+            {:counts    0
+             :items     [54 65 75 74]
+             :operation ["+" 6]
+             :test      19
+             :true-op   2
+             :false-op  0}
+            {:counts    0
+             :items     [79 60 97]
+             :operation ["*" "old"]
+             :test      13
+             :true-op   1
+             :false-op  3}
+            {:counts    0
+             :items     [74]
+             :operation ["+" 3]
+             :test      17
+             :true-op   0
+             :false-op  1}]))))
+
 (deftest round-test
   (testing "Monkeys end up with the right items after each round"
     (is (= [[20 23 27 26]

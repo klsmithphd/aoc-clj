@@ -165,6 +165,11 @@
 ######......######......######......####
 #######.......#######.......#######.....")
 
+(deftest parse-test
+  (testing "Correctly parses the sample input"
+    (is (= d10-01
+           [::t/noop 3 -5]))))
+
 (deftest register-values-test
   (testing "Computes the register value over time given the instructions"
     (is (= [1 1 1 4 4 -1] (t/register-values d10-01)))))

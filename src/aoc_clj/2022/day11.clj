@@ -4,6 +4,8 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.math :as math]))
 
+;;;; Input parsing
+
 (def start-str-len  (count "  Starting items: "))
 (def oper-str-len   (count "  Operation: new = old "))
 (def test-str-len   (count "  Test: divisible by "))
@@ -36,7 +38,97 @@
   [input]
   (mapv parse-monkey (u/split-at-blankline input)))
 
-(def day11-input (parse (u/puzzle-input "2022/day11-input.txt")))
+(def day11-input (u/parse-puzzle-input parse 2022 11))
+
+;;;; Puzzle logic
+
+(defn items
+  "The items held by each monkey"
+  [monkeys]
+  (map :items monkeys))
+
+(defn counts
+  "The counts of items that each monkey has processed"
+  [monkeys]
+  (map :counts monkeys))
+
+(defn operate-1
+  "Apply the monkey's operation rule to the item"
+  [[op arg] item]
+  (case op
+    "+" (+' item arg)
+    "*" (*' item (if (= "old" arg) item arg))))
+
+(defn operate-2
+  [[op arg] [mod rem]]
+  (case op
+    "+" [mod (math/mod-add mod rem arg)]
+    "*" [mod (math/mod-mul mod rem (if (= "old" arg) rem arg))]))
+
+(defn worry-1
+  [operation item]
+  (quot (operate-1 operation item) 3))
+
+(defn worry-2
+  "Apply the monkey's operation rule to the item, only keeping track of
+   mod remainders"
+  [operation item]
+  (into {} (map #(operate-2 operation %) item)))
+
+(defn divides?-1
+  [worry test]
+  (zero? (rem worry test)))
+
+(defn divides?-2
+  [worry test]
+  (zero? (worry test)))
+
+(defn monkey-do
+  "Let the current monkey identified by `monkey-id` process its
+   next item"
+  [worry-fn divides?-fn monkeys monkey-id]
+  (let [monkey (get monkeys monkey-id)
+        {:keys [items operation test true-op false-op]} monkey
+        item   (first items)
+        worry  (worry-fn operation item)
+        dest   (if (divides?-fn worry test) true-op false-op)]
+    (-> monkeys
+        (update-in [monkey-id :items] (comp vec rest))
+        (update-in [monkey-id :counts] inc)
+        (update-in [dest :items] conj worry))))
+
+(def monkey-do-1 (partial monkey-do worry-1 divides?-1))
+(def monkey-do-2 (partial monkey-do worry-2 divides?-2))
+
+(defn monkey-turn
+  "Process all the items held by the monkey identified by `monkey-id`"
+  [monkey-do-fn monkeys monkey-id]
+  (loop [ms monkeys]
+    (if (empty? (get-in ms [monkey-id :items]))
+      ms
+      (recur (monkey-do-fn ms monkey-id)))))
+
+(defn round
+  "Have every monkey in turn process their items"
+  [monkey-do-fn monkeys]
+  (reduce (partial monkey-turn monkey-do-fn) monkeys (range (count monkeys))))
+
+(def round-1 (partial round monkey-do-1))
+(def round-2 (partial round monkey-do-2))
+
+(defn monkey-business
+  "The product of the number of items inspected by the two most active 
+   monkeys after `rounds`"
+  [round-fn monkeys rounds]
+  (let [cnts (-> (iterate round-fn monkeys)
+                 (nth rounds)
+                 counts)]
+    (->> (sort > cnts)
+         (take 2)
+         (reduce *))))
+
+(def monkey-business-1 (partial monkey-business round-1))
+(def monkey-business-2 (partial monkey-business round-2))
 
 (defn remainders
   "Creates a map, where the keys are the first ten prime numbers
@@ -64,92 +156,7 @@
   [monkeys]
   (mapv remainderize monkeys))
 
-(defn items
-  "The items held by each monkey"
-  [monkeys]
-  (map :items monkeys))
-
-(defn counts
-  "The counts of items that each monkey has processed"
-  [monkeys]
-  (map :counts monkeys))
-
-(defn operate
-  "Apply the monkey's operation rule to the item"
-  [[op arg] item]
-  (case op
-    "+" (+' item arg)
-    "*" (*' item (if (= "old" arg) item arg))))
-
-(defn operate-2
-  [[op arg] [mod rem]]
-  (case op
-    "+" [mod (math/mod-add mod rem arg)]
-    "*" [mod (math/mod-mul mod rem (if (= "old" arg) rem arg))]))
-
-
-(defn worry-1
-  [operation item]
-  (quot (operate operation item) 3))
-
-(defn worry-2
-  "Apply the monkey's operation rule to the item, only keeping track of
-   mod remainders"
-  [operation item]
-  (into {} (map #(operate-2 operation %) item)))
-
-(defn divides?-1
-  [worry test]
-  (zero? (rem worry test)))
-
-(defn divides?-2
-  [worry test]
-  (zero? (worry test)))
-
-(defn monkey-do
-  [worry-fn divides?-fn monkeys monkey-id]
-  (let [monkey (get monkeys monkey-id)
-        {:keys [items operation test true-op false-op]} monkey
-        item   (first items)
-        worry  (worry-fn operation item)
-        dest   (if (divides?-fn worry test) true-op false-op)]
-    (-> monkeys
-        (update-in [monkey-id :items] (comp vec rest))
-        (update-in [monkey-id :counts] inc)
-        (update-in [dest :items] conj worry))))
-
-(defn monkey-turn
-  "Process all the items held by the monkey identified by `monkey-id`"
-  [monkey-do-fn monkeys monkey-id]
-  (loop [ms monkeys]
-    (if (empty? (get-in ms [monkey-id :items]))
-      ms
-      (recur (monkey-do-fn ms monkey-id)))))
-
-(defn round
-  "Have every monkey in turn process their items"
-  [monkey-do-fn monkeys]
-  (reduce (partial monkey-turn monkey-do-fn) monkeys (range (count monkeys))))
-
-(defn monkey-business
-  "The product of the number of items inspected by the two most active 
-   monkeys after `rounds`"
-  [round-fn monkeys rounds]
-  (let [cnts (-> (iterate round-fn monkeys)
-                 (nth rounds)
-                 counts)]
-    (->> (sort > cnts)
-         (take 2)
-         (reduce *))))
-
-(def monkey-do-1 (partial monkey-do worry-1 divides?-1))
-(def monkey-do-2 (partial monkey-do worry-2 divides?-2))
-
-(def round-1 (partial round monkey-do-1))
-(def round-2 (partial round monkey-do-2))
-
-(def monkey-business-1 (partial monkey-business round-1))
-(def monkey-business-2 (partial monkey-business round-2))
+;;;; Puzzle solutions
 
 (defn day11-part1-soln
   "What is the level of monkey business after 20 rounds of stuff-slinging 

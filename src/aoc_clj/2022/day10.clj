@@ -3,24 +3,28 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
+;;;; Input parsing
+
 (defn parse-line
   [line]
   (if (= "noop" line)
-    :noop
+    ::noop
     (read-string (subs line 5))))
 
 (defn parse
   [input]
   (map parse-line input))
 
-(def day10-input (parse (u/puzzle-input "2022/day10-input.txt")))
+(def day10-input (u/parse-puzzle-input parse 2022 10))
+
+;;;; Puzzle logic
 
 (defn op->change
   "addx V takes two cycles to complete. After two cycles, the X register
    is increased by the value V. (V can be negative.)
    noop takes one cycle to complete. It has no other effect."
   [op]
-  (if (= :noop op)
+  (if (= ::noop op)
     [0]
     [0 op]))
 
@@ -67,17 +71,13 @@
    (map str/join)
    (str/join "\n")))
 
+;;;; Puzzle solutions
+
 (defn day10-part1-soln
   "Find the signal strength during the 20th, 60th, 100th, 140th, 180th, 
    and 220th cycles. What is the sum of these six signal strengths?"
   []
   (sampled-signal-strength-sums day10-input))
-
-(defn day10-part2-soln
-  "Render the image given by your program. 
-   What eight capital letters appear on your CRT?"
-  []
-  "ECZUZALR")
 
 (comment
   (print (screen day10-input))
@@ -87,3 +87,9 @@
    #    #     #   #  #  #   #### #    ###  
    #    #  # #    #  # #    #  # #    # #  
    ####  ##  ####  ##  #### #  # #### #  #")
+
+(defn day10-part2-soln
+  "Render the image given by your program. 
+   What eight capital letters appear on your CRT?"
+  []
+  "ECZUZALR")
