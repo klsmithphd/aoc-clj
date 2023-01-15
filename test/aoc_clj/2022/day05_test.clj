@@ -14,6 +14,87 @@
     "move 2 from 2 to 1"
     "move 1 from 1 to 2"]))
 
+(deftest parse-test
+  (testing "Correctly parses the sample input"
+    (is (= d05-s01
+           {:stacks {1 ["Z" "N"]
+                     2 ["M" "C" "D"]
+                     3 ["P"]}
+            :moves [[1 2 1]
+                    [3 1 3]
+                    [2 2 1]
+                    [1 1 2]]}))))
+
+(deftest apply-move-1-test
+  (testing "Move logic of part 1 is correctly implemented"
+    (is (= {1 ["Z" "N" "D"]
+            2 ["M" "C"]
+            3 ["P"]}
+           (t/apply-move-1
+            {1 ["Z" "N"]
+             2 ["M" "C" "D"]
+             3 ["P"]}
+            [1 2 1])))
+    (is (= {1 []
+            2 ["M" "C"]
+            3 ["P" "D" "N" "Z"]}
+           (t/apply-move-1
+            {1 ["Z" "N" "D"]
+             2 ["M" "C"]
+             3 ["P"]}
+            [3 1 3])))
+    (is (= {1 ["C" "M"]
+            2 []
+            3 ["P" "D" "N" "Z"]}
+           (t/apply-move-1
+            {1 []
+             2 ["M" "C"]
+             3 ["P" "D" "N" "Z"]}
+            [2 2 1])))
+    (is (= {1 ["C"]
+            2 ["M"]
+            3 ["P" "D" "N" "Z"]}
+           (t/apply-move-1
+            {1 ["C" "M"]
+             2 []
+             3 ["P" "D" "N" "Z"]}
+            [1 1 2])))))
+
+(deftest apply-move-2-test
+  (testing "Move logic of part 2 is correctly implemented"
+    (is (= {1 ["Z" "N" "D"]
+            2 ["M" "C"]
+            3 ["P"]}
+           (t/apply-move-2
+            {1 ["Z" "N"]
+             2 ["M" "C" "D"]
+             3 ["P"]}
+            [1 2 1])))
+    (is (= {1 []
+            2 ["M" "C"]
+            3 ["P" "Z" "N" "D"]}
+           (t/apply-move-2
+            {1 ["Z" "N" "D"]
+             2 ["M" "C"]
+             3 ["P"]}
+            [3 1 3])))
+    (is (= {1 ["M" "C"]
+            2 []
+            3 ["P" "Z" "N" "D"]}
+           (t/apply-move-2
+            {1 []
+             2 ["M" "C"]
+             3 ["P" "Z" "N" "D"]}
+            [2 2 1])))
+    (is (= {1 ["M"]
+            2 ["C"]
+            3 ["P" "Z" "N" "D"]}
+           (t/apply-move-2
+            {1 ["M" "C"]
+             2 []
+             3 ["P" "Z" "N" "D"]}
+            [1 1 2])))))
+
 (deftest final-arrangement-1-test
   (testing "Stacks end up in the correct final state in part1"
     (is (= {1 ["C"], 2 ["M"], 3 ["P" "D" "N" "Z"]}

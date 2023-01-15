@@ -19,6 +19,11 @@
     ""
     "10000"]))
 
+(deftest parse-test
+  (testing "Parses the sample input correctly"
+    (is (= s01-01
+           [[1000 2000 3000] [4000] [5000 6000] [7000 8000 9000] [10000]]))))
+
 (deftest top-n-capacity-sum-test
   (testing "Find the max calorie capacity of top elf and top 3 elves"
     (is (= 24000 (t/top-n-capacity-sum 1 s01-01)))
