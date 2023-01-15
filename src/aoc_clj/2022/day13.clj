@@ -20,61 +20,57 @@
 
 ;;;; Puzzle logic
 
-(declare in-order?)
-(defn in-order-int?
+(declare packet-compare)
+
+(defn compare-size
+  [a b]
+  (compare (count a) (count b)))
+
+(defn compare-vector
+  "If both values are lists, compare the first value of each list, 
+   then the second value, and so on. 
+   
+   If the left list runs out of items first, the inputs are in the right order. 
+   
+   If the right list runs out of items first, the inputs are not in the right 
+   order. 
+   
+   If the lists are the same length and no comparison makes a decision about 
+   the order, continue checking the next part of the input."
+  [a b]
+  (let [order-comparison (first (remove zero? (map packet-compare a b)))
+        size-comparison  (compare-size a b)]
+    (if (= 0 order-comparison size-comparison)
+      0
+      (if (nil? order-comparison)
+        size-comparison
+        order-comparison))))
+
+(defn packet-compare
   [a b]
   (cond
-    (> a b) false
-    (< a b) true
-    (= a b) :noop))
-
-(defn size-check
-  [a b]
-  (let [lena (count a)
-        lenb (count b)]
-    (cond
-      (> lena lenb) false
-      (< lena lenb) true
-      (= lena lenb) :noop)))
-
-(defn in-order-vector?
-  [a b]
-  (let [order-check (first (remove #{:noop} (map in-order? a b)))
-        size-check  (size-check a b)]
-    (if (= :noop order-check size-check)
-      :noop
-      (if (nil? order-check)
-        size-check
-        order-check))))
+    (and (number? a) (number? b)) (compare a b)
+    (and (number? a) (vector? b)) (packet-compare (vector a) b)
+    (and (vector? a) (number? b)) (packet-compare a (vector b))
+    (and (vector? a) (vector? b)) (compare-vector a b)))
 
 (defn in-order?
   [a b]
-  (cond
-    (and (number? a) (number? b)) (in-order-int? a b)
-    (and (number? a) (vector? b)) (in-order? (vector a) b)
-    (and (vector? a) (number? b)) (in-order? a (vector b))
-    (and (vector? a) (vector? b)) (in-order-vector? a b)))
+  (not (pos? (packet-compare a b))))
 
 (defn right-order-packet-id-sum
+  "What are the indices of the pairs that are already in the right order? 
+   (The first pair has index 1, the second pair has index 2, and so on.)"
   [input]
   (->>
-   (map-indexed
-    (fn [a b] [(inc a) (apply in-order? b)])
-    input)
+   (map-indexed (fn [idx [a b]] [(inc idx) (in-order? a b)]) input)
    (filter second)
    (map first)
    (reduce +)))
 
-(defn in-order-compare
-  [a b]
-  (case (in-order? a b)
-    true -1
-    :noop 0
-    false 1))
-
 (defn sorted
   [input]
-  (sort in-order-compare (apply concat (concat divider-packets input))))
+  (sort packet-compare (apply concat (concat divider-packets input))))
 
 (defn decoder-key
   "To find the decoder key for this distress signal, you need to determine the 
