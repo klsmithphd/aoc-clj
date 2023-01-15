@@ -2,12 +2,23 @@
   "Solution to https://adventofcode.com/2022/day/13"
   (:require [aoc-clj.utils.core :as u]))
 
+;;;; Constants
+(def divider-packets
+  "The distress signal protocol also requires that you include two 
+   additional divider packets:"
+  [[[[2]]
+    [[6]]]])
+
+;;;; Input parsing
+
 (defn parse
   [input]
   (map (partial mapv read-string)
        (u/split-at-blankline input)))
 
-(def day13-input (parse (u/puzzle-input "2022/day13-input.txt")))
+(def day13-input (u/parse-puzzle-input parse 2022 13))
+
+;;;; Puzzle logic
 
 (declare in-order?)
 (defn in-order-int?
@@ -61,9 +72,6 @@
     :noop 0
     false 1))
 
-(def divider-packets [[[[2]] [[6]]]])
-(ffirst divider-packets)
-
 (defn sorted
   [input]
   (sort in-order-compare (apply concat (concat divider-packets input))))
@@ -78,6 +86,8 @@
         p0      (inc (u/index-of [[2]] packets))
         p1      (inc (u/index-of [[6]] packets))]
     (* p0 p1)))
+
+;;;; Puzzle solutions
 
 (defn day13-part1-soln
   "Determine which pairs of packets are already in the right order. 

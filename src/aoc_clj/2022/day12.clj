@@ -5,6 +5,8 @@
             [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
+;;;; Input parsing
+
 (defn translate [c]
   (case c
     \S -1
@@ -15,7 +17,9 @@
   [input]
   (mapgrid/lists->MapGrid2D (map (partial map translate) input)))
 
-(def day12-input (parse (u/puzzle-input "2022/day12-input.txt")))
+(def day12-input (u/parse-puzzle-input parse 2022 12))
+
+;;;; Puzzle logic
 
 (defn find-matches
   "Given the `grid`, find the coordinates of the location with `value`"
@@ -23,6 +27,9 @@
   (map first (filter #(= value (second %)) grid)))
 
 (defn transitions
+  "Given the `grid` and a position `pos`, return a map of all the
+   allowed moves, with the allowed move positions as keys and the value
+   of 1 as the values (signifying the distance of the move)"
   [grid pos]
   (let [v (get grid pos)
         candidates (grid/neighbors-2d grid pos)
@@ -41,6 +48,7 @@
   (-> (graph/dijkstra g s (u/equals? e)) count dec))
 
 (defn shortest-path-from-start
+  "Find the fewest number of steps from the start to the finish given the map"
   [input]
   (let [start (first (find-matches input -1))
         end   (first (find-matches input 26))
@@ -48,6 +56,8 @@
     (shortest-path-length graph start end)))
 
 (defn shortest-path-from-any-a
+  "Find the fewest number of steps from any grid cell labeled `a` to the finish 
+   given the map"
   [input]
   (let [starts  (concat (find-matches input -1)
                         (find-matches input 0))
@@ -55,6 +65,8 @@
         graph   (grid->graph input)
         lengths (remove neg? (map #(shortest-path-length graph % end) starts))]
     (apply min lengths)))
+
+;;;; Puzzle solutions
 
 (defn day12-part1-soln
   "What is the fewest steps required to move from your current position to the 
