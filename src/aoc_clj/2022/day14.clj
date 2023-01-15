@@ -3,6 +3,8 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
+;;;; Input parsing
+
 (defn parse-line
   [line]
   (mapv #(read-string (str "[" % "]")) (str/split line #" \-\> ")))
@@ -31,7 +33,9 @@
   [input]
   (rocks (map parse-line input)))
 
-(def day14-input (parse (u/puzzle-input "2022/day14-input.txt")))
+(def day14-input (u/parse-puzzle-input parse 2022 14))
+
+;;;; Puzzle logic
 
 (defn lowest
   [grid]
@@ -114,6 +118,8 @@
    deposited."
   [grid]
   (sand-until-condition not-blocked? (add-floor grid)))
+
+;;;; Puzzle solutions
 
 (defn day14-part1-soln
   "Using your scan, simulate the falling sand. How many units of sand come 
