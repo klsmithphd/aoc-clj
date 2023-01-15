@@ -11,7 +11,8 @@
    "CrZsJsPPZsGzwwsLwLmpwMDw"])
 
 (deftest overlaps-test
-  (testing "Finds the overlapping items in the first/second halves"
+  (testing "Finds the overlapping items in the first/second halves
+            or among groups of three"
     (is (= [\p \L \P \v \t \s]
            (t/overlaps ::t/halfway d03-s01)))
     (is (= [\r \Z]
