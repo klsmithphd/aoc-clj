@@ -11,6 +11,18 @@
        io/reader
        line-seq))
 
+(defn parse-puzzle-input
+  "Load and parse the puzzle input for the given `year` and `day`, 
+   using the provided `parse` function.
+   
+   This expects that all puzzle input files are saved with the naming
+   convention `${year}/day${day}-input.txt`, where ${day} is a zero-padded
+   two-digit number from 01-25"
+  [parse year day]
+  (-> (str year "/day" (format "%02d" day) "-input.txt")
+      puzzle-input
+      parse))
+
 (defn str->vec
   "Convert a string of space- or comma-separated list of values into a
    vector of those values"
