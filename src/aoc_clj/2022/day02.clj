@@ -3,11 +3,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(defn parse
-  [input]
-  (map #(str/split % #" ") input))
-
-(def day02-input (parse (u/puzzle-input "2022/day02-input.txt")))
+;;;; Constants
 
 (def guide->p1move
   "The first column is what your opponent is going to play: 
@@ -57,24 +53,29 @@
    [::scissors ::paper    ::lose]
    [::scissors ::scissors ::draw]])
 
-(def outcomes
-  "Map from [p1 p2] to game outcome (for player 2)"
-  (into {} (map (fn [[p1 p2 o]] [[p1 p2] o]) permutations)))
+;;;; Input parsing
 
-(def p2-plays
-  "Map from [p1 outcome] to player 2 play"
-  (into {} (map (fn [[p1 p2 o]] [[p1 o] p2]) permutations)))
+(defn parse
+  [input]
+  (map #(str/split % #" ") input))
+
+(def day02-input (u/parse-puzzle-input parse 2022 2))
 
 (defn interpret
   "Interpret the input data according to the guidance of part1 or part2,
    as given by the `interpret-fn` for the second column"
   [interpret-fn input]
-  (letfn [(interpret [[p1 p2]]
-            [(guide->p1move p1) (interpret-fn p2)])]
+  (letfn [(interpret [[col1 col2]] [(guide->p1move col1) (interpret-fn col2)])]
     (map interpret input)))
 
 (def interpret-part1 (partial interpret guide->p2move))
 (def interpret-part2 (partial interpret guide->p2outcome))
+
+;;;; Puzzle logic
+
+(def outcomes
+  "Map from [p1 p2] to game outcome (for player 2)"
+  (into {} (map (fn [[p1 p2 o]] [[p1 p2] o]) permutations)))
 
 (defn score-part1
   "Compute the round score using the part1 interpretation of the strategy guide"
@@ -82,11 +83,17 @@
   (+ (shape-score p2)
      (outcome-score (outcomes round))))
 
+(def p2-plays
+  "Map from [p1 outcome] to player 2 play"
+  (into {} (map (fn [[p1 p2 o]] [[p1 o] p2]) permutations)))
+
 (defn score-part2
   "Compute the round score using the part2 interpretation of the strategy guide"
   [[_ outcome :as round]]
   (+ (shape-score (p2-plays round))
      (outcome-score outcome)))
+
+;;;; Puzzle solutions
 
 (defn day02-part1-soln
   "What would your total score be if everything goes exactly according to 

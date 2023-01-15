@@ -2,6 +2,8 @@
   "Solution to https://adventofcode.com/2022/day/1"
   (:require [aoc-clj.utils.core :as u]))
 
+;;;; Input parsing
+
 (defn parse-segment
   "Parse each string in the collection as a number"
   [segment]
@@ -12,7 +14,9 @@
   [input]
   (->> input u/split-at-blankline (map parse-segment)))
 
-(def day01-input (parse (u/puzzle-input "2022/day01-input.txt")))
+(def day01-input (u/parse-puzzle-input parse 2022 1))
+
+;;;; Puzzle logic
 
 (defn sorted-totals
   "Return a collection of all the `calorie` totals, sorted in descending order"
@@ -23,6 +27,8 @@
   "Return the sum of the top `n` totals"
   [n input]
   (reduce + (take n (sorted-totals input))))
+
+;;;; Puzzle solutions
 
 (defn day01-part1-soln
   "Find the Elf carrying the most Calories. 

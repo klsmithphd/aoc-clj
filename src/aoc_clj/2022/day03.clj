@@ -3,7 +3,11 @@
   (:require [clojure.set :as set]
             [aoc-clj.utils.core :as u]))
 
-(def day03-input (u/puzzle-input "2022/day03-input.txt"))
+;;;; Input parsing
+(def parse identity)
+(def day03-input (u/parse-puzzle-input parse 2022 3))
+
+;;;; Puzzle logic
 
 (defn split-halfway
   "Divide a sequence `s` into a vector of two sequences, cut at the midpoint"
@@ -47,6 +51,8 @@
   (->> (overlaps split-type input)
        (map priority)
        (reduce +)))
+
+;;;; Puzzle solutions
 
 (defn day03-part1-soln
   "Find the item type that appears in both compartments of each rucksack. 

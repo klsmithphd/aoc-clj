@@ -43,9 +43,9 @@
      "d.ext" 5626152
      "k" 7214296}}})
 
-(deftest crawl-tree-test
+(deftest parse-test
   (testing "Parses the terminal commands to construct the directory tree"
-    (is (= d07-s01 (t/crawl-tree d07-s01-raw)))))
+    (is (= d07-s01 (t/parse d07-s01-raw)))))
 
 (deftest node-size-test
   (testing "Returns the size of the node in the directory tree"

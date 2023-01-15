@@ -24,6 +24,18 @@
     "L 25"
     "U 20"]))
 
+(deftest parse-test
+  (testing "Correctly parses the sample input"
+    (is (= d09-s01
+           ["R" "R" "R" "R"
+            "U" "U" "U" "U"
+            "L" "L" "L"
+            "D"
+            "R" "R" "R" "R"
+            "D"
+            "L" "L" "L" "L" "L"
+            "R" "R"]))))
+
 (deftest all-moves-test
   (testing "The chain ends in the expected final state"
     (is (= [[1 2] [2 2]]

@@ -3,6 +3,8 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
+;;;; Constants
+
 (def total-disk-space
   "The total disk space available to the filesystem is 70000000"
   70000000)
@@ -11,15 +13,21 @@
   "To run the update, you need unused space of at least 30000000"
   30000000)
 
+;;;; Input Parsing
+
 (defn cd-command?
+  "Is this `cmd` a cd (change directory) command?"
   [cmd]
   (str/starts-with? cmd "$ cd"))
 
 (defn ls-command?
+  "Is this `cmd` a ls (list) command?"
   [cmd]
   (= cmd "$ ls"))
 
 (defn change-dir
+  "Process a cd command to descend into a subdirectory or return to 
+   the parent directory"
   [{:keys [node cmds] :as state}]
   (let [newdir (subs (first cmds) 5)]
     (assoc state
@@ -29,6 +37,7 @@
            :cmds (rest cmds))))
 
 (defn add-dir
+  "Add a new directory into the file hierarchy"
   [{:keys [tree node cmds] :as state}]
   (let [dirname (subs (first cmds) 4)]
     (assoc state
@@ -36,6 +45,7 @@
            :cmds (rest cmds))))
 
 (defn add-file
+  "Add a new file into the file hierarchy"
   [{:keys [tree node cmds] :as state}]
   (let [[size name] (str/split (first cmds) #" ")]
     (assoc state
@@ -43,6 +53,8 @@
            :cmds (rest cmds))))
 
 (defn list-dir
+  "Process a ls command. Subsequent lines until the next command
+   must be files or directories"
   [{:keys [cmds] :as state}]
   (if (ls-command? (first cmds))
     (assoc state :cmds (rest cmds))
@@ -51,19 +63,23 @@
       (add-file state))))
 
 (defn process
+  "Process each line of the terminal output"
   [{:keys [cmds] :as state}]
   (if (cd-command? (first cmds))
     (change-dir state)
     (list-dir state)))
 
-(defn crawl-tree
-  [terminal]
-  (loop [state {:tree {} :node [] :cmds terminal}]
+(defn parse
+  "Parse the day07 input"
+  [input]
+  (loop [state {:tree {} :node [] :cmds input}]
     (if (empty? (:cmds state))
       (:tree state)
       (recur (process state)))))
 
-(def day07-input (crawl-tree (u/puzzle-input "2022/day07-input.txt")))
+(def day07-input (u/parse-puzzle-input parse 2022 7))
+
+;;;; Puzzle logic
 
 (defn node-size
   "Find the size of a given node identified by its `path`.
@@ -113,6 +129,8 @@
          sort
          (filter #(>= % min-required))
          first)))
+
+;;;; Puzzle solutions
 
 (defn day07-part1-soln
   "Find all of the directories with a total size of at most 100000. 

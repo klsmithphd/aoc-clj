@@ -3,6 +3,16 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
+;;;; Constants
+
+(def move->delta
+  {"R" [1 0]
+   "L" [-1 0]
+   "U" [0 1]
+   "D" [0 -1]})
+
+;;;; Input parsing
+
 (defn parse-line
   [line]
   (let [[l r] (str/split line #" ")]
@@ -16,13 +26,9 @@
   [input]
   (expand (map parse-line input)))
 
-(def day09-input (parse (u/puzzle-input "2022/day09-input.txt")))
+(def day09-input (u/parse-puzzle-input parse 2022 9))
 
-(def move->delta
-  {"R" [1 0]
-   "L" [-1 0]
-   "U" [0 1]
-   "D" [0 -1]})
+;;;; Puzzle logic
 
 (defn cap
   "Limit the size of the move to no more than one move in each direction."
@@ -69,6 +75,8 @@
        (map first)
        distinct
        count))
+
+;;;; Puzzle solutions
 
 (defn day09-part1-soln
   "Simulate your complete hypothetical series of motions. How many positions 

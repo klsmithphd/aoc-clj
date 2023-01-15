@@ -2,6 +2,7 @@
   "Solution to https://adventofcode.com/2022/day/8"
   (:require [aoc-clj.utils.core :as u]))
 
+;;;; Input parsing 
 (defn parse-row
   [row]
   (mapv (comp read-string str) row))
@@ -10,7 +11,9 @@
   [input]
   (mapv parse-row input))
 
-(def day08-input (parse (u/puzzle-input "2022/day08-input.txt")))
+(def day08-input (u/parse-puzzle-input parse 2022 8))
+
+;;;; Puzzle logic
 
 (defn visible?
   "Returns a vec of 0s or 1s, where 0 indicates that the tree is not visible
@@ -95,6 +98,8 @@
   (map *
        (flatten (grid-view-distance grid))
        (flatten (transpose-fn grid-view-distance grid))))
+
+;;;; Puzzle solutions
 
 (defn max-scenic-score
   "Find the maximum scenic score of any tree in the grid"

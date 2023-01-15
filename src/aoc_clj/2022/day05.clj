@@ -3,6 +3,8 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
+;;;; Input parsing
+
 (defn parse-stack
   "Convert a text string representation given by `text` with the first
    character being the stack id and the remaining characters
@@ -51,7 +53,9 @@
     {:stacks (parse-stacks stacks)
      :moves  (parse-moves moves)}))
 
-(def day05-input (parse (u/puzzle-input "2022/day05-input.txt")))
+(def day05-input (u/parse-puzzle-input parse 2022 5))
+
+;;;; Puzzle logic
 
 (defn take-crates-2
   "The crates taken off of a stack, maintaining order"
@@ -96,6 +100,8 @@
     (->> (map stacks (range 1 (inc n)))
          (map peek)
          (str/join))))
+
+;;;; Puzzle solutions
 
 (defn day05-part1-soln
   "After the rearrangement procedure completes, 

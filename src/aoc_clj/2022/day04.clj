@@ -4,6 +4,8 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intervals :as ivs]))
 
+;;;; Input parsing
+
 (defn parse-range
   "Split range at the `-` character"
   [range]
@@ -19,7 +21,9 @@
   [input]
   (mapv parse-line input))
 
-(def day04-input (parse (u/puzzle-input "2022/day04-input.txt")))
+(def day04-input (u/parse-puzzle-input parse 2022 4))
+
+;;;; Puzzle solutions
 
 (defn day04-part1-soln
   "In how many assignment pairs does one range fully contain the other?"

@@ -2,7 +2,11 @@
   "Solution to https://adventofcode.com/2022/day/6"
   (:require [aoc-clj.utils.core :as u]))
 
-(def day06-input (first (u/puzzle-input "2022/day06-input.txt")))
+;;;; Input parsing
+(def parse first)
+(def day06-input (u/parse-puzzle-input parse 2022 6))
+
+;;;; Puzzle logic
 
 (defn chars-to-distinct-run
   "Returns the number of characters that need to be examined to
@@ -13,6 +17,8 @@
        (map #(apply distinct? %))
        (u/index-of true)
        (+ len)))
+
+;;;; Puzzle solutions
 
 (defn day06-part1-soln
   "How many characters need to be processed before the 
