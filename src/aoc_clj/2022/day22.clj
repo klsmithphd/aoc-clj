@@ -2,12 +2,20 @@
   "Solution to https://adventofcode.com/2022/day/22"
   (:require [aoc-clj.utils.core :as u]))
 
+;;;; Constants
+
 (def charmap {\  nil \. :open \# :wall})
-(def facing-value {:R 0 :D 1 :L 2 :U 3})
 (def turn-right {:U :R :R :D :D :L :L :U})
 (def turn-left  {:U :L :L :D :D :R :R :U})
+(def facing-value
+  "Facing is 0 for right (>), 1 for down (v), 2 for left (<), and 3 for up (^)"
+  {:R 0 :D 1 :L 2 :U 3})
+
+;;;; Input parsing
 
 (defn parse-line
+  "Return a collection of [[x y] value] pairs based on the charmap.
+   Empty space cells are removed"
   [y s]
   (filter #(some? (second %))
           (map vector
@@ -15,6 +23,7 @@
                (map charmap s))))
 
 (defn bounds
+  "For a sorted list of lists of points, compute the extent of the bounds"
   [dir lines]
   (let [[minx miny] (-> lines first first)
         [maxx maxy] (-> lines last last)]
@@ -27,19 +36,31 @@
    :vert  first})
 
 (defn zones
+  "Compute the rectangular zones of continuous x,y values in either
+   the horizontal or vertical directions as per `dir`.
+   
+   Zones are indicated as a range in one direction and the corresponding
+   range in the orthogonal direction"
   [dir points]
   (->> points
+       ;; Select just the coordinates
        (map first)
+       ;; Group by either the x or y value
        (group-by (dir-lookup dir))
+       ;; Sort lexigraphically by the key (the x or y value)
        sort
+       ;; Take just the keys (the groupings of points for a fixed x or y)
        (map second)
+       ;; Break into partitions whenever the size of the lines changes
        (partition-by count)
+       ;; Apply the bounds fn on the partitions to compute their extent
        (map (partial bounds dir))))
 
 (def horizontal-zones (partial zones :horiz))
 (def vertical-zones   (partial zones :vert))
 
 (defn parse-map
+  "Populate a map based on the ASCII string representation of the grid"
   [s]
   (let [points (apply concat (map-indexed parse-line s))]
     {:grid (into {} points)
@@ -63,24 +84,9 @@
     (assoc (parse-map a)
            :path (parse-path (first b)))))
 
-(def d22-s01
-  (parse
-   ["        ...#"
-    "        .#.."
-    "        #..."
-    "        ...."
-    "...#.......#"
-    "........#..."
-    "..#....#...."
-    "..........#."
-    "        ...#...."
-    "        .....#.."
-    "        .#......"
-    "        ......#."
-    ""
-    "10R5L5R10L4R5L5"]))
+(def day22-input (u/parse-puzzle-input parse 2022 22))
 
-(def day22-input (parse (u/puzzle-input "2022/day22-input.txt")))
+;;;; Puzzle logic
 
 (defn zone-match
   [[a b] [[mn mx] [vmin vmax]]]
@@ -94,6 +100,7 @@
   (first (filter some? (map #(zone-match pos %) zones))))
 
 (defn wrap-around
+  "Wrap horizontally or vertically when at the edge of the known grid"
   [{:keys [h-zones v-zones]} facing [x y]]
   (if (or (= facing :L) (= facing :R))
     {:facing facing :pos [(lookup h-zones [y x]) y]}
@@ -112,6 +119,8 @@
   (= :wall (grid pos)))
 
 (defn next-cell
+  "Attempt to move to the next cell unless that cell is occupied
+   by a wall. May wrap around based on the `wrap-fn` logic"
   [{:keys [grid wrap-fn] :as themap} {:keys [facing pos]}]
   (let [test-pos (next-pos facing pos)]
     (if (grid test-pos)
@@ -119,12 +128,15 @@
       (wrap-fn themap facing test-pos))))
 
 (defn turn
+  "Turn left or right as given by `dir`"
   [state dir]
   (update state :facing (case dir
                           "R" turn-right
                           "L" turn-left)))
 
 (defn walk
+  "Move forward the number of spaces given by `dist` unless 
+   you collide with a wall."
   [themap state dist]
   (loop [s state cnt dist]
     (let [{:keys [pos] :as new-s} (next-cell themap s)]
@@ -133,21 +145,28 @@
         (recur new-s (dec cnt))))))
 
 (defn apply-cmd
+  "Apply the given path command (either move forward a certain number
+   of spaces or turn)"
   [themap state cmd]
   (if (number? cmd)
     (walk themap state cmd)
     (turn state cmd)))
 
 (defn follow-path
+  "Apply the path commands sequentially until complete"
   [{:keys [path start] :as themap}]
   (reduce (partial apply-cmd themap) {:pos start :facing :R} path))
 
 (defn final-password
+  "The final password is the sum of 1000 times the row, 
+   4 times the column, and the facing."
   [{:keys [pos facing]}]
   (let [[x y] pos]
     (+ (* 1000 y) (* 4 x) (facing-value facing))))
 
 (defn cube-wrap-around
+  "For the specifics of my puzzle input, compute the new position
+   wrapping around the flattened cube. "
   [_ facing [x y]]
   (case facing
     :U (cond
@@ -170,10 +189,13 @@
          (<= 151 y 200) {:pos [(+ 51 (- y 151)) 150] :facing :U})))
 
 (defn day22-part1-soln
+  "Follow the path given in the monkeys' notes. What is the final password?"
   []
   (final-password (follow-path (assoc day22-input :wrap-fn wrap-around))))
 
 (defn day22-part2-soln
+  "Fold the map into a cube, then follow the path given in the monkeys' notes. 
+   What is the final password?"
   []
   (final-password (follow-path (assoc day22-input :wrap-fn cube-wrap-around))))
 

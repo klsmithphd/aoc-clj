@@ -19,7 +19,27 @@
     ""
     "10R5L5R10L4R5L5"]))
 
+(deftest parse-test
+  (testing "Correctly parses the sample input"
+    (is (= (select-keys d22-s01 [:start :h-zones :v-zones :path])
+           {;; The start point is the upper-leftmost non-empty cell
+            :start [9 1]
+            ;; Horizontal zones are broken down to indicate areas
+            ;; of discontinuity. 
+            ;; From y = 1 to 4, x-values are 9-12
+            ;; From y = 5 to 8, x-values are 1-12
+            ;; From y = 9 to 12, x-values are 9-16
+            :h-zones '([[1 4] [9 12]] [[5 8] [1 12]] [[9 12] [9 16]])
+            ;; Vertical zones are similar
+            ;; From x = 1 to 8, y-values are 5-8
+            ;; From x = 9 to 12, y-values are 1-12
+            ;; From x = 13 to 16, y-values 9-12
+            :v-zones '([[1 8] [5 8]] [[9 12] [1 12]] [[13 16] [9 12]])
+            :path '(10 "R" 5 "L" 5 "R" 10 "L" 4 "R" 5 "L" 5)}))))
+
 (defn sample-cube-wrap-around
+  "This cube wrap-around logic is specific to the flattened cube
+   layout in the sample data (`d22-s01`)"
   [_ facing [x y]]
   (case facing
     :U (cond
