@@ -3,6 +3,8 @@
   (:require [aoc-clj.utils.core :as u]
             [clojure.string :as str]))
 
+;;;; Constants
+
 (def snafu-map
   {\2 2
    \1 1
@@ -10,7 +12,12 @@
    \- -1
    \= -2})
 
-(def day25-input (u/puzzle-input "2022/day25-input.txt"))
+;;;; Input parsing
+
+(def parse identity)
+(def day25-input (u/parse-puzzle-input parse 2022 25))
+
+;;;; Puzzle logic
 
 (def powers-of-five
   "An infinite seq of the powers of five, i.e. 5^0, 5^1, ..."
@@ -83,6 +90,8 @@
        (map snafu->decimal)
        (reduce +)
        decimal->snafu))
+
+;;;; Puzzle solutions
 
 (defn day25-part1-soln
   "What SNAFU number do you supply to Bob's console?"
