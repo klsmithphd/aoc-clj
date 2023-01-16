@@ -41,31 +41,32 @@
                         [-1 1]
                         [1 1]} [0 0])))))
 
+(def sample (t/init-state d14-s01))
 (deftest deposit-sand-grain-test
   (testing "Updates the grid with a newly deposited sand grain"
     (is (= [500 8]
-           (second (t/deposit-sand-grain [d14-s01 nil]))))
+           (:last-added (t/deposit-sand-grain sample))))
     (is (= [499 8]
-           (second
-            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 2))))
+           (:last-added
+            (nth (iterate t/deposit-sand-grain sample) 2))))
     (is (= [501 8]
-           (second
-            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 3))))
+           (:last-added
+            (nth (iterate t/deposit-sand-grain sample) 3))))
     (is (= [500 7]
-           (second
-            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 4))))
+           (:last-added
+            (nth (iterate t/deposit-sand-grain sample) 4))))
     (is (= [498 8]
-           (second
-            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 5))))
+           (:last-added
+            (nth (iterate t/deposit-sand-grain sample) 5))))
     (is (= [500 2]
-           (second
-            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 22))))
+           (:last-added
+            (nth (iterate t/deposit-sand-grain sample) 22))))
     (is (= [497 5]
-           (second
-            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 23))))
+           (:last-added
+            (nth (iterate t/deposit-sand-grain sample) 23))))
     (is (= [495 8]
-           (second
-            (nth (iterate t/deposit-sand-grain [d14-s01 nil]) 24))))))
+           (:last-added
+            (nth (iterate t/deposit-sand-grain sample) 24))))))
 
 (deftest sand-until-continuous-flow-test
   (testing "Finds the amount of sand that sticks before continuous flow"

@@ -39,6 +39,12 @@
   [grid]
   (apply max (map second grid)))
 
+(defn init-state
+  [grid]
+  {:grid grid
+   :lowpoint (lowest grid)
+   :last-added nil})
+
 (defn move
   "A unit of sand always falls down one step if possible. 
    If the tile immediately below is blocked (by rock or sand), 
@@ -62,30 +68,31 @@
   "Deposit one new grain of sand, given the current layout of rock and
    sand given by `grid`. Returns a vector of the new grid and the position
    of the newly deposited sand grain."
-  [[grid _]]
-  (let [lowpoint (lowest grid)]
-    (loop [pos [500 0]]
-      (if (or (nil? (move grid pos))
-              (>= (second pos) lowpoint))
-        [(conj grid pos) pos]
-        (recur (move grid pos))))))
+  [{:keys [lowpoint grid] :as state}]
+  (loop [pos [500 0]]
+    (if (or (nil? (move grid pos))
+            (>= (second pos) lowpoint))
+      (-> state
+          (update :grid conj pos)
+          (assoc  :last-added pos))
+      (recur (move grid pos)))))
 
 (defn flow-check
-  [lowpoint x]
-  (or (nil? (second x))
-      (< (second (second x)) lowpoint)))
+  [{:keys [lowpoint last-added]}]
+  (or (nil? last-added)
+      (< (second last-added) lowpoint)))
 
 (defn not-blocked?
-  [x]
-  (or (nil? (second x))
-      (not= [500 0] (second x))))
+  [{:keys [last-added]}]
+  (or (nil? last-added)
+      (not= [500 0] last-added)))
 
 (defn sand-until-condition
   "Continuously deposit new sand grains into the grid as long as the 
    condition indicated by `pred` remains true. Returns the number of
    sand grains deposited."
   [pred grid]
-  (->> (iterate deposit-sand-grain [grid nil])
+  (->> (iterate deposit-sand-grain (init-state grid))
        (take-while pred)
        count))
 
@@ -94,8 +101,7 @@
    beyond the lowest rock in the grid). Returns the number of sand grains
    deposited."
   [grid]
-  (let [not-done? (partial flow-check (lowest grid))]
-    (dec (sand-until-condition not-done? grid))))
+  (dec (sand-until-condition flow-check grid)))
 
 (defn add-floor
   "Update the map with a large floor surface of rock, two units below
