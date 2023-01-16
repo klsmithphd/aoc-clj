@@ -3,6 +3,8 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
+;;;; Input parsing
+
 (defn parse-line
   [line]
   (let [[l r] (str/split line #": ")
@@ -15,7 +17,9 @@
   [input]
   (into {} (map parse-line input)))
 
-(def day21-input (parse (u/puzzle-input "2022/day21-input.txt")))
+(def day21-input (u/parse-puzzle-input parse 2022 21))
+
+;;;; Puzzle logic
 
 (defn equation
   "Given the input equations in `jobs`, return an equation in prefix
@@ -109,6 +113,8 @@
       (equation "root")
       solve-for-x
       eval))
+
+;;;; Puzzle solutions
 
 (defn day21-part1-soln
   "What number will the monkey named root yell?"
