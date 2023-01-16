@@ -76,8 +76,6 @@
   (testing "Reproduces the answer for day14, part1"
     (is (= 913 (t/day14-part1-soln)))))
 
-;; FIXME: The implementation is too slow to test in a reasonable time
-;; https://github.com/Ken-2scientists/aoc-clj/issues/27
-(deftest ^:slow day14-part2-soln
+(deftest day14-part2-soln
   (testing "Reproduces the answer for day14, part2"
     (is (= 30762 (t/day14-part2-soln)))))
