@@ -1,6 +1,7 @@
 (ns aoc-clj.2022.day14
   "Solution to https://adventofcode.com/2022/day/14"
-  (:require [clojure.string :as str]
+  (:require [clojure.set :as set]
+            [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
 ;;;; Input parsing
@@ -25,7 +26,8 @@
 
 (defn rocks
   [input]
-  (set (mapcat trace-lines input)))
+  (->> (group-by first (mapcat trace-lines input))
+       (u/fmap #(into #{} (map second %)))))
 
 (defn parse
   [input]
@@ -37,13 +39,24 @@
 
 (defn lowest
   [grid]
-  (apply max (map second grid)))
+  (apply max (apply set/union (vals grid))))
 
 (defn init-state
   [grid]
   {:grid grid
    :lowpoint (lowest grid)
    :last-added nil})
+
+(defn occupied?
+  [grid [x y]]
+  (and (some? (grid x))
+       (some? ((grid x) y))))
+
+(defn add-grain
+  [grid [x y]]
+  (if (grid x)
+    (update grid x conj y)
+    (assoc grid x #{y})))
 
 (defn move
   "A unit of sand always falls down one step if possible. 
@@ -62,7 +75,7 @@
                [(dec x) (inc y)]
                ;; down to the right
                [(inc x) (inc y)]]]
-    (first (remove grid moves))))
+    (first (remove (partial occupied? grid) moves))))
 
 (defn deposit-sand-grain
   "Deposit one new grain of sand, given the current layout of rock and
@@ -73,7 +86,7 @@
     (if (or (nil? (move grid pos))
             (>= (second pos) lowpoint))
       (-> state
-          (update :grid conj pos)
+          (update :grid add-grain pos)
           (assoc  :last-added pos))
       (recur (move grid pos)))))
 
@@ -109,8 +122,10 @@
   [grid]
   (let [floor (+ 2 (lowest grid))
         width (* 2 floor)]
-    (into grid (for [x (range (- 500 width) (+ 500 width))]
-                 [x floor]))))
+    (merge-with set/union
+                grid
+                (into {} (for [x (range (- 500 width) (+ 500 width))]
+                           [x #{floor}])))))
 
 (defn sand-until-blocked
   "Let sand deposit until it reaches the source and blocks it, based
