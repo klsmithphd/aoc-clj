@@ -24,7 +24,7 @@
 (deftest parse-test
   (testing "Correctly parses the sample input"
     (is (= d24-s01
-           {:x-bound 5, :y-bound 5, :blizzards ([[4 4] :d] [[1 2] :r])}))))
+           {:x-bound 5, :y-bound 5, :blizzards '([[4 4] :d] [[1 2] :r])}))))
 
 (deftest blizzard-sim-test
   (testing "Evolves the map one step at a time, moving all blizzards to their
