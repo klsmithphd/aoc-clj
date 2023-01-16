@@ -4,6 +4,8 @@
             [aoc-clj.utils.graph :as graph :refer [->MapGraph]]
             [aoc-clj.utils.core :as u]))
 
+;;;; Input parsing
+
 (defn parse-line
   [line]
   (let [valves (re-seq #"[A-Z]{2}" line)
@@ -16,21 +18,29 @@
   [input]
   (map parse-line input))
 
-(def day16-input (parse (sort (u/puzzle-input "2022/day16-input.txt"))))
+(def day16-input (u/parse-puzzle-input parse 2022 16))
+
+;;;; Puzzle logic
 
 (defn edges
+  "Every adjacent tunnel is one minute away"
   [{:keys [valve tunnels]}]
   [valve (zipmap tunnels (repeat 1))])
 
 (defn raw-graph
+  "A Graph representation of all rooms"
   [input]
   (->MapGraph (into {} (map edges input))))
 
 (defn keeper?
+  "Only the starting room `AA` and rooms with valves that have positive
+   flow rates are worth considering"
   [{:keys [valve flow]}]
   (or (= "AA" valve) (pos? flow)))
 
 (defn valves
+  "Constructs a map from valves to their corresponding flow rate,
+   just for the valves with non-zero flow rates"
   [input]
   (let [nodes (filter keeper? input)]
     (into {} (map #(vector (:valve %) (:flow %)) nodes))))
@@ -140,6 +150,8 @@
   (let [g (:graph (simpler-graph input))
         v (valves input)]
     (total-pressure (first (best-subpath-2 g v [[["AA" 26 0] ["AA" 26 0]]])))))
+
+;;;; Puzzle solutions
 
 (defn day16-part1-soln
   "Work out the steps to release the most pressure in 30 minutes. 

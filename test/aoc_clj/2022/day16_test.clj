@@ -15,6 +15,20 @@
     "Valve II has flow rate=0; tunnels lead to valves AA, JJ"
     "Valve JJ has flow rate=21; tunnel leads to valve II"]))
 
+(deftest parse-test
+  (testing "Correctly parses the sample input"
+    (is (= d16-s01
+           [{:valve "AA", :flow 0,  :tunnels ["DD" "II" "BB"]}
+            {:valve "BB", :flow 13, :tunnels ["CC" "AA"]}
+            {:valve "CC", :flow 2,  :tunnels ["DD" "BB"]}
+            {:valve "DD", :flow 20, :tunnels ["CC" "AA" "EE"]}
+            {:valve "EE", :flow 3,  :tunnels ["FF" "DD"]}
+            {:valve "FF", :flow 0,  :tunnels ["EE" "GG"]}
+            {:valve "GG", :flow 0,  :tunnels ["FF" "HH"]}
+            {:valve "HH", :flow 22, :tunnels ["GG"]}
+            {:valve "II", :flow 0,  :tunnels ["AA" "JJ"]}
+            {:valve "JJ", :flow 21, :tunnels ["II"]}]))))
+
 (deftest best-pressure-subpath-test
   (testing "Finds the optimum path to release the most pressure"
     (is (= [["CC" 6 1651] ["EE" 9 1639] ["HH" 13 1612] ["JJ" 21 1326]
@@ -32,12 +46,13 @@
   (testing "Finds the optimum amount of pressure released"
     (is (= 1707 (t/best-pressure-2 d16-s01)))))
 
+;; FIXME: The implementation is too slow
+;; https://github.com/Ken-2scientists/aoc-clj/issues/28
+
 (deftest ^:slow day16-part1-soln
   (testing "Reproduces the answer for day16, part1"
     (is (= 1701 (t/day16-part1-soln)))))
 
-;; FIXME: The implementation is too slow
-;; https://github.com/Ken-2scientists/aoc-clj/issues/28
 (deftest ^:slow day16-part2-soln
   (testing "Reproduces the answer for day16, part2"
     (is (= 2455 (t/day16-part2-soln)))))
