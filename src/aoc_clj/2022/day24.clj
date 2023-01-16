@@ -6,7 +6,11 @@
             [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.math :as math]))
 
+;;;; Constants
+
 (def charmap {\. :open \# :wall \> :r \^ :u \< :l \v :d})
+
+;;;; Input parsing
 
 (defn blizzards
   [grid]
@@ -20,28 +24,13 @@
      :y-bound   (- height 2)
      :blizzards (blizzards grid)}))
 
-(def d24-s01
-  (parse
-   ["#.#####"
-    "#.....#"
-    "#>....#"
-    "#.....#"
-    "#...v.#"
-    "#.....#"
-    "#####.#"]))
+(def day24-input (u/parse-puzzle-input parse 2022 24))
 
-(def d24-s02
-  (parse
-   ["#.######"
-    "#>>.<^<#"
-    "#.<..<<#"
-    "#>v.><>#"
-    "#<^v^^>#"
-    "######.#"]))
-
-(def day24-input (parse (u/puzzle-input "2022/day24-input.txt")))
+;;;; Puzzle logic
 
 (defn blizzard-update
+  "Evolve a blizzards one step forward in time, implementing
+   wrap-around logic."
   [{:keys [x-bound y-bound]} [[x y] dir]]
   (let [newpos (case dir
                  :u (if (= 1 y)       [x y-bound] [x (dec y)])
@@ -51,6 +40,7 @@
     [newpos dir]))
 
 (defn step
+  "Evolve all blizzards one step forward in time"
   [{:keys [blizzards] :as state}]
   (assoc state :blizzards (map #(blizzard-update state %) blizzards)))
 
@@ -59,6 +49,8 @@
   (into #{} (map first blizzards)))
 
 (defn blizzard-sim
+  "Given the initial state of blizzards, return a function that
+   will return all blizzard locations at any time in the future"
   [{:keys [x-bound y-bound] :as state}]
   (let [recurrence (math/lcm x-bound y-bound)
         states (->> (iterate step state)
@@ -75,12 +67,17 @@
            (<= 1 y y-bound))))
 
 (defn augment
+  "Remove the list of blizzard locations and add a blizzard
+   simulator function that will return the list of blizzards
+   at any time t"
   [state]
   (-> state
       (dissoc :blizzards)
       (assoc  :sim (blizzard-sim state))))
 
 (defn next-possible-states
+  "Compute the set of possible next valid states to move to,
+   from a given position at time `time`"
   [{:keys [sim] :as state} [time pos]]
   (let [blizzards (sim (inc time))
         moves     (->> (grid/adj-coords-2d pos)
@@ -94,22 +91,6 @@
   (edges [_ v] (next-possible-states state v))
   (distance [_ _ _] 1))
 
-(defn entrance?
-  [_ [_ pos]]
-  (= pos [1 1]))
-
-(defn entrance-heuristic
-  [_ [_ pos]]
-  (math/manhattan pos [1 1]))
-
-(defn exit?
-  [{:keys [x-bound y-bound]} [_ pos]]
-  (= pos [x-bound y-bound]))
-
-(defn exit-heuristic
-  [{:keys [x-bound y-bound]} [_ pos]]
-  (math/manhattan pos [x-bound y-bound]))
-
 (defn destination?
   [location]
   (fn [[_ pos]]
@@ -121,6 +102,9 @@
     (math/manhattan pos location)))
 
 (defn find-path
+  "Use the A* algorithm to find the shortest path from the start to
+   destination, using the heuristic of the manhattan distance from
+   any grid position to the destination"
   [graph start dest]
   (graph/a-star
    graph
@@ -129,30 +113,27 @@
    (heuristic dest)))
 
 (defn path-to-exit
+  "Find the path from the start to the cell immediately before the exit,
+   beginning at time `t`"
   [{:keys [x-bound y-bound] :as state} t]
   (let [g (->BlizzardGraph (augment state))]
     (find-path g [t [1 0]] [x-bound y-bound])))
 
 (defn path-to-start
+  "Find the path from the exit to the cell immediately before the start,
+   beginning at time `t`"
   [{:keys [x-bound y-bound] :as state} t]
   (let [g (->BlizzardGraph (augment state))]
     (find-path g [t [x-bound (inc y-bound)]] [1 1])))
 
-(defn move-to-exit
-  [path]
-  (let [[t [x y]] (last path)]
-    [(inc t) [x (inc y)]]))
-
-(defn move-to-start
-  [path]
-  (let [[t [x y]] (last path)]
-    [(inc t) [x (dec y)]]))
-
 (defn shortest-time-to-exit
+  "Compute the shortest path from the start to the exit"
   [input]
   (count (path-to-exit input 0)))
 
 (defn shortest-roundtrip-to-exit
+  "Compute the shortest path from the start to the exit,
+   back to the start, and then back to the exit again."
   [input]
   (->> (path-to-exit input 0)
        last
@@ -167,10 +148,16 @@
        first
        inc))
 
+;;;; Puzzle solutions
+
 (defn day24-part1-soln
+  "What is the fewest number of minutes required to avoid the blizzards and
+   reach the goal?"
   []
   (shortest-time-to-exit day24-input))
 
 (defn day24-part2-soln
+  "What is the fewest number of minutes required to reach the goal, 
+   go back to the start, then reach the goal again?"
   []
   (shortest-roundtrip-to-exit day24-input))
