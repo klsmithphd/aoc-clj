@@ -19,6 +19,24 @@
     "Sensor at x=14, y=3: closest beacon is at x=15, y=3"
     "Sensor at x=20, y=1: closest beacon is at x=15, y=3"]))
 
+(deftest parse-test
+  (testing "Correctly parses the sample input"
+    (is (= d15-s01
+           [{:sensor [2 18],  :beacon [-2 15], :radius 7}
+            {:sensor [9 16],  :beacon [10 16], :radius 1}
+            {:sensor [13 2],  :beacon [15 3],  :radius 3}
+            {:sensor [12 14], :beacon [10 16], :radius 4}
+            {:sensor [10 20], :beacon [10 16], :radius 4}
+            {:sensor [14 17], :beacon [10 16], :radius 5}
+            {:sensor [8 7],   :beacon [2 10],  :radius 9}
+            {:sensor [2 0],   :beacon [2 10],  :radius 10}
+            {:sensor [0 11],  :beacon [2 10],  :radius 3}
+            {:sensor [20 14], :beacon [25 17], :radius 8}
+            {:sensor [17 20], :beacon [21 22], :radius 6}
+            {:sensor [16 7],  :beacon [15 3],  :radius 5}
+            {:sensor [14 3],  :beacon [15 3],  :radius 1}
+            {:sensor [20 1],  :beacon [15 3],  :radius 7}]))))
+
 (deftest no-beacon-points-in-line-test
   (testing "Finds the right number of points that can't contain a beacon
             at a given line"

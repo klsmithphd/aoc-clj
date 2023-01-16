@@ -5,6 +5,8 @@
             [aoc-clj.utils.math :as math]
             [aoc-clj.utils.core :as u]))
 
+;;;; Input parsing
+
 (defn parse-line
   [line]
   (let [[x y bx by] (map read-string (re-seq #"\-?\d+" line))]
@@ -14,7 +16,9 @@
   [input]
   (map parse-line input))
 
-(def day15-input (parse (u/puzzle-input "2022/day15-input.txt")))
+(def day15-input (u/parse-puzzle-input parse 2022 15))
+
+;;;; Puzzle logic
 
 (defn visible-intervals
   "Along line `y`, identify the x interval range where the
@@ -109,6 +113,8 @@
    and then adding its y coordinate."
   [[x y]]
   (+ (* 4000000 x) y))
+
+;;;; Puzzle solutions
 
 (defn day15-part1-soln
   "Consult the report from the sensors you just deployed. In the row where 
