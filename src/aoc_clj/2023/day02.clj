@@ -43,21 +43,21 @@
 (defn set-compare
   "Given a target map of maximum cubes of any given color, return
    a boolean indicating whether the set value is less than or equal to the target"
-  [target [k v]]
-  (<= v (target k)))
+  [[k v]]
+  (<= v (part1-target k)))
 
 (defn possible-set
   "Returns a boolean if the set is possible. A set is possible
    if the number of cubes of a given color are less than or equal to
    the target numbers for that color"
-  [target game-set]
-  (every? #(set-compare target %) game-set))
+  [game-set]
+  (every? set-compare game-set))
 
 (defn possible-game
   "Returns a boolean indicating whether the game is possible.
    A game is possible if every set in the game is possible."
   [{:keys [sets]}]
-  (every? #(possible-set part1-target %) sets))
+  (every? possible-set sets))
 
 (defn possible-game-id-sum
   "Returns the sum of the ids of the games deemed possible"
