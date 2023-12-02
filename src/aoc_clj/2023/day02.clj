@@ -1,7 +1,6 @@
 (ns aoc-clj.2023.day02
   "Solution to https://adventofcode.com/2023/day/2"
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.string :as str]))
 
 (def part1-target
   {:red 12
@@ -37,8 +36,6 @@
 (defn parse
   [input]
   (mapv parse-game input))
-
-(def day02-input (u/parse-puzzle-input parse 2023 2))
 
 (defn set-compare
   "Given a target map of maximum cubes of any given color, return
@@ -100,11 +97,11 @@
   "Determine which games would have been possible if the bag had been loaded 
    with only 12 red cubes, 13 green cubes, and 14 blue cubes. 
    What is the sum of the IDs of those games?"
-  []
-  (possible-game-id-sum day02-input))
+  [input]
+  (possible-game-id-sum input))
 
 (defn day02-part2-soln
   "For each game, find the minimum set of cubes that must have been present. 
    What is the sum of the power of these sets?"
-  []
-  (power-fewest-cubes-sum day02-input))
+  [input]
+  (power-fewest-cubes-sum input))
