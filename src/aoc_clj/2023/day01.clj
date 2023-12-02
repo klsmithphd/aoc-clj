@@ -23,7 +23,7 @@
 
 (defn digits2
   [s]
-  (re-seq #"\d|one|two|three|four|five|six|seven|eight|nine" s))
+  (map second (re-seq #"(?=(\d|one|two|three|four|five|six|seven|eight|nine))" s)))
 
 (defn s->int
   [s]
