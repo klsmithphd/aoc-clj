@@ -85,9 +85,8 @@
   (let [neighbors (->> points
                        (mapcat #(grid/adj-coords-2d % :include-diagonals true))
                        set)]
-    (boolean (seq (set/intersection symbol-pts neighbors)))
-    ;; neighbors
-    ))
+    (boolean (seq (set/intersection symbol-pts neighbors)))))
+
 
 (defn part-numbers
   [{:keys [symbols numbers]}]
@@ -97,6 +96,28 @@
     (->> numbers
          (filter #(part-number? symbol-pts %))
          (map :value))))
+
+(defn adjacent-parts
+  [numbers point]
+  (let [gear-nbrs (set (grid/adj-coords-2d point :include-diagonals true))]
+    (filter #(seq (set/intersection gear-nbrs (set (:points %)))) numbers)))
+
+(defn gear-adjacent-parts
+  [{:keys [symbols numbers]}]
+  (let [gear-pts (->> symbols
+                      (filter #(= \* (:value %)))
+                      (map :point)
+                      set)]
+    (->> (map #(adjacent-parts numbers %) gear-pts)
+         (filter #(= 2 (count %)))
+         (map #(map :value %)))))
+
+(defn gear-ratio-sum
+  [input]
+  (->> input
+       gear-adjacent-parts
+       (map #(reduce * %))
+       (reduce +)))
 
 (defn part-numbers-sum
   [input]
@@ -111,4 +132,4 @@
 (defn day03-part2-soln
   "Part2"
   [input]
-  (identity input))
+  (gear-ratio-sum input))

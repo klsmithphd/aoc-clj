@@ -44,6 +44,10 @@
   (testing "Returns the sum of all the part numbers"
     (is (= 4361 (t/part-numbers-sum d03-s01)))))
 
+(deftest gear-ratio-sum
+  (testing "Computes the sum of all the gear ratios"
+    (is (= 467835 (t/gear-ratio-sum d03-s01)))))
+
 
 (def day03-input (u/parse-puzzle-input t/parse 2023 3))
 
@@ -51,6 +55,6 @@
   (testing "Reproduces the answer for day03, part1"
     (is (= 509115 (t/day03-part1-soln day03-input)))))
 
-;; (deftest day03-part2-soln
-;;   (testing "Reproduces the answer for day03, part2"
-;;     (is (= 1 (t/day03-part2-soln day03-input)))))
+(deftest day03-part2-soln
+  (testing "Reproduces the answer for day03, part2"
+    (is (= 75220503 (t/day03-part2-soln day03-input)))))
