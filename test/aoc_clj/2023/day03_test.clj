@@ -36,12 +36,20 @@
   (testing "Correctly parses the input"
     (is (= d03-s01 (t/parse d03-s01-raw)))))
 
+(deftest part-numbers-test
+  (testing "Finds all of the part numbers"
+    (is (= [467 35 633 617 592 755 664 598] (t/part-numbers d03-s01)))))
 
-;; (def day03-input (u/parse-puzzle-input t/parse 2023 3))
+(deftest part-numbers-sum-test
+  (testing "Returns the sum of all the part numbers"
+    (is (= 4361 (t/part-numbers-sum d03-s01)))))
 
-;; (deftest day03-part1-soln
-;;   (testing "Reproduces the answer for day03, part1"
-;;     (is (= 1 (t/day03-part1-soln day03-input)))))
+
+(def day03-input (u/parse-puzzle-input t/parse 2023 3))
+
+(deftest day03-part1-soln
+  (testing "Reproduces the answer for day03, part1"
+    (is (= 509115 (t/day03-part1-soln day03-input)))))
 
 ;; (deftest day03-part2-soln
 ;;   (testing "Reproduces the answer for day03, part2"
