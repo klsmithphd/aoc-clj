@@ -29,17 +29,48 @@
   [input]
   (mapv parse-line input))
 
-(defn points
+(defn card-score
   [{:keys [winning card]}]
-  (let [overlap (count (set/intersection winning card))]
-    (if (zero? overlap)
+  (count (set/intersection winning card)))
+
+(defn points
+  [card]
+  (let [matches (card-score card)]
+    (if (zero? matches)
       0
-      (int (Math/pow 2 (dec overlap))))))
+      (int (Math/pow 2 (dec matches))))))
 
 (defn points-sum
   [cards]
   (reduce + (map points cards)))
 
+(defn update-card-count
+  [{:keys [card-cnt total]} score]
+  (let [this-count (first card-cnt)
+        new-counts (map #(+ this-count %) (take score (rest card-cnt)))]
+    {:card-cnt (concat new-counts (drop score (rest card-cnt)))
+     :total    (+ total this-count)}))
+
+(update-card-count {:card-cnt [1 1 1 1 1 1] :total 0} 4)
+(update-card-count {:card-cnt [2 2 2 2 1] :total 1} 2)
+(update-card-count {:card-cnt [4 4 2 1] :total 3} 2)
+(update-card-count {:card-cnt [8 6 1] :total 7} 1)
+(update-card-count {:card-cnt [14 1] :total 15} 0)
+(update-card-count {:card-cnt [1] :total 29} 0)
+
+(reduce update-card-count {:card-cnt [1 1 1 1 1 1] :total 0} [4 2 2 1 0 0])
+
+(defn total-cards
+  [cards]
+  (let [scores (map card-score cards)
+        card-cnt (repeat (count cards) 1)]
+    (:total (reduce update-card-count {:card-cnt card-cnt :total 0} scores))))
+
+
 (defn day04-part1-soln
   [input]
   (points-sum input))
+
+(defn day04-part2-soln
+  [input]
+  (total-cards input))

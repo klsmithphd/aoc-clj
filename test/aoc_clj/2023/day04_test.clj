@@ -37,3 +37,26 @@
 (deftest day04-part1-soln
   (testing "Reproduces the answer for day04, part1"
     (is (= 27059 (t/day04-part1-soln day04-input)))))
+
+(deftest day04-part2-soln
+  (testing "Reproduces the answer for day04, part2"
+    (is (= 5744979 (t/day04-part2-soln day04-input)))))
+
+
+;; ;; Scores 
+;; [4 2 2 1 0 0]
+
+;; ;; Card Count
+;; [1 1 1 1 1 1] ;; START
+;; ;; idx = 0, score = 4, cnt = 1, add 1 to next 4
+;; [1 2 2 2 2 1]
+;; ;; idx = 1, score = 2, cnt = 2, add 2 to next 2
+;; [1 2 4 4 2 1]
+;; ;; idx = 2, score = 2, cnt = 4, add 4 to next 2
+;; [1 2 4 8 6 1]
+;; ;; idx = 3, score = 1, cnt = 8, add 8 to next 1
+;; [1 2 4 8 14 1]
+;; ;; idx = 4, score = 0, cnt = 14, do nothing
+;; [1 2 4 8 14 1]
+;; ;; idx = 5, score = 0, cnt = 1, do nothing
+;; [1 2 4 8 14 1] ;; FINAL
