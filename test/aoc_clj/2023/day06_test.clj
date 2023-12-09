@@ -24,14 +24,24 @@
   (testing "Computes how many ways there are to win a race"
     (is (= 4 (t/winning-options-count (nth d06-s01 0))))
     (is (= 8 (t/winning-options-count (nth d06-s01 1))))
-    (is (= 9 (t/winning-options-count (nth d06-s01 2))))))
+    (is (= 9 (t/winning-options-count (nth d06-s01 2))))
+
+    (is (= 71503 (t/winning-options-count (t/long-race d06-s01))))))
 
 (deftest win-count-multiplied-test
   (testing "Computes the product of the ways to win each race"
     (is (= 288 (t/win-count-multiplied d06-s01)))))
+
+(deftest long-races-test
+  (testing "Reinterprets the input as one long race"
+    (is (= {:time 71530 :dist 940200} (t/long-race d06-s01)))))
 
 (def day06-input (u/parse-puzzle-input t/parse 2023 6))
 
 (deftest day06-part1-soln
   (testing "Reproduces the answer for day06, part1"
     (is (= 2344708 (t/day06-part1-soln day06-input)))))
+
+(deftest day06-part2-soln
+  (testing "Reproduces the answer for day06, part2"
+    (is (= 30125202 (t/day06-part2-soln day06-input)))))
