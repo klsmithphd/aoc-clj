@@ -34,8 +34,8 @@
   [input]
   (map parse-row input))
 
-
 (defn hand-type
+  "Returns the hand *type*"
   [hand]
   (let [freqs (vec (sort (vals (frequencies hand))))]
     (case freqs
@@ -47,24 +47,82 @@
       [1 1 1 2]   :one-pair
       [1 1 1 1 1] :high-card)))
 
+(defn jack->joker
+  "Change the numerical value of Jacks (11) to Jokers (0) while
+   leaving all other numbers untouched"
+  [num]
+  (case num
+    11 0
+    num))
+
+(defn jokerize-hand
+  "Replace Jacks with Jokers in the hand"
+  [hand]
+  (update hand :hand #(mapv jack->joker %)))
+
+(defn max-occurring
+  "Returns the most frequently occurring item in the collection"
+  [cards]
+  (->> (frequencies cards)
+       (sort-by val >)
+       first
+       key))
+
+(defn effective-hand
+  "Returns the effective hand, where jokers are replaced with cards that
+   maximize the rank of the hand."
+  [hand]
+  (let [joker-count  (count (filter zero? hand))]
+    (if (or (zero? joker-count) (= 5 joker-count))
+      hand
+      (let [normal-cards (filter pos? hand)
+            max-card (max-occurring normal-cards)
+            mapping (fn [card]
+                      (case card
+                        0 max-card
+                        card))]
+        (mapv mapping hand)))))
 
 (defn compare-hands
-  [a b]
-  (let [hand-a (:hand a)
-        hand-b (:hand b)
-        rank-a (hand-type-ranks (hand-type hand-a))
-        rank-b (hand-type-ranks (hand-type hand-b))]
-    (if (= rank-a rank-b)
-      (compare hand-a hand-b)
-      (compare rank-a rank-b))))
+  "Compare two hands, returning a negative number if a < b, 0 if a = b, or
+   a positive number if a > b"
+  ([a b]
+   (compare-hands false a b))
+  ([jokers? a b]
+   (let [hand-a (:hand a)
+         hand-b (:hand b)
+         rank-a (hand-type-ranks (if jokers?
+                                   (hand-type (effective-hand hand-a))
+                                   (hand-type hand-a)))
+         rank-b (hand-type-ranks (if jokers?
+                                   (hand-type (effective-hand hand-b))
+                                   (hand-type hand-b)))]
+     (if (= rank-a rank-b)
+       (compare hand-a hand-b)
+       (compare rank-a rank-b)))))
 
 (defn winnings
+  "You can determine the total winnings of this set of hands by adding up
+   the result of multiplying each hand's bid with its rank "
+  ([hands]
+   (winnings hands false))
+  ([hands jokers?]
+   (->> (sort (partial compare-hands jokers?) hands)
+        (map-indexed #(* (inc %1) (:bid %2)))
+        (reduce +))))
+
+(defn joker-winnings
+  "Computes the winnings from the hands, accounting for joker rules"
   [hands]
-  (->> (sort compare-hands hands)
-       (map-indexed #(* (inc %1) (:bid %2)))
-       (reduce +)))
+  (winnings (map jokerize-hand hands) true))
 
 (defn day07-part1-soln
+  "Find the rank of every hand in your set. What are the total winnings?"
   [input]
   (winnings input))
 
+(defn day07-part2-soln
+  "Using the new joker rule, find the rank of every hand in your set. 
+   What are the new total winnings?"
+  [input]
+  (joker-winnings input))

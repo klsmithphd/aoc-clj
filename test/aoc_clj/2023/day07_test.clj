@@ -15,6 +15,12 @@
               {:hand [13 10 11 11 10] :bid 220}
               {:hand [12 12 12 11 14] :bid 483}])
 
+(def d07-s01-jokers [{:hand [3 2 10 3 13] :bid 765}
+                     {:hand [10 5 5 0 5] :bid 684}
+                     {:hand [13 13 6 7 7] :bid 28}
+                     {:hand [13 10 0 0 10] :bid 220}
+                     {:hand [12 12 12 0 14] :bid 483}])
+
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d07-s01 (t/parse d07-s01-raw)))))
@@ -42,8 +48,30 @@
   (testing "Computes the overall winnings"
     (is (= 6440 (t/winnings d07-s01)))))
 
+(deftest jokerize-hand-test
+  (testing "Reinterprets the hand with J as Joker"
+    (is (= d07-s01-jokers (map t/jokerize-hand d07-s01)))))
+
+(deftest effective-hand-test
+  (testing "Returns the effective hand with the joker acting as any card"
+    (is (= [3 2 10 3 13]    (t/effective-hand (:hand (nth d07-s01-jokers 0)))))
+    (is (= [10 5 5 5 5]     (t/effective-hand (:hand (nth d07-s01-jokers 1)))))
+    (is (= [13 13 6 7 7]    (t/effective-hand (:hand (nth d07-s01-jokers 2)))))
+    (is (= [13 10 10 10 10] (t/effective-hand (:hand (nth d07-s01-jokers 3)))))
+    (is (= [12 12 12 12 14] (t/effective-hand (:hand (nth d07-s01-jokers 4)))))
+    ;; Five Jokers is still Five Jokers
+    (is (= [0 0 0 0 0]      (t/effective-hand [0 0 0 0 0])))))
+
+(deftest joker-winnings-test
+  (testing "Computes the winnings correctly with joker rules"
+    (is (= 5905 (t/joker-winnings d07-s01)))))
+
 (def day07-input (u/parse-puzzle-input t/parse 2023 7))
 
 (deftest day07-part1-soln
   (testing "Reproduces the answer for day07, part1"
     (is (= 248396258 (t/day07-part1-soln day07-input)))))
+
+(deftest day07-part1-soln
+  (testing "Reproduces the answer for day07, part2"
+    (is (= 246436046 (t/day07-part2-soln day07-input)))))
