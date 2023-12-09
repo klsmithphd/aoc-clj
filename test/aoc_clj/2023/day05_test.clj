@@ -50,3 +50,37 @@
 (deftest parse-test
   (testing "Parses the input correctly"
     (is (= d05_s01 (t/parse d05_s01_raw)))))
+
+(deftest apply-map-test
+  (testing "Correctly maps a source number to a target number given a map"
+    (is (= 0 (t/apply-map 0 (first (:maps d05_s01)))))
+    (is (= 49 (t/apply-map 49 (first (:maps d05_s01)))))
+    (is (= 52 (t/apply-map 50 (first (:maps d05_s01)))))
+    (is (= 99 (t/apply-map 97 (first (:maps d05_s01)))))
+    (is (= 50 (t/apply-map 98 (first (:maps d05_s01)))))
+    (is (= 51 (t/apply-map 99 (first (:maps d05_s01)))))))
+
+(deftest mappings-test
+  (testing "Maps a seed number through each of the mappings"
+    (is (= [79 81 81 81 74 78 78 82] (t/mappings 79 (:maps d05_s01))))
+    (is (= [14 14 53 49 42 42 43 43] (t/mappings 14 (:maps d05_s01))))
+    (is (= [55 57 57 53 46 82 82 86] (t/mappings 55 (:maps d05_s01))))
+    (is (= [13 13 52 41 34 34 35 35] (t/mappings 13 (:maps d05_s01))))))
+
+(deftest location-test
+  (testing "Maps a seed to its location"
+    (is (= 82 (t/location 79 (:maps d05_s01))))
+    (is (= 43 (t/location 14 (:maps d05_s01))))
+    (is (= 86 (t/location 55 (:maps d05_s01))))
+    (is (= 35 (t/location 13 (:maps d05_s01))))))
+
+(deftest lowest-location-test
+  (testing "Finds the lowest location value"
+    (is (= 35 (t/lowest-location d05_s01)))))
+
+
+(def day05-input (u/parse-puzzle-input t/parse 2023 5))
+
+(deftest day05-part1-soln
+  (testing "Reproduces the answer for day05, part1"
+    (is (= 323142486 (t/day05-part1-soln day05-input)))))

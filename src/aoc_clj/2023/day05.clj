@@ -22,4 +22,34 @@
     {:seeds (parse-seeds (ffirst chunks))
      :maps  (mapv parse-map (rest chunks))}))
 
+(defn within-range?
+  [number [_ src_start length]]
+  (<= src_start number (+ src_start length -1)))
+
+(defn destination
+  [number [dest_start src_start _]]
+  (+ (- number src_start) dest_start))
+
+(defn apply-map
+  [number ranges]
+  (let [matches (filter #(within-range? number %) ranges)]
+    (if (seq matches)
+      (destination number (first matches))
+      number)))
+
+(defn mappings
+  [number ranges]
+  (reductions apply-map number ranges))
+
+(defn location
+  [number ranges]
+  (reduce apply-map number ranges))
+
+(defn lowest-location
+  [{:keys [seeds maps]}]
+  (apply min (map #(location % maps) seeds)))
+
+(defn day05-part1-soln
+  [input]
+  (lowest-location input))
 
