@@ -85,6 +85,4 @@
 
 (deftest ^:slow day08-part2-soln
   (testing "Reproduces the answer for day08, part2"
-    (is (= 12169 (t/day08-part2-soln day08-input)))))
-
-(t/ghost-steps-to-zzz day08-input)
+    (is (= 1 (t/day08-part2-soln day08-input)))))
