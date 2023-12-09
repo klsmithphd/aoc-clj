@@ -36,7 +36,7 @@
 
 (deftest day09-part1-soln
   (testing "Reproduces the answer for day09, part1"
-    (is (= 2162 (t/day09-part1-soln day09-input)))))
+    (is (= 1647269739 (t/day09-part1-soln day09-input)))))
 
 (deftest day09-part2-soln
   (testing "Reproduces the answer for day09, part2"
