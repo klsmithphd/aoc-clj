@@ -78,9 +78,23 @@
   (testing "Finds the lowest location value"
     (is (= 35 (t/lowest-location d05_s01)))))
 
+(deftest seed-ranges
+  (testing "Converts the seed numbers into ranges to explore"
+    (is (= [79 80 81 82 83 84 85 86 87 88 89 90 91 92
+            55 56 57 58 59 60 61 62 63 64 65 66 67]
+           (t/seed-ranges d05_s01)))))
+
+(deftest lowest-location-ranges-test
+  (testing "Finds the lowest location value among seed ranges"
+    (is (= 46 (t/lowest-location-ranges d05_s01)))))
+
 
 (def day05-input (u/parse-puzzle-input t/parse 2023 5))
 
 (deftest day05-part1-soln
   (testing "Reproduces the answer for day05, part1"
     (is (= 323142486 (t/day05-part1-soln day05-input)))))
+
+(deftest ^:slow day05-part2-soln
+  (testing "Reproduces the answer for day05, part2"
+    (is (= 1 (t/day05-part2-soln day05-input)))))

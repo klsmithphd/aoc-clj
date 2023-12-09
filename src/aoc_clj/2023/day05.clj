@@ -49,7 +49,22 @@
   [{:keys [seeds maps]}]
   (apply min (map #(location % maps) seeds)))
 
+(defn seed-range
+  [[start length]]
+  (range start (+ start length)))
+
+(defn seed-ranges
+  [{:keys [seeds]}]
+  (mapcat seed-range (partition 2 seeds)))
+
+(defn lowest-location-ranges
+  [input]
+  (lowest-location (assoc input :seeds (seed-ranges input))))
+
 (defn day05-part1-soln
   [input]
   (lowest-location input))
 
+(defn day05-part2-soln
+  [input]
+  (lowest-location-ranges input))
