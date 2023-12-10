@@ -26,6 +26,10 @@
     (first (drop-while #(not= :start (value grid %)) locs))))
 
 (defn allowed-tiles
+  "For the set of neighboring tile locations and their values,
+   return in the order S E N W, determine which are allowable moves
+   (based on which ends of the pipes are open to the direction we'd be
+   heading in)"
   [neighbors]
   (let [[south east north west] (seq neighbors)]
     (filter some?
@@ -39,6 +43,8 @@
                (key west))])))
 
 (defn heading
+  "Determines the direction we just came from by comparing the current
+   and previous positions. Returns `:right`, `:left:`, `:up`, or `:down`"
   [[px py] [cx cy]]
   (if (zero? (- cy py))
     (if (> cx px)
@@ -48,7 +54,9 @@
       :down
       :up)))
 
-(defn follow-loop
+(defn next-location
+  "Returns the next location along the loop based on the current pipe
+   and the direction we entered from"
   [prev curr tile]
   (let [dir (heading prev curr)]
     ;; S = 0, E = 1, N = 2, W = 3
@@ -79,7 +87,7 @@
            visited [init]]
       (if (= pos init)
         visited
-        (recur (key (nth (seq (neighbors-4 grid pos)) (follow-loop (last visited) pos (value grid pos))))
+        (recur (key (nth (seq (neighbors-4 grid pos)) (next-location (last visited) pos (value grid pos))))
                (into visited [pos]))))))
 
 (defn farthest-steps-from-start
