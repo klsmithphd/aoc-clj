@@ -11,6 +11,9 @@
   (map parse-line input))
 
 (declare num-arrangements)
+
+;; TODO --- clean this up and make it more readable. The nested `cond`s are
+;; difficult to reason about
 (defn num-arrangements-uncached
   [[spring-str groups]]
   ;; Trim any leading "." indicating operating springs.
@@ -45,6 +48,10 @@
   (reduce + (map num-arrangements input)))
 
 (defn unfold
+  "To unfold the records, on each row, replace the list of spring conditions 
+   with five copies of itself (separated by ?) and replace the list of 
+   contiguous groups of damaged springs with five copies of itself 
+   (separated by ,)."
   [[springs groups]]
   [(str/join "?" (repeat 5 springs))
    (apply concat (repeat 5 groups))])
@@ -54,9 +61,14 @@
   (num-arrangements-sum (map unfold input)))
 
 (defn day12-part1-soln
+  "For each row, count all of the different arrangements of operational and 
+   broken springs that meet the given criteria. 
+   What is the sum of those counts?"
   [input]
   (num-arrangements-sum input))
 
 (defn day12-part2-soln
+  "Unfold your condition records; what is the new sum of 
+   possible arrangement counts?"
   [input]
   (unfolded-arrangements-sum input))
