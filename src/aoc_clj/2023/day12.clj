@@ -10,7 +10,8 @@
   [input]
   (map parse-line input))
 
-(defn num-arrangements
+(declare num-arrangements)
+(defn num-arrangements-uncached
   [[spring-str groups]]
   ;; Trim any leading "." indicating operating springs.
   (let [springs (str/replace spring-str #"^\.+" "")]
@@ -37,10 +38,25 @@
       :else (+ (num-arrangements [(str "#" (subs springs 1)) groups])
                (num-arrangements [(subs springs 1) groups])))))
 
+(def num-arrangements (memoize num-arrangements-uncached))
+
 (defn num-arrangements-sum
   [input]
   (reduce + (map num-arrangements input)))
 
+(defn unfold
+  [[springs groups]]
+  [(str/join "?" (repeat 5 springs))
+   (apply concat (repeat 5 groups))])
+
+(defn unfolded-arrangements-sum
+  [input]
+  (num-arrangements-sum (map unfold input)))
+
 (defn day12-part1-soln
   [input]
   (num-arrangements-sum input))
+
+(defn day12-part2-soln
+  [input]
+  (unfolded-arrangements-sum input))
