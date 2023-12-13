@@ -15,7 +15,7 @@
 
 (defn vert-mirror
   [rows]
-  (->> (range 1 (dec (count rows)))
+  (->> (range 1 (count rows))
        (map #(split-at % rows))
        (map-indexed mirror-test)
        (filter second)
