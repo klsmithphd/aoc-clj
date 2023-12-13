@@ -5,26 +5,38 @@
   [input]
   (u/split-at-blankline input))
 
+(defn differences
+  [a b]
+  (if (= a b) 0 1))
+
 (defn mirror-test
   [idx [a b]]
   (let [size-a (count a)
         size-b (count b)]
     (if (< size-a size-b)
-      [idx (every? identity (map = a (reverse (take size-a b))))]
-      [idx (every? identity (map = (drop (- size-a size-b) a) (reverse b)))])))
+      [idx (reduce + (map differences
+                          (apply str a)
+                          (apply str (reverse (take size-a b)))))]
+      [idx (reduce + (map differences
+                          (apply str (drop (- size-a size-b) a))
+                          (apply str (reverse b))))])))
 
-(defn vert-mirror
+(defn test-splits
   [rows]
   (->> (range 1 (count rows))
        (map #(split-at % rows))
-       (map-indexed mirror-test)
-       (filter second)
+       (map-indexed mirror-test)))
+
+(defn vert-mirror
+  [diffs rows]
+  (->> (test-splits rows)
+       (filter (comp #(= diffs %) second))
        (ffirst)))
 
 (defn mirror-pos
-  [rows]
-  (let [h-mirror (vert-mirror rows)
-        v-mirror (vert-mirror (u/transpose rows))]
+  [diffs rows]
+  (let [h-mirror (vert-mirror diffs rows)
+        v-mirror (vert-mirror diffs (mapv #(apply str %) (u/transpose rows)))]
     (if (nil? v-mirror)
       {:type :horizontal :pos (inc h-mirror)}
       {:type :vertical :pos (inc v-mirror)})))
@@ -36,12 +48,16 @@
     :horizontal (* 100 pos)))
 
 (defn summarize
-  [input]
+  [diffs input]
   (->> input
-       (map mirror-pos)
+       (map (partial mirror-pos diffs))
        (map summarize-math)
        (reduce +)))
 
 (defn day13-part1-soln
   [input]
-  (summarize input))
+  (summarize 0 input))
+
+(defn day13-part2-soln
+  [input]
+  (summarize 1 input))
