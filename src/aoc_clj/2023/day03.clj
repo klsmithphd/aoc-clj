@@ -1,6 +1,7 @@
 (ns aoc-clj.2023.day03
   "Solution to https://adventofcode.com/2023/day/3"
   (:require [clojure.set :as set]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid :as grid]))
 
 (def digit-chars
@@ -29,7 +30,6 @@
     (process-number group)
     {:point (last (first group)) :value (second (first group))}))
 
-
 (defn parse-row
   [y row]
   (let [chars (map-indexed (partial parse-char y) row)
@@ -52,32 +52,34 @@
                        set)]
     (boolean (seq (set/intersection symbol-pts neighbors)))))
 
-
 (defn part-numbers
+  "Returns a collection of all the part numbers (numbers adjacent to a symbol)"
   [{:keys [symbols numbers]}]
-  (let [symbol-pts (->> symbols
-                        (map :point)
-                        set)]
+  (let [symbol-pts (set (map :point symbols))]
     (->> numbers
          (filter #(part-number? symbol-pts %))
          (map :value))))
 
 (defn part-numbers-sum
+  "Computes the sum of all of the valid part numbers"
   [input]
   (reduce + (part-numbers input)))
 
 (defn adjacent-parts
+  "Returns all of the numbers adjacent to `point`"
   [numbers point]
   (let [gear-nbrs (set (grid/adj-coords-2d point :include-diagonals true))]
     (filter #(seq (set/intersection gear-nbrs (set (:points %)))) numbers)))
 
 (defn gear-adjacent-parts
+  "Returns the part numbers of the items adjacent to gears"
   [{:keys [symbols numbers]}]
   (let [gear-pts (->> symbols
-                      (filter #(= \* (:value %)))
+                      (filter (comp (u/equals? \*) :value))
                       (map :point)
                       set)]
     (->> (map #(adjacent-parts numbers %) gear-pts)
+         ;; A gear must be adjacent to exactly two part numbers
          (filter #(= 2 (count %)))
          (map #(map :value %)))))
 
@@ -85,11 +87,9 @@
   "A gear is any * symbol that is adjacent to exactly two part numbers.
    Its gear ratio is the result of multiplying those two numbers together."
   [input]
-  (->> input
-       gear-adjacent-parts
+  (->> (gear-adjacent-parts input)
        (map #(reduce * %))
        (reduce +)))
-
 
 (defn day03-part1-soln
   "What is the sum of all of the part numbers in the engine schematic?"
