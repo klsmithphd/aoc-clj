@@ -6,44 +6,58 @@
   (u/split-at-blankline input))
 
 (defn differences
+  "Returns 0 if `a` and `b` are equal, otherwise 1"
   [a b]
   (if (= a b) 0 1))
 
-(defn mirror-test
-  [idx [a b]]
-  (let [size-a (count a)
-        size-b (count b)]
-    (if (< size-a size-b)
-      [idx (reduce + (map differences
-                          (apply str a)
-                          (apply str (reverse (take size-a b)))))]
-      [idx (reduce + (map differences
-                          (apply str (drop (- size-a size-b) a))
-                          (apply str (reverse b))))])))
+(defn trim-and-reflect
+  "Takes the `top` and `bot` collections of rows, trims the larger
+   collection to the size of the smaller one, and then reflects 
+   one of them. Returns a vector of two concatenated strings
+   that can then be compared for differences."
+  [top bot]
+  (let [size-top (count top)
+        size-bot (count bot)]
+    (if (< size-top size-bot)
+      [(apply str top)
+       (apply str (reverse (take size-top bot)))]
 
-(defn test-splits
+      [(apply str (take size-bot (reverse top)))
+       (apply str bot)])))
+
+(defn mirror-differences
+  "Computes the number of differences in characters between the 
+   top and bottom if they're treated as reflections of each other"
+  [[top bot]]
+  (let [[str-a str-b] (trim-and-reflect top bot)]
+    (reduce + (map differences str-a str-b))))
+
+(defn split-differences
+  "For a given set of `rows`, computes the mirror differences for 
+   all of the possible split points"
   [rows]
   (->> (range 1 (count rows))
        (map #(split-at % rows))
-       (map-indexed mirror-test)))
+       (map mirror-differences)))
 
-(defn vert-mirror
+(defn reflection-row
+  "Returns the position of the row where the reflection condition holds, 
+   i.e. where the number of differences between rows and their reflections
+   matches `diffs`"
   [diffs rows]
-  (->> (test-splits rows)
-       (filter (comp #(= diffs %) second))
-       (ffirst)))
-
-(defn str-transpose
-  [rows]
-  (mapv #(apply str %) (u/transpose rows)))
+  (u/index-of (u/equals? diffs) (split-differences rows)))
 
 (defn mirror-pos
+  "Returns the type and position of the reflection line based on
+   how many differences are allowed to exist between the reflections"
   [diffs rows]
-  (let [h-mirror (vert-mirror diffs rows)
-        v-mirror (vert-mirror diffs (str-transpose rows))]
+  (let [h-mirror (reflection-row diffs rows)
+        ;; For simplicity, reuse the row logic on the transposed rows 
+        ;; to find vertical reflection lines
+        v-mirror (reflection-row diffs (u/str-transpose rows))]
     (if (nil? v-mirror)
       {:type :horizontal :pos (inc h-mirror)}
-      {:type :vertical :pos (inc v-mirror)})))
+      {:type :vertical   :pos (inc v-mirror)})))
 
 (defn summarize-math
   "To summarize your pattern notes, add up the number of columns to the left 
