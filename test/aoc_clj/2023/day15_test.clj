@@ -4,12 +4,21 @@
             [aoc-clj.2023.day15 :as t]))
 
 (def d15-s01-raw ["rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"])
-(def d15-s01 ["rn=1" "cm-" "qp=3" "cm=2" "qp-" "pc=4" "ot=9" "ab=5" "pc-" "pc=6" "ot=7"])
+(def d15-s01 ["rn=1"
+              "cm-"
+              "qp=3"
+              "cm=2"
+              "qp-"
+              "pc=4"
+              "ot=9"
+              "ab=5"
+              "pc-"
+              "pc=6"
+              "ot=7"])
 
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d15-s01 (t/parse d15-s01-raw)))))
-
 
 (deftest hash-char-test
   (testing "Steps of the HASH algorithm, character-by-character"
