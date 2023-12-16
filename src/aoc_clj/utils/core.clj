@@ -136,6 +136,12 @@
   [v]
   (apply mapv vector v))
 
+(defn str-transpose
+  "Transpose a vector of strings, so that characters at position (i,j)
+   move to position (j,i)"
+  [rows]
+  (mapv #(apply str %) (transpose rows)))
+
 (defn converge
   "Like `iterate`, returns a lazy sequence of x, (f x), (f (f x)) etc.,
    until there are no longer any changes in continued applications of the

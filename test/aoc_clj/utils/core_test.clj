@@ -102,6 +102,17 @@
                          [1 4 7]
                          [2 5 8]])))))
 
+(deftest str-transpose-test
+  (testing "Demonstration of str-transpose: returns the transpose of a vector
+            of strings"
+    (is (= ["abcde"
+            "fghij"]
+           (u/str-transpose ["af"
+                             "bg"
+                             "ch"
+                             "di"
+                             "ej"])))))
+
 (deftest converge-test
   (testing "Demonstration of converge: returns a lazy seq of repeatedly
             applying a function to itself until there are no further
