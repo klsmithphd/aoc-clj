@@ -33,21 +33,30 @@
        (filter (comp #(= diffs %) second))
        (ffirst)))
 
+(defn str-transpose
+  [rows]
+  (mapv #(apply str %) (u/transpose rows)))
+
 (defn mirror-pos
   [diffs rows]
   (let [h-mirror (vert-mirror diffs rows)
-        v-mirror (vert-mirror diffs (mapv #(apply str %) (u/transpose rows)))]
+        v-mirror (vert-mirror diffs (str-transpose rows))]
     (if (nil? v-mirror)
       {:type :horizontal :pos (inc h-mirror)}
       {:type :vertical :pos (inc v-mirror)})))
 
 (defn summarize-math
+  "To summarize your pattern notes, add up the number of columns to the left 
+   of each vertical line of reflection; to that, also add 100 multiplied by 
+   the number of rows above each horizontal line of reflection."
   [{:keys [type pos]}]
   (case type
     :vertical pos
     :horizontal (* 100 pos)))
 
 (defn summarize
+  "Returns the summarization sum after finding the reflection position
+   that allows `diffs` values to be different across the reflection"
   [diffs input]
   (->> input
        (map (partial mirror-pos diffs))
@@ -55,9 +64,14 @@
        (reduce +)))
 
 (defn day13-part1-soln
+  "Find the line of reflection in each of the patterns in your notes. 
+   What number do you get after summarizing all of your notes?"
   [input]
   (summarize 0 input))
 
 (defn day13-part2-soln
+  "In each pattern, fix the smudge and find the different line of reflection. 
+   What number do you get after summarizing the new reflection line in each 
+   pattern in your notes?"
   [input]
   (summarize 1 input))
