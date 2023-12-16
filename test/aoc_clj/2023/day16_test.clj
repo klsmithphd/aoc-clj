@@ -60,5 +60,3 @@
 (deftest day16-part2-soln
   (testing "Reproduces the answer for day16, part2"
     (is (= 8225 (t/day16-part2-soln day16-input)))))
-
-(t/start-points d16-s01)
