@@ -16,7 +16,7 @@
   (let [dirs (if (= dir :right)
                [:east :south :west :north]
                [:east :north :west :south])
-        start (u/index-of heading dirs)
+        start (u/index-of (u/equals? heading) dirs)
         shift (case amount
                 90  1
                 180 2

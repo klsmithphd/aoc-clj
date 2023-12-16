@@ -16,7 +16,7 @@
   [input]
   (->> (instructions input)
        (reductions + 0)
-       (u/index-of -1)))
+       (u/index-of (u/equals? -1))))
 
 (defn day01-part1-soln
   []

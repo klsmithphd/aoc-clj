@@ -83,7 +83,7 @@
                      :x (map (comp vector first) moons)
                      :y (map (comp vector second) moons)
                      :z (map (comp vector last) moons))]
-    (inc (u/index-of 0 (rest (map total-energy (simulate-axis axis-moons)))))))
+    (inc (u/index-of zero? (rest (map total-energy (simulate-axis axis-moons)))))))
 
 (defn recurrence-period
   [moons]

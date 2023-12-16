@@ -110,11 +110,11 @@
   (map #(rotate % coll) (range (count coll))))
 
 (defn index-of
-  "Find the index position of x within coll. Only returns the
-   first match, even when there are multiple matches. Returns nil
-   if x is not found"
-  [x coll]
-  (ffirst (filter #(= x (second %)) (map-indexed vector coll))))
+  "Find the index position of the first item `x` in `coll` that satisfies
+   `(pred x)` Only returns the first match, even when there are multiple
+   matches. Returns nil if no element satisfies `pred`"
+  [pred coll]
+  (ffirst (filter (comp pred second) (map-indexed vector coll))))
 
 (defn count-if
   "Find the count of items in coll that satisfy predicate pred"

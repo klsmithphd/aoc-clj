@@ -61,7 +61,7 @@
 
 (defn day22-part1-soln
   []
-  (u/index-of 2019 (shuffle-deck 10007 day22-input)))
+  (u/index-of (u/equals? 2019) (shuffle-deck 10007 day22-input)))
 
 (defn card-after-multiple-shuffles
   [size steps times position]
