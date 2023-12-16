@@ -79,8 +79,8 @@
    and so on.)"
   [input]
   (let [packets (sorted input)
-        p0      (inc (u/index-of [[2]] packets))
-        p1      (inc (u/index-of [[6]] packets))]
+        p0      (inc (u/index-of (u/equals? [[2]]) packets))
+        p1      (inc (u/index-of (u/equals? [[6]]) packets))]
     (* p0 p1)))
 
 ;;;; Puzzle solutions

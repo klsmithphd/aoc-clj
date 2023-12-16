@@ -15,7 +15,7 @@
   [len s]
   (->> (partition len 1 s)
        (map #(apply distinct? %))
-       (u/index-of true)
+       (u/index-of true?)
        (+ len)))
 
 ;;;; Puzzle solutions

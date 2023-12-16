@@ -48,7 +48,7 @@
    back around to the other end as if the ends were connected."
   [input order idx]
   (let [shift   (input idx)
-        old-pos (u/index-of idx order)
+        old-pos (u/index-of (u/equals? idx) order)
         new-pos (bounded-shift (dec (count input)) old-pos shift)]
     (remove-and-insert order old-pos new-pos)))
 
@@ -72,7 +72,7 @@
    3000th numbers after the value 0, wrapping around the list as necessary."
   [nums]
   (let [n (count nums)
-        zero-pos (u/index-of 0 nums)]
+        zero-pos (u/index-of zero? nums)]
     (+ (nth nums (mod (+ zero-pos 1000) n))
        (nth nums (mod (+ zero-pos 2000) n))
        (nth nums (mod (+ zero-pos 3000) n)))))

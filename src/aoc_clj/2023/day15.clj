@@ -1,5 +1,6 @@
 (ns aoc-clj.2023.day15
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [aoc-clj.utils.core :as u]))
 
 (defn parse
   [input]
@@ -27,11 +28,6 @@
   [steps]
   (reduce + (map hash-alg steps)))
 
-;; TODO change the utility fn to take a predicate instead of a value
-(defn index-of
-  [pred coll]
-  (ffirst (filter (comp pred second) (map-indexed vector coll))))
-
 (defn match-lens
   [label [lens-label _]]
   (= label lens-label))
@@ -55,7 +51,7 @@
   (let [[label r] (str/split step #"=")
         box-id (hash-alg label)
         lens (read-string r)
-        index (index-of (partial match-lens label) (boxes box-id))]
+        index (u/index-of (partial match-lens label) (boxes box-id))]
     (if index
       (update boxes box-id #(assoc % index [label lens]))
       (update boxes box-id #(if (seq %) (conj % [label lens]) [[label lens]])))))
@@ -76,7 +72,7 @@
   [boxes step]
   (let [label (subs step 0 (dec (count step)))
         box-id (hash-alg label)
-        index (index-of (partial match-lens label) (boxes box-id))]
+        index (u/index-of (partial match-lens label) (boxes box-id))]
     (if index
       (update boxes box-id #(vec-without % index))
       boxes)))

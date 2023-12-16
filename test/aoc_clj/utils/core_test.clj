@@ -70,9 +70,9 @@
 
 (deftest index-of-test
   (testing "Demonstration of index-of: find index in seq of first occurrence "
-    (is (= 3 (u/index-of 8 [1 2 4 8 16])))
-    (is (nil? (u/index-of 8 [1 3 9 27 81])))
-    (is (= 1 (u/index-of :b [:a :b :b :b :b :b])))))
+    (is (= 3  (u/index-of (u/equals? 8) [1 2 4 8 16])))
+    (is (nil? (u/index-of (u/equals? 8) [1 3 9 27 81])))
+    (is (= 1  (u/index-of (u/equals? :b) [:a :b :b :b :b :b])))))
 
 (deftest count-if-test
   (testing "Demonstration of count-if: find the number of elements of coll that satisfy pred"
