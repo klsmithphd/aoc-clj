@@ -58,9 +58,9 @@
          set)))
 
 (defn energized
-  [grid]
-  (loop [queue   [[[0 0] :R]]
-         visited #{[[0 0] :R]}]
+  [grid start]
+  (loop [queue   [start]
+         visited #{start}]
     (if (empty? queue)
       (set (map first visited))
       (let [next-cell  (first queue)]
@@ -70,9 +70,26 @@
                (conj visited next-cell))))))
 
 (defn energized-count
+  [grid start]
+  (count (energized grid start)))
+
+(defn start-points
   [grid]
-  (count (energized grid)))
+  (let [w (width grid)
+        h (height grid)]
+    (concat (for [x (range w)] [[x 0] :D])
+            (for [x (range w)] [[x (dec h) :U]])
+            (for [y (range h)] [[0 y] :R])
+            (for [y (range h)] [[(dec w) y] :L]))))
+
+(defn max-energization
+  [grid]
+  (apply max (map #(energized-count grid %) (start-points grid))))
 
 (defn day16-part1-soln
   [input]
-  (energized-count input))
+  (energized-count input [[0 0] :R]))
+
+(defn day16-part2-soln
+  [input]
+  (max-energization input))

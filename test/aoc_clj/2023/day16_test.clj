@@ -44,7 +44,12 @@
 
 (deftest energized-count-test
   (testing "Counts the number of energized cells"
-    (is (= 46 (t/energized-count d16-s01)))))
+    (is (= 46 (t/energized-count d16-s01 [[0 0] :R])))
+    (is (= 51 (t/energized-count d16-s01 [[3 0] :D])))))
+
+(deftest max-energization-test
+  (testing "Finds the maximum possible number of energized cells"
+    (is (= 51 (t/max-energization d16-s01)))))
 
 (def day16-input (u/parse-puzzle-input t/parse 2023 16))
 
@@ -52,3 +57,8 @@
   (testing "Reproduces the answer for day16, part1"
     (is (= 8034 (t/day16-part1-soln day16-input)))))
 
+(deftest day16-part2-soln
+  (testing "Reproduces the answer for day16, part2"
+    (is (= 8225 (t/day16-part2-soln day16-input)))))
+
+(t/start-points d16-s01)
