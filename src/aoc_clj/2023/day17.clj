@@ -3,7 +3,8 @@
             [aoc-clj.utils.graph :as g :refer [Graph]]
             [aoc-clj.utils.grid :as grid :refer [width height value]]
             [aoc-clj.utils.grid.vecgrid :as vg]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.math :as math]))
 
 (defn parse-line
   [line]
@@ -41,35 +42,55 @@
   [pos heading count]
   {:pos pos :heading heading :count count})
 
+(defn part1-rules
+  [vertices]
+  (remove #(>= (:count %) 3) vertices))
+
+(defn part1-finish?
+  [end {:keys [pos]}]
+  (= end pos))
+
+(defn part2-rules
+  [vertices]
+  (let [straight (first vertices)]
+    (if (< (:count straight) 4)
+      [straight]
+      (remove #(>= (:count %) 10) vertices))))
+
+(defn part2-finish?
+  [end {:keys [pos count]}]
+  (and (= end pos)
+       (<= 3 count)))
+
 (defn next-vertices
-  [grid {:keys [pos heading count]}]
+  [grid steering-rules {:keys [pos heading count]}]
   (let [headings  (allowed-headings heading)
         positions (map #(next-cell pos %) headings)
         counts    [(inc count) 0 0]
         vertices  (map new-vertex positions headings counts)]
     (->> vertices
-         (filter #(in-grid? grid (:pos %)))
-         (remove #(= 3 (:count %))))))
+         steering-rules
+         (filter #(in-grid? grid (:pos %))))))
 
-(defrecord CityGrid [grid]
+(defrecord CityGrid [grid steering-rules]
   Graph
   (edges
     [_ v]
-    (next-vertices grid v))
+    (next-vertices grid steering-rules v))
   (distance
     [_ _ {:keys [pos]}]
     (value grid pos)))
 
 (defn min-heat-loss
-  [grid]
-  (let [ex (dec (width grid))
-        ey (dec (height grid))
-        graph (->CityGrid grid)]
+  [grid steering finish?]
+  (let [end [(dec (width grid)) (dec (height grid))]
+        heuristic #(math/manhattan end (:pos %))
+        graph (->CityGrid grid steering)]
     (->>
-     (g/dijkstra graph
-                 {:pos [0 0] :heading :R :count 0}
-                 #(= [ex ey] (:pos %))
-                 :limit 10000000)
+     (g/a-star graph
+               {:pos [0 0] :heading :R :count 0}
+               (partial finish? end)
+               heuristic)
      (drop 1)
      (map :pos)
      (map #(value grid %))
@@ -77,4 +98,8 @@
 
 (defn day17-part1-soln
   [input]
-  (min-heat-loss input))
+  (min-heat-loss input part1-rules part1-finish?))
+
+(defn day17-part2-soln
+  [input]
+  (min-heat-loss input part2-rules part2-finish?))
