@@ -62,9 +62,14 @@
   (lowest-location (assoc input :seeds (seed-ranges input))))
 
 (defn day05-part1-soln
+  "What is the lowest location number that corresponds to any of the initial
+   seed numbers?"
   [input]
   (lowest-location input))
 
 (defn day05-part2-soln
+  "Consider all of the initial seed numbers listed in the ranges on the 
+   first line of the almanac. What is the lowest location number that 
+   corresponds to any of the initial seed numbers?"
   [input]
   (lowest-location-ranges input))
