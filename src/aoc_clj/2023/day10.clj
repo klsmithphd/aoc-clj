@@ -1,7 +1,8 @@
 (ns aoc-clj.2023.day10
   (:require [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.utils.grid :as grid
-             :refer [height width value neighbors-4]]))
+             :refer [height width value neighbors-4]]
+            [aoc-clj.utils.geometry :as geo]))
 
 (def charmap
   {\| :pipe-v
@@ -96,10 +97,24 @@
   [grid]
   (quot (count (loop-positions grid)) 2))
 
+(defn interior-tiles
+  "Computes how many tiles are enclosed by the pipe loop represented in the
+   `grid`"
+  [grid]
+  (-> (loop-positions grid)
+      geo/vertices->edges
+      geo/interior-count))
+
 (defn day10-part1-soln
   "Find the single giant loop starting at S. How many steps along the loop does
    it take to get from the starting position to the point farthest from the 
    starting position?"
   [input]
   (farthest-steps-from-start input))
+
+(defn day10-part2-soln
+  "Figure out whether you have time to search for the nest by calculating the 
+   area within the loop. How many tiles are enclosed by the loop?"
+  [input]
+  (interior-tiles input))
 

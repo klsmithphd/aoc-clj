@@ -25,6 +25,43 @@
                   "LJ.LJ"])
 (def d10-s02 (t/parse d10-s02-raw))
 
+(def d10-s03
+  (t/parse
+   ["..........."
+    ".S-------7."
+    ".|F-----7|."
+    ".||.....||."
+    ".||.....||."
+    ".|L-7.F-J|."
+    ".|..|.|..|."
+    ".L--J.L--J."
+    "..........."]))
+
+(def d10-s04
+  (t/parse
+   [".........."
+    ".S------7."
+    ".|F----7|."
+    ".||OOOO||."
+    ".||OOOO||."
+    ".|L-7F-J|."
+    ".|II||II|."
+    ".L--JL--J."
+    ".........."]))
+
+(def d10-s05
+  (t/parse
+   [".F----7F7F7F7F-7...."
+    ".|F--7||||||||FJ...."
+    ".||.FJ||||||||L7...."
+    "FJL7L7LJLJ||LJ.L-7.."
+    "L--J.L7...LJS7F-7L7."
+    "....F-J..F7FJ|L7L7L7"
+    "....L7.F7||L7|.L7L7|"
+    ".....|FJLJ|FJ|F7|.LJ"
+    "....FJL-7.||.||||..."
+    "....L---J.LJ.LJLJ..."]))
+
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d10-s01 (t/parse d10-s01-raw)))))
@@ -47,8 +84,18 @@
     (is (= 4 (t/farthest-steps-from-start d10-s01)))
     (is (= 8 (t/farthest-steps-from-start d10-s02)))))
 
+(deftest interior-tiles-test
+  (testing "Computes the number of tiles that are enclosed within the loop"
+    (is (= 4 (t/interior-tiles d10-s03)))
+    (is (= 4 (t/interior-tiles d10-s04)))
+    (is (= 8 (t/interior-tiles d10-s05)))))
+
 (def day10-input (u/parse-puzzle-input t/parse 2023 10))
 
 (deftest day02-part1-soln
   (testing "Reproduces the answer for day10, part1"
     (is (= 7093 (t/day10-part1-soln day10-input)))))
+
+(deftest day02-part2-soln
+  (testing "Reproduces the answer for day10, part2"
+    (is (= 407 (t/day10-part2-soln day10-input)))))
