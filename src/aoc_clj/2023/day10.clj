@@ -103,7 +103,8 @@
   [grid]
   (-> (loop-positions grid)
       geo/vertices->edges
-      geo/interior-count))
+      geo/interior-count
+      int))
 
 (defn day10-part1-soln
   "Find the single giant loop starting at S. How many steps along the loop does
