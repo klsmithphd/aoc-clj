@@ -158,3 +158,11 @@
    that argument equals `x`"
   [x]
   (partial = x))
+
+(defn ring
+  "Returns a collection wrapped back around to its beginning, with the
+   first element repeated as its last. If the size of `coll` is `n`,
+   then `(ring coll)` returns a collection of size n+1"
+  [coll]
+  (let [n (count coll)]
+    (take (inc n) (cycle coll))))

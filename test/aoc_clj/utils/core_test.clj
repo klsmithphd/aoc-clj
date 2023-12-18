@@ -125,3 +125,10 @@
             returns true when its argument equals the supplied x value"
     (is ((u/equals? 5) 5))
     (is (not ((u/equals? :a) 2)))))
+
+(deftest ring-test
+  (testing "Demonstration of ring: returns a collection with the first
+            element wrapped around to the end"
+    (is (= [0 1 2 3 4 0] (u/ring (range 5))))
+    (is (= [1 1]         (u/ring [1])))
+    (is (= []            (u/ring [])))))
