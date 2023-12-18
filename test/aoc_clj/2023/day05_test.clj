@@ -3,50 +3,61 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2023.day05 :as t]))
 
-(def d05-s01-raw ["seeds: 79 14 55 13"
-                  ""
-                  "seed-to-soil map:"
-                  "50 98 2"
-                  "52 50 48"
-                  ""
-                  "soil-to-fertilizer map:"
-                  "0 15 37"
-                  "37 52 2"
-                  "39 0 15"
-                  ""
-                  "fertilizer-to-water map:"
-                  "49 53 8"
-                  "0 11 42"
-                  "42 0 7"
-                  "57 7 4"
-                  ""
-                  "water-to-light map:"
-                  "88 18 7"
-                  "18 25 70"
-                  ""
-                  "light-to-temperature map:"
-                  "45 77 23"
-                  "81 45 19"
-                  "68 64 13"
-                  ""
-                  "temperature-to-humidity map:"
-                  "0 69 1"
-                  "1 0 69"
-                  ""
-                  "humidity-to-location map:"
-                  "60 56 37"
-                  "56 93 4"])
+(def d05-s01-raw
+  ["seeds: 79 14 55 13"
+   ""
+   "seed-to-soil map:"
+   "50 98 2"
+   "52 50 48"
+   ""
+   "soil-to-fertilizer map:"
+   "0 15 37"
+   "37 52 2"
+   "39 0 15"
+   ""
+   "fertilizer-to-water map:"
+   "49 53 8"
+   "0 11 42"
+   "42 0 7"
+   "57 7 4"
+   ""
+   "water-to-light map:"
+   "88 18 7"
+   "18 25 70"
+   ""
+   "light-to-temperature map:"
+   "45 77 23"
+   "81 45 19"
+   "68 64 13"
+   ""
+   "temperature-to-humidity map:"
+   "0 69 1"
+   "1 0 69"
+   ""
+   "humidity-to-location map:"
+   "60 56 37"
+   "56 93 4"])
 
 (def d05-s01
   {:seeds      [79 14 55 13]
-   :range-maps [[[98 99 -48] [50 97 2]]
-                [[15 51 -15] [52 53 -15] [0 14 39]]
-                [[53 60 -4] [11 52 -11] [0 6 42] [7 10 50]]
-                [[18 24 70] [25 94 -7]]
-                [[77 99 -32] [45 63 36] [64 76 4]]
-                [[69 69 -69] [0 68 1]]
-                [[56 92 4] [93 96 -37]]]})
-
+   :range-maps [[[50 97 2]
+                 [98 99 -48]]
+                [[0 14 39]
+                 [15 51 -15]
+                 [52 53 -15]]
+                [[0 6 42]
+                 [7 10 50]
+                 [11 52 -11]
+                 [53 60 -4]]
+                [[18 24 70]
+                 [25 94 -7]]
+                [[45 63 36]
+                 [64 76 4]
+                 [77 99 -32]]
+                [[0 68 1]
+                 [69 69 -69]]
+                [[56 92 4]
+                 [93 96 -37]]]})
 
 (deftest parse-test
   (testing "Parses the input correctly"
@@ -101,4 +112,41 @@
 
 (deftest day05-part2-soln
   (testing "Reproduces the answer for day05, part2"
-    (is (= 0 (t/day05-part2-soln day05-input)))))
+    (is (= 79874951 (t/day05-part2-soln day05-input)))))
+
+
+;; (take 10 (t/day05-part2-soln day05-input))
+;; (clojure.pprint/pprint (take 1 (:range-maps day05-input)))
+
+;; (t/day05-part2-soln (update day05-input :range-maps (partial take 1)))
+
+;; (reduce t/next-values
+;;         (t/seed-ranges (:seeds day05-input))
+;;         (take 1 (:range-maps day05-input)))
+
+;; (t/seed-ranges (:seeds day05-input))
+;; (t/intervals-to-propagate
+;;  (t/seed-ranges (:seeds day05-input))
+;;  (nth (:range-maps day05-input) 0))
+;; (partition 2
+;;            (map #(t/apply-range-map % (nth (:range-maps day05-input) 0))
+;;                 (flatten (t/intervals-to-propagate
+;;                           (t/seed-ranges (:seeds day05-input))
+;;                           (nth (:range-maps day05-input) 0)))))
+
+;; (clojure.pprint/pprint (sort (nth (:range-maps day05-input) 1)))
+;; (def after-1 [[2637529854 2860924752] [3007537707 3511520873] [307349251 504732785] [3543757609 3820406008] [2296792159 2437803013] [116452725 121613257] [2246652813 2296420148] [762696372 890067009] [890067009 890067010] [890067010 923151448] [3960442213 4066309213] [1197133308 1235680073]])
+;; (partition 2
+;;            (map #(t/apply-range-map % (nth (:range-maps day05-input) 1))
+;;                 (flatten (t/intervals-to-propagate
+;;                           after-1
+;;                           (nth (:range-maps day05-input) 1)))))
+;; (clojure.pprint/pprint (:range-maps d05-s01))
+;; (clojure.pprint/pprint (reductions t/next-values (t/seed-ranges (:seeds d05-s01)) (:range-maps d05-s01)))
+
+;; (clojure.pprint/pprint
+;;  (reductions t/next-values (t/seed-ranges (:seeds day05-input)) (:range-maps day05-input)))
+
+;; 50184598
+;; 595208874
+;; 422846749

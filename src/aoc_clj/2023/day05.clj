@@ -8,7 +8,7 @@
 
 (defn parse-maps
   [chunk]
-  (map (comp convert-map u/str->vec) (rest chunk)))
+  (sort (map (comp convert-map u/str->vec) (rest chunk))))
 
 (defn parse-seeds
   [seeds-str]
@@ -64,10 +64,16 @@
   [range-maps]
   (mapcat #(vector (first %) (second %)) range-maps))
 
+;; There's almost certainly an off-by-one range error hidden in 
+;; this function
 (defn interval-split
   [[mn mx] split-val]
   (if (<= mn split-val mx)
-    [[mn split-val] [split-val mx]]
+    (cond
+      (= mn mx)        [[mn mx]]
+      (= mn split-val) [[mn mn] [(inc mn) mx]]
+      (= mx split-val) [[mn (dec mx)] [mx mx]]
+      :else            [[mn split-val] [(inc split-val) mx]])
     [[mn mx]]))
 
 (defn reduce-fn
@@ -95,13 +101,14 @@
 
 (defn seed-ranges
   [seeds]
-  (map seed-range (partition 2 seeds)))
+  (sort (map seed-range (partition 2 seeds))))
 
 (defn range-lowest-location
   [{:keys [seeds range-maps]}]
   (->> (reduce next-values (seed-ranges seeds) range-maps)
        flatten
        (apply min)))
+
 
 
 ;; (defn lowest-location-ranges
