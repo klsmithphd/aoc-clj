@@ -1,5 +1,6 @@
 (ns aoc-clj.2023.day18-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2023.day18 :as t]))
 
 (def d18-s01-raw
@@ -34,6 +35,54 @@
    {:dir "L" :dist 2 :color "#015232"}
    {:dir "U" :dist 2 :color "#7a21e3"}])
 
+(def d18-vertices
+  [[6 0] [6 5] [4 5] [4 7] [6 7] [6 9] [1 9]
+   [1 7] [0 7] [0 5] [2 5] [2 2] [0 2] [0 0]])
+
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d18-s01 (t/parse d18-s01-raw)))))
+
+(deftest vertices-test
+  (testing "Returns the collection of vertices for each segment"
+    (is (= d18-vertices (t/vertices d18-s01)))))
+
+(deftest perimeter-length-test
+  (testing "Computes the length along the perimiter"
+    (is (= 38 (t/perimeter-length d18-vertices)))))
+
+(deftest polygon-area-test
+  (testing "Computes the area of a polygon described by its vertices"
+    (is (= 42 (t/polygon-area d18-vertices)))))
+
+(deftest interior-count-test
+  (testing "Computes the number of internal points within a polygon"
+    (is (= 24 (t/interior-count d18-vertices)))))
+
+(deftest dig-area-test
+  (testing "Computes the number of tiles excavated"
+    (is (= 62 (t/dig-area d18-s01)))))
+
+(deftest trench-test
+  (testing "Returns the path of trench points per the dig steps"
+    (is (= [[1 0] [2 0] [3 0] [4 0] [5 0] [6 0]
+            [6 1] [6 2] [6 3] [6 4] [6 5]
+            [5 5] [4 5]
+            [4 6] [4 7]
+            [5 7] [6 7]
+            [6 8] [6 9]
+            [5 9] [4 9] [3 9] [2 9] [1 9]
+            [1 8] [1 7]
+            [0 7]
+            [0 6] [0 5]
+            [1 5] [2 5]
+            [2 4] [2 3] [2 2]
+            [1 2] [0 2]
+            [0 1] [0 0]]
+           (t/trench d18-s01)))))
+
+(def day18-input (u/parse-puzzle-input t/parse 2023 18))
+
+(deftest day18-part1-soln
+  (testing "Reproduces the answer for day18, part1"
+    (is (= 66993 (t/day18-part1-soln day18-input)))))
