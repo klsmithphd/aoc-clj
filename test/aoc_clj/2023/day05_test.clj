@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2023.day05 :as t]))
 
-(def d05_s01_raw ["seeds: 79 14 55 13"
+(def d05-s01-raw ["seeds: 79 14 55 13"
                   ""
                   "seed-to-soil map:"
                   "50 98 2"
@@ -37,57 +37,61 @@
                   "60 56 37"
                   "56 93 4"])
 
-(def d05_s01
-  {:seeds [79 14 55 13]
-   :maps  [[[50 98 2] [52 50 48]]
-           [[0 15 37] [37 52 2] [39 0 15]]
-           [[49 53 8] [0 11 42] [42 0 7] [57 7 4]]
-           [[88 18 7] [18 25 70]]
-           [[45 77 23] [81 45 19] [68 64 13]]
-           [[0 69 1] [1 0 69]]
-           [[60 56 37] [56 93 4]]]})
+(def d05-s01
+  {:seeds      [79 14 55 13]
+   :range-maps [[[98 99 -48] [50 97 2]]
+                [[15 51 -15] [52 53 -15] [0 14 39]]
+                [[53 60 -4] [11 52 -11] [0 6 42] [7 10 50]]
+                [[18 24 70] [25 94 -7]]
+                [[77 99 -32] [45 63 36] [64 76 4]]
+                [[69 69 -69] [0 68 1]]
+                [[56 92 4] [93 96 -37]]]})
+
 
 (deftest parse-test
   (testing "Parses the input correctly"
-    (is (= d05_s01 (t/parse d05_s01_raw)))))
+    (is (= d05-s01 (t/parse d05-s01-raw)))))
 
 (deftest apply-map-test
   (testing "Correctly maps a source number to a target number given a map"
-    (is (= 0 (t/apply-map 0 (first (:maps d05_s01)))))
-    (is (= 49 (t/apply-map 49 (first (:maps d05_s01)))))
-    (is (= 52 (t/apply-map 50 (first (:maps d05_s01)))))
-    (is (= 99 (t/apply-map 97 (first (:maps d05_s01)))))
-    (is (= 50 (t/apply-map 98 (first (:maps d05_s01)))))
-    (is (= 51 (t/apply-map 99 (first (:maps d05_s01)))))))
+    (is (= 0  (t/apply-range-map 0  (first (:range-maps d05-s01)))))
+    (is (= 49 (t/apply-range-map 49 (first (:range-maps d05-s01)))))
+    (is (= 52 (t/apply-range-map 50 (first (:range-maps d05-s01)))))
+    (is (= 99 (t/apply-range-map 97 (first (:range-maps d05-s01)))))
+    (is (= 50 (t/apply-range-map 98 (first (:range-maps d05-s01)))))
+    (is (= 51 (t/apply-range-map 99 (first (:range-maps d05-s01)))))))
 
-(deftest mappings-test
+(deftest range-mappings-test
   (testing "Maps a seed number through each of the mappings"
-    (is (= [79 81 81 81 74 78 78 82] (t/mappings 79 (:maps d05_s01))))
-    (is (= [14 14 53 49 42 42 43 43] (t/mappings 14 (:maps d05_s01))))
-    (is (= [55 57 57 53 46 82 82 86] (t/mappings 55 (:maps d05_s01))))
-    (is (= [13 13 52 41 34 34 35 35] (t/mappings 13 (:maps d05_s01))))))
+    (is (= [79 81 81 81 74 78 78 82]
+           (t/range-mappings 79 (:range-maps d05-s01))))
+    (is (= [14 14 53 49 42 42 43 43]
+           (t/range-mappings 14 (:range-maps d05-s01))))
+    (is (= [55 57 57 53 46 82 82 86]
+           (t/range-mappings 55 (:range-maps d05-s01))))
+    (is (= [13 13 52 41 34 34 35 35]
+           (t/range-mappings 13 (:range-maps d05-s01))))))
 
 (deftest location-test
   (testing "Maps a seed to its location"
-    (is (= 82 (t/location 79 (:maps d05_s01))))
-    (is (= 43 (t/location 14 (:maps d05_s01))))
-    (is (= 86 (t/location 55 (:maps d05_s01))))
-    (is (= 35 (t/location 13 (:maps d05_s01))))))
+    (is (= 82 (t/location 79 (:range-maps d05-s01))))
+    (is (= 43 (t/location 14 (:range-maps d05-s01))))
+    (is (= 86 (t/location 55 (:range-maps d05-s01))))
+    (is (= 35 (t/location 13 (:range-maps d05-s01))))))
 
 (deftest lowest-location-test
   (testing "Finds the lowest location value"
-    (is (= 35 (t/lowest-location d05_s01)))))
+    (is (= 35 (t/lowest-location d05-s01)))))
 
-(deftest seed-ranges
-  (testing "Converts the seed numbers into ranges to explore"
-    (is (= [79 80 81 82 83 84 85 86 87 88 89 90 91 92
-            55 56 57 58 59 60 61 62 63 64 65 66 67]
-           (t/seed-ranges d05_s01)))))
+;; (deftest seed-ranges
+;;   (testing "Converts the seed numbers into ranges to explore"
+;;     (is (= [79 80 81 82 83 84 85 86 87 88 89 90 91 92
+;;             55 56 57 58 59 60 61 62 63 64 65 66 67]
+;;            (t/seed-ranges d05_s01)))))
 
-(deftest lowest-location-ranges-test
+(deftest range-lowest-location-test
   (testing "Finds the lowest location value among seed ranges"
-    (is (= 46 (t/lowest-location-ranges d05_s01)))))
-
+    (is (= 46 (t/range-lowest-location d05-s01)))))
 
 (def day05-input (u/parse-puzzle-input t/parse 2023 5))
 
@@ -95,6 +99,6 @@
   (testing "Reproduces the answer for day05, part1"
     (is (= 323142486 (t/day05-part1-soln day05-input)))))
 
-(deftest ^:slow day05-part2-soln
+(deftest day05-part2-soln
   (testing "Reproduces the answer for day05, part2"
-    (is (= 1 (t/day05-part2-soln day05-input)))))
+    (is (= 0 (t/day05-part2-soln day05-input)))))
