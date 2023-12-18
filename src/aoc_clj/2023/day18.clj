@@ -1,7 +1,6 @@
 (ns aoc-clj.2023.day18
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.utils.geometry :as geo]))
 
 (defn parse-line
   [line]
@@ -15,6 +14,8 @@
   (map parse-line input))
 
 (defn vertices-step
+  "Compute the next vertex along the path by interepreting the offset
+   relative to the last vertex point in `vertices`"
   [vertices {:keys [dir dist]}]
   (let [[sx sy] (or (last vertices) [0 0])]
     (conj vertices (case dir
@@ -24,53 +25,25 @@
                      "R" [(+ sx dist) sy]))))
 
 (defn vertices
+  "Given the dig instruction steps, return the ordered collection of vertices
+   of the corners of the dig path"
   [steps]
   (reduce vertices-step [] steps))
-
-(defn edges
-  "Take a collection of vertices and return a collection of all the edges"
-  [vertices]
-  (->> (u/ring vertices)
-       (partition 2 1)))
-
-(defn perimeter-length
-  [vertices]
-  (->> (edges vertices)
-       (map #(apply math/manhattan %))
-       (reduce +)))
-
-(defn shoelace-step
-  "Helper function for Shoelace formula
-   https://en.wikipedia.org/wiki/Shoelace_formula"
-  [[[x1 y1] [x2 y2]]]
-  (- (* x1 y2) (* x2 y1)))
-
-(defn polygon-area
-  "Computes area of a polygon given
-   https://en.wikipedia.org/wiki/Shoelace_formula"
-  [vertices]
-  (let [area2 (->> (edges vertices)
-                   (map shoelace-step)
-                   (reduce +))]
-    (abs (/ area2 2))))
-
-(defn interior-count
-  "Computes the number of interior points using Pick's theorem"
-  [vertices]
-  (let [area     (polygon-area vertices)
-        boundary (perimeter-length vertices)]
-    (- area (/ boundary 2) -1)))
 
 (defn dig-area
   "Computes the total dug-up area given the steps by adding
    the interior and perimeter points"
   [steps]
-  (let [vs       (vertices steps)
-        area     (polygon-area vs)
-        boundary (perimeter-length vs)]
-    (+ area (/ boundary 2) 1)))
+  (let [edges    (geo/vertices->edges (vertices steps))
+        interior (geo/interior-count edges)
+        boundary (geo/perimeter-length edges)]
+    (bigint (+ interior boundary))))
 
 (defn interpret-hex
+  "Each hexadecimal code is six hexadecimal digits long. 
+   The first five hexadecimal digits encode the distance in meters as a 
+   five-digit hexadecimal number. The last hexadecimal digit encodes the 
+   direction to dig: 0 means R, 1 means D, 2 means L, and 3 means U."
   [{:keys [color]}]
   {:dist (read-string (str "0x" (subs color 0 5)))
    :dir  (case (subs color 5 6)
@@ -80,13 +53,20 @@
            "3" "U")})
 
 (defn dig-area-reinterpreted
+  "Compute the dig area after re-interpreting the color hex code as
+   described in part 2"
   [steps]
   (dig-area (map interpret-hex steps)))
 
 (defn day18-part1-soln
+  "The Elves are concerned the lagoon won't be large enough; 
+   if they follow their dig plan, how many cubic meters of lava could it hold?"
   [input]
   (dig-area input))
 
 (defn day18-part2-soln
+  "Convert the hexadecimal color codes into the correct instructions; 
+   if the Elves follow this new dig plan, how many cubic meters of lava 
+   could the lagoon hold?"
   [input]
   (dig-area-reinterpreted input))

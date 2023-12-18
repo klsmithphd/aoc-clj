@@ -51,7 +51,7 @@
    {:dir "L" :dist 5411}
    {:dir "U" :dist 500254}])
 
-(def d18-vertices
+(def d18-s01-vertices
   [[6 0] [6 5] [4 5] [4 7] [6 7] [6 9] [1 9]
    [1 7] [0 7] [0 5] [2 5] [2 2] [0 2] [0 0]])
 
@@ -61,19 +61,7 @@
 
 (deftest vertices-test
   (testing "Returns the collection of vertices for each segment"
-    (is (= d18-vertices (t/vertices d18-s01)))))
-
-(deftest perimeter-length-test
-  (testing "Computes the length along the perimiter"
-    (is (= 38 (t/perimeter-length d18-vertices)))))
-
-(deftest polygon-area-test
-  (testing "Computes the area of a polygon described by its vertices"
-    (is (= 42 (t/polygon-area d18-vertices)))))
-
-(deftest interior-count-test
-  (testing "Computes the number of internal points within a polygon"
-    (is (= 24 (t/interior-count d18-vertices)))))
+    (is (= d18-s01-vertices (t/vertices d18-s01)))))
 
 (deftest dig-area-test
   (testing "Computes the number of tiles excavated"
