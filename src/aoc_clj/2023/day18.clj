@@ -78,60 +78,6 @@
         boundary (perimeter-length vs)]
     (+ area (/ boundary 2) 1)))
 
-
-
-
-(defn trench-step
-  [points {:keys [dir dist]}]
-  (let [[sx sy] (or (last points) [0 0])]
-    (into points (case dir
-                   "U" (for [y (range (dec sy) (- sy dist 1) -1)] [sx y])
-                   "D" (for [y (range (inc sy) (+ sy dist 1))]    [sx y])
-                   "L" (for [x (range (dec sx) (- sx dist 1) -1)] [x sy])
-                   "R" (for [x (range (inc sx) (+ sx dist 1))]    [x sy])))))
-
-(defn trench
-  [steps]
-  (reduce trench-step [] steps))
-
-(defn interior-counts
-  [coll]
-  (let [change-signals (map #(not= 1 (- %1 %2)) (next coll) coll)]
-    change-signals))
-
-(interior-counts [0 1 2 5 6 7])
-(interior-counts [0 2 5 7 8 9])
-
-(defn consecutive-groups
-  [coll]
-  (->> coll
-       (map-indexed (fn [i x] [(- x i) x]))
-       (partition-by first)
-       (map (partial map second))))
-
-;; (defn vertices
-;;   [coll]
-;;   (->> (consecutive-groups coll)
-;;        (mapcat (fn [nums] [(first nums) (last nums)]))
-;;        (dedupe)))
-
-(vertices [0 2 3 4 5 9])
-
-(defn interior
-  [points]
-  (->>
-   (sort points)
-   (partition-by first)
-   (map (partial map second))
-   (map consecutive-groups)))
-
-
-
-;; sort the points, default will give all x = i with y's ascending, then x = i+1
-;; For each x
-  ;; group ys into consecutive ranges
-  ;; count the cells between endpoints"
-
 (defn interpret-hex
   [{:keys [color]}]
   {:dist (read-string (str "0x" (subs color 0 5)))
