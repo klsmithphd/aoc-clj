@@ -1,5 +1,6 @@
 (ns aoc-clj.2023.day18
   (:require [clojure.string :as str]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.utils.math :as math]))
 
 (defn parse-line
@@ -26,19 +27,10 @@
   [steps]
   (reduce vertices-step [] steps))
 
-;; TODO make a utility function 
-(defn ring
-  "Returns a collection wrapped back around to its beginning, with the
-   first element repeated as its last. If the size of `coll` is `n`,
-   then `(ring coll)` returns a collection of size n+1"
-  [coll]
-  (let [n (count coll)]
-    (take (inc n) (cycle coll))))
-
 (defn edges
   "Take a collection of vertices and return a collection of all the edges"
   [vertices]
-  (->> (ring vertices)
+  (->> (u/ring vertices)
        (partition 2 1)))
 
 (defn perimeter-length
