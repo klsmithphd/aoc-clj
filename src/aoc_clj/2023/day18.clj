@@ -7,7 +7,7 @@
   (let [[a b c] (str/split line #" ")]
     {:dir a
      :dist (read-string b)
-     :color (subs c 1 (dec (count c)))}))
+     :color (subs c 2 (dec (count c)))}))
 
 (defn parse
   [input]
@@ -78,9 +78,7 @@
         boundary (perimeter-length vs)]
     (+ area (/ boundary 2) 1)))
 
-(defn day18-part1-soln
-  [input]
-  (dig-area input))
+
 
 
 (defn trench-step
@@ -134,3 +132,23 @@
   ;; group ys into consecutive ranges
   ;; count the cells between endpoints"
 
+(defn interpret-hex
+  [{:keys [color]}]
+  {:dist (read-string (str "0x" (subs color 0 5)))
+   :dir  (case (subs color 5 6)
+           "0" "R"
+           "1" "D"
+           "2" "L"
+           "3" "U")})
+
+(defn dig-area-reinterpreted
+  [steps]
+  (dig-area (map interpret-hex steps)))
+
+(defn day18-part1-soln
+  [input]
+  (dig-area input))
+
+(defn day18-part2-soln
+  [input]
+  (dig-area-reinterpreted input))
