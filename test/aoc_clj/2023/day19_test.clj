@@ -119,8 +119,18 @@
             accepted outcome"
     (is (= d19-s01-all-paths (t/all-accepted-paths d19-s01)))))
 
+(deftest all-accepted-count
+  (testing "Computes how many possible combinations of ratings will
+            reach an acceptable outcome"
+    (is (= 167409079868000 (t/all-accepted-count d19-s01)))))
+
+
 (def day19-input (u/parse-puzzle-input t/parse 2023 19))
 
 (deftest day19-part1-soln
   (testing "Reproduces the answer for day19, part1"
     (is (= 319062 (t/day19-part1-soln day19-input)))))
+
+(deftest day19-part2-soln
+  (testing "Reproduces the answer for day19, part2"
+    (is (= 118638369682135 (t/day19-part2-soln day19-input)))))

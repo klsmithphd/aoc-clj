@@ -128,9 +128,23 @@
     (assoc-in ranges [rating :max] (if (= op "<") (dec num) num))
     (assoc-in ranges [rating :min] (if (= op ">") (inc num) num))))
 
+(defn options
+  [{:keys [min max]}]
+  (inc (- max min)))
+
 (defn range-limits
   [conditions]
-  (reduce update-range-limits default-ranges conditions))
+  (->> conditions
+       (reduce update-range-limits default-ranges)
+       vals
+       (map options)
+       (reduce *)))
+
+(defn all-accepted-count
+  [input]
+  (->> (all-accepted-paths input)
+       (map range-limits)
+       (reduce +)))
 
 (defn day19-part1-soln
   "Sort through all of the parts you've been given; what do you get if you 
@@ -138,3 +152,10 @@
    ultimately get accepted?"
   [input]
   (accepted-parts-sum input))
+
+(defn day19-part2-soln
+  "Consider only your list of workflows; the list of part ratings that the 
+   Elves wanted you to sort is no longer relevant. How many distinct 
+   combinations of ratings will be accepted by the Elves' workflows?"
+  [input]
+  (all-accepted-count input))
