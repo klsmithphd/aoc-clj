@@ -5,14 +5,11 @@
 (defn parse-rule
   [rule-str]
   (if (nil? (str/index-of rule-str ":"))
-    {:outcome (keyword rule-str)}
+    [(keyword rule-str)]
     (let [value (subs rule-str 0 1)
           oper  (subs rule-str 1 2)
           [num outcome] (str/split (subs rule-str 2) #":")]
-      {:value value
-       :oper oper
-       :num (read-string num)
-       :outcome (keyword outcome)})))
+      [value oper (read-string num) (keyword outcome)])))
 
 (defn parse-workflow
   [workflow-str]
@@ -33,7 +30,7 @@
 (defn cond->str
   "Construct a cond clause as a string for each of the non-terminal 
    workflow rules"
-  [{:keys [value oper num outcome]}]
+  [[value oper num outcome]]
   (str "(" oper " " value " " num ")" " " outcome))
 
 (defn workflow->fn-str
@@ -43,9 +40,7 @@
   (let [opening ["(fn [[x m a s]]"
                  "(cond"]
         body    (into opening (map cond->str (butlast rules)))
-        closing (into body [(str ":else "
-                                 (:outcome (last rules))
-                                 "))")])]
+        closing (into body [(str ":else " (first (last rules)) "))")])]
     (str/join " " closing)))
 
 (defn workflow->fn
@@ -89,3 +84,8 @@
    ultimately get accepted?"
   [input]
   (accepted-parts-sum input))
+
+
+(defn paths-to-accepted
+  [{:keys [workflows]}]
+  (let [start (workflows :in)]))

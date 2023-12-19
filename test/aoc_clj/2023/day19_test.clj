@@ -23,31 +23,17 @@
    "{x=2127,m=1623,a=2188,s=1013}"])
 
 (def d19-s01
-  {:workflows {:px  [{:value "a", :oper "<", :num 2006, :outcome :qkq}
-                     {:value "m", :oper ">", :num 2090, :outcome :A}
-                     {:outcome :rfg}],
-               :pv  [{:value "a", :oper ">", :num 1716, :outcome :R}
-                     {:outcome :A}],
-               :lnx [{:value "m", :oper ">", :num 1548, :outcome :A}
-                     {:outcome :A}],
-               :rfg [{:value "s", :oper "<", :num 537, :outcome :gd}
-                     {:value "x", :oper ">", :num 2440, :outcome :R}
-                     {:outcome :A}],
-               :qs  [{:value "s", :oper ">", :num 3448, :outcome :A}
-                     {:outcome :lnx}],
-               :qkq [{:value "x", :oper "<", :num 1416, :outcome :A}
-                     {:outcome :crn}],
-               :crn [{:value "x", :oper ">", :num 2662, :outcome :A}
-                     {:outcome :R}],
-               :in  [{:value "s", :oper "<", :num 1351, :outcome :px}
-                     {:outcome :qqz}]
-               :qqz [{:value "s", :oper ">", :num 2770, :outcome :qs}
-                     {:value "m", :oper "<", :num 1801, :outcome :hdj}
-                     {:outcome :R}],
-               :gd  [{:value "a", :oper ">", :num 3333, :outcome :R}
-                     {:outcome :R}],
-               :hdj [{:value "m", :oper ">", :num 838, :outcome :A}
-                     {:outcome :pv}]}
+  {:workflows {:px  [["a" "<" 2006 :qkq] ["m" ">" 2090 :A]   [:rfg]]
+               :pv  [["a" ">" 1716 :R]   [:A]]
+               :lnx [["m" ">" 1548 :A]   [:A]]
+               :rfg [["s" "<" 537 :gd]   ["x" ">" 2440 :R]   [:A]]
+               :qs  [["s" ">" 3448 :A]   [:lnx]]
+               :qkq [["x" "<" 1416 :A]   [:crn]]
+               :crn [["x" ">" 2662 :A]   [:R]]
+               :in  [["s" "<" 1351 :px]  [:qqz]]
+               :qqz [["s" ">" 2770 :qs]  ["m" "<" 1801 :hdj] [:R]]
+               :gd  [["a" ">" 3333 :R]   [:R]]
+               :hdj [["m" ">" 838 :A]    [:pv]]}
    :parts [[787 2655 1222 2876]
            [1679 44 2067 496]
            [2036 264 79 2244]
