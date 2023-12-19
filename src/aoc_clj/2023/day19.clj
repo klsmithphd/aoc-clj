@@ -9,7 +9,7 @@
     (let [value (subs rule-str 0 1)
           oper  (subs rule-str 1 2)
           [num outcome] (str/split (subs rule-str 2) #":")]
-      [value oper (read-string num) (keyword outcome)])))
+      [(keyword outcome) value oper (read-string num)])))
 
 (defn parse-workflow
   [workflow-str]
@@ -30,7 +30,7 @@
 (defn cond->str
   "Construct a cond clause as a string for each of the non-terminal 
    workflow rules"
-  [[value oper num outcome]]
+  [[outcome value oper num]]
   (str "(" oper " " value " " num ")" " " outcome))
 
 (defn workflow->fn-str
@@ -78,14 +78,63 @@
        (map (partial reduce +))
        (reduce +)))
 
+
+(def negate-comparisons
+  {"<" ">="
+   ">" "<="})
+
+(defn conditions
+  [other-conds [out val op num]]
+  (if (empty? other-conds)
+    [[out [[val op num]]]]
+    (let [last-conds (second (peek other-conds))]
+      (conj other-conds
+            [out (vec (filter
+                       some?
+                       (conj (vec (drop-last last-conds))
+                             (update (peek last-conds) 1 negate-comparisons)
+                             (when val [val op num]))))]))))
+
+(defn explicit-conditions
+  "Unrolls the conditional logic so that there's an explicit statement
+   of the conditions that must be true to reach another node in the 
+   workflow graph"
+  [{:keys [workflows]}]
+  (u/fmap #(reduce conditions [] %) workflows))
+
+(defn accepted-search
+  "Searches the rules space to find paths that reach an accepted state"
+  [rules paths [nxt-node conditions]]
+  (if (= :A nxt-node)
+    [(into paths conditions)]
+    (->> (rules nxt-node)
+         (mapcat #(accepted-search rules (into paths conditions) %)))))
+
+(defn all-accepted-paths
+  "Returns all mutually disjoint rule sets that lead to an accepted outcome"
+  [input]
+  (let [rules (explicit-conditions input)]
+    (mapcat #(accepted-search rules [] %) (rules :in))))
+
+(def default-ranges
+  {"x" {:min 1 :max 4000}
+   "m" {:min 1 :max 4000}
+   "a" {:min 1 :max 4000}
+   "s" {:min 1 :max 4000}})
+
+(defn update-range-limits
+  [ranges [rating op num]]
+  (if (or (= op "<") (= op "<="))
+    (assoc-in ranges [rating :max] (if (= op "<") (dec num) num))
+    (assoc-in ranges [rating :min] (if (= op ">") (inc num) num))))
+
+(defn range-limits
+  [conditions]
+  (reduce update-range-limits default-ranges conditions))
+
 (defn day19-part1-soln
   "Sort through all of the parts you've been given; what do you get if you 
    add together all of the rating numbers for all of the parts that 
    ultimately get accepted?"
   [input]
   (accepted-parts-sum input))
-
-
-(defn paths-to-accepted
-  [{:keys [workflows]}]
-  (let [start (workflows :in)]))
