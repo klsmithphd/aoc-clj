@@ -243,6 +243,7 @@
 
 (defn all-paths-dfs
   "Return a seq of all paths (if any) in a `graph` from `start` until 
-   reaching a vertex satisfying the `finish?` predicate"
+   reaching a vertex satisfying the `finish?` predicate by using a 
+   Depth-First Search (DFS)"
   [graph start finish?]
   (dfs graph finish? [start] #{start}))
