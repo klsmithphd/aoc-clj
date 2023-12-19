@@ -78,12 +78,14 @@
        (map (partial reduce +))
        (reduce +)))
 
-
 (def negate-comparisons
   {"<" ">="
    ">" "<="})
 
 (defn conditions
+  "Each subsequent condition is tacked on to the negation of all previous
+   conditions. That is, if the first condition says `s < 1351`, then
+   every subsequent condition should contain `s >= 1351`."
   [other-conds [out val op num]]
   (if (empty? other-conds)
     [[out [[val op num]]]]
@@ -117,33 +119,42 @@
     (mapcat #(accepted-search rules [] %) (rules :in))))
 
 (def default-ranges
+  "Each of the four ratings (x, m, a, s) can have an integer value ranging 
+   from a minimum of 1 to a maximum of 4000"
   {"x" {:min 1 :max 4000}
    "m" {:min 1 :max 4000}
    "a" {:min 1 :max 4000}
    "s" {:min 1 :max 4000}})
 
 (defn update-range-limits
+  "Given the condition specified in the second argument, update
+   the range to respect the condition."
   [ranges [rating op num]]
   (if (or (= op "<") (= op "<="))
     (assoc-in ranges [rating :max] (if (= op "<") (dec num) num))
     (assoc-in ranges [rating :min] (if (= op ">") (inc num) num))))
 
-(defn options
+(defn option-count
   [{:keys [min max]}]
   (inc (- max min)))
 
-(defn range-limits
+(defn path-option-count
+  "Computes the total number of options that could satisfy the
+   conditions for the x, m, a, s rating values"
   [conditions]
   (->> conditions
        (reduce update-range-limits default-ranges)
        vals
-       (map options)
+       (map option-count)
        (reduce *)))
 
 (defn all-accepted-count
+  "Given the workflows in the input, compute the number of possible
+   unique combinations of ratings values, constrained between 1 and 4000,
+   that will result in an acceptable part outcome"
   [input]
   (->> (all-accepted-paths input)
-       (map range-limits)
+       (map path-option-count)
        (reduce +)))
 
 (defn day19-part1-soln

@@ -41,6 +41,8 @@
            [2127 1623 2188 1013]]})
 
 (def d19-s01-explicit
+  "In this explicit representation, the conditions required to be routed
+   to each outcome (or subsequent workflow) are fully spelled out"
   {:px  [[:qkq [["a" "<" 2006]]]
          [:A   [["a" ">=" 2006] ["m" ">" 2090]]]
          [:rfg [["a" ">=" 2006] ["m" "<=" 2090]]]]
@@ -68,6 +70,8 @@
          [:pv  [["m" "<=" 838]]]]})
 
 (def d19-s01-all-paths
+  "For the sample data, the conditions along each of the possible paths
+   resulting in an accepted outcome"
   [[["s" "<" 1351]  ["a" "<" 2006]  ["x" "<" 1416]]
    [["s" "<" 1351]  ["a" "<" 2006]  ["x" ">=" 1416] ["x" ">" 2662]]
    [["s" "<" 1351]  ["a" ">=" 2006] ["m" ">" 2090]]
@@ -100,7 +104,7 @@
     (is (= :A (t/apply-workflows d19-s01-fns (nth (:parts d19-s01) 4))))))
 
 (deftest accepted-parts-test
-  (testing "Returns the parts that are accepted"
+  (testing "Returns the parts (expressed as xmas ratings values) that are accepted"
     (is (= [[787 2655 1222 2876]
             [2036 264 79 2244]
             [2127 1623 2188 1013]]
