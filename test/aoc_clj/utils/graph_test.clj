@@ -79,3 +79,21 @@
 (deftest a-star-test
   (testing "Can find the shortest path between two vertices using A* alg"
     (is (= [:a :e :f :g] (g/a-star t5 :a (u/equals? :g) h5)))))
+
+
+(deftest all-paths-dfs-test
+  (testing "Finds all of the paths from start to finish using a depth-first
+            search"
+    (is (= [[:a :b :f :g]] (g/all-paths-dfs t2 :a (u/equals? :g))))
+    (is (= [[:a :b :c :d :g]
+            [:a :e :f :g]] (g/all-paths-dfs t5 :a (u/equals? :g))))
+    (is (= [[:a :b :d :c :f]
+            [:a :b :d :e :f]
+            [:a :b :e :d :c :f]
+            [:a :b :e :f]
+            [:a :c :d :b :e :f]
+            [:a :c :d :e :f]
+            [:a :c :f]
+            [:a :d :b :e :f]
+            [:a :d :c :f]
+            [:a :d :e :f]] (g/all-paths-dfs t3 :a (u/equals? :f))))))
