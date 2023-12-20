@@ -137,19 +137,30 @@
 
 (defn after-n-buttons
   [modules n]
-  (if (zero? n)
-    pulse-history-init
-    (loop [countdown (dec n)
-           state     (process-pulses (init-state modules))]
-      (if (<= countdown 0)
-        state
-        (recur (dec countdown)
-               (-> state button-press process-pulses))))))
+  (let [init (init-state modules)]
+    (if (zero? n)
+      init
+      (loop [countdown (dec n)
+             state     (process-pulses init)]
+        (if (<= countdown 0)
+          state
+          (recur (dec countdown)
+                 (-> state button-press process-pulses)))))))
+
+(defn pulses-after-1000-brute-force
+  [modules]
+  (let [{:keys [low high]} (:pulse-history (after-n-buttons modules 1000))]
+    (* low high)))
 
 (defn pulses-after-1000
   [modules]
   (let [{:keys [low high buttons]} (pulses-until-cycle modules)
         units     (quot 1000 buttons)
-        remainder (rem 1000 buttons)]
-    (* (+ (* low units) (* remainder low))
-       (+ (* high units) (* remainder high)))))
+        remainder (rem 1000 buttons)
+        rest-sim  (:pulse-history (after-n-buttons modules remainder))]
+    (* (+ (* low units)  (:low rest-sim))
+       (+ (* high units) (:high rest-sim)))))
+
+(defn day20-part1-soln
+  [input]
+  (pulses-after-1000-brute-force input))

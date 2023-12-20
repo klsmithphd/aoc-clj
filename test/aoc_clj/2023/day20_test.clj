@@ -53,12 +53,6 @@
             "inv" {"a" :low}
             "con" {"a" :low "b" :low}} (t/initial-circuit-state d20-s02)))))
 
-(= (-> (t/init-state d20-s01) t/process-pulses)
-   (t/after-n-buttons d20-s01 1))
-
-;; (t/process-pulses (t/init-state d20-s01))
-(t/after-n-buttons d20-s01 1)
-
 (deftest pulse-history-test
   (testing "Confirms the number of high and low pulses after processing
             initial pulse"
@@ -95,11 +89,17 @@
     (is (= 32000000 (t/pulses-after-1000 d20-s01)))
     (is (= 11687500 (t/pulses-after-1000 d20-s02)))))
 
+(deftest pulses-after-1000-brute-force
+  (testing "Product of the number of pulses of each type after processing
+            1000 button presses by actually simulating all those presses"
+    (is (= 32000000 (t/pulses-after-1000-brute-force d20-s01)))
+    (is (= 11687500 (t/pulses-after-1000-brute-force d20-s02)))))
+
 (def day20-input (u/parse-puzzle-input t/parse 2023 20))
 
-;; (deftest day20-part1-soln
-;;   (testing "Reproduces the answer for day20, part1"
-;;     (is (= 0 (t/day20-part1-soln day20-input)))))
+(deftest day20-part1-soln
+  (testing "Reproduces the answer for day20, part1"
+    (is (= 821985143 (t/day20-part1-soln day20-input)))))
 
 ;; (deftest day20-part2-soln
 ;;   (testing "Reproduces the answer for day20, part2"
