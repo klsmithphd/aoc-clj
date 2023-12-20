@@ -88,13 +88,20 @@
                                    (new-pulses dest to-id :low)
                                    (new-pulses dest to-id :high)))))))
 
+(defn process-output-pulse
+  "A pulse that isn't sent to one of the known modules must be an
+   output pulse. Update the state to count how many signals were sent
+   to rx during this cycle"
+  [state to-id _ pulse _]
+  (update-in state [to-id pulse] inc))
+
 (defn type->update-fn
   [type]
   (case type
     :broadcast process-broadcast-pulse
     :flip-flop process-flip-flop-pulse
     :conjunction process-conjunction-pulse
-    (fn [state _ _ _ _] state)))
+    process-output-pulse))
 
 (defn process-pulse
   [{:keys [modules pulses] :as state}]
@@ -113,13 +120,21 @@
   {:modules       modules
    :circuit-state (initial-circuit-state modules)
    :pulses        pulses-init
-   :pulse-history pulse-history-init})
+   :pulse-history pulse-history-init
+   "output"        {:high 0 :low 0}
+   "rx"            {:high 0 :low 0}})
+
+(defn reset-rx
+  [state]
+  (if (= {:high 0 :low 1} (state "rx"))
+    state
+    (assoc state "rx" {:high 0 :low 0})))
 
 (defn process-pulses
   [init-state]
   (loop [state init-state]
     (if (not (peek (:pulses state)))
-      state
+      (reset-rx state)
       (recur (process-pulse state)))))
 
 (defn button-press
@@ -161,6 +176,17 @@
     (* (+ (* low units)  (:low rest-sim))
        (+ (* high units) (:high rest-sim)))))
 
+(defn presses-until-single-rx-low-pulse
+  [modules]
+  (loop [state (process-pulses (init-state modules))]
+    (if (= {:high 0 :low 1} (get state "rx"))
+      (get-in state [:pulse-history :buttons])
+      (recur (-> state button-press process-pulses)))))
+
 (defn day20-part1-soln
   [input]
   (pulses-after-1000-brute-force input))
+
+(defn day20-part2-soln
+  [input]
+  (presses-until-single-rx-low-pulse input))

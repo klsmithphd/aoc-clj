@@ -42,7 +42,7 @@
     (is (= ["a"]     (t/conj-inputs d20-s02 "inv")))
     (is (= ["a" "b"] (t/conj-inputs d20-s02 "con")))))
 
-(deftest initial-state-test
+(deftest initial-circuit-state-test
   (testing "Constructs the initial state of the connected modules"
     (is (= {"a" :off
             "b" :off
