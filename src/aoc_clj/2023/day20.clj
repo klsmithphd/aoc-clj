@@ -1,15 +1,155 @@
 (ns aoc-clj.2023.day20
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [aoc-clj.utils.core :as u]))
 
 (defn parse-line
   [line]
   (let [[l r] (str/split line #" -> ")]
-    {:type (cond (= "broadcaster" l) :broadcast
-                 (str/starts-with? l "%") :flip-flop
-                 (str/starts-with? l "&") :conjunction)
-     :id (if (= "broadcaster" l) l (subs l 1))
-     :dest (str/split r #", ")}))
+    [(if (= "broadcaster" l) l (subs l 1))
+     {:type (cond (= "broadcaster" l) :broadcast
+                  (str/starts-with? l "%") :flip-flop
+                  (str/starts-with? l "&") :conjunction)
+      :dest (str/split r #", ")}]))
 
 (defn parse
   [input]
-  (map parse-line input))
+  (into {} (map parse-line input)))
+
+(defn conj-inputs
+  "Returns the input modules that send signals into the given conjunction module"
+  [modules conj-module]
+  (map key (filter #(some #{conj-module} (:dest (val %))) modules)))
+
+(defn state-setup
+  "For each non-broadcast module, return the initial state of that module
+   
+   Flip-flop modules are initially off.
+   Conjunction modules initially default to remembering a low pulse for each
+   input"
+  [modules [id {:keys [type]}]]
+  (case type
+    :flip-flop   [id :off]
+    :conjunction [id (into {} (map vector (conj-inputs modules id) (repeat :low)))]
+    nil))
+
+(defn initial-circuit-state
+  "Computes the initial state of the circuit based on the type of all the
+   modules and their connections"
+  [modules]
+  (into {} (remove nil? (map #(state-setup modules %) modules))))
+
+(defn new-pulses
+  [dest from-id pulse]
+  (map vector dest (repeat from-id) (repeat pulse)))
+
+(defn process-broadcast-pulse
+  "There is a single broadcast module (named broadcaster). 
+   When it receives a pulse, it sends the same pulse to all of its 
+   destination modules."
+  [state _ _ pulse dest]
+  (-> state
+      (update :pulses #(into % (new-pulses dest :broadcast pulse)))
+      (update-in [:pulse-history :buttons] inc)))
+
+(def flip-state
+  {:on :off :off :on})
+
+(defn process-flip-flop-pulse
+  "Flip-flop modules (prefix %) are either on or off; they are initially off. 
+   If a flip-flop module receives a high pulse, it is ignored and nothing 
+   happens. However, if a flip-flop module receives a low pulse, 
+   it flips between on and off. 
+   If it was off, it turns on and sends a high pulse. 
+   If it was on, it turns off and sends a low pulse."
+  [{:keys [circuit-state] :as state} to-id _ pulse dest]
+  (if (= :high pulse)
+    state
+    (-> state
+        (update :pulses #(into % (if (= :on (circuit-state to-id))
+                                   (new-pulses dest to-id :low)
+                                   (new-pulses dest to-id :high))))
+        (update-in [:circuit-state to-id] flip-state))))
+
+(defn process-conjunction-pulse
+  "Conjunction modules (prefix &) remember the type of the most recent 
+   pulse received from each of their connected input modules; 
+   they initially default to remembering a low pulse for each input. 
+   When a pulse is received, the conjunction module first updates its 
+   memory for that input. 
+   Then, if it remembers high pulses for all inputs, it sends a low pulse; 
+   otherwise, it sends a high pulse."
+  [{:keys [circuit-state] :as state} to-id from-id pulse dest]
+  (let [new-circuit-state (assoc-in circuit-state [to-id from-id] pulse)]
+    (-> state
+        (assoc :circuit-state new-circuit-state)
+        (update :pulses #(into % (if (every?
+                                      (u/equals? :high)
+                                      (vals (new-circuit-state to-id)))
+                                   (new-pulses dest to-id :low)
+                                   (new-pulses dest to-id :high)))))))
+
+(defn type->update-fn
+  [type]
+  (case type
+    :broadcast process-broadcast-pulse
+    :flip-flop process-flip-flop-pulse
+    :conjunction process-conjunction-pulse
+    (fn [state _ _ _ _] state)))
+
+(defn process-pulse
+  [{:keys [modules pulses] :as state}]
+  (let [[to-id from-id pulse] (peek pulses)
+        {:keys [type dest]}  (get modules to-id)]
+    (-> state
+        (update :pulses pop)
+        ((type->update-fn type) to-id from-id pulse dest)
+        (update-in [:pulse-history pulse] inc))))
+
+(def button-press-pulse ["broadcaster" "button" :low])
+(def pulse-history-init {:low 0 :high 0 :buttons 0})
+(def pulses-init (conj clojure.lang.PersistentQueue/EMPTY button-press-pulse))
+(defn init-state
+  [modules]
+  {:modules       modules
+   :circuit-state (initial-circuit-state modules)
+   :pulses        pulses-init
+   :pulse-history pulse-history-init})
+
+(defn process-pulses
+  [init-state]
+  (loop [state init-state]
+    (if (not (peek (:pulses state)))
+      state
+      (recur (process-pulse state)))))
+
+(defn button-press
+  [state]
+  (update state :pulses conj button-press-pulse))
+
+(defn pulses-until-cycle
+  [modules]
+  (let [init               (init-state modules)
+        init-circuit-state (:circuit-state init)]
+    (loop [state (process-pulses init)]
+      (if (= init-circuit-state (:circuit-state state))
+        (:pulse-history state)
+        (recur (-> state button-press process-pulses))))))
+
+(defn after-n-buttons
+  [modules n]
+  (if (zero? n)
+    pulse-history-init
+    (loop [countdown (dec n)
+           state     (process-pulses (init-state modules))]
+      (if (<= countdown 0)
+        state
+        (recur (dec countdown)
+               (-> state button-press process-pulses))))))
+
+(defn pulses-after-1000
+  [modules]
+  (let [{:keys [low high buttons]} (pulses-until-cycle modules)
+        units     (quot 1000 buttons)
+        remainder (rem 1000 buttons)]
+    (* (+ (* low units) (* remainder low))
+       (+ (* high units) (* remainder high)))))
