@@ -2,6 +2,9 @@
   (:require [aoc-clj.utils.grid :refer [height width value neighbors-4]]
             [aoc-clj.utils.grid.vecgrid :as vg]))
 
+(def steps-part1 64)
+(def steps-part2 26501365)
+
 (def charmap {\S :start \. :plot \# :rock})
 
 (defn parse
@@ -39,4 +42,4 @@
   "Starting from the garden plot marked S on your map, how many garden plots 
    could the Elf reach in exactly 64 steps?"
   [input]
-  (reachable-steps input 64))
+  (reachable-steps input steps-part1))
