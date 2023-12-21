@@ -1,6 +1,7 @@
 (ns aoc-clj.2023.day20
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.math :as math]))
 
 (defn parse-line
   [line]
@@ -124,17 +125,17 @@
    "output"        {:high 0 :low 0}
    "rx"            {:high 0 :low 0}})
 
-(defn reset-rx
-  [state]
-  (if (= {:high 0 :low 1} (state "rx"))
-    state
-    (assoc state "rx" {:high 0 :low 0})))
+;; (defn reset-rx
+;;   [state]
+;;   (if (= {:high 0 :low 1} (state "rx"))
+;;     state
+;;     (assoc state "rx" {:high 0 :low 0})))
 
 (defn process-pulses
   [init-state]
   (loop [state init-state]
     (if (not (peek (:pulses state)))
-      (reset-rx state)
+      state
       (recur (process-pulse state)))))
 
 (defn button-press
@@ -179,9 +180,45 @@
 (defn presses-until-single-rx-low-pulse
   [modules]
   (loop [state (process-pulses (init-state modules))]
-    (if (= {:high 0 :low 1} (get state "rx"))
+    (if (> (get-in state ["rx" :low]) 0)
       (get-in state [:pulse-history :buttons])
       (recur (-> state button-press process-pulses)))))
+
+(defn module-quadrants
+  "Use the fact that the full puzzle data is effectively four isolated
+   quadrants that run in parallel, so we can run each quadrant by itself.
+   
+   This function splits the input data according to the different 
+   modules that the broadcaster reachest out to."
+  [modules]
+  (let [start-nodes (get-in modules ["broadcaster" :dest])]
+    (map #(assoc-in modules ["broadcaster" :dest] [%]) start-nodes)))
+
+
+;; TODO this is fast hacky mess that needs to be cleaned up
+(defn prune-other-rx-inputs
+  "Remove the intervening conjunction nodes from the other quadrants that
+   should be disconnected to test the quadrant in isolation"
+  [modules]
+  (let [first-node (first (get-in modules ["broadcaster" :dest]))
+        first-conj (->> (get-in modules [first-node :dest])
+                        (filter #(= :conjunction (get-in modules [% :type])))
+                        first)
+        first-conj-dests (get-in modules [first-conj :dest])
+        rx-prev    (key (first (filter #(= ["rx"] (:dest (val %))) modules)))
+        final-conjs (map key (filter #(= [rx-prev] (:dest (val %))) modules))
+        to-remove (remove (set first-conj-dests) final-conjs)]
+    (apply dissoc modules to-remove)))
+
+(defn buttons-till-rx
+  "Compute how many button presses each quadrant takes in isolation
+   until it emits a single low rx value and then find the least common
+   multiple (LCM) of the four quadrant values"
+  [modules]
+  (->> (module-quadrants modules)
+       (map prune-other-rx-inputs)
+       (map presses-until-single-rx-low-pulse)
+       (apply math/lcm)))
 
 (defn day20-part1-soln
   [input]
@@ -189,4 +226,5 @@
 
 (defn day20-part2-soln
   [input]
-  (presses-until-single-rx-low-pulse input))
+  (buttons-till-rx input))
+

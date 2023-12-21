@@ -101,6 +101,6 @@
   (testing "Reproduces the answer for day20, part1"
     (is (= 821985143 (t/day20-part1-soln day20-input)))))
 
-;; (deftest day20-part2-soln
-;;   (testing "Reproduces the answer for day20, part2"
-;;     (is (= 0 (t/day20-part2-soln day20-input)))))
+(deftest day20-part2-soln
+  (testing "Reproduces the answer for day20, part2"
+    (is (= 240853834793347 (t/day20-part2-soln day20-input)))))
