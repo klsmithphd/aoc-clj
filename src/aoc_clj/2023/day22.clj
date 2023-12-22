@@ -9,7 +9,7 @@
 
 (defn parse
   [input]
-  (sort-by (comp peek first) (map parse-line input)))
+  (map parse-line input))
 
 (defn lowest-z
   [brick]
@@ -57,7 +57,7 @@
 
 (defn disintegratable-count
   [bricks]
-  (let [placed-bricks (place-bricks (map brick-z-rep bricks))]
+  (let [placed-bricks (place-bricks (sort-by lowest-z (map brick-z-rep bricks)))]
     (->> (:bricks placed-bricks)
          (filter #(disintegratable? placed-bricks %))
          count)))

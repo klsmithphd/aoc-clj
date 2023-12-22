@@ -12,6 +12,12 @@
    "0,1,6~2,1,6"
    "1,1,8~1,1,9"])
 
+(def d22-s02-raw
+  ["0,0,1~0,1,1"
+   "1,1,1~1,1,1"
+   "0,0,2~0,0,2"
+   "0,1,2~1,1,2"])
+
 (def d22-s01
   [[[1 0 1] [1 2 1]]
    [[0 0 2] [2 0 2]]
@@ -91,7 +97,8 @@
 
 (deftest disintegratable-count-test
   (testing "Counts how many placed bricks can be disintegrated"
-    (is (= 5 (t/disintegratable-count d22-s01)))))
+    (is (= 5 (t/disintegratable-count d22-s01)))
+    (is (= 3 (t/disintegratable-count (t/parse d22-s02-raw))))))
 
 (def day22-input (u/parse-puzzle-input t/parse 2023 22))
 
