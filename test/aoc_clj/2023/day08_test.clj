@@ -65,8 +65,8 @@
 
 (deftest steps-to-zzz
   (testing "Correctly counts the number of steps to get to ZZZ"
-    (is (= 2 (t/steps-to-zzz d08-s01)))
-    (is (= 6 (t/steps-to-zzz d08-s02)))))
+    (is (= 2 (t/steps-to-zzz d08-s01 "AAA")))
+    (is (= 6 (t/steps-to-zzz d08-s02 "AAA")))))
 
 (deftest start-nodes-test
   (testing "Finds all the start nodes"
@@ -83,6 +83,6 @@
   (testing "Reproduces the answer for day08, part1"
     (is (= 12169 (t/day08-part1-soln day08-input)))))
 
-(deftest ^:slow day08-part2-soln
+(deftest day08-part2-soln
   (testing "Reproduces the answer for day08, part2"
-    (is (= 1 (t/day08-part2-soln day08-input)))))
+    (is (= 12030780859469 (t/day08-part2-soln day08-input)))))

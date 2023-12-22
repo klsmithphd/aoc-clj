@@ -1,6 +1,7 @@
 (ns aoc-clj.2023.day08
-  (:require [aoc-clj.utils.core :as u]
-            [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.math :as math]))
 
 (defn parse-node
   [s]
@@ -17,41 +18,40 @@
     {:instructions (map {\L :left \R :right} (ffirst chunks))
      :nodes (parse-nodes (first (rest chunks)))}))
 
+(defn start-nodes
+  "Find all the nodes in the input data that end with 'A'"
+  [nodes]
+  (filter #(str/ends-with? % "A") (keys nodes)))
+
+(defn finished?
+  "The end target is a node that ends in 'Z'"
+  [node]
+  (str/ends-with? node "Z"))
+
 (defn steps-to-zzz
-  [{:keys [instructions nodes]}]
-  (loop [node "AAA" steps 0 insts (cycle instructions)]
-    (if (= "ZZZ" node)
+  "Apply each of the successive L/R instructions to navigate the map
+   from the provided starting node until reaching a node ending in 'Z'. "
+  [{:keys [instructions nodes]} start]
+  (loop [node start steps 0 insts (cycle instructions)]
+    (if (finished? node)
       steps
       (recur (get-in nodes [node (first insts)])
              (inc steps)
              (rest insts)))))
 
-(defn start-nodes
-  [nodes]
-  (filter #(str/ends-with? % "A") (keys nodes)))
-
-(defn finished?
-  [nodes]
-  (every? #(str/ends-with? % "Z") nodes))
-
 (defn ghost-steps-to-zzz
-  [{:keys [instructions nodes]}]
-  (loop [locs (start-nodes nodes) steps 0 insts (cycle instructions)]
-    (if (finished? locs)
-      steps
-      (recur (doall (map #(get-in nodes [% (first insts)]) locs))
-             (inc steps)
-             (next insts)))))
-
-(defn next-locations
-  [nodes locs inst]
-  (map #(get-in nodes [% inst]) locs))
+  "Finds the number of steps it takes for each starting position
+   to reach its end and then finds the least common multiple of all
+   those step counts"
+  [{:keys [nodes] :as input}]
+  (->> (map #(steps-to-zzz input %) (start-nodes nodes))
+       (apply math/lcm)))
 
 (defn day08-part1-soln
   "Starting at AAA, follow the left/right instructions.
    How many steps are required to reach ZZZ?"
   [input]
-  (steps-to-zzz input))
+  (steps-to-zzz input "AAA"))
 
 (defn day08-part2-soln
   "Simultaneously start on every node that ends with A.
