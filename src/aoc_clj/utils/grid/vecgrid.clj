@@ -1,11 +1,15 @@
 (ns aoc-clj.utils.grid.vecgrid
   (:require [aoc-clj.utils.grid :as grid :refer [Grid2D]]))
 
+(defn get-value
+  [v [x y]]
+  (get-in v [y x]))
+
 (defrecord VecGrid2D [v]
   Grid2D
   (width [_] (count (first v)))
   (height [_] (count v))
-  (value [_ [x y]] (get-in v [y x]))
+  (value [_ pos] (get-value v pos))
   (slice
     [_ dim idx]
     (->VecGrid2D
@@ -15,11 +19,11 @@
   (neighbors-4
     [_ pos]
     (let [locs (grid/adj-coords-2d pos)]
-      (zipmap locs (map #(get-in v (-> % reverse vec)) locs))))
+      (zipmap locs (map #(get-value v %) locs))))
   (neighbors-8
     [_ pos]
     (let [locs (grid/adj-coords-2d pos :include-diagonals true)]
-      (zipmap locs (map #(get-in v (-> % reverse vec)) locs)))))
+      (zipmap locs (map #(get-value v %) locs)))))
 
 (defn ascii->VecGrid2D
   "Convert an ASCII represention of a 2D grid into
