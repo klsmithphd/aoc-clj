@@ -62,7 +62,11 @@
 
 (def day21-input (u/parse-puzzle-input t/parse 2023 21))
 
-
 (deftest day21-part1-soln
   (testing "Reproduces the answer for day21, part1"
     (is (= 3764 (t/day21-part1-soln day21-input)))))
+
+;; (deftest day21-part2-soln
+;;   (testing "Reproduces the answer for day21, part2"
+;;     ;; TOO HIGH
+;;     (is (= 622926942173582 (t/day21-part2-soln day21-input)))))

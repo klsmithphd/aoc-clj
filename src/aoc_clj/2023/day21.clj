@@ -63,8 +63,39 @@
   [grid n]
   (count (reachable-plots (reachable-plot-distances grid (start-pos grid)) n)))
 
+(defn tile-repetitions
+  [n tile-size]
+  (-> (- n (quot tile-size 2))
+      (quot tile-size)))
+
+(defn inf-reachable-steps
+  "The idea for this approach came from
+   https://github.com/villuna/aoc23/wiki/A-Geometric-solution-to-advent-of-code-2023,-day-21"
+  [grid n]
+  (let [tile-size (height grid)]
+    (if (< n (quot tile-size 2))
+      (reachable-steps grid n)
+      (let [tile-mults (tile-repetitions n tile-size)
+            dists      (reachable-plot-distances grid (start-pos grid))
+            even-tile-count (count (filter even? (vals dists)))
+            odd-tile-count  (count (filter odd? (vals dists)))
+            even-corner-count (count (filter #(and (even? %)
+                                                   (> % 65)) (vals dists)))
+            odd-corner-count  (count (filter #(and (odd? %)
+                                                   (> % 65)) (vals dists)))]
+        (+ (* (inc tile-mults) (inc tile-mults) odd-tile-count)
+           (* tile-mults tile-mults even-tile-count)
+           (* tile-mults even-corner-count)
+           (- (* (inc tile-mults) odd-corner-count)))))))
+
 (defn day21-part1-soln
   "Starting from the garden plot marked S on your map, how many garden plots 
    could the Elf reach in exactly 64 steps?"
   [input]
   (reachable-steps input steps-part1))
+
+(defn day21-part2-soln
+  "Starting from the garden plot marked S on your infinite map, how many garden
+   plots could the Elf reach in exactly 26501365 steps?"
+  [input]
+  (inf-reachable-steps input steps-part2))
