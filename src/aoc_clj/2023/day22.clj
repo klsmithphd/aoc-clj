@@ -11,17 +11,6 @@
   [input]
   (sort-by (comp peek first) (map parse-line input)))
 
-;; (defn expanded-brick-coords
-;;   [[[sx sy sz] [ex ey ez]]]
-;;   (for [z (range sz (inc ez))
-;;         y (range sy (inc ey))
-;;         x (range sx (inc ex))]
-;;     [x y z]))
-
-;; (defn xy-vals
-;;   [brick]
-;;   (set (map (comp vec #(take 2 %)) brick)))
-
 (defn lowest-z
   [brick]
   (apply min (keys brick)))
@@ -47,10 +36,6 @@
     (if (at-rest? z-index next-brick)
       next-brick
       (recur (u/kmap dec next-brick)))))
-
-;; (defn update-z-index
-;;   [index brick]
-;;   (merge-with into index brick))
 
 (defn place-brick
   [{:keys [z-index bricks]} brick]
@@ -80,13 +65,3 @@
 (defn day22-part1-soln
   [input]
   (disintegratable-count input))
-
-
-
-;; Imagine overhead view of grid
-;; [x y]
-;; and then keep track of each z-depth
-;; There's what ever's at z= 1, z = 2, etc.
-;; Then each brick can be lowered until it's resting on a brick cell below it
-;; We need to retain the identity of bricks because we need to figure out which
-;; ones support one another

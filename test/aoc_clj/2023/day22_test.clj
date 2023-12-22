@@ -31,33 +31,9 @@
    {8 #{[1 1]}
     9 #{[1 1]}}])
 
-;; (def d22-s01-expanded
-;;   [[[1 0 1] [1 1 1] [1 2 1]]
-;;    [[0 0 2] [1 0 2] [2 0 2]]
-;;    [[0 2 3] [1 2 3] [2 2 3]]
-;;    [[0 0 4] [0 1 4] [0 2 4]]
-;;    [[2 0 5] [2 1 5] [2 2 5]]
-;;    [[0 1 6] [1 1 6] [2 1 6]]
-;;    [[1 1 8] [1 1 9]]])
-
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d22-s01 (t/parse d22-s01-raw)))))
-
-;; (deftest expanded-brick-coords-test
-;;   (testing "Expands the input into occupied coordinate cells"
-;;     (is (= d22-s01-expanded (map t/expanded-brick-coords d22-s01)))))
-
-;; (deftest xy-vals-test
-;;   (testing "Returns only the xy positions of a brick"
-;;     (is (= [#{[1 0] [1 1] [1 2]}
-;;             #{[0 0] [1 0] [2 0]}
-;;             #{[0 2] [1 2] [2 2]}
-;;             #{[0 0] [0 1] [0 2]}
-;;             #{[2 0] [2 1] [2 2]}
-;;             #{[0 1] [1 1] [2 1]}
-;;             #{[1 1]}]
-;;            (map t/xy-vals d22-s01-expanded)))))
 
 (deftest lowest-z-test
   (testing "Computes the lowest z position of a brick"
