@@ -1,5 +1,5 @@
 (ns aoc-clj.2023.day21
-  (:require [aoc-clj.utils.grid :refer [height width value neighbors-4]]
+  (:require [aoc-clj.utils.grid :refer [height width neighbors-4]]
             [aoc-clj.utils.grid.vecgrid :as vg]))
 
 (def steps-part1 64)
