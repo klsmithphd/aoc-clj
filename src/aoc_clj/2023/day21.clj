@@ -83,10 +83,10 @@
                                                    (> % 65)) (vals dists)))
             odd-corner-count  (count (filter #(and (odd? %)
                                                    (> % 65)) (vals dists)))]
-        (+ (* (inc tile-mults) (inc tile-mults) odd-tile-count)
-           (* tile-mults tile-mults even-tile-count)
-           (* tile-mults even-corner-count)
-           (- (* (inc tile-mults) odd-corner-count)))))))
+        (+ (* (inc tile-mults) (inc tile-mults) even-tile-count)
+           (* tile-mults tile-mults odd-tile-count)
+           (* tile-mults odd-corner-count)
+           (- (* (inc tile-mults) even-corner-count)))))))
 
 (defn day21-part1-soln
   "Starting from the garden plot marked S on your map, how many garden plots 

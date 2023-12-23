@@ -68,5 +68,6 @@
 
 ;; (deftest day21-part2-soln
 ;;   (testing "Reproduces the answer for day21, part2"
-;;     ;; TOO HIGH
+;;     ;; TOO HIGH: 622926942173582
+;;     ;; TOO LOW:  622926894430664
 ;;     (is (= 622926942173582 (t/day21-part2-soln day21-input)))))
