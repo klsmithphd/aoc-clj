@@ -99,6 +99,18 @@
     (is (= 5 (t/disintegratable-count d22-s01)))
     (is (= 3 (t/disintegratable-count (t/parse d22-s02-raw))))))
 
+(deftest disintegration-chain-test
+  (testing "Constructs the chain of dependencies among the bricks"
+    (is (= [[0 [1 2]]  ;; A supports B and C
+            [1 [3 4]]  ;; B supports D and E
+            [2 [3 4]]  ;; C supports D and E
+            [3 [5]]    ;; D supports F
+            [4 [5]]    ;; E supports F
+            [5 [6]]    ;; F supports G
+            [6 []]]    ;; G supports nothing
+           (t/disintegratable-chain d22-s01)))))
+
+
 (def day22-input (u/parse-puzzle-input t/parse 2023 22))
 
 (deftest day22-part1-soln

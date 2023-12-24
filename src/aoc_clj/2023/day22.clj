@@ -53,8 +53,8 @@
 
 (defn disintegratable?
   [{:keys [z-index bricks]} brick]
-  (let [brick-z      (highest-z brick)
-        above-bricks (filter #(= (inc brick-z) (lowest-z %)) bricks)
+  (let [z-above-brick    (inc (highest-z brick))
+        above-bricks     (filter #(= z-above-brick (lowest-z %)) bricks)
         z-index-wo-brick (merge-with set/difference z-index brick)]
     (or (empty? above-bricks)
         (every? #(at-rest? z-index-wo-brick %) above-bricks))))
@@ -65,6 +65,66 @@
     (->> (:bricks placed-bricks)
          (filter #(disintegratable? placed-bricks %))
          count)))
+
+(defn disintegration-chain-step
+  [{:keys [bricks]} id brick]
+  (let [z-above-brick    (inc (highest-z brick))
+        touching-bricks  (->> (map-indexed vector bricks)
+                              (filter #(= z-above-brick (lowest-z (second %))))
+                              (filter #(set/intersection
+                                        (first (vals brick))
+                                        (first (vals (second %))))))]
+    [id (mapv first touching-bricks)]))
+
+(defn unroll
+  [[a b]]
+  (if (empty? b)
+    [[a]]
+    (map #(vector a %) b)))
+
+
+(defn disintegratable-chain
+  "Adjacency list"
+  [bricks]
+  (let [placed-bricks (->> (map brick-z-rep bricks)
+                           (sort-by lowest-z)
+                           place-bricks)]
+    (->> (map-indexed
+          (partial disintegration-chain-step placed-bricks)
+          (:bricks placed-bricks))
+         (mapcat unroll))))
+
+(def foo [[0 1] [0 2] [1 3] [1 4] [2 3] [2 4] [3 5] [4 5] [5 6] [6]])
+
+(defn indegree
+  [adjaceny brick]
+  (count (filter #(= brick (second %)) adjaceny)))
+
+(defn children
+  [adjacency brick]
+  (->>  (filter #(= brick (first %)) adjacency)
+        (map second)))
+
+(indegree foo 6)
+
+(defn adj-disintegratable?
+  [adjacency brick]
+  (let [kids (children adjacency brick)]
+    (if (= [nil] kids)
+      true
+      (every? #(> % 1) (map #(indegree adjacency %) kids)))))
+
+(adj-disintegratable? foo 6)
+
+(defn desc-depth
+  [adjacency brick]
+  (if (= [nil] (children adjacency brick))
+    1
+    (reduce + (map #(desc-depth adjacency %) (children adjacency brick)))))
+
+(children foo 5)
+(desc-depth foo 5)
+
 
 (defn day22-part1-soln
   [input]
