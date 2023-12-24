@@ -116,3 +116,10 @@
 (deftest day22-part1-soln
   (testing "Reproduces the answer for day22, part1"
     (is (= 418 (t/day22-part1-soln day22-input)))))
+
+(deftest day22-part2-soln
+  (testing "Reproduces the answer for day22, part2"
+    (is (= 418 (t/day22-part2-soln day22-input)))))
+
+(t/disintegratable-bricks day22-input)
+(t/bricks-to-fall day22-input)

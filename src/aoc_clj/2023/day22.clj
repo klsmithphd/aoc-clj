@@ -59,12 +59,15 @@
     (or (empty? above-bricks)
         (every? #(at-rest? z-index-wo-brick %) above-bricks))))
 
-(defn disintegratable-count
+(defn disintegratable-bricks
   [bricks]
   (let [placed-bricks (place-bricks (sort-by lowest-z (map brick-z-rep bricks)))]
     (->> (:bricks placed-bricks)
-         (filter #(disintegratable? placed-bricks %))
-         count)))
+         (filter #(disintegratable? placed-bricks %)))))
+
+(defn disintegratable-count
+  [bricks]
+  (count (disintegratable-bricks bricks)))
 
 (defn disintegration-chain-step
   [{:keys [bricks]} id brick]
@@ -97,24 +100,43 @@
 (def foo [[0 1] [0 2] [1 3] [1 4] [2 3] [2 4] [3 5] [4 5] [5 6] [6]])
 
 (defn indegree
-  [adjaceny brick]
-  (count (filter #(= brick (second %)) adjaceny)))
+  [adj-list brick]
+  (count (filter #(= brick (second %)) adj-list)))
 
 (defn children
-  [adjacency brick]
-  (->>  (filter #(= brick (first %)) adjacency)
+  [adj-list brick]
+  (->>  (filter #(= brick (first %)) adj-list)
         (map second)))
 
-(indegree foo 6)
-
 (defn adj-disintegratable?
-  [adjacency brick]
-  (let [kids (children adjacency brick)]
+  [adj-list brick]
+  (let [kids (children adj-list brick)]
     (if (= [nil] kids)
       true
-      (every? #(> % 1) (map #(indegree adjacency %) kids)))))
+      (every? #(> % 1) (map #(indegree adj-list %) kids)))))
 
-(adj-disintegratable? foo 6)
+(defn dependents-count
+  [adj-list brick]
+  (loop [reachable #{brick} last-reachable #{}]
+    (if (= reachable last-reachable)
+      (dec (count (filter some? reachable)))
+      (recur (into reachable (mapcat #(children adj-list %) reachable)) reachable))))
+
+(set (mapcat #(children foo %) #{1 2}))
+(dependents-count foo 6)
+
+(defn bricks-to-fall
+  [bricks]
+  (let [adj-chain (disintegratable-chain bricks)
+        brick-ids (set (map first adj-chain))
+        bricks-to-remove (remove #(adj-disintegratable? adj-chain %) brick-ids)
+        dependents (map #(dependents-count adj-chain %) bricks-to-remove)]
+    ;; (reduce + dependents)
+    (map #(adj-disintegratable? adj-chain %) brick-ids)))
+
+
+
+
 
 (defn desc-depth
   [adjacency brick]
@@ -129,3 +151,7 @@
 (defn day22-part1-soln
   [input]
   (disintegratable-count input))
+
+(defn day22-part2-soln
+  [input]
+  (bricks-to-fall input))
