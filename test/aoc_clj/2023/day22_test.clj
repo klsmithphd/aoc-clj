@@ -49,7 +49,6 @@
   (testing "Converts the brick expression into occupied cells at each z-level"
     (is (= d22-s01-z-rep (map t/brick-z-rep d22-s01)))))
 
-
 (deftest place-brick-test
   (testing "Places each brick in correct location in sample data"
     (is (= {:z-index {1 #{[1 0] [1 1] [1 2]}}
@@ -104,5 +103,4 @@
 
 (deftest day22-part1-soln
   (testing "Reproduces the answer for day22, part1"
-    ;; 461 is too high
-    (is (= 461 (t/day22-part1-soln day22-input)))))
+    (is (= 418 (t/day22-part1-soln day22-input)))))

@@ -15,6 +15,10 @@
   [brick]
   (apply min (keys brick)))
 
+(defn highest-z
+  [brick]
+  (apply max (keys brick)))
+
 (defn brick-z-rep
   [[[sx sy sz] [ex ey ez]]]
   (into {} (for [z (range sz (inc ez))]
@@ -49,7 +53,7 @@
 
 (defn disintegratable?
   [{:keys [z-index bricks]} brick]
-  (let [brick-z      (lowest-z brick)
+  (let [brick-z      (highest-z brick)
         above-bricks (filter #(= (inc brick-z) (lowest-z %)) bricks)
         z-index-wo-brick (merge-with set/difference z-index brick)]
     (or (empty? above-bricks)
