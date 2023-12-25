@@ -66,8 +66,11 @@
   (testing "Reproduces the answer for day21, part1"
     (is (= 3764 (t/day21-part1-soln day21-input)))))
 
-;; (deftest day21-part2-soln
-;;   (testing "Reproduces the answer for day21, part2"
-;;     ;; TOO HIGH: 622926942173582
-;;     ;; TOO LOW:  622926894430664
-;;     (is (= 622926942173582 (t/day21-part2-soln day21-input)))))
+(deftest day21-part2-soln
+  (testing "Reproduces the answer for day21, part2"
+    ;; TOO HIGH: 622926942173582
+    ;; Correct:  622926941971282 (too high minus N)
+    ;; TOO LOW:  622926894430664
+    (is (= 622926941971282 (t/day21-part2-soln day21-input)))))
+
+(- 622926942173582 202300)

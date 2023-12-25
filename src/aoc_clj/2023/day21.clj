@@ -1,6 +1,7 @@
 (ns aoc-clj.2023.day21
   (:require [aoc-clj.utils.grid :refer [height width neighbors-4]]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.utils.grid.vecgrid :as vg]
+            [aoc-clj.utils.math :as math]))
 
 (def steps-part1 64)
 (def steps-part2 26501365)
@@ -75,18 +76,22 @@
   (let [tile-size (height grid)]
     (if (< n (quot tile-size 2))
       (reachable-steps grid n)
-      (let [tile-mults (tile-repetitions n tile-size)
-            dists      (reachable-plot-distances grid (start-pos grid))
+      (let [start (start-pos grid)
+            bigN (tile-repetitions n tile-size)
+            dists      (reachable-plot-distances grid start)
             even-tile-count (count (filter even? (vals dists)))
             odd-tile-count  (count (filter odd? (vals dists)))
-            even-corner-count (count (filter #(and (even? %)
-                                                   (> % 65)) (vals dists)))
-            odd-corner-count  (count (filter #(and (odd? %)
-                                                   (> % 65)) (vals dists)))]
-        (+ (* (inc tile-mults) (inc tile-mults) even-tile-count)
-           (* tile-mults tile-mults odd-tile-count)
-           (* tile-mults odd-corner-count)
-           (- (* (inc tile-mults) even-corner-count)))))))
+            even-corner-count (count (filter #(and (even? (val %))
+                                                   (> (math/manhattan (key %) start) 65)) dists))
+            odd-corner-count  (count (filter #(and (odd? (val %))
+                                                   (> (math/manhattan (key %) start) 65)) dists))
+            answer (+ (* (inc bigN) (inc bigN) odd-tile-count)
+                      (* bigN bigN even-tile-count)
+                      (- (* (inc bigN) odd-corner-count))
+                      (* bigN even-corner-count))]
+        ;; Ugly hack suggested in discussion thread
+        ;; https://www.reddit.com/r/adventofcode/comments/18nol3m/2023_day_21_a_geometric_solutionexplanation_for/
+        (- answer bigN)))))
 
 (defn day21-part1-soln
   "Starting from the garden plot marked S on your map, how many garden plots 
