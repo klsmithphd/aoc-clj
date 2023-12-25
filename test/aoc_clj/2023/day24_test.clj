@@ -38,8 +38,10 @@
   (testing "Counts the number of hailstone intersections within a prescribed area"
     (is (= 2 (t/intersections-within-area [7 27] d24-s01)))))
 
-
 (def day24-input (u/parse-puzzle-input t/parse 2023 24))
+
+;; (t/parallel-hailstones-3d d24-s01)
+;; (t/parallel-hailstones-3d day24-input)
 
 (deftest day24-part1-soln
   (testing "Reproduces the answer for day24, part1"

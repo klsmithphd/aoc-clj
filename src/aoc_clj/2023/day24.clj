@@ -42,6 +42,16 @@
        (filter (partial within-area? limits))
        count))
 
+(defn parallel-3d?
+  [[[_ v1] [_ v2]]]
+  (apply = (map / v2 v1)))
+
+(defn parallel-hailstones-3d
+  [hailstones]
+  (->> (combo/combinations hailstones 2)
+       (filter parallel-3d?)))
+
+
 (def part1-limits [200000000000000 400000000000000])
 
 (defn day24-part1-soln
