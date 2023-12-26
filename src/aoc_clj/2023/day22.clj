@@ -74,79 +74,74 @@
   (let [z-above-brick    (inc (highest-z brick))
         touching-bricks  (->> (map-indexed vector bricks)
                               (filter #(= z-above-brick (lowest-z (second %))))
-                              (filter #(set/intersection
-                                        (first (vals brick))
-                                        (first (vals (second %))))))]
+                              (filter #(seq
+                                        (set/intersection
+                                         (first (vals brick))
+                                         (first (vals (second %)))))))]
     [id (mapv first touching-bricks)]))
 
-(defn unroll
-  [[a b]]
-  (if (empty? b)
-    [[a]]
-    (map #(vector a %) b)))
-
-
-(defn disintegratable-chain
-  "Adjacency list"
+(defn supports-graph
   [bricks]
   (let [placed-bricks (->> (map brick-z-rep bricks)
                            (sort-by lowest-z)
                            place-bricks)]
-    (->> (map-indexed
-          (partial disintegration-chain-step placed-bricks)
-          (:bricks placed-bricks))
-         (mapcat unroll))))
+    (into {} (map-indexed #(disintegration-chain-step placed-bricks %1 %2) (:bricks placed-bricks)))))
 
-(def foo [[0 1] [0 2] [1 3] [1 4] [2 3] [2 4] [3 5] [4 5] [5 6] [6]])
+(defn unroll
+  [[a b]]
+  (map #(vector a %) b))
 
-(defn indegree
-  [adj-list brick]
-  (count (filter #(= brick (second %)) adj-list)))
+(defn adj-list
+  [graph]
+  (mapcat unroll graph))
 
-(defn children
-  [adj-list brick]
-  (->>  (filter #(= brick (first %)) adj-list)
-        (map second)))
+(defn supported-by-graph
+  [supports-graph]
+  (->> (adj-list supports-graph)
+       (group-by second)
+       (u/fmap #(mapv first %))))
 
 (defn adj-disintegratable?
-  [adj-list brick]
-  (let [kids (children adj-list brick)]
-    (if (= [nil] kids)
+  [graph indegrees brick]
+  (let [kids (graph brick)]
+    (if (empty? kids)
       true
-      (every? #(> % 1) (map #(indegree adj-list %) kids)))))
+      (every? #(> % 1) (map indegrees kids)))))
+
+(declare dependents)
+(defn dependents-uncached
+  [graph brick]
+  (into (set (graph brick)) (mapcat #(dependents graph %) (graph brick))))
+(def dependents (memoize dependents-uncached))
 
 (defn dependents-count
-  [adj-list brick]
-  (loop [reachable #{brick} last-reachable #{}]
-    (if (= reachable last-reachable)
-      (dec (count (filter some? reachable)))
-      (recur (into reachable (mapcat #(children adj-list %) reachable)) reachable))))
+  [graph brick]
+  (count (dependents graph brick)))
 
-(set (mapcat #(children foo %) #{1 2}))
-(dependents-count foo 6)
+(defn will-fall?
+  [supported-by removed brick]
+  (empty? (set/difference (set (supported-by brick)) removed)))
+
+(defn fall-number
+  [supports supported-by brick]
+  (loop [queue (into clojure.lang.PersistentQueue/EMPTY (supports brick))
+         removed #{brick}
+         number 0]
+    (if (not (seq queue))
+      number
+      (if (will-fall? supported-by removed (peek queue))
+        (recur (into (pop queue) (remove (set queue) (supports (peek queue))))
+               (conj removed (peek queue))
+               (inc number))
+        (recur (pop queue) removed number)))))
 
 (defn bricks-to-fall
   [bricks]
-  (let [adj-chain (disintegratable-chain bricks)
-        brick-ids (set (map first adj-chain))
-        bricks-to-remove (remove #(adj-disintegratable? adj-chain %) brick-ids)
-        dependents (map #(dependents-count adj-chain %) bricks-to-remove)]
-    ;; (reduce + dependents)
-    (map #(adj-disintegratable? adj-chain %) brick-ids)))
-
-
-
-
-
-(defn desc-depth
-  [adjacency brick]
-  (if (= [nil] (children adjacency brick))
-    1
-    (reduce + (map #(desc-depth adjacency %) (children adjacency brick)))))
-
-(children foo 5)
-(desc-depth foo 5)
-
+  (let [supports     (supports-graph bricks)
+        supported-by (supported-by-graph supports)
+        brick-ids (keys supports)]
+    (->> (map #(fall-number supports supported-by %) brick-ids)
+         (reduce +))))
 
 (defn day22-part1-soln
   [input]
