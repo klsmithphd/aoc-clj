@@ -62,24 +62,6 @@
   [bricks]
   (reduce place-brick {:z-index {} :bricks []} bricks))
 
-;; (defn disintegratable?
-;;   [{:keys [z-index bricks]} brick]
-;;   (let [z-above-brick    (inc (highest-z brick))
-;;         above-bricks     (filter #(= z-above-brick (lowest-z %)) bricks)
-;;         z-index-wo-brick (merge-with set/difference z-index brick)]
-;;     (or (empty? above-bricks)
-;;         (every? #(at-rest? z-index-wo-brick %) above-bricks))))
-
-;; (defn disintegratable-bricks
-;;   [bricks]
-;;   (let [placed-bricks (place-bricks (sort-by lowest-z (map brick-z-rep bricks)))]
-;;     (->> (:bricks placed-bricks)
-;;          (filter #(disintegratable? placed-bricks %)))))
-
-;; (defn disintegratable-count
-;;   [bricks]
-;;   (count (disintegratable-bricks bricks)))
-
 (defn adjacent-bricks
   [{:keys [bricks]} id brick]
   (let [z-above-brick    (inc (highest-z brick))
@@ -98,15 +80,6 @@
                            place-bricks)]
     (into {} (map-indexed #(adjacent-bricks placed-bricks %1 %2) (:bricks placed-bricks)))))
 
-;; (defn disintegratable?
-;;   [{:keys [z-index bricks]} brick]
-;;   (let [z-above-brick    (inc (highest-z brick))
-;;         above-bricks     (filter #(= z-above-brick (lowest-z %)) bricks)
-;;         z-index-wo-brick (merge-with set/difference z-index brick)]
-;;     (or (empty? above-bricks)
-;;         (every? #(at-rest? z-index-wo-brick %) above-bricks))))
-
-
 ;; TODO - Move to graph utils
 (defn unroll
   [[a b]]
@@ -119,55 +92,48 @@
 
 ;; Consider also moving to graph utils
 (defn supported-by-graph
+  "Inverts the supports graph to provide a supported-by graph"
   [supports-graph]
   (->> (adj-list supports-graph)
        (group-by second)
        (u/fmap #(mapv first %))))
 
 (defn disintegratable?
+  "A brick can be disintegrated if removing it does not cause any other
+   bricks to fall. This can happen in two ways.
+   1. The given brick supports no other bricks
+   2. The bricks supported by the given brick are also supported by other
+   bricks."
   [supports supported-by brick]
   (if (empty? (supports brick))
     true
     (every? #(> % 1) (map #(count (supported-by %)) (supports brick)))))
 
 (defn disintegratable-bricks
+  "Returns the ids of all the bricks that can individually be safely 
+   disintegrated."
   [bricks]
   (let [supports (supports-graph bricks)
         supported-by (supported-by-graph supports)]
     (filter #(disintegratable? supports supported-by %) (keys supports))))
 
-
 (defn disintegratable-count
+  "Returns the count of all the bricks that can be safely disintegrated."
   [bricks]
   (count (disintegratable-bricks bricks)))
-;; (defn disintegratable?
-;;   [supports supported-by brick]
-;;   (if (empty? (supports brick))
-;;     true
-;;     (every? #(> % 1) (map #(count (supported-by %)) (supports brick)))))
-
-;; (defn adj-disintegratable?
-;;   [graph indegrees brick]
-;;   (let [kids (graph brick)]
-;;     (if (empty? kids)
-;;       true
-;;       (every? #(> % 1) (map indegrees kids)))))
-
-;; (declare dependents)
-;; (defn dependents-uncached
-;;   [graph brick]
-;;   (into (set (graph brick)) (mapcat #(dependents graph %) (graph brick))))
-;; (def dependents (memoize dependents-uncached))
-
-;; (defn dependents-count
-;;   [graph brick]
-;;   (count (dependents graph brick)))
 
 (defn will-fall?
+  "Determines whether a brick will fall based on the static analysis
+   of the supporting bricks combined with a set of `removed` bricks
+   that no longer offer support"
   [supported-by removed brick]
   (empty? (set/difference (set (supported-by brick)) removed)))
 
 (defn fall-number
+  "Counts the number of other bricks that will fall if the supplied `brick`
+   is removed, based on the `supports` mapping (indicating the list of bricks
+   supported by a key brick) and the `supported-by` mapping (indicating the
+   list of bricks the key brick is supported by)."
   [supports supported-by brick]
   (loop [queue (into clojure.lang.PersistentQueue/EMPTY (supports brick))
          removed #{brick}
@@ -181,6 +147,8 @@
         (recur (pop queue) removed number)))))
 
 (defn bricks-to-fall
+  "Determines the total number of bricks to fall if each brick is
+   individually removed."
   [bricks]
   (let [supports     (supports-graph bricks)
         supported-by (supported-by-graph supports)
