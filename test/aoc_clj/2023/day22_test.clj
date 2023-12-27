@@ -87,20 +87,8 @@
              6 #{[1 1]}}]
            (:bricks d22-s01-placed-bricks)))))
 
-(deftest distintegratable?-test
-  (testing "Determines whether a brick can be distintegrated
-            without affecting any bricks above it"
-    (is (= [false true true true true false true]
-           (map #(t/disintegratable? d22-s01-placed-bricks %)
-                (:bricks d22-s01-placed-bricks))))))
-
-(deftest disintegratable-count-test
-  (testing "Counts how many placed bricks can be disintegrated"
-    (is (= 5 (t/disintegratable-count d22-s01)))
-    (is (= 3 (t/disintegratable-count (t/parse d22-s02-raw))))))
-
-(deftest disintegration-chain-test
-  (testing "Constructs the chain of dependencies among the bricks"
+(deftest supports-graph-test
+  (testing "Constructs the graph of which bricks are supported by a given brick"
     (is (= {0 [1 2] ;; A supports B and C
             1 [3 4] ;; B supports D and E
             2 [3 4] ;; C supports D and E
@@ -110,6 +98,24 @@
             6 []}   ;; G supports nothing
            (t/supports-graph d22-s01)))))
 
+(deftest supported-by-graph-test
+  (testing "Constructs the graph of which bricks are supporting a given brick"
+    (is (= {1 [0]
+            2 [0]
+            3 [1 2]
+            4 [1 2]
+            5 [3 4]
+            6 [5]}
+           (t/supported-by-graph (t/supports-graph d22-s01))))))
+
+(deftest disintegratable-bricks-test
+  (testing "Identifies the brick ids of the bricks that can be disintegrated"
+    (is (= [1 2 3 4 6] (t/disintegratable-bricks d22-s01)))))
+
+(deftest disintegratable-count-test
+  (testing "Counts how many placed bricks can be disintegrated"
+    (is (= 5 (t/disintegratable-count d22-s01)))
+    (is (= 3 (t/disintegratable-count (t/parse d22-s02-raw))))))
 
 (deftest bricks-to-fall-test
   (testing "Computes the number of bricks that will fall when
