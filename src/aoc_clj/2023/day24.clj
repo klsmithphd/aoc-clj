@@ -1,8 +1,7 @@
 (ns aoc-clj.2023.day24
   (:require [clojure.math :as math]
             [clojure.math.combinatorics :as combo]
-            [clojure.core.matrix :as matrix]
-            [net.mikera.vectorz-clj]))
+            [clojure.core.matrix :as matrix]))
 
 (matrix/set-current-implementation :vectorz)
 
