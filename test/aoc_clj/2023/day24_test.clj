@@ -38,11 +38,23 @@
   (testing "Counts the number of hailstone intersections within a prescribed area"
     (is (= 2 (t/intersections-within-area [7 27] d24-s01)))))
 
-(def day24-input (u/parse-puzzle-input t/parse 2023 24))
+(deftest rock-parameters-test
+  (testing "Solves the linear equations to find the rock's parameters"
+    (is (= [24 13 10 -3 1 2]
+           (map clojure.math/round (apply t/rock-parameters (take 3 d24-s01)))))))
 
-;; (t/parallel-hailstones-3d d24-s01)
-;; (t/parallel-hailstones-3d day24-input)
+(deftest rock-position-sum
+  (testing "Computes the sum of the position values of the rock"
+    (is (= 47 (t/rock-position-sum d24-s01)))))
+
+(def day24-input (u/parse-puzzle-input t/parse 2023 24))
 
 (deftest day24-part1-soln
   (testing "Reproduces the answer for day24, part1"
     (is (= 16172 (t/day24-part1-soln day24-input)))))
+
+(deftest day24-part2-soln
+  (testing "Reproduces the answer for day24, part2"
+    ;; 600352360036791 is too HIGH
+    ;; 600352360036788 is too HIGHs
+    (is (= 600352360036791 (t/day24-part2-soln day24-input)))))
