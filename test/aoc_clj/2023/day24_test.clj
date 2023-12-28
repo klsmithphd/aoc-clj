@@ -41,7 +41,7 @@
 (deftest rock-parameters-test
   (testing "Solves the linear equations to find the rock's parameters"
     (is (= [24 13 10 -3 1 2]
-           (map clojure.math/round (apply t/rock-parameters (take 3 d24-s01)))))))
+           (apply t/rock-parameters (take 3 d24-s01))))))
 
 (deftest rock-position-sum
   (testing "Computes the sum of the position values of the rock"
@@ -53,8 +53,7 @@
   (testing "Reproduces the answer for day24, part1"
     (is (= 16172 (t/day24-part1-soln day24-input)))))
 
+(apply t/rock-parameters (take 3 day24-input))
 (deftest day24-part2-soln
   (testing "Reproduces the answer for day24, part2"
-    ;; 600352360036791 is too HIGH
-    ;; 600352360036788 is too HIGHs
-    (is (= 600352360036791 (t/day24-part2-soln day24-input)))))
+    (is (= 600352360036779 (t/day24-part2-soln day24-input)))))
