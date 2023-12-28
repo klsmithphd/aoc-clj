@@ -8,7 +8,9 @@
                  [org.clojure/math.combinatorics "0.1.6"]
                  [cheshire "5.10.0"]
                  [clojure-lanterna "0.9.7"]
-                 [manifold "0.2.4"]]
+                 [manifold "0.2.4"]
+                 [net.mikera/core.matrix "0.63.0"]
+                 [net.mikera/vectorz-clj "0.48.0"]]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}
