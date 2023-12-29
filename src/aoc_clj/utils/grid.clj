@@ -18,10 +18,11 @@
   "A two-dimensional grid of values"
   (width [this] "The total width of the grid (number of cells in the horizontal direction)")
   (height [this] "The total height of the grid (number of cells in the vertical direction)")
+  (in-grid? [this pos] "Whether the provided position falls within the boundaries of the grid")
   (value [this pos] "The value of the grid at position pos")
   (slice [this dim idx] "A slice of the grid along dim (:row or :col) at index idx")
   (neighbors-4 [this pos] "A map of the positions and values of the four nearest (von Neumann) neighbors of position pos")
-  (neighbors-8 [this [x y]] "A map of the positions and values of the eight nearest (Moore) neighbors, including diagonals, of position pos"))
+  (neighbors-8 [this pos] "A map of the positions and values of the eight nearest (Moore) neighbors, including diagonals, of position pos"))
 
 (defn Grid2D->ascii
   "Convert a Grid2D into an ASCII-art string representation.
@@ -41,6 +42,12 @@
                                x (range w)]
                            (chars (value grid2d [x y]))))]
     (str/join "\n" (mapv #(apply str %) rep))))
+
+(defn within-grid?
+  "Returns true if the position is contained within the `grid`"
+  [grid [x y]]
+  (and (<= 0 x (dec (width grid)))
+       (<= 0 y (dec (height grid)))))
 
 (defn adj-coords-2d
   "Coordinates of adjacent points. If include-diagonals is not set or false, 
