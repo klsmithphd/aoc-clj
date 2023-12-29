@@ -1,5 +1,6 @@
 (ns aoc-clj.2023.day23-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.2023.day23 :as t]))
 
@@ -67,3 +68,13 @@
             [11 3] {[13 13] 24, [21 22] 45}
             [13 13] {[21 22] 33}}
            (t/trace-maze d23-s01 {:pos [1 0] :heading :n})))))
+
+(deftest longest-possible-path-test
+  (testing "Finds the longest possible path through the maze"
+    (is (= 94 (t/longest-possible-path d23-s01)))))
+
+(def day23-input (u/parse-puzzle-input t/parse 2023 23))
+
+(deftest day23-part1-soln
+  (testing "Reproduces the answer for day23, part1"
+    (is (= 2334 (t/day23-part1-soln day23-input)))))

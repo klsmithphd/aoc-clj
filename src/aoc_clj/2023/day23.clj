@@ -37,10 +37,16 @@
         (recur (into (pop queue) new-nodes)
                (update junctions (:pos node) merge jn))))))
 
-(defn possible-paths
+(defn longest-possible-path
   [grid]
   (let [start [1 0]
         grid-start {:pos start :heading :n}
-        finish [(- (width grid) 2) (- (height grid) 1)]
+        finish? (u/equals? [(- (width grid) 2) (- (height grid) 1)])
         graph (graph/->MapGraph (trace-maze grid grid-start))]
-    graph))
+    (->> (graph/all-paths-dfs graph start finish?)
+         (map #(graph/path-distance graph %))
+         (apply max))))
+
+(defn day23-part1-soln
+  [input]
+  (longest-possible-path input))
