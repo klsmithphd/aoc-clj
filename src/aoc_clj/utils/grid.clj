@@ -14,6 +14,34 @@
    :s [0 -1]
    :w [-1 0]})
 
+(def extended-cardinal-offsets
+  (merge cardinal-offsets
+         {:ne [1 1]
+          :se [1 -1]
+          :sw [-1 -1]
+          :nw [-1 1]}))
+
+(def headings
+  "The eight cardinal and intercardinal compass headings"
+  [:n :ne :e :se :s :sw :w :nw])
+
+(def rel-bearings
+  "Eight relative bearings"
+  [:forward
+   :forward-right
+   :right
+   :backward-right
+   :backward
+   :backward-left
+   :left
+   :forward-left])
+
+(def relative-bearing
+  "A mapping from a given compass heading to a map that translates
+   each compass heading to its relative bearing"
+  (zipmap headings
+          (map #(zipmap (u/rotate % headings) rel-bearings) (range 8))))
+
 (defprotocol Grid2D
   "A two-dimensional grid of values"
   (width [this] "The total width of the grid (number of cells in the horizontal direction)")
@@ -63,6 +91,41 @@
          (filter #(not= [x y] %)))
     ;; only directly adjacent
     [[x (inc y)] [(inc x) y] [x (dec y)] [(dec x) y]]))
+
+(defn- neighbor-datum
+  "Constructs a map of the position, value, and absolute bearing from
+   the position `pos`"
+  [grid pos [bearing offset]]
+  (let [neighbor-pos (mapv + pos offset)]
+    {:pos         neighbor-pos
+     :val         (value grid neighbor-pos)
+     :heading bearing}))
+
+(defn neighbor-data
+  "Given a `grid` and a fixed cell position `pos`, return a collection of
+   information about neighboring grid cells.
+   
+   If keyword `:diagonals` is set to a truthy value, will return values
+   for the eight (Moore) neighbors. Otherwise, by default, only returns
+   values for the four (von Neumann) neighbors."
+  ([grid pos & {:keys [diagonals]}]
+   (let [neighbors (if diagonals
+                     extended-cardinal-offsets
+                     cardinal-offsets)]
+     (map (partial neighbor-datum grid pos) neighbors))))
+
+(defn- add-rel-bearing
+  "Uses knowledge of the absolute heading of the original position and
+   augments the neighbor datum with a relative bearing"
+  [heading neighbor]
+  (assoc neighbor :bearing
+         (get-in relative-bearing [heading (:heading neighbor)])))
+
+(defn with-rel-bearings
+  "Augments neighbor data with the relative heading of each neighboring
+   position, given the original position's `heading`"
+  [heading neighbor-data]
+  (map (partial add-rel-bearing heading) neighbor-data))
 
 (defn adj-coords-3d
   "Coordinates of adjacent points in 3D"
