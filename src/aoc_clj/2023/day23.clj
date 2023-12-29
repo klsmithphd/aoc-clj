@@ -17,6 +17,12 @@
        (not (and (= \> val) (= :w heading)))
        (not (and (= \v val) (= :s heading)))))
 
+(defn part2-open?
+  [grid {:keys [pos val bearing]}]
+  (and (in-grid? grid pos)
+       (not= \# val)
+       (not= :backward bearing)))
+
 (defn next-node
   [grid start]
   (loop [next-cell (maze/one-step start) path-length 1]
