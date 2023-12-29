@@ -229,3 +229,21 @@
         (let [node (first next-neighbors)]
           (recur (conj visited node)
                  (if (stop-cond node) explore (concat explore (edges graph node)))))))))
+
+
+(defn- dfs
+  "Helper function for performing a depth-first search (DFS) of a `graph`"
+  [graph finish? path visited]
+  (let [node (peek path)]
+    (if (finish? node)
+      [path]
+      (->> (edges graph node)
+           (remove visited)
+           (mapcat #(dfs graph finish? (conj path %) (conj visited %)))))))
+
+(defn all-paths-dfs
+  "Return a seq of all paths (if any) in a `graph` from `start` until 
+   reaching a vertex satisfying the `finish?` predicate by using a 
+   Depth-First Search (DFS)"
+  [graph start finish?]
+  (dfs graph finish? [start] #{start}))
