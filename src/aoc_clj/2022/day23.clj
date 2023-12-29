@@ -44,7 +44,7 @@
                ;; Check SE, E, and NE
                :e [[(inc x) (dec y)] [(inc x) y] [(inc x) (inc y)]])]
     (when (not-any? elves opts)
-      (mapv + [x y] (grid/cardinal->offset dir)))))
+      (mapv + [x y] (grid/cardinal-offsets dir)))))
 
 (defn propose-move
   "For an elf at `pos` with all other elves at `elves`, and
