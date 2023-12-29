@@ -3,6 +3,21 @@
             [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.core :as u]))
 
+(defn one-step
+  [{:keys [pos heading] :as walker}]
+  (assoc walker :pos (mapv + pos (grid/cardinal-offsets heading))))
+
+(defn next-cells
+  "Returns the next viable cells to visit (if any) for a given `grid`,
+   `pos` and compass `heading`. 
+   
+   Requires a function `open?` which should accept the map of neighbor
+   data as a single argument"
+  [grid open? {:keys [pos heading]}]
+  (->> (grid/neighbor-data grid pos)
+       (grid/with-rel-bearings heading)
+       (filter open?)))
+
 (defn all-open
   [open? maze]
   (map first (filter #(open? (val %)) maze)))
