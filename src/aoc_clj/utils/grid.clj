@@ -8,7 +8,7 @@
    :s {:forward :s :left :e :backward :n :right :w}
    :w {:forward :w :left :s :backward :e :right :n}})
 
-(def cardinal->offset
+(def cardinal-offsets
   {:n [0 1]
    :e [1 0]
    :s [0 -1]
@@ -76,13 +76,13 @@
   "Find the position of the neighbor in the cardinal direction `dir` 
    relative to position `pos`"
   [pos dir]
-  (mapv + pos (cardinal->offset dir)))
+  (mapv + pos (cardinal-offsets dir)))
 
 (defn neighbor-value
   "Find the value of the `grid` map at the cardinal direction `dir` 
    relative to position `pos`"
   [grid pos dir]
-  (grid (mapv + pos (cardinal->offset dir))))
+  (grid (mapv + pos (cardinal-offsets dir))))
 
 (defn rel-neighbors
   "Return a map of the relative directions (forward, backward, left, right)
