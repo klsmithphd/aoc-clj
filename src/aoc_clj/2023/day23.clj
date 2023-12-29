@@ -9,7 +9,7 @@
   [input]
   (vg/ascii->VecGrid2D identity input :down true))
 
-(defn open?
+(defn part1-open?
   [grid {:keys [pos val heading bearing]}]
   (and (in-grid? grid pos)
        (not= \# val)
@@ -20,7 +20,7 @@
 (defn next-node
   [grid start]
   (loop [next-cell (maze/one-step start) path-length 1]
-    (let [neighbors (maze/next-cells grid (partial open? grid) next-cell)]
+    (let [neighbors (maze/next-cells grid (partial part1-open? grid) next-cell)]
       (if (or (> (count neighbors) 1) (empty? neighbors))
         [(map #(assoc % :pos (:pos next-cell)) neighbors)
          {(:pos next-cell) path-length}]
@@ -29,13 +29,16 @@
 (defn trace-maze
   [grid start]
   (loop [queue (u/queue [start])
-         junctions {}]
+         junctions {}
+         visited #{start}]
     (if (not (seq queue))
       junctions
       (let [node           (peek queue)
-            [new-nodes jn] (next-node grid node)]
-        (recur (into (pop queue) new-nodes)
-               (update junctions (:pos node) merge jn))))))
+            [new-nodes jn] (next-node grid node)
+            trimmed-new-nodes (map #(select-keys % [:pos :heading]) new-nodes)]
+        (recur (into (pop queue) (remove visited trimmed-new-nodes))
+               (update junctions (:pos node) merge jn)
+               (into visited node))))))
 
 (defn longest-possible-path
   [grid]
