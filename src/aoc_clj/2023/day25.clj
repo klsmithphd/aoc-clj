@@ -46,13 +46,13 @@
                   (graph-without-nodes to-remove))]
     (map (partial connected-nodes graph) (first to-remove))))
 
-(defn graphviz-line
-  [[a coll]]
-  (map #(str a " -- " %) coll))
+;; (defn graphviz-line
+;;   [[a coll]]
+;;   (map #(str a " -- " %) coll))
 
-(defn graphviz-rep
-  [input]
-  (str/join "\n" (mapcat graphviz-line input)))
+;; (defn- graphviz-rep
+;;   [input]
+;;   (str/join "\n" (mapcat graphviz-line input)))
 
 ;; Determined by plotting the graph with graphviz and seeing what links crossed
 ;; between the two clusters
@@ -62,5 +62,8 @@
    #{"fjn" "mzb"}])
 
 (defn day25-part1-soln
+  "Find the three wires you need to disconnect in order to divide the 
+   components into two separate groups. What do you get if you multiply the 
+   sizes of these two groups together?"
   [input]
-  (clique-sizes input day25-input-cuts))
+  (reduce * (clique-sizes input day25-input-cuts)))
