@@ -17,6 +17,10 @@
     [_]
     (keys graph))
 
+  (vertex
+    [_ v]
+    (graph v))
+
   (edges
     [_ v]
     (keys (graph v)))
@@ -247,3 +251,25 @@
    Depth-First Search (DFS)"
   [graph start finish?]
   (dfs graph finish? [start] #{start}))
+
+(defn- unroll
+  [[start nodes]]
+  (map #(into [start] %) nodes))
+
+(defn adjacency-list
+  "Takes a graph represented as a map and converts it into an
+   adjacency list representation"
+  [graph]
+  (mapcat unroll graph))
+
+(defn- reverse-graph-helper
+  [coll]
+  (into {} (map (fn [[a _ b]] [a b]) coll)))
+
+(defn reverse-graph
+  "Takes a directed graph and returns a graph with all the edges
+   going in the opposite direction"
+  [graph]
+  (->> (adjacency-list graph)
+       (group-by second)
+       (u/fmap reverse-graph-helper)))

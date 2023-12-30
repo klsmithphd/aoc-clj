@@ -7,6 +7,7 @@
   (width [_] width)
   (height [_] height)
   (value [_ pos] (get grid pos))
+  (in-grid? [this pos] (grid/within-grid? this pos))
   (slice
     [_ dim idx]
     (let [coord (case dim :col first  :row second)

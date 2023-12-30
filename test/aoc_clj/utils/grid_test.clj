@@ -1,11 +1,58 @@
 (ns aoc-clj.utils.grid-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.grid :as grid]))
+            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.grid.mapgrid :as mg]))
 
 (def sample
   {[0 2] 7 [1 2] 8 [2 2] 9
    [0 1] 4 [1 1] 5 [2 1] 6
    [0 0] 1 [1 0] 2 [2 0] 3})
+
+(def sample-grid (mg/->MapGrid2D 3 3 sample))
+
+(deftest neighbor-data-test
+  (testing "Retrieves the position, value, and bearing of all the neighboring values"
+    (is (= [{:pos [1 2] :val 8 :heading :n}
+            {:pos [2 1] :val 6 :heading :e}
+            {:pos [1 0] :val 2 :heading :s}
+            {:pos [0 1] :val 4 :heading :w}]
+           (grid/neighbor-data sample-grid [1 1])))
+
+    (is (= [{:pos [0 3] :val nil  :heading :n}
+            {:pos [1 2] :val 8    :heading :e}
+            {:pos [0 1] :val 4    :heading :s}
+            {:pos [-1 2] :val nil :heading :w}]
+           (grid/neighbor-data sample-grid [0 2])))
+
+    (is (= [{:pos [1 2] :val 8 :heading :n}
+            {:pos [2 1] :val 6 :heading :e}
+            {:pos [1 0] :val 2 :heading :s}
+            {:pos [0 1] :val 4 :heading :w}
+            {:pos [2 2] :val 9 :heading :ne}
+            {:pos [2 0] :val 3 :heading :se}
+            {:pos [0 0] :val 1 :heading :sw}
+            {:pos [0 2] :val 7 :heading :nw}]
+           (grid/neighbor-data sample-grid [1 1] :diagonals true)))))
+
+(deftest with-rel-bearings-test
+  (testing "Augments the neighbor data with relative bearings"
+    (is (= [{:pos [1 2] :val 8 :heading :n :bearing :left}
+            {:pos [2 1] :val 6 :heading :e :bearing :forward}
+            {:pos [1 0] :val 2 :heading :s :bearing :right}
+            {:pos [0 1] :val 4 :heading :w :bearing :backward}]
+           (->> (grid/neighbor-data sample-grid [1 1])
+                (grid/with-rel-bearings :e))))
+
+    (is (= [{:pos [1 2] :val 8 :heading :n  :bearing :backward-right}
+            {:pos [2 1] :val 6 :heading :e  :bearing :backward-left}
+            {:pos [1 0] :val 2 :heading :s  :bearing :forward-left}
+            {:pos [0 1] :val 4 :heading :w  :bearing :forward-right}
+            {:pos [2 2] :val 9 :heading :ne :bearing :backward}
+            {:pos [2 0] :val 3 :heading :se :bearing :left}
+            {:pos [0 0] :val 1 :heading :sw :bearing :forward}
+            {:pos [0 2] :val 7 :heading :nw :bearing :right}]
+           (->> (grid/neighbor-data sample-grid [1 1] :diagonals true)
+                (grid/with-rel-bearings :sw))))))
 
 (deftest neighbor-value-test
   (testing "Retrieves the correct value of a cardinal direction neighbor"

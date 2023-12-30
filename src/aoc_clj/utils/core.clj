@@ -166,3 +166,12 @@
   [coll]
   (let [n (count coll)]
     (take (inc n) (cycle coll))))
+
+(defn queue
+  "Returns a queue. If no argument is supplied, creates an empty 
+   queue. If a collection is supplied, constructs a queue with all of
+   the elements of `coll` inserted."
+  ([]
+   clojure.lang.PersistentQueue/EMPTY)
+  ([coll]
+   (into clojure.lang.PersistentQueue/EMPTY coll)))
