@@ -116,7 +116,7 @@
             "-5,0"
             "-2,1"])))
 
-(def day19-input  (u/fmap add-relative-vectors (parse (u/puzzle-input "2021/day19-input.txt"))))
+(def day19-input  (u/fmap add-relative-vectors (parse (u/puzzle-input "inputs/2021/day19-input.txt"))))
 
 (defn matrix-mult
   "Matrix multiply with v represented as a row (not column) vector"

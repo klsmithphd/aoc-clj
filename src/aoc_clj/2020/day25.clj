@@ -2,7 +2,7 @@
   (:require [aoc-clj.utils.math :as math]
             [aoc-clj.utils.core :as u]))
 
-(def day25-input (map read-string (u/puzzle-input "2020/day25-input.txt")))
+(def day25-input (map read-string (u/puzzle-input "inputs/2020/day25-input.txt")))
 
 (defn transform
   [loop-size subject-number]

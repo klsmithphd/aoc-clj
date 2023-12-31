@@ -41,7 +41,7 @@
   [s]
   (Long/parseLong s 2))
 
-(def day16-input (parse (first (u/puzzle-input "2021/day16-input.txt"))))
+(def day16-input (parse (first (u/puzzle-input "inputs/2021/day16-input.txt"))))
 
 (defn decode-literal
   [s]

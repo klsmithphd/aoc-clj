@@ -9,7 +9,7 @@
   (let [[op arg] (str/split line #"\ ")]
     [(keyword op) (read-string arg)]))
 
-(def day08-input (map parse (u/puzzle-input "2020/day08-input.txt")))
+(def day08-input (map parse (u/puzzle-input "inputs/2020/day08-input.txt")))
 
 (defn execute
   [{:keys [line acc] :as state} [op arg]]

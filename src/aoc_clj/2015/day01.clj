@@ -1,7 +1,7 @@
 (ns aoc-clj.2015.day01
   (:require [aoc-clj.utils.core :as u]))
 
-(def day01-input (first (u/puzzle-input "2015/day01-input.txt")))
+(def day01-input (first (u/puzzle-input "inputs/2015/day01-input.txt")))
 
 (defn instructions
   [input]

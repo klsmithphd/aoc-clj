@@ -14,7 +14,7 @@
      :pass password}))
 
 (def day02-input
-  (map parse (u/puzzle-input "2020/day02-input.txt")))
+  (map parse (u/puzzle-input "inputs/2020/day02-input.txt")))
 
 (defn part1-valid?
   [{:keys [min max char pass]}]

@@ -26,7 +26,7 @@
      "1293138521"
      "2311944581"])))
 
-(def day15-input (mapgrid/lists->MapGrid2D (parse (u/puzzle-input "2021/day15-input.txt"))))
+(def day15-input (mapgrid/lists->MapGrid2D (parse (u/puzzle-input "inputs/2021/day15-input.txt"))))
 
 (defn find-path-vals
   [{:keys [width height grid] :as input}]

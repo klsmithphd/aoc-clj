@@ -2,7 +2,7 @@
   (:require [aoc-clj.utils.core :as u]))
 
 (def day01-input
-  (map read-string (u/puzzle-input "2021/day01-input.txt")))
+  (map read-string (u/puzzle-input "inputs/2021/day01-input.txt")))
 
 (defn increases
   [depths]

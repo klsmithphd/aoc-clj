@@ -4,7 +4,7 @@
 
 (def char-map {\. :off \# :on})
 (def day18-input
-  (mapgrid/ascii->MapGrid2D char-map (u/puzzle-input "2015/day18-input.txt")))
+  (mapgrid/ascii->MapGrid2D char-map (u/puzzle-input "inputs/2015/day18-input.txt")))
 
 (defn adj-coords
   [[x y]]

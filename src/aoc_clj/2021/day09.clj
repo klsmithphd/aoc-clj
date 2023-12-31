@@ -8,7 +8,7 @@
   (map (comp read-string str) line))
 
 (def day09-input
-  (->> (u/puzzle-input "2021/day09-input.txt")
+  (->> (u/puzzle-input "inputs/2021/day09-input.txt")
        (map parse-line)
        mapgrid/lists->MapGrid2D
        :grid))

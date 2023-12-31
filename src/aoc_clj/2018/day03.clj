@@ -14,7 +14,7 @@
      :w (read-string w)
      :h (read-string h)}))
 
-(def day03-input (map parse-input-line (u/puzzle-input "2018/day03_input.txt")))
+(def day03-input (map parse-input-line (u/puzzle-input "inputs/2018/day03-input.txt")))
 
 (defn swath-grid
   [{:keys [x y w h]}]

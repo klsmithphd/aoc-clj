@@ -16,7 +16,7 @@
       {:cmd a :x (parse-var b) :y (parse-var c)}
       {:cmd a :x (parse-var b)})))
 
-(def day12-input (mapv parse-line (u/puzzle-input "2016/day12-input.txt")))
+(def day12-input (mapv parse-line (u/puzzle-input "inputs/2016/day12-input.txt")))
 
 (defn dref
   [state x]

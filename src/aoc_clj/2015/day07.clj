@@ -32,7 +32,7 @@
                :else (parse-assign ops))]
     [(tokenize dest) inst]))
 
-(def day07-input (into {} (map parse (u/puzzle-input "2015/day07-input.txt"))))
+(def day07-input (into {} (map parse (u/puzzle-input "inputs/2015/day07-input.txt"))))
 
 (def wire-val
   (memoize

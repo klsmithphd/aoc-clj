@@ -12,7 +12,7 @@
        (map read-string)))
 
 (def day12-input
-  (map parse-coord (u/puzzle-input "2019/day12-input.txt")))
+  (map parse-coord (u/puzzle-input "inputs/2019/day12-input.txt")))
 
 (defn rotations
   [coll]

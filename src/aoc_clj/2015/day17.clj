@@ -2,7 +2,7 @@
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]))
 
-(def day17-input (map read-string (u/puzzle-input "2015/day17-input.txt")))
+(def day17-input (map read-string (u/puzzle-input "inputs/2015/day17-input.txt")))
 
 (defn sums-to?
   [sum coll]

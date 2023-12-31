@@ -10,7 +10,7 @@
     {:supernets (into [(first chunks)] (map second splits))
      :hypernets (mapv first splits)}))
 
-(def day07-input (map parse-line (u/puzzle-input "2016/day07-input.txt")))
+(def day07-input (map parse-line (u/puzzle-input "inputs/2016/day07-input.txt")))
 
 (defn abba?
   [s]

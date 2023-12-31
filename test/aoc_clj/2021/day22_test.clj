@@ -35,7 +35,7 @@
     "on x=-54112..-39298,y=-85059..-49293,z=-27449..7877"
     "on x=967..23432,y=45373..81175,z=27513..53682"]))
 
-(def day22-sample3 (t/parse (u/puzzle-input "2021/day22-sample3.txt")))
+(def day22-sample3 (t/parse (u/puzzle-input "inputs/2021/day22-sample3.txt")))
 
 (deftest cubes-in-init-area
   (testing "Computes the cuboids that are 'on' inside the init area"

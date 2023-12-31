@@ -5,7 +5,7 @@
             [aoc-clj.utils.intcode :as intcode]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
-(def day17-input (u/firstv (u/puzzle-input "2019/day17-input.txt")))
+(def day17-input (u/firstv (u/puzzle-input "inputs/2019/day17-input.txt")))
 
 (def scaffold-mapping
   {\. :space

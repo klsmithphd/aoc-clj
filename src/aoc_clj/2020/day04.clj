@@ -3,7 +3,7 @@
             [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def day04-input (str/join "\n" (u/puzzle-input "2020/day04-input.txt")))
+(def day04-input (str/join "\n" (u/puzzle-input "inputs/2020/day04-input.txt")))
 
 (defn split-pair
   [pair]

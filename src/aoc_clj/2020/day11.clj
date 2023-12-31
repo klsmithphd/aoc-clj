@@ -9,7 +9,7 @@
                       \L :seat}]
     (mapgrid/ascii->MapGrid2D seat-mapping ascii-lines)))
 
-(def day11-input (ferry-seatmap (u/puzzle-input "2020/day11-input.txt")))
+(def day11-input (ferry-seatmap (u/puzzle-input "inputs/2020/day11-input.txt")))
 
 (def dirs
   (->> (for [y (range -1 2)

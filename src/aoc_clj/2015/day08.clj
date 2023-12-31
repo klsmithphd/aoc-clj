@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]))
 
 (def hex-pattern #"\\x[0-9a-f]{2}")
-(def day08-input (u/puzzle-input "2015/day08-input.txt"))
+(def day08-input (u/puzzle-input "inputs/2015/day08-input.txt"))
 
 (defn hex->str
   [h]

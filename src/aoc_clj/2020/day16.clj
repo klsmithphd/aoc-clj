@@ -57,7 +57,7 @@ nearby tickets:
 day16-sample
 
 (def day16-input (->>
-                  (u/puzzle-input "2020/day16-input.txt")
+                  (u/puzzle-input "inputs/2020/day16-input.txt")
                   (str/join "\n")
                   parse))
 

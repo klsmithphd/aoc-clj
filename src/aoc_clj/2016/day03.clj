@@ -5,7 +5,7 @@
   [line]
   (read-string (str "[" line "]")))
 
-(def day03-input (map parse-line (u/puzzle-input "2016/day03-input.txt")))
+(def day03-input (map parse-line (u/puzzle-input "inputs/2016/day03-input.txt")))
 
 (defn valid-triangle?
   [[a b c]]

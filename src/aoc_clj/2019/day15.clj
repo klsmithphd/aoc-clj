@@ -5,7 +5,7 @@
             [aoc-clj.utils.graph :as g]
             [aoc-clj.utils.maze :as maze]))
 
-(def day15-input (u/firstv (u/puzzle-input "2019/day15-input.txt")))
+(def day15-input (u/firstv (u/puzzle-input "inputs/2019/day15-input.txt")))
 
 (def dir->code
   {:n 1

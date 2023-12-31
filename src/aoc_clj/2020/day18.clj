@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def day18-input (u/puzzle-input "2020/day18-input.txt"))
+(def day18-input (u/puzzle-input "inputs/2020/day18-input.txt"))
 
 (defn parse
   [input]

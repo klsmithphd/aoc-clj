@@ -13,7 +13,7 @@
       str/trim
       (str/split #" ")))
 
-(def day24-input (map parse-line (u/puzzle-input "2020/day24-input.txt")))
+(def day24-input (map parse-line (u/puzzle-input "inputs/2020/day24-input.txt")))
 
 (def dir->coord {"e"  [1  1  0]
                  "w"  [-1 -1  0]

@@ -2,7 +2,7 @@
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day02-input (u/firstv (u/puzzle-input "2019/day02-input.txt")))
+(def day02-input (u/firstv (u/puzzle-input "inputs/2019/day02-input.txt")))
 
 (defn override-intcode
   "Replace `intcode` with `noun` in position 1 and `verb` in position 2"

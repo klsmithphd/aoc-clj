@@ -22,7 +22,7 @@
     {:rules (into {} (map parse-rule (str/split rules #"\n")))
      :messages (str/split messages #"\n")}))
 
-(def day19-input (parse (str/join "\n" (u/puzzle-input "2020/day19-input.txt"))))
+(def day19-input (parse (str/join "\n" (u/puzzle-input "inputs/2020/day19-input.txt"))))
 
 (defn handle-special-eleven
   "I'm not proud of this, but it works"

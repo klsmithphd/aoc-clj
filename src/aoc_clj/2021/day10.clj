@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def day10-input (u/puzzle-input "2021/day10-input.txt"))
+(def day10-input (u/puzzle-input "inputs/2021/day10-input.txt"))
 
 (def illegal-char-points
   {\) 3

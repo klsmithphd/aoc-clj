@@ -2,7 +2,7 @@
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]))
 
-(def day24-input (map read-string (u/puzzle-input "2015/day24-input.txt")))
+(def day24-input (map read-string (u/puzzle-input "inputs/2015/day24-input.txt")))
 
 (defn smallest-groups
   [groups input]

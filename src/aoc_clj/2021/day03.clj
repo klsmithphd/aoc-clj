@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]))
 
 (def day03-input
-  (u/puzzle-input "2021/day03-input.txt"))
+  (u/puzzle-input "inputs/2021/day03-input.txt"))
 
 (defn most-common-nth-bit
   [signals bit]

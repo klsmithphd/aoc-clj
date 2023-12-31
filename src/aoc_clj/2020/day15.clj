@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]))
 
 (def day15-input (map read-string
-                      (-> (u/puzzle-input "2020/day15-input.txt")
+                      (-> (u/puzzle-input "inputs/2020/day15-input.txt")
                           first
                           (str/split #","))))
 

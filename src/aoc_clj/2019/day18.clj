@@ -12,7 +12,7 @@
 ;; FIXME: This implementation is too complex and not sufficiently documented
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/19
 
-(def day18-input (vec (u/puzzle-input "2019/day18-input.txt")))
+(def day18-input (vec (u/puzzle-input "inputs/2019/day18-input.txt")))
 
 (defn maze-map
   [char]

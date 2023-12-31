@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def day04-input (str/join "\n" (sort (u/puzzle-input "2018/day04_input.txt"))))
+(def day04-input (str/join "\n" (sort (u/puzzle-input "inputs/2018/day04-input.txt"))))
 
 (defn parse-shift
   [shift]

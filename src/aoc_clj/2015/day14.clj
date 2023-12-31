@@ -15,7 +15,7 @@
   [input]
   (into {} (map parse-line input)))
 
-(def day14-input (parse (u/puzzle-input "2015/day14-input.txt")))
+(def day14-input (parse (u/puzzle-input "inputs/2015/day14-input.txt")))
 
 (defn distance-at-time
   [time {:keys [speed fly rest]}]

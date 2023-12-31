@@ -5,7 +5,7 @@
             [aoc-clj.utils.grid.vecgrid :refer [->VecGrid2D]]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day11-input (u/firstv (u/puzzle-input "2019/day11-input.txt")))
+(def day11-input (u/firstv (u/puzzle-input "inputs/2019/day11-input.txt")))
 
 (defn turn-left-and-move
   [{:keys [direction] [x y] :position}]

@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]))
 
 (def day06-input
-  (->> (u/puzzle-input "2019/day06-input.txt")
+  (->> (u/puzzle-input "inputs/2019/day06-input.txt")
        (map #(str/split % #"\)"))
        (mapcat reverse)
        (apply hash-map)))

@@ -8,7 +8,7 @@
 ;; TODO: 2019 Day 20 implementation is too complex and undocumented 
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/21
 
-(def day20-input (vec (u/puzzle-input "2019/day20-input.txt")))
+(def day20-input (vec (u/puzzle-input "inputs/2019/day20-input.txt")))
 
 (defn maze-dims
   [maze]

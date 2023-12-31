@@ -19,7 +19,7 @@
     {:coords (map parse-coord (str/split coords #"\n"))
      :folds  (map parse-fold  (str/split folds #"\n"))}))
 
-(def day13-input (parse (u/puzzle-input "2021/day13-input.txt")))
+(def day13-input (parse (u/puzzle-input "inputs/2021/day13-input.txt")))
 
 (defn fold-y
   [loc [x y]]

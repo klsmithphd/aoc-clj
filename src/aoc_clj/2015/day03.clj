@@ -2,7 +2,7 @@
   (:require [aoc-clj.utils.core :as u]))
 
 (def day03-input
-  (first (u/puzzle-input "2015/day03-input.txt")))
+  (first (u/puzzle-input "inputs/2015/day03-input.txt")))
 
 (def dir-map
   {\^ [0 -1]

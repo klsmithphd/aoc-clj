@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def day10-input (map read-string (u/puzzle-input "2020/day10-input.txt")))
+(def day10-input (map read-string (u/puzzle-input "inputs/2020/day10-input.txt")))
 
 (defn freq-steps
   [jolts]

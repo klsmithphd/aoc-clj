@@ -2,7 +2,7 @@
   (:require [clojure.zip :as zip]
             [aoc-clj.utils.core :as u]))
 
-(def day18-input (map read-string (u/puzzle-input "2021/day18-input.txt")))
+(def day18-input (map read-string (u/puzzle-input "inputs/2021/day18-input.txt")))
 
 (defn iter-zip [zipper]
   (->> zipper

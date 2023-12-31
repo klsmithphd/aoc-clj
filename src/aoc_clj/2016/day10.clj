@@ -46,7 +46,7 @@
     {:assignments (reduce assign {} (assignments cmds))
      :comparisons (into {} (map establish-comparison (comparisons cmds)))}))
 
-(def day10-input (initialize (u/puzzle-input "2016/day10-input.txt")))
+(def day10-input (initialize (u/puzzle-input "inputs/2016/day10-input.txt")))
 
 (defn ready-bots
   [{:keys [assignments]}]

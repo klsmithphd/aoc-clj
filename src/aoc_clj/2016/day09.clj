@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def day09-input (first (u/puzzle-input "2016/day09-input.txt")))
+(def day09-input (first (u/puzzle-input "inputs/2016/day09-input.txt")))
 
 (defn repeat-coll
   [n coll]

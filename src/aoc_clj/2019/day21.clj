@@ -5,7 +5,7 @@
 ;; FIXME Add code or documentation for where the springcode came from
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/22
 
-(def day21-input (u/firstv (u/puzzle-input "2019/day21-input.txt")))
+(def day21-input (u/firstv (u/puzzle-input "inputs/2019/day21-input.txt")))
 
 (def spring-codes-part1
   ["OR A T"

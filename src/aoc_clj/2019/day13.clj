@@ -4,7 +4,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day13-input (u/firstv (u/puzzle-input "2019/day13-input.txt")))
+(def day13-input (u/firstv (u/puzzle-input "inputs/2019/day13-input.txt")))
 
 (defn day13-part1-soln
   []

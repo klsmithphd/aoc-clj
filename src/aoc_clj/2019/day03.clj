@@ -13,7 +13,7 @@
   (map parse-segment segments))
 
 (def day03-input
-  (->> (u/puzzle-input "2019/day03-input.txt")
+  (->> (u/puzzle-input "inputs/2019/day03-input.txt")
        (map #(str/split % #","))
        (map parse-segments)))
 

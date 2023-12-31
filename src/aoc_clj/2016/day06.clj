@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day06
   (:require [aoc-clj.utils.core :as u]))
 
-(def day06-input (u/puzzle-input "2016/day06-input.txt"))
+(def day06-input (u/puzzle-input "inputs/2016/day06-input.txt"))
 
 (defn frequent-chars
   [max-or-min-f input]

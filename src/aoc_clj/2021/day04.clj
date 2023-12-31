@@ -29,7 +29,7 @@
     {:drawings (parse-drawings (first groups))
      :boards (mapv parse-board (rest groups))}))
 
-(def day04-input (parse-input (u/puzzle-input "2021/day04-input.txt")))
+(def day04-input (parse-input (u/puzzle-input "inputs/2021/day04-input.txt")))
 
 (defn winning-board?
   [drawn]

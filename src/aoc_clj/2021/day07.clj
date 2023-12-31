@@ -7,7 +7,7 @@
   (->> (str/split (first line) #",")
        (map read-string)))
 
-(def day07-input (parse (u/puzzle-input "2021/day07-input.txt")))
+(def day07-input (parse (u/puzzle-input "inputs/2021/day07-input.txt")))
 
 (defn mean
   [vals]

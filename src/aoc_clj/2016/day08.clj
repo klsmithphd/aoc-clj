@@ -26,7 +26,7 @@
     (parse-rect s)
     (parse-rotate s)))
 
-(def day08-input (map parse-line (u/puzzle-input "2016/day08-input.txt")))
+(def day08-input (map parse-line (u/puzzle-input "inputs/2016/day08-input.txt")))
 
 (defn apply-rect
   [state {:keys [width height]}]

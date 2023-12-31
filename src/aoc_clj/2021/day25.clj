@@ -7,7 +7,7 @@
 (def day25-input
   (mapgrid/ascii->MapGrid2D
    charmap
-   (u/puzzle-input "2021/day25-input.txt")
+   (u/puzzle-input "inputs/2021/day25-input.txt")
    :down true))
 
 (defn available?

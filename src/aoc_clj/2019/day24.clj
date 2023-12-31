@@ -12,7 +12,7 @@
   [input]
   (:grid (mapgrid/ascii->MapGrid2D bug-map input :down true)))
 
-(def day24-input (parse (u/puzzle-input "2019/day24-input.txt")))
+(def day24-input (parse (u/puzzle-input "inputs/2019/day24-input.txt")))
 
 (defn conway-rule
   [space pos neighbor-fn]

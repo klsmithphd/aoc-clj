@@ -31,7 +31,7 @@
        (into {})))
 
 (def day20-input
-  (->> (u/puzzle-input "2020/day20-input.txt")
+  (->> (u/puzzle-input "inputs/2020/day20-input.txt")
        (str/join "\n")
        parse))
 

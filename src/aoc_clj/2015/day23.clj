@@ -16,7 +16,7 @@
   [input]
   (mapv parse-line input))
 
-(def day23-input (parse (u/puzzle-input "2015/day23-input.txt")))
+(def day23-input (parse (u/puzzle-input "inputs/2015/day23-input.txt")))
 
 (defn apply-inst
   [instructions {:keys [next-inst] :as state}]

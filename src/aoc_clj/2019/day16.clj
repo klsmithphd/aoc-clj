@@ -11,7 +11,7 @@
   (mapv (comp read-string str) s))
 
 (def day16-input
-  (str->nums (first (u/puzzle-input "2019/day16-input.txt"))))
+  (str->nums (first (u/puzzle-input "inputs/2019/day16-input.txt"))))
 
 (defn selector-lookup
   [size idx]

@@ -53,7 +53,7 @@ mask = 00000000000000000000000000000000X0XX
 mem[26] = 1" #"\n")))
 
 
-(def day14-input (map parse-line (u/puzzle-input "2020/day14-input.txt")))
+(def day14-input (map parse-line (u/puzzle-input "inputs/2020/day14-input.txt")))
 
 (defn execute
   [instructions]

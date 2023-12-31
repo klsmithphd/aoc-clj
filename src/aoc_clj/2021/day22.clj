@@ -21,7 +21,7 @@
   [lines]
   (map parse-line lines))
 
-(def day22-input (parse (u/puzzle-input "2021/day22-input.txt")))
+(def day22-input (parse (u/puzzle-input "inputs/2021/day22-input.txt")))
 
 (defn volume
   [{:keys [bounds sign]}]

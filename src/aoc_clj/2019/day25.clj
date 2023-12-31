@@ -3,8 +3,8 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day25-input (u/firstv (u/puzzle-input "2019/day25-input.txt")))
-(def day25-cmds (u/puzzle-input "2019/day25-cmds.txt"))
+(def day25-input (u/firstv (u/puzzle-input "inputs/2019/day25-input.txt")))
+(def day25-cmds (u/puzzle-input "inputs/2019/day25-cmds.txt"))
 
 (def checkpoint1-items
   ["astronaut ice cream"

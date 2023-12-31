@@ -22,7 +22,7 @@
        (apply merge)))
 
 (def day14-input
-  (reactions (u/puzzle-input "2019/day14-input.txt")))
+  (reactions (u/puzzle-input "inputs/2019/day14-input.txt")))
 
 (defn multiply
   [factor ingredients]

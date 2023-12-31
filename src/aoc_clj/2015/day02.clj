@@ -7,7 +7,7 @@
   (map read-string (str/split line #"x")))
 
 (def day02-input
-  (map parse-line (u/puzzle-input "2015/day02-input.txt")))
+  (map parse-line (u/puzzle-input "inputs/2015/day02-input.txt")))
 
 (defn wrapping-paper-area
   [[l w h]]

@@ -11,7 +11,7 @@
     {:time (read-string time)
      :buses buses}))
 
-(def day13-input (parse (u/puzzle-input "2020/day13-input.txt")))
+(def day13-input (parse (u/puzzle-input "inputs/2020/day13-input.txt")))
 
 (defn next-bus
   [time bus]

@@ -19,7 +19,7 @@
        (group-by first)
        (u/fmap #(into {} (map second %)))))
 
-(def day13-input (parse (u/puzzle-input "2015/day13-input.txt")))
+(def day13-input (parse (u/puzzle-input "inputs/2015/day13-input.txt")))
 
 (defn adjacents
   [order]

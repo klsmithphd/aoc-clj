@@ -1,7 +1,7 @@
 (ns aoc-clj.2015.day05
   (:require [aoc-clj.utils.core :as u]))
 
-(def day05-input (u/puzzle-input "2015/day05-input.txt"))
+(def day05-input (u/puzzle-input "inputs/2015/day05-input.txt"))
 
 (defn three-vowels?
   [s]

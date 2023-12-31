@@ -16,10 +16,10 @@
    using the provided `parse` function.
    
    This expects that all puzzle input files are saved with the naming
-   convention `${year}/day${day}-input.txt`, where ${day} is a zero-padded
-   two-digit number from 01-25"
+   convention `inputs/${year}/day${day}-input.txt`, where ${day} is a 
+   zero-padded two-digit number from 01-25"
   [parse year day]
-  (-> (str year "/day" (format "%02d" day) "-input.txt")
+  (-> (str "inputs/" year "/day" (format "%02d" day) "-input.txt")
       puzzle-input
       parse))
 

@@ -13,7 +13,7 @@
   [line]
   (map parse-cmd (str/split line #", ")))
 
-(def day01-input (-> (u/puzzle-input "2016/day01-input.txt") first parse))
+(def day01-input (-> (u/puzzle-input "inputs/2016/day01-input.txt") first parse))
 
 (defn rotate
   [heading dir]

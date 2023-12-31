@@ -7,7 +7,7 @@
         amount (read-string (subs cmd 1))]
     [dir amount]))
 
-(def day12-input (map parse (u/puzzle-input "2020/day12-input.txt")))
+(def day12-input (map parse (u/puzzle-input "inputs/2020/day12-input.txt")))
 
 (def start {:pos [0 0] :waypoint [10 1] :heading :east})
 

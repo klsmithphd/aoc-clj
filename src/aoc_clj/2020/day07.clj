@@ -20,7 +20,7 @@
        (map bag-description (str/split inner #",")))]))
 
 (def day07-input
-  (->> (u/puzzle-input "2020/day07-input.txt")
+  (->> (u/puzzle-input "inputs/2020/day07-input.txt")
        (map parse-rule)))
 
 (defn contained-by

@@ -18,7 +18,7 @@
     {:algorithm (mapv char-map (first part1))
      :image (mapgrid/ascii->MapGrid2D char-map part2 :down true)}))
 
-(def day20-input (parse (u/puzzle-input "2021/day20-input.txt")))
+(def day20-input (parse (u/puzzle-input "inputs/2021/day20-input.txt")))
 
 ;; TODO variant of adj-coords. Consider consolidating
 (defn three-by-cell

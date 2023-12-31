@@ -16,7 +16,7 @@
        (group-by first)
        (u/fmap #(apply merge (map second %)))))
 
-(def day09-input (parse (u/puzzle-input "2015/day09-input.txt")))
+(def day09-input (parse (u/puzzle-input "inputs/2015/day09-input.txt")))
 
 (defn route-distance
   [dists route]

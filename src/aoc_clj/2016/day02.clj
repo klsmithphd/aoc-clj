@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day02
   (:require [aoc-clj.utils.core :as u]))
 
-(def day02-input (u/puzzle-input "2016/day02-input.txt"))
+(def day02-input (u/puzzle-input "inputs/2016/day02-input.txt"))
 
 (def square-keypad
   {[-1 -1] 1  [0 -1] 2  [1 -1] 3

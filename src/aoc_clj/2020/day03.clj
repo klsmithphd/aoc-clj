@@ -2,7 +2,7 @@
   (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.core :as u]))
 
-(def day03-input (u/puzzle-input "2020/day03-input.txt"))
+(def day03-input (u/puzzle-input "inputs/2020/day03-input.txt"))
 
 (defn forest-basemap
   [ascii-lines]

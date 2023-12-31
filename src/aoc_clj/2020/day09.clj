@@ -1,7 +1,7 @@
 (ns aoc-clj.2020.day09
   (:require [aoc-clj.utils.core :as u]))
 
-(def day09-input (map read-string (u/puzzle-input "2020/day09-input.txt")))
+(def day09-input (map read-string (u/puzzle-input "inputs/2020/day09-input.txt")))
 
 (defn first-non-sum
   [nums window]

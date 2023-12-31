@@ -7,7 +7,7 @@
   (->> (str/split (first input) #",")
        (map read-string)))
 
-(def day06-input (parse (u/puzzle-input "2021/day06-input.txt")))
+(def day06-input (parse (u/puzzle-input "inputs/2021/day06-input.txt")))
 (def zero-counts (vec (take 9 (repeat 0))))
 
 (defn step

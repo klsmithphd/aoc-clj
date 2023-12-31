@@ -2,7 +2,7 @@
   (:require [cheshire.core :as c]
             [aoc-clj.utils.core :as u]))
 
-(def day12-input (first  (u/puzzle-input "2015/day12-input.txt")))
+(def day12-input (first  (u/puzzle-input "inputs/2015/day12-input.txt")))
 
 (defn all-numbers
   [s]

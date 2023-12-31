@@ -19,7 +19,7 @@ trh fvjkl sbzzf mxmxvkd (contains dairy)
 sqjhc fvjkl (contains soy)
 sqjhc mxmxvkd sbzzf (contains fish)" #"\n")))
 
-(def day21-input (map parse-line (u/puzzle-input "2020/day21-input.txt")))
+(def day21-input (map parse-line (u/puzzle-input "inputs/2020/day21-input.txt")))
 
 (defn allergen-to-ingreds
   [{:keys [ingredients allergens]}]

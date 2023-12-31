@@ -28,7 +28,7 @@
   [input]
   (into {} (mapv parse-line input)))
 
-(def day16-input (parse (u/puzzle-input "2015/day16-input.txt")))
+(def day16-input (parse (u/puzzle-input "inputs/2015/day16-input.txt")))
 
 (defn exact-match?
   [[_ props]]

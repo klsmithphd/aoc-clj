@@ -2,7 +2,7 @@
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day19-input (u/firstv (u/puzzle-input "2019/day19-input.txt")))
+(def day19-input (u/firstv (u/puzzle-input "inputs/2019/day19-input.txt")))
 
 (defn tractor-beam
   [intcode size]

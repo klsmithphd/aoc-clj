@@ -55,7 +55,7 @@
     "pj-fs"
     "start-RW"]))
 
-(def day12-input (parse (u/puzzle-input "2021/day12-input.txt")))
+(def day12-input (parse (u/puzzle-input "inputs/2021/day12-input.txt")))
 
 (defn big-cave?
   [cave]

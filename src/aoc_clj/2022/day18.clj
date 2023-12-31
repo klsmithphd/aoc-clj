@@ -9,7 +9,7 @@
   [input]
   (set (map u/str->vec input)))
 
-(def day18-input (parse (u/puzzle-input "2022/day18-input.txt")))
+(def day18-input (parse (u/puzzle-input "inputs/2022/day18-input.txt")))
 
 ;;;; Puzzle logic
 

@@ -2,7 +2,7 @@
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day05-input (u/firstv (u/puzzle-input "2019/day05-input.txt")))
+(def day05-input (u/firstv (u/puzzle-input "inputs/2019/day05-input.txt")))
 
 (defn day05-part1-soln
   []

@@ -13,7 +13,7 @@
      :start [(read-string b) (read-string c)]
      :end   [(read-string d) (read-string e)]}))
 
-(def day06-input (map parse (u/puzzle-input "2015/day06-input.txt")))
+(def day06-input (map parse (u/puzzle-input "inputs/2015/day06-input.txt")))
 
 (defn rect-range
   [[sx sy] [ex ey]]

@@ -9,7 +9,7 @@
         :when (= \# (nth (nth ascii-asteroids y) x))]
     [x y]))
 
-(def day10-input (parse-map (u/puzzle-input "2019/day10-input.txt")))
+(def day10-input (parse-map (u/puzzle-input "inputs/2019/day10-input.txt")))
 
 (defn quadrant
   [[x1 y1] [x2 y2]]

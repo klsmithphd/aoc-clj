@@ -12,7 +12,7 @@
     {:replacements (mapv parse-replacement (str/split replacements #"\n"))
      :molecule molecule}))
 
-(def day19-input (parse (u/puzzle-input "2015/day19-input.txt")))
+(def day19-input (parse (u/puzzle-input "inputs/2015/day19-input.txt")))
 
 (defn indicesOf
   [s pattern]

@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2021.day19 :as t]))
 
-(def day19-sample1 (u/fmap t/add-relative-vectors (t/parse (u/puzzle-input "2021/day19-sample1.txt"))))
+(def day19-sample1 (u/fmap t/add-relative-vectors (t/parse (u/puzzle-input "inputs/2021/day19-sample1.txt"))))
 
 (deftest orient-sensor-to-known
   (testing "Can compute the offset for sensor 1 to sensor 0 in the sample data"

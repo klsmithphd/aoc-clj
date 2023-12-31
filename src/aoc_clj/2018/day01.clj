@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day01
   (:require [aoc-clj.utils.core :as u]))
 
-(def day01-input (map read-string (u/puzzle-input "2018/day01_input.txt")))
+(def day01-input (map read-string (u/puzzle-input "inputs/2018/day01-input.txt")))
 
 (defn net-freq-change
   "Sums all the changes in frequency, starting with zero"

@@ -8,7 +8,7 @@
     [(keyword cmd) (read-string val)]))
 
 (def day02-input
-  (map parse-line (u/puzzle-input "2021/day02-input.txt")))
+  (map parse-line (u/puzzle-input "inputs/2021/day02-input.txt")))
 
 (defn part1-rules
   [[pos depth] [cmd val]]

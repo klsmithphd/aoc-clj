@@ -41,7 +41,7 @@
     "div w 2"
     "mod w 2"]))
 
-(def day24-input (parse (u/puzzle-input "2021/day24-input.txt")))
+(def day24-input (parse (u/puzzle-input "inputs/2021/day24-input.txt")))
 
 (defn arg
   [regs s]

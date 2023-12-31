@@ -14,7 +14,7 @@
     {:template template
      :rules (into {} (map parse-rule (str/split rules #"\n")))}))
 
-(def day14-input (parse (u/puzzle-input "2021/day14-input.txt")))
+(def day14-input (parse (u/puzzle-input "inputs/2021/day14-input.txt")))
 
 (defn pair-insert
   [template rules]

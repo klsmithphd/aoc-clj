@@ -13,7 +13,7 @@
             (str/split #" "))))
 
 (def day22-input
-  (map parse-line (u/puzzle-input "2019/day22-input.txt")))
+  (map parse-line (u/puzzle-input "inputs/2019/day22-input.txt")))
 
 (defn deal-op
   "A deal into new stack is a mod-multiply by -1 and a mod-add of -1"

@@ -21,7 +21,7 @@
 ..#
 ###" #"\n")))
 
-(def day17-input (initial-slice (u/puzzle-input "2020/day17-input.txt")))
+(def day17-input (initial-slice (u/puzzle-input "inputs/2020/day17-input.txt")))
 
 (def adjacent-dirs-3d
   (->> (for [z (range -1 2)

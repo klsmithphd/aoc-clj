@@ -24,7 +24,7 @@
         "0,0 -> 8,8"
         "5,5 -> 8,2"]))
 
-(def day05-input (map parse-line (u/puzzle-input "2021/day05-input.txt")))
+(def day05-input (map parse-line (u/puzzle-input "inputs/2021/day05-input.txt")))
 
 (defn diagonal?
   [[[x1 y1] [x2 y2]]]

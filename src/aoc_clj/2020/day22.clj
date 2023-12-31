@@ -16,7 +16,7 @@
 
 (def day22-input
   (parse
-   (str/join "\n" (u/puzzle-input "2020/day22-input.txt"))))
+   (str/join "\n" (u/puzzle-input "inputs/2020/day22-input.txt"))))
 
 (defn round-results-simple
   [{:keys [player1 player2]}]

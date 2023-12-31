@@ -15,7 +15,7 @@
   [input]
   (into {} (mapv parse-line input)))
 
-(def day15-input (parse (u/puzzle-input "2015/day15-input.txt")))
+(def day15-input (parse (u/puzzle-input "inputs/2015/day15-input.txt")))
 (def max-teaspoons 100)
 
 (defn score

@@ -22,7 +22,7 @@
     {:patterns (str/split l #" ")
      :output (str/split r #" ")}))
 
-(def day08-input (map parse-line (u/puzzle-input "2021/day08-input.txt")))
+(def day08-input (map parse-line (u/puzzle-input "inputs/2021/day08-input.txt")))
 
 (def day08-sample1
   (parse-line "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"))

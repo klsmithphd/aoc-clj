@@ -12,7 +12,7 @@
   [input]
   (into {} (map parse-line input)))
 
-(def day21-input (parse (u/puzzle-input "2015/day21-input.txt")))
+(def day21-input (parse (u/puzzle-input "inputs/2015/day21-input.txt")))
 (def player {:hit-points 100 :damage 0 :armor 0 :cost 0})
 
 (def weapons

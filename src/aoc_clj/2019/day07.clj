@@ -4,7 +4,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day05-input (u/firstv (u/puzzle-input "2019/day07-input.txt")))
+(def day05-input (u/firstv (u/puzzle-input "inputs/2019/day07-input.txt")))
 
 (defn amplifier
   "Creates an 'amplifier' `intcode` program to run on another thread

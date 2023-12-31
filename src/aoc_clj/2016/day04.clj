@@ -12,7 +12,7 @@
      :sector-id (read-string (last name))
      :checksum (butlast r)}))
 
-(def day04-input (map parse-line (u/puzzle-input "2016/day04-input.txt")))
+(def day04-input (map parse-line (u/puzzle-input "inputs/2016/day04-input.txt")))
 
 (defn freq-letter-compare
   [x y]

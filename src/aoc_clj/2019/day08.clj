@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]))
 
 (def day08-input
-  (->> (u/puzzle-input "2019/day08-input.txt")
+  (->> (u/puzzle-input "inputs/2019/day08-input.txt")
        first
        (map (comp read-string str))))
 
