@@ -1,5 +1,6 @@
 (ns aoc-clj.2016.day07-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day07 :as t]))
 
 (def day07-sample1
@@ -33,10 +34,12 @@
     (is (= [true false true true]
            (map t/supports-ssl? day07-sample2)))))
 
+(def day07-input (u/parse-puzzle-input t/parse 2016 7))
+
 (deftest day07-part1-soln
   (testing "Reproduces the answer for day07, part1"
-    (is (= 110 (t/day07-part1-soln)))))
+    (is (= 110 (t/day07-part1-soln day07-input)))))
 
 (deftest day07-part2-soln
   (testing "Reproduces the answer for day07, part2"
-    (is (= 242 (t/day07-part2-soln)))))
+    (is (= 242 (t/day07-part2-soln day07-input)))))

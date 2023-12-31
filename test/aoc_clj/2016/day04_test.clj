@@ -1,8 +1,9 @@
 (ns aoc-clj.2016.day04-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day04 :as t]))
 
-(def day04-sample
+(def d04-s00
   (map t/parse-line
        ["aaaaa-bbb-z-y-x-123[abxyz]"
         "a-b-c-d-e-f-g-h-987[abcde]"
@@ -12,16 +13,18 @@
 (deftest real-room?
   (testing "Identifies which rooms are real (not decoys)"
     (is (= [true true true false]
-           (map t/real-room? day04-sample)))))
+           (map t/real-room? d04-s00)))))
 
 (deftest real-room-sector-id-sum
   (testing "Adds up the sector ids of all the real rooms"
-    (is (= 1514 (t/real-room-sector-id-sum day04-sample)))))
+    (is (= 1514 (t/real-room-sector-id-sum d04-s00)))))
+
+(def day04-input (u/parse-puzzle-input t/parse 2016 4))
 
 (deftest day04-part1-soln
   (testing "Reproduces the answer for day04, part1"
-    (is (= 361724 (t/day04-part1-soln)))))
+    (is (= 361724 (t/day04-part1-soln day04-input)))))
 
 (deftest day04-part2-soln
   (testing "Reproduces the answer for day04, part2"
-    (is (= 482 (t/day04-part2-soln)))))
+    (is (= 482 (t/day04-part2-soln day04-input)))))

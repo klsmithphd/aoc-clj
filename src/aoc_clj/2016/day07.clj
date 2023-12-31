@@ -1,16 +1,17 @@
 (ns aoc-clj.2016.day07
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2016/day/7"
+  (:require [clojure.string :as str]))
 
 (defn parse-line
   [line]
   (let [chunks (str/split line #"\[")
         splits (map #(str/split % #"\]") (rest chunks))]
-    ;; (println start others)
     {:supernets (into [(first chunks)] (map second splits))
      :hypernets (mapv first splits)}))
 
-(def day07-input (map parse-line (u/puzzle-input "inputs/2016/day07-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn abba?
   [s]
@@ -21,10 +22,6 @@
   (if (some identity (filter abba? hypernets))
     false
     (boolean (some identity (filter abba? supernets)))))
-
-(defn day07-part1-soln
-  []
-  (count (filter supports-tls? day07-input)))
 
 (defn all-abas
   [s]
@@ -43,7 +40,11 @@
        (some identity)
        boolean))
 
+(defn day07-part1-soln
+  [input]
+  (count (filter supports-tls? input)))
+
 (defn day07-part2-soln
-  []
-  (count (filter supports-ssl? day07-input)))
+  [input]
+  (count (filter supports-ssl? input)))
 

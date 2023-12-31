@@ -1,11 +1,13 @@
 (ns aoc-clj.2016.day03
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2016/day/3")
 
 (defn parse-line
   [line]
   (read-string (str "[" line "]")))
 
-(def day03-input (map parse-line (u/puzzle-input "inputs/2016/day03-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn valid-triangle?
   [[a b c]]
@@ -17,10 +19,6 @@
   [input]
   (->> input (filter valid-triangle?) count))
 
-(defn day03-part1-soln
-  []
-  (count-of-valid-triangles day03-input))
-
 (defn group-by-columns
   [input]
   (->> (concat (map #(nth % 0) input)
@@ -28,6 +26,10 @@
                (map #(nth % 2) input))
        (partition 3)))
 
+(defn day03-part1-soln
+  [input]
+  (count-of-valid-triangles input))
+
 (defn day03-part2-soln
-  []
-  (-> day03-input group-by-columns count-of-valid-triangles))
+  [input]
+  (-> input group-by-columns count-of-valid-triangles))

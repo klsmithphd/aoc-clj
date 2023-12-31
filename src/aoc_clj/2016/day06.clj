@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day06
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2016/day/6")
 
-(def day06-input (u/puzzle-input "inputs/2016/day06-input.txt"))
+(def parse identity)
 
 (defn frequent-chars
   [max-or-min-f input]
@@ -17,9 +17,9 @@
 (def least-frequent-chars (partial frequent-chars min-key))
 
 (defn day06-part1-soln
-  []
-  (most-frequent-chars day06-input))
+  [input]
+  (most-frequent-chars input))
 
 (defn day06-part2-soln
-  []
-  (least-frequent-chars day06-input))
+  [input]
+  (least-frequent-chars input))

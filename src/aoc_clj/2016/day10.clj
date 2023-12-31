@@ -1,4 +1,5 @@
 (ns aoc-clj.2016.day10
+  "Solution to https://adventofcode.com/2016/day/10"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -40,13 +41,11 @@
   [cmds]
   (filter #(= :comparison (:type %)) cmds))
 
-(defn initialize
+(defn parse
   [input]
   (let [cmds (map parse-line input)]
     {:assignments (reduce assign {} (assignments cmds))
      :comparisons (into {} (map establish-comparison (comparisons cmds)))}))
-
-(def day10-input (initialize (u/puzzle-input "inputs/2016/day10-input.txt")))
 
 (defn ready-bots
   [{:keys [assignments]}]
@@ -75,10 +74,6 @@
         (read-string (subs (ffirst matches) 3))
         (recur (step s))))))
 
-(defn day10-part1-soln
-  []
-  (bot-that-compares day10-input #{17 61}))
-
 (defn output-values
   [state]
   (let [outputs (-> (u/converge step state)
@@ -90,6 +85,10 @@
          (map first)
          (reduce *))))
 
+(defn day10-part1-soln
+  [input]
+  (bot-that-compares input #{17 61}))
+
 (defn day10-part2-soln
-  []
-  (output-values day10-input))
+  [input]
+  (output-values input))

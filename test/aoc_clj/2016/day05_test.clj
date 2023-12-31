@@ -1,8 +1,9 @@
 (ns aoc-clj.2016.day05-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day05 :as t]))
 
-(def day05-sample "abc")
+(def d05-s00 "abc")
 
 (def day05-sample-valid-offsets
   "Found by calling (valid-hash-offsets day05-sample) and waiting a long time!"
@@ -13,16 +14,18 @@
 
 (deftest password
   (testing "Identifies the password using part1 logic"
-    (is (= "18f47a30" (t/password day05-sample day05-sample-valid-offsets)))))
+    (is (= "18f47a30" (t/password d05-s00 day05-sample-valid-offsets)))))
 
 (deftest password-part2
   (testing "Identifies the password using part2 logic"
-    (is (= "05ace8e3" (t/password-part2 day05-sample day05-sample-valid-offsets)))))
+    (is (= "05ace8e3" (t/password-part2 d05-s00 day05-sample-valid-offsets)))))
+
+(def day05-input (u/parse-puzzle-input t/parse 2016 5))
 
 (deftest day05-part1-soln
   (testing "Reproduces the answer for day05, part1"
-    (is (= "f97c354d" (t/day05-part1-soln)))))
+    (is (= "f97c354d" (t/day05-part1-soln day05-input)))))
 
 (deftest day05-part2-soln
   (testing "Reproduces the answer for day05, part2"
-    (is (= "863dde27" (t/day05-part2-soln)))))
+    (is (= "863dde27" (t/day05-part2-soln day05-input)))))

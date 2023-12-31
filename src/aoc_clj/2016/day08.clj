@@ -1,4 +1,5 @@
 (ns aoc-clj.2016.day08
+  "Solution to https://adventofcode.com/2016/day/8"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid :as grid]))
@@ -26,7 +27,9 @@
     (parse-rect s)
     (parse-rotate s)))
 
-(def day08-input (map parse-line (u/puzzle-input "inputs/2016/day08-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn apply-rect
   [state {:keys [width height]}]
@@ -80,20 +83,19 @@
        count))
 
 (defn day08-part1-soln
-  []
-  (lit-pixels 50 6 day08-input))
-
-;; Execute to print message to screen
-(comment
-  (println (grid/Grid2D->ascii {\  :off \# :on} (apply-instructions 50 6 day08-input)))
-  "####  ##   ##  ###   ##  ###  #  # #   # ##   ##  "
-  "#    #  # #  # #  # #  # #  # #  # #   ##  # #  # "
-  "###  #  # #  # #  # #    #  # ####  # # #  # #  # "
-  "#    #  # #### ###  # ## ###  #  #   #  #### #  # "
-  "#    #  # #  # # #  #  # #    #  #   #  #  # #  # "
-  "####  ##  #  # #  #  ### #    #  #   #  #  #  ##  ")
+  [input]
+  (lit-pixels 50 6 input))
 
 (defn day08-part2-soln
-  []
+  [input]
+  ;; Execute the code in the comment to print the message
+  (comment
+    (println (grid/Grid2D->ascii {\  :off \# :on} (apply-instructions 50 6 input)))
+    "####  ##   ##  ###   ##  ###  #  # #   # ##   ##  "
+    "#    #  # #  # #  # #  # #  # #  # #   ##  # #  # "
+    "###  #  # #  # #  # #    #  # ####  # # #  # #  # "
+    "#    #  # #### ###  # ## ###  #  #   #  #### #  # "
+    "#    #  # #  # # #  #  # #    #  #   #  #  # #  # "
+    "####  ##  #  # #  #  ### #    #  #   #  #  #  ##  ")
   "EOARGPHYAO")
 

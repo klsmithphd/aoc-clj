@@ -1,8 +1,8 @@
 (ns aoc-clj.2016.day09
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2016/day/9"
+  (:require [clojure.string :as str]))
 
-(def day09-input (first (u/puzzle-input "inputs/2016/day09-input.txt")))
+(def parse first)
 
 (defn repeat-coll
   [n coll]
@@ -24,10 +24,6 @@
                  (rest remainder)
                  (into output (repeat-coll repeats repeat-seq))))))))
 
-(defn day09-part1-soln
-  []
-  (count (decompress day09-input)))
-
 (defn decompress-count
   [s]
   (loop [char-count 0 remaining s]
@@ -43,6 +39,10 @@
           (recur (+ (* (decompress-count repeat-string) repeats)
                     char-count open-marker-loc) new))))))
 
+(defn day09-part1-soln
+  [input]
+  (count (decompress input)))
+
 (defn day09-part2-soln
-  []
-  (decompress-count day09-input))
+  [input]
+  (decompress-count input))

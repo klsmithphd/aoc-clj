@@ -1,4 +1,5 @@
 (ns aoc-clj.2016.day04
+  "Solution to https://adventofcode.com/2016/day/4"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -12,7 +13,9 @@
      :sector-id (read-string (last name))
      :checksum (butlast r)}))
 
-(def day04-input (map parse-line (u/puzzle-input "inputs/2016/day04-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn freq-letter-compare
   [x y]
@@ -36,10 +39,6 @@
        (map :sector-id)
        (reduce +)))
 
-(defn day04-part1-soln
-  []
-  (real-room-sector-id-sum day04-input))
-
 (defn decipher
   [{:keys [encrypted-name sector-id] :as room}]
   (let [mapping (zipmap alphabet (u/rotate (mod sector-id 26) alphabet))]
@@ -53,6 +52,10 @@
        first
        :sector-id))
 
+(defn day04-part1-soln
+  [input]
+  (real-room-sector-id-sum input))
+
 (defn day04-part2-soln
-  []
-  (north-pole-objects-room day04-input))
+  [input]
+  (north-pole-objects-room input))
