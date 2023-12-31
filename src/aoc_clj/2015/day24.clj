@@ -1,8 +1,10 @@
 (ns aoc-clj.2015.day24
-  (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/24"
+  (:require [clojure.math.combinatorics :as combo]))
 
-(def day24-input (map read-string (u/puzzle-input "inputs/2015/day24-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn smallest-groups
   [groups input]
@@ -27,9 +29,9 @@
        best-quantum-entanglement))
 
 (defn day24-part1-soln
-  []
-  (best-qe-thirds day24-input))
+  [input]
+  (best-qe-thirds input))
 
 (defn day24-part2-soln
-  []
-  (best-qe-fourths day24-input))
+  [input]
+  (best-qe-fourths input))

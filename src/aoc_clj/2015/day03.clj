@@ -1,8 +1,7 @@
 (ns aoc-clj.2015.day03
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/3")
 
-(def day03-input
-  (first (u/puzzle-input "inputs/2015/day03-input.txt")))
+(def parse first)
 
 (def dir-map
   {\^ [0 -1]
@@ -32,9 +31,9 @@
          count)))
 
 (defn day03-part1-soln
-  []
-  (houses-visited day03-input))
+  [input]
+  (houses-visited input))
 
 (defn day03-part2-soln
-  []
-  (split-houses-visited day03-input))
+  [input]
+  (split-houses-visited input))

@@ -1,19 +1,21 @@
 (ns aoc-clj.2015.day06
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/6")
 
 (def pattern #"(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)")
 (def command {"turn on" :on
               "turn off" :off
               "toggle" :toggle})
 
-(defn parse
+(defn parse-line
   [line]
   (let [[a b c d e] (rest (first (re-seq pattern line)))]
     {:cmd (command a)
      :start [(read-string b) (read-string c)]
      :end   [(read-string d) (read-string e)]}))
 
-(def day06-input (map parse (u/puzzle-input "inputs/2015/day06-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn rect-range
   [[sx sy] [ex ey]]
@@ -72,10 +74,10 @@
 
 (def update-grid-part1 (partial update-grid commands))
 (defn day06-part1-soln
-  []
-  (count-on (reduce update-grid-part1 {} day06-input)))
+  [input]
+  (count-on (reduce update-grid-part1 {} input)))
 
 (def update-grid-part2 (partial update-grid commands2))
 (defn day06-part2-soln
-  []
-  (brightness (reduce update-grid-part2 {} day06-input)))
+  [input]
+  (brightness (reduce update-grid-part2 {} input)))

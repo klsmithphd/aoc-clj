@@ -1,5 +1,6 @@
 (ns aoc-clj.2015.day05-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2015.day05 :as t]))
 
 (deftest nice-strings
@@ -27,10 +28,12 @@
     (is (not (t/new-nice? "ieodomkazucvgmuy")))
     (is (not (t/non-overlapping-pair? "ieodomkazucvgmuy")))))
 
+(def day05-input (u/parse-puzzle-input t/parse 2015 5))
+
 (deftest day05-part1-soln
   (testing "Reproduces the answer for day05, part1"
-    (is (= 255 (t/day05-part1-soln)))))
+    (is (= 255 (t/day05-part1-soln day05-input)))))
 
 (deftest day05-part2-soln
   (testing "Reproduces the answer for day05, part2"
-    (is (= 55 (t/day05-part2-soln)))))
+    (is (= 55 (t/day05-part2-soln day05-input)))))

@@ -1,13 +1,14 @@
 (ns aoc-clj.2015.day25
+  "Solution to https://adventofcode.com/2015/day/25"
   (:require [aoc-clj.utils.math :as m]))
 
 (def first-code 20151125)
 (def modulus 33554393)
 (def multiplier 252533)
 
-
-(def code-row 2981)
-(def code-col 3075)
+(defn parse
+  [input]
+  (map read-string (re-seq #"\d+" (first input))))
 
 ;https://en.wikipedia.org/wiki/Lazy_caterer%27s_sequence
 (defn lazy-caterer
@@ -31,5 +32,5 @@
       (m/mod-mul modulus (m/mod-pow modulus multiplier (dec code-num)) first-code))))
 
 (defn day25-part1-soln
-  []
-  (code code-row code-col))
+  [[row col]]
+  (code row col))

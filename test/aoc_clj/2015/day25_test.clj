@@ -1,5 +1,6 @@
 (ns aoc-clj.2015.day25-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2015.day25 :as t]))
 
 (deftest code-num-test
@@ -25,6 +26,8 @@
     (is (= 33511524 (t/code 1 6)))
     (is (= 27995004 (t/code 6 6)))))
 
+(def day25-input (u/parse-puzzle-input t/parse 2015 25))
+
 (deftest day25-part1-soln
   (testing "Reproduces the answer for day25, part1"
-    (is (= 9132360 (t/day25-part1-soln)))))
+    (is (= 9132360 (t/day25-part1-soln day25-input)))))

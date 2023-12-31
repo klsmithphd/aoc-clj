@@ -1,4 +1,5 @@
 (ns aoc-clj.2015.day13
+  "Solution to https://adventofcode.com/2015/day/13"
   (:require [clojure.string :as str]
             [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]))
@@ -18,8 +19,6 @@
   (->> (map parse-line input)
        (group-by first)
        (u/fmap #(into {} (map second %)))))
-
-(def day13-input (parse (u/puzzle-input "inputs/2015/day13-input.txt")))
 
 (defn adjacents
   [order]
@@ -46,9 +45,9 @@
     (assoc new-table "Me" (zipmap (keys new-table) (repeat 0)))))
 
 (defn day13-part1-soln
-  []
-  (max-happiness day13-input))
+  [input]
+  (max-happiness input))
 
 (defn day13-part2-soln
-  []
-  (max-happiness (add-me day13-input)))
+  [input]
+  (max-happiness (add-me input)))

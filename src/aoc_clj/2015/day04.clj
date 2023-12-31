@@ -1,7 +1,8 @@
 (ns aoc-clj.2015.day04
+  "Solution to https://adventofcode.com/2015/day/4"
   (:import java.security.MessageDigest))
 
-(def day04-input "yzbqklnj")
+(def parse first)
 (def md5-alg (MessageDigest/getInstance "MD5"))
 
 (defn md5-bytes
@@ -35,9 +36,9 @@
   (partial first-to-meet-condition starts-with-six-zeros?))
 
 (defn day04-part1-soln
-  []
-  (first-to-start-with-five-zeros day04-input))
+  [input]
+  (first-to-start-with-five-zeros input))
 
 (defn day04-part2-soln
-  []
-  (first-to-start-with-six-zeros day04-input))
+  [input]
+  (first-to-start-with-six-zeros input))

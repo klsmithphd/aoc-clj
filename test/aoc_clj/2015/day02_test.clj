@@ -1,5 +1,6 @@
 (ns aoc-clj.2015.day02-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2015.day02 :as t]))
 
 (deftest wrapping-paper-area
@@ -12,10 +13,12 @@
     (is (= 34 (t/ribbon-length [2 3 4])))
     (is (= 14 (t/ribbon-length [1 1 10])))))
 
+(def day02-input (u/parse-puzzle-input t/parse 2015 2))
+
 (deftest day02-part1-soln
   (testing "Reproduces the answer for day02, part1"
-    (is (= 1598415 (t/day02-part1-soln)))))
+    (is (= 1598415 (t/day02-part1-soln day02-input)))))
 
 (deftest day02-part2-soln
   (testing "Reproduces the answer for day02, part2"
-    (is (= 3812909 (t/day02-part2-soln)))))
+    (is (= 3812909 (t/day02-part2-soln day02-input)))))

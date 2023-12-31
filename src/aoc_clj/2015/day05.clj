@@ -1,7 +1,7 @@
 (ns aoc-clj.2015.day05
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/5")
 
-(def day05-input (u/puzzle-input "inputs/2015/day05-input.txt"))
+(def parse identity)
 
 (defn three-vowels?
   [s]
@@ -35,9 +35,9 @@
    repeat-with-letter-between?))
 
 (defn day05-part1-soln
-  []
-  (count (filter nice? day05-input)))
+  [input]
+  (count (filter nice? input)))
 
 (defn day05-part2-soln
-  []
-  (count (filter new-nice? day05-input)))
+  [input]
+  (count (filter new-nice? input)))

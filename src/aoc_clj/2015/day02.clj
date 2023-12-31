@@ -1,13 +1,14 @@
 (ns aoc-clj.2015.day02
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/2"
+  (:require [clojure.string :as str]))
 
 (defn parse-line
   [line]
   (map read-string (str/split line #"x")))
 
-(def day02-input
-  (map parse-line (u/puzzle-input "inputs/2015/day02-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn wrapping-paper-area
   [[l w h]]
@@ -21,9 +22,9 @@
        (* l w h))))
 
 (defn day02-part1-soln
-  []
-  (reduce + (map wrapping-paper-area day02-input)))
+  [input]
+  (reduce + (map wrapping-paper-area input)))
 
 (defn day02-part2-soln
-  []
-  (reduce + (map ribbon-length day02-input)))
+  [input]
+  (reduce + (map ribbon-length input)))

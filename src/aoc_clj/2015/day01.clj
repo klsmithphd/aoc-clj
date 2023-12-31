@@ -1,7 +1,8 @@
 (ns aoc-clj.2015.day01
+  "Solution to https://adventofcode.com/2015/day/1"
   (:require [aoc-clj.utils.core :as u]))
 
-(def day01-input (first (u/puzzle-input "inputs/2015/day01-input.txt")))
+(def parse first)
 
 (defn instructions
   [input]
@@ -19,10 +20,10 @@
        (u/index-of (u/equals? -1))))
 
 (defn day01-part1-soln
-  []
-  (final-floor day01-input))
+  [input]
+  (final-floor input))
 
 (defn day01-part2-soln
-  []
-  (first-pos-in-basement day01-input))
+  [input]
+  (first-pos-in-basement input))
 
