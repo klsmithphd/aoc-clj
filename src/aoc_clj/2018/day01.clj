@@ -1,7 +1,9 @@
 (ns aoc-clj.2018.day01
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2018/day/1")
 
-(def day01-input (map read-string (u/puzzle-input "inputs/2018/day01-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn net-freq-change
   "Sums all the changes in frequency, starting with zero"
@@ -19,9 +21,9 @@
         (recur (rest freqs) (conj observed freq))))))
 
 (defn day01-part1-soln
-  []
-  (net-freq-change day01-input))
+  [input]
+  (net-freq-change input))
 
 (defn day01-part2-soln
-  []
-  (find-first-repeated-freq day01-input))
+  [input]
+  (find-first-repeated-freq input))

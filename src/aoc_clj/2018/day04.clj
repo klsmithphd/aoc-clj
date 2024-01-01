@@ -1,8 +1,7 @@
 (ns aoc-clj.2018.day04
+  "Solution to https://adventofcode.com/2018/day/4"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
-
-(def day04-input (str/join "\n" (sort (u/puzzle-input "inputs/2018/day04-input.txt"))))
 
 (defn parse-shift
   [shift]
@@ -13,7 +12,7 @@
 
 (defn parse
   [input]
-  (->> (str/split input #"\[.{16}\] Guard ")
+  (->> (str/split (str/join "\n" (sort input)) #"\[.{16}\] Guard ")
        (map #(str/split % #"\n"))
        rest
        (map parse-shift)
@@ -45,9 +44,9 @@
     [guard minute]))
 
 (defn day04-part1-soln
-  []
-  (reduce * (sleepiest-guard-and-optimal-minute (parse day04-input))))
+  [input]
+  (reduce * (sleepiest-guard-and-optimal-minute input)))
 
 (defn day04-part2-soln
-  []
-  (reduce * (guard-most-frequently-asleep-at-minute (parse day04-input))))
+  [input]
+  (reduce * (guard-most-frequently-asleep-at-minute input)))

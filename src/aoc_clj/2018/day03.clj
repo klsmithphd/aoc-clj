@@ -1,9 +1,9 @@
 (ns aoc-clj.2018.day03
+  "Solution to https://adventofcode.com/2018/day/3"
   (:require [clojure.set :as set]
-            [clojure.string :as string]
-            [aoc-clj.utils.core :as u]))
+            [clojure.string :as string]))
 
-(defn parse-input-line
+(defn parse-line
   [line]
   (let [vars (->> (string/split line #"[@\,\:x]")
                   (map string/trim))
@@ -14,7 +14,9 @@
      :w (read-string w)
      :h (read-string h)}))
 
-(def day03-input (map parse-input-line (u/puzzle-input "inputs/2018/day03-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn swath-grid
   [{:keys [x y w h]}]
@@ -58,11 +60,11 @@
     (first (set/difference all-ids overlap-ids))))
 
 (defn day03-part1-soln
-  []
-  (overlapping-squares day03-input))
+  [input]
+  (overlapping-squares input))
 
 (defn day03-part2-soln
-  []
-  (nonoverlapping-swath day03-input))
+  [input]
+  (nonoverlapping-swath input))
 
 
