@@ -4,7 +4,7 @@
             [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.2023.day23 :as t]))
 
-(def d23-s01-raw
+(def d23-s00-raw
   ["#.#####################"
    "#.......#########...###"
    "#######.#########.#.###"
@@ -29,7 +29,7 @@
    "#.....###...###...#...#"
    "#####################.#"])
 
-(def d23-s01
+(def d23-s00
   (vg/->VecGrid2D
    [[\# \. \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \#]
     [\# \. \. \. \. \. \. \. \# \# \# \# \# \# \# \# \# \. \. \. \# \# \#]
@@ -78,12 +78,12 @@
 
 (deftest parse-test
   (testing "Correctly parses the input"
-    (is (= d23-s01 (t/parse d23-s01-raw)))))
+    (is (= d23-s00 (t/parse d23-s00-raw)))))
 
 (deftest trace-maze-test
   (testing "Explores the maze and returns a map representation
             of a DAG representing the vertices"
-    (is (= d23-s01-graph (t/trace-maze d23-s01 {:pos [1 0] :heading :n})))))
+    (is (= d23-s01-graph (t/trace-maze d23-s00 {:pos [1 0] :heading :n})))))
 
 (deftest full-graph-test
   (testing "Adds the reverse edges to the graph"
@@ -91,8 +91,8 @@
 
 (deftest longest-possible-path-test
   (testing "Finds the longest possible path through the maze"
-    (is (= 94 (t/longest-downslope-path d23-s01)))
-    (is (= 154 (t/longest-full-path d23-s01)))))
+    (is (= 94 (t/longest-downslope-path d23-s00)))
+    (is (= 154 (t/longest-full-path d23-s00)))))
 
 (def day23-input (u/parse-puzzle-input t/parse 2023 23))
 
