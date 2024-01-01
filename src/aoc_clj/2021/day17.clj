@@ -1,11 +1,14 @@
-(ns aoc-clj.2021.day17)
+(ns aoc-clj.2021.day17
+  "Solution to https://adventofcode.com/2021/day/17")
 
-;; target area: x=281..311, y=-74..-54
-(def day17-input
-  {:xmin 281
-   :xmax 311
-   :ymin -74
-   :ymax -54})
+(defn parse
+  [input]
+  (let [nums (map read-string (re-seq #"\-?\d+" (first input)))
+        [xmin xmax ymin ymax] nums]
+    {:xmin xmin
+     :xmax xmax
+     :ymin ymin
+     :ymax ymax}))
 
 (defn target?
   [{:keys [xmin xmax ymin ymax]} [x y]]
@@ -50,10 +53,6 @@
   [target]
   (second (highest-trajectory target 100)))
 
-(defn day17-part1-soln
-  []
-  (highest-point day17-input))
-
 ;; TODO this is a brute force approach, and could
 ;; be made considerably smarter by calculating the time
 ;; range that the projectile is in the target's x range 
@@ -71,6 +70,10 @@
         candidates (filter (partial hits-target? target) trajectories)]
     (count candidates)))
 
+(defn day17-part1-soln
+  [input]
+  (highest-point input))
+
 (defn day17-part2-soln
-  []
-  (viable-init-vels day17-input 100))
+  [input]
+  (viable-init-vels input 100))

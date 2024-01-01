@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day02
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2016/day/2")
 
-(def day02-input (u/puzzle-input "inputs/2016/day02-input.txt"))
+(def parse identity)
 
 (def square-keypad
   {[-1 -1] 1  [0 -1] 2  [1 -1] 3
@@ -46,9 +46,9 @@
 (def diagonal-bathroom-code (partial bathroom-code diagonal-keypad))
 
 (defn day02-part1-soln
-  []
-  (square-bathroom-code day02-input))
+  [input]
+  (square-bathroom-code input))
 
 (defn day02-part2-soln
-  []
-  (diagonal-bathroom-code day02-input))
+  [input]
+  (diagonal-bathroom-code input))

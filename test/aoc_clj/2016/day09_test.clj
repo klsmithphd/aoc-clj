@@ -1,5 +1,6 @@
 (ns aoc-clj.2016.day09-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day09 :as t]))
 
 (deftest decompress
@@ -18,10 +19,12 @@
     (is (= 241920 (t/decompress-count "(27x12)(20x12)(13x14)(7x10)(1x12)A")))
     (is (= 445 (t/decompress-count "(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN")))))
 
+(def day09-input (u/parse-puzzle-input t/parse 2016 9))
+
 (deftest day09-part1-soln
   (testing "Reproduces the answer for day09, part1"
-    (is (= 112830 (t/day09-part1-soln)))))
+    (is (= 112830 (t/day09-part1-soln day09-input)))))
 
 (deftest day09-part2-soln
   (testing "Reproduces the answer for day09, part2"
-    (is (= 10931789799 (t/day09-part2-soln)))))
+    (is (= 10931789799 (t/day09-part2-soln day09-input)))))

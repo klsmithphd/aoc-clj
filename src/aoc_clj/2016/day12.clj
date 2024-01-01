@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day12
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2016/day/12"
+  (:require [clojure.string :as str]))
 
 (defn parse-var
   [x]
@@ -16,7 +16,9 @@
       {:cmd a :x (parse-var b) :y (parse-var c)}
       {:cmd a :x (parse-var b)})))
 
-(def day12-input (mapv parse-line (u/puzzle-input "inputs/2016/day12-input.txt")))
+(defn parse
+  [input]
+  (mapv parse-line input))
 
 (defn dref
   [state x]
@@ -51,12 +53,10 @@
         (recur (apply-cmd state cmd))))))
 
 (defn day12-part1-soln
-  []
-  (:a (execute init-state day12-input)))
+  [input]
+  (:a (execute init-state input)))
 
 (defn day12-part2-soln
-  []
-  (:a (execute
-       (assoc init-state :c 1)
-       day12-input)))
+  [input]
+  (:a (execute (assoc init-state :c 1) input)))
 

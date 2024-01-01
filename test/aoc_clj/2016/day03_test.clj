@@ -1,8 +1,9 @@
 (ns aoc-clj.2016.day03-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day03 :as t]))
 
-(def day03-sample
+(def d03-s00
   [[101 301 501]
    [102 302 502]
    [103 303 503]
@@ -18,12 +19,14 @@
              (401 402 403)
              (501 502 503)
              (601 602 603))
-           (t/group-by-columns day03-sample)))))
+           (t/group-by-columns d03-s00)))))
+
+(def day03-input (u/parse-puzzle-input t/parse 2016 3))
 
 (deftest day03-part1-soln
   (testing "Reproduces the answer for day03, part1"
-    (is (= 869 (t/day03-part1-soln)))))
+    (is (= 869 (t/day03-part1-soln day03-input)))))
 
 (deftest day03-part2-soln
   (testing "Reproduces the answer for day03, part2"
-    (is (= 1544 (t/day03-part2-soln)))))
+    (is (= 1544 (t/day03-part2-soln day03-input)))))

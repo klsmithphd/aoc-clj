@@ -17,8 +17,6 @@
   [input]
   (mapgrid/lists->MapGrid2D (map (partial map translate) input)))
 
-(def day12-input (u/parse-puzzle-input parse 2022 12))
-
 ;;;; Puzzle logic
 
 (defn find-matches
@@ -71,11 +69,11 @@
 (defn day12-part1-soln
   "What is the fewest steps required to move from your current position to the 
    location that should get the best signal?"
-  []
-  (shortest-path-from-start day12-input))
+  [input]
+  (shortest-path-from-start input))
 
 (defn day12-part2-soln
   "What is the fewest steps required to move starting from any square with 
    elevation `a` to the location that should get the best signal?"
-  []
-  (shortest-path-from-any-a day12-input))
+  [input]
+  (shortest-path-from-any-a input))

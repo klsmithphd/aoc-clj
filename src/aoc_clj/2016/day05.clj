@@ -1,20 +1,21 @@
 (ns aoc-clj.2016.day05
+  "Solution to https://adventofcode.com/2016/day/5"
   (:require [aoc-clj.utils.digest :as d]))
 
-(def day05-input "reyedfim")
+(def parse first)
 
-(defn starts-with-five-zeros?
-  [bytes]
-  (and (zero? (aget bytes 0))
-       (zero? (aget bytes 1))
-       (<= 0 (aget bytes 2) 15)))
+;; (defn starts-with-five-zeros?
+;;   [bytes]
+;;   (and (zero? (aget bytes 0))
+;;        (zero? (aget bytes 1))
+;;        (<= 0 (aget bytes 2) 15)))
 
-(defn valid-hash-offsets
-  [door-id]
-  (let [hashed #(d/md5-bytes (str door-id %))]
-    (->>  (range)
-          (filter (comp starts-with-five-zeros? hashed))
-          (take 30))))
+;; (defn valid-hash-offsets
+;;   [door-id]
+;;   (let [hashed #(d/md5-bytes (str door-id %))]
+;;     (->>  (range)
+;;           (filter (comp starts-with-five-zeros? hashed))
+;;           (take 30))))
 
 (def day05-input-valid-offsets
   "Found by calling (valid-hash-offsets day05-input) and waiting a long time!"
@@ -32,10 +33,6 @@
        (map #(nth % 5))
        (apply str)))
 
-(defn day05-part1-soln
-  []
-  (password day05-input day05-input-valid-offsets))
-
 (defn set-char
   [s [idx c]]
   (let [pos (read-string (str idx))]
@@ -51,6 +48,10 @@
        (reduce set-char [\* \* \* \* \* \* \* \*])
        (apply str)))
 
+(defn day05-part1-soln
+  [input]
+  (password input day05-input-valid-offsets))
+
 (defn day05-part2-soln
-  []
-  (password-part2 day05-input day05-input-valid-offsets))
+  [input]
+  (password-part2 input day05-input-valid-offsets))

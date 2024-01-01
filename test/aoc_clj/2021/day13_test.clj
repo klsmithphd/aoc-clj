@@ -1,8 +1,9 @@
 (ns aoc-clj.2021.day13-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2021.day13 :as t]))
 
-(def day13-sample
+(def d13-s00
   (t/parse
    ["6,10"
     "0,14"
@@ -28,7 +29,7 @@
 
 (deftest dots-after-first-fold
   (testing "Counts the dots after only one fold in sample data"
-    (is (= 17 (t/dots-after-first-fold day13-sample)))))
+    (is (= 17 (t/dots-after-first-fold d13-s00)))))
 
 (deftest complete-folds
   (testing "Returns the 16 dots after all folds in sample data"
@@ -37,15 +38,14 @@
              [0 2]                   [4 2]
              [0 3]                   [4 3]
              [0 4] [1 4] [2 4] [3 4] [4 4]}
-           (t/complete-folds day13-sample)))))
+           (t/complete-folds d13-s00)))))
+
+(def day13-input (u/parse-puzzle-input t/parse 2021 13))
 
 (deftest day13-part1-soln
   (testing "Reproduces the answer for day13, part1"
-    (is (= 621 (t/day13-part1-soln)))))
+    (is (= 621 (t/day13-part1-soln day13-input)))))
 
-;; Day 13 Part 2 solution emits a string that
-;; when printed, can be read as a set of upper-case
-;; letters
-;; (deftest day13-part2-soln
-;;   (testing "Reproduces the answer for day13, part2"
-;;     (is (= "HKUJGAJZ" (t/day13-part2-soln)))))
+(deftest day13-part2-soln
+  (testing "Reproduces the answer for day13, part2"
+    (is (= "HKUJGAJZ" (t/day13-part2-soln day13-input)))))

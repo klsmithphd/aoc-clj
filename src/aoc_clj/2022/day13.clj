@@ -16,8 +16,6 @@
   (map (partial mapv read-string)
        (u/split-at-blankline input)))
 
-(def day13-input (u/parse-puzzle-input parse 2022 13))
-
 ;;;; Puzzle logic
 
 (declare packet-compare)
@@ -88,11 +86,11 @@
 (defn day13-part1-soln
   "Determine which pairs of packets are already in the right order. 
    What is the sum of the indices of those pairs?"
-  []
-  (right-order-packet-id-sum day13-input))
+  [input]
+  (right-order-packet-id-sum input))
 
 (defn day13-part2-soln
   "Organize all of the packets into the correct order. 
    What is the decoder key for the distress signal?"
-  []
-  (decoder-key day13-input))
+  [input]
+  (decoder-key input))

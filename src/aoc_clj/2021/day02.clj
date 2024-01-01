@@ -1,14 +1,15 @@
 (ns aoc-clj.2021.day02
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/2"
+  (:require [clojure.string :as str]))
 
 (defn parse-line
   [line]
   (let [[cmd val] (str/split line #" ")]
     [(keyword cmd) (read-string val)]))
 
-(def day02-input
-  (map parse-line (u/puzzle-input "inputs/2021/day02-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn part1-rules
   [[pos depth] [cmd val]]
@@ -29,9 +30,9 @@
   (reduce rules [0 0 0] cmds))
 
 (defn day02-part1-soln
-  []
-  (reduce * (sub-end-state day02-input part1-rules)))
+  [input]
+  (reduce * (sub-end-state input part1-rules)))
 
 (defn day02-part2-soln
-  []
-  (reduce * (drop-last (sub-end-state day02-input part2-rules))))
+  [input]
+  (reduce * (drop-last (sub-end-state input part2-rules))))

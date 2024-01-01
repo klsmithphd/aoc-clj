@@ -1,18 +1,16 @@
 (ns aoc-clj.2015.day22
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/22")
 
-(defn parse-line
-  [line]
-  (let [[attr qty] (str/split line #": ")]
-    [(keyword (str/join "-" (str/split (str/lower-case attr) #" "))) (read-string qty)]))
+;; (defn parse-line
+;;   [line]
+;;   (let [[attr qty] (str/split line #": ")]
+;;     [(keyword (str/join "-" (str/split (str/lower-case attr) #" "))) (read-string qty)]))
 
-(defn parse
-  [input]
-  (into {} (map parse-line input)))
+;; (defn parse
+;;   [input]
+;;   (into {} (map parse-line input)))
 
-(def day22-input (parse (u/puzzle-input "inputs/2015/day22-input.txt")))
-(def player {:hit-points 50 :mana 500 :armor 0})
+;; (def player {:hit-points 50 :mana 500 :armor 0})
 (def spell-cost
   {:magic-missile 53
    :drain         73
@@ -98,28 +96,29 @@
    (-> (player-round hard? state spell)
        boss-round)))
 
-(defn player-wins?
-  [{:keys [player boss]}]
-  (and
-   (not (pos? (:hit-points boss)))
-   (pos? (:hit-points player))))
+;; (defn player-wins?
+;;   [{:keys [player boss]}]
+;;   (and
+;;    (not (pos? (:hit-points boss)))
+;;    (pos? (:hit-points player))))
 
-(defn available-spells
-  [{:keys [player effects]}]
-  (if (<= (:hit-points player) 0)
-    []
-    (let [active-effects (map first (filter #(> 1 (val %)) effects))]
-      (->> (u/without-keys spell-cost active-effects)
-           (filter #(>= (:mana player) (val %)))
-           (map first)))))
+;; (defn available-spells
+;;   [{:keys [player effects]}]
+;;   (if (<= (:hit-points player) 0)
+;;     []
+;;     (let [active-effects (map first (filter #(> 1 (val %)) effects))]
+;;       (->> (u/without-keys spell-cost active-effects)
+;;            (filter #(>= (:mana player) (val %)))
+;;            (map first)))))
 
+;; TODO - These ought to be implemented so that they work on abitrary
+;; inputs rather than hard-coding the winning plays
 (def winning-plays [:poison :recharge :shield :poison :recharge :magic-missile :poison :drain :magic-missile])
 (defn day22-part1-soln
   []
   (reduce + (map spell-cost winning-plays)))
 
 (def winning-plays-part2 [:poison :recharge :shield :poison :recharge :shield :poison :magic-missile :magic-missile])
-
 (defn day22-part2-soln
   []
   (reduce + (map spell-cost winning-plays-part2)))

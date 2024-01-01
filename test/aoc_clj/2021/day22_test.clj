@@ -3,14 +3,14 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2021.day22 :as t]))
 
-(def day22-sample1
+(def d22-s00
   (t/parse
    ["on x=10..12,y=10..12,z=10..12"
     "on x=11..13,y=11..13,z=11..13"
     "off x=9..11,y=9..11,z=9..11"
     "on x=10..10,y=10..10,z=10..10"]))
 
-(def day22-sample2
+(def d22-s01
   (t/parse
    ["on x=-20..26,y=-36..17,z=-47..7"
     "on x=-20..33,y=-21..23,z=-26..28"
@@ -35,24 +35,26 @@
     "on x=-54112..-39298,y=-85059..-49293,z=-27449..7877"
     "on x=967..23432,y=45373..81175,z=27513..53682"]))
 
-(def day22-sample3 (t/parse (u/puzzle-input "inputs/2021/day22-sample3.txt")))
+(def d22-s02 (t/parse (u/puzzle-input "inputs/2021/day22-sample3.txt")))
 
 (deftest cubes-in-init-area
   (testing "Computes the cuboids that are 'on' inside the init area"
-    (is (= 39     (t/on-cubes-in-init-area day22-sample1)))
-    (is (= 590784 (t/on-cubes-in-init-area day22-sample2)))
-    (is (= 474140 (t/on-cubes-in-init-area day22-sample3)))))
+    (is (= 39     (t/on-cubes-in-init-area d22-s00)))
+    (is (= 590784 (t/on-cubes-in-init-area d22-s01)))
+    (is (= 474140 (t/on-cubes-in-init-area d22-s02)))))
 
 (deftest cubes-in-large-example
   (testing "Computes all of the on cubes in a large example"
-    (is (= 2758514936282235 (t/on-cubes day22-sample3)))))
+    (is (= 2758514936282235 (t/on-cubes d22-s02)))))
+
+(def day22-input (u/parse-puzzle-input t/parse 2021 22))
 
 (deftest day22-part1-soln
   (testing "Reproduces the answer for day22, part1"
-    (is (= 503864 (t/day22-part1-soln)))))
+    (is (= 503864 (t/day22-part1-soln day22-input)))))
 
 ;; FIXME 2021.day22 part2 is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/8
 (deftest ^:slow day22-part2-soln
   (testing "Reproduces the answer for day22, part2"
-    (is (= 1255547543528356 (t/day22-part2-soln)))))
+    (is (= 1255547543528356 (t/day22-part2-soln day22-input)))))

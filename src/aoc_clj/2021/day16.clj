@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day16
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/16"
+  (:require [clojure.string :as str]))
 
 ;; From https://groups.google.com/g/clojure-dev/c/NaAuBz6SpkY?pli=1
 (defn take-until
@@ -34,14 +34,12 @@
    \F "1111"})
 
 (defn parse
-  [s]
-  (str/join (mapcat hex-sub s)))
+  [input]
+  (str/join (mapcat hex-sub (first input))))
 
 (defn binstr->long
   [s]
   (Long/parseLong s 2))
-
-(def day16-input (parse (first (u/puzzle-input "inputs/2021/day16-input.txt"))))
 
 (defn decode-literal
   [s]
@@ -98,10 +96,6 @@
        (reduce version-sum accumulator (:subpackets decoded)))
     (+ accumulator (:version decoded))))
 
-(defn day16-part1-soln
-  []
-  (version-sum 0 (decode day16-input)))
-
 (defn apply-operator
   [decoded]
   (let [subvals (map apply-operator (:subpackets decoded))]
@@ -115,6 +109,10 @@
       6 (if (< (first subvals) (second subvals)) 1 0)
       7 (if (= (first subvals) (second subvals)) 1 0))))
 
+(defn day16-part1-soln
+  [input]
+  (version-sum 0 (decode input)))
+
 (defn day16-part2-soln
-  []
-  (apply-operator (decode day16-input)))
+  [input]
+  (apply-operator (decode input)))

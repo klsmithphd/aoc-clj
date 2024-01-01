@@ -1,8 +1,9 @@
 (ns aoc-clj.2022.day03-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day03 :as t]))
 
-(def d03-s01
+(def d03-s00
   ["vJrwpWtwJgWrhcsFMMfFFhFp"
    "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"
    "PmmdzqPrVvPwwTWBwg"
@@ -14,9 +15,9 @@
   (testing "Finds the overlapping items in the first/second halves
             or among groups of three"
     (is (= [\p \L \P \v \t \s]
-           (t/overlaps ::t/halfway d03-s01)))
+           (t/overlaps ::t/halfway d03-s00)))
     (is (= [\r \Z]
-           (t/overlaps ::t/thirds d03-s01)))))
+           (t/overlaps ::t/thirds d03-s00)))))
 
 (deftest priority-test
   (testing "Computes the priority for a given character"
@@ -29,13 +30,15 @@
 
 (deftest overlaps-priority-test
   (testing "Finds the sum of the priorities of the overlapping items"
-    (is (= 157 (t/overlap-priority-sum ::t/halfway d03-s01)))
-    (is (= 70  (t/overlap-priority-sum ::t/thirds d03-s01)))))
+    (is (= 157 (t/overlap-priority-sum ::t/halfway d03-s00)))
+    (is (= 70  (t/overlap-priority-sum ::t/thirds d03-s00)))))
+
+(def day03-input (u/parse-puzzle-input t/parse 2022 3))
 
 (deftest day03-part1-soln
   (testing "Reproduces the answer for day03, part1"
-    (is (= 7597 (t/day03-part1-soln)))))
+    (is (= 7597 (t/day03-part1-soln day03-input)))))
 
 (deftest day03-part2-soln
   (testing "Reproduces the answer for day03, part2"
-    (is (= 2607 (t/day03-part2-soln)))))
+    (is (= 2607 (t/day03-part2-soln day03-input)))))

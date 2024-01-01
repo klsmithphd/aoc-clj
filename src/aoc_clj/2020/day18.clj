@@ -1,14 +1,14 @@
 (ns aoc-clj.2020.day18
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/18"
+  (:require [clojure.string :as str]))
 
-(def day18-input (u/puzzle-input "inputs/2020/day18-input.txt"))
+(def parse identity)
 
-(defn parse
+(defn interpret
   [input]
   (read-string (str "(" input ")")))
 
-(defn parse2
+(defn interpret2
   [input]
   (let [updated (-> input
                     (str/replace "(" "((")
@@ -34,9 +34,9 @@
      init (partition 2 (rest expr)))))
 
 (defn day18-part1-soln
-  []
-  (reduce + (map (comp infix parse) day18-input)))
+  [input]
+  (reduce + (map (comp infix interpret) input)))
 
 (defn day18-part2-soln
-  []
-  (reduce + (map (comp infix parse2) day18-input)))
+  [input]
+  (reduce + (map (comp infix interpret2) input)))

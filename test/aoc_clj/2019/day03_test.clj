@@ -1,5 +1,6 @@
 (ns aoc-clj.2019.day03-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2019.day03 :as t]))
 
 (def path1-segs (t/parse-segments ["R8","U5","L5","D3"]))
@@ -49,10 +50,12 @@
     (is (= steps2 (t/shortest-steps-to-intersection input2)))
     (is (= steps3 (t/shortest-steps-to-intersection input3)))))
 
+(def day03-input (u/parse-puzzle-input t/parse 2019 3))
+
 (deftest day03-part1-soln-test
   (testing "Can reproduce the answer for part1"
-    (is (= 375 (t/day03-part1-soln)))))
+    (is (= 375 (t/day03-part1-soln day03-input)))))
 
 (deftest day03-part2-soln-test
   (testing "Can reproduce the answer for part2"
-    (is (= 14746 (t/day03-part2-soln)))))
+    (is (= 14746 (t/day03-part2-soln day03-input)))))

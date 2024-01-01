@@ -1,8 +1,9 @@
 (ns aoc-clj.2022.day05-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day05 :as t]))
 
-(def d05-s01
+(def d05-s00
   (t/parse
    ["    [D]    "
     "[N] [C]    "
@@ -16,7 +17,7 @@
 
 (deftest parse-test
   (testing "Correctly parses the sample input"
-    (is (= d05-s01
+    (is (= d05-s00
            {:stacks {1 ["Z" "N"]
                      2 ["M" "C" "D"]
                      3 ["P"]}
@@ -98,17 +99,19 @@
 (deftest final-arrangement-1-test
   (testing "Stacks end up in the correct final state in part1"
     (is (= {1 ["C"], 2 ["M"], 3 ["P" "D" "N" "Z"]}
-           (t/final-arrangement-1 d05-s01)))))
+           (t/final-arrangement-1 d05-s00)))))
 
 (deftest final-arrangement-2-test
   (testing "Stacks end up in the correct final state in part1"
     (is (= {1 ["M"], 2 ["C"], 3 ["P" "Z" "N" "D"]}
-           (t/final-arrangement-2 d05-s01)))))
+           (t/final-arrangement-2 d05-s00)))))
+
+(def day05-input (u/parse-puzzle-input t/parse 2022 5))
 
 (deftest day05-part1-soln
   (testing "Reproduces the answer for day05, part1"
-    (is (= "CNSZFDVLJ" (t/day05-part1-soln)))))
+    (is (= "CNSZFDVLJ" (t/day05-part1-soln day05-input)))))
 
 (deftest day05-part2-soln
   (testing "Reproduces the answer for day05, part2"
-    (is (= "QNDWLMGNS" (t/day05-part2-soln)))))
+    (is (= "QNDWLMGNS" (t/day05-part2-soln day05-input)))))

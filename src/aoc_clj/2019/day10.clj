@@ -1,15 +1,14 @@
 (ns aoc-clj.2019.day10
+  "Solution to https://adventofcode.com/2019/day/10"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.math :as math]))
 
-(defn parse-map
+(defn parse
   [ascii-asteroids]
   (for [y (range (count ascii-asteroids))
         x (range (count (first ascii-asteroids)))
         :when (= \# (nth (nth ascii-asteroids y) x))]
     [x y]))
-
-(def day10-input (parse-map (u/puzzle-input "inputs/2019/day10-input.txt")))
 
 (defn quadrant
   [[x1 y1] [x2 y2]]
@@ -47,10 +46,6 @@
   (let [counts (map #(visible-asteroid-count % asteroids) asteroids)
         visibles (zipmap asteroids counts)]
     (apply max-key second visibles)))
-
-(defn day10-part1-soln
-  []
-  (best-location day10-input))
 
 (defn angle
   [[slope quadrant]]
@@ -95,9 +90,13 @@
          (apply mapcat vector)
          (filter some?))))
 
+(defn day10-part1-soln
+  [input]
+  (best-location input))
+
 (defn day10-part2-soln
-  []
-  (let [pos (first (day10-part1-soln))
-        [x y] (nth (asteroids-laser-order pos day10-input) 199)]
+  [input]
+  (let [pos (first (day10-part1-soln input))
+        [x y] (nth (asteroids-laser-order pos input) 199)]
     (+ (* 100 x) y)))
 

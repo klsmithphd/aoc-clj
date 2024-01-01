@@ -1,8 +1,8 @@
 (ns aoc-clj.2015.day12
-  (:require [cheshire.core :as c]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/11"
+  (:require [cheshire.core :as c]))
 
-(def day12-input (first  (u/puzzle-input "inputs/2015/day12-input.txt")))
+(def parse first)
 
 (defn all-numbers
   [s]
@@ -21,12 +21,12 @@
       s)))
 
 (defn day12-part1-soln
-  []
-  (reduce + (all-numbers day12-input)))
+  [input]
+  (reduce + (all-numbers input)))
 
 (defn day12-part2-soln
-  []
-  (->> (c/parse-string day12-input)
+  [input]
+  (->> (c/parse-string input)
        drop-red
        c/generate-string
        all-numbers

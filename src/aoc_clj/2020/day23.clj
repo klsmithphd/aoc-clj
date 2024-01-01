@@ -1,9 +1,11 @@
 (ns aoc-clj.2020.day23
+  "Solution to https://adventofcode.com/2020/day/23"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
-(def day23-sample [3 8 9 1 2 5 4 6 7])
-(def day23-input [1 9 8 7 5 3 4 6 2])
+(defn parse
+  [input]
+  (map (comp read-string str) (first input)))
 
 (defn init-ring
   "Represents a ring as a simple map, each node is a key, and its next node
@@ -61,9 +63,9 @@
     (take 10 (order-after-moves lotsa-cups moves))))
 
 (defn day23-part1-soln
-  []
-  (str/join (drop 1 (order-after-moves day23-input 100))))
+  [input]
+  (str/join (drop 1 (order-after-moves input 100))))
 
 (defn day23-part2-soln
-  []
-  (reduce * (take 2 (drop 1 (star-cups day23-input 10000000)))))
+  [input]
+  (reduce * (take 2 (drop 1 (star-cups input 10000000)))))

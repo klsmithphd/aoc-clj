@@ -1,32 +1,34 @@
 (ns aoc-clj.2020.day13-test
-  (:require [clojure.string :as str]
-            [clojure.test :refer [deftest testing is]]
+  (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2020.day13 :as t]))
 
-(def day13-sample1 (t/parse (str/split "939\n7,13,x,x,59,x,31,19" #"\n")))
-(def day13-sample2 {:buses '(17,x,13,19)})
-(def day13-sample3 {:buses '(67,7,59,61)})
-(def day13-sample4 {:buses '(67,x,7,59,61)})
-(def day13-sample5 {:buses '(67,7,x,59,61)})
-(def day13-sample6 {:buses '(1789,37,47,1889)})
+(def d13-s00 (t/parse ["939" "7,13,x,x,59,x,31,19"]))
+(def d13-s01 {:buses '(17,x,13,19)})
+(def d13-s02 {:buses '(67,7,59,61)})
+(def d13-s03 {:buses '(67,x,7,59,61)})
+(def d13-s04 {:buses '(67,7,x,59,61)})
+(def d13-s05 {:buses '(1789,37,47,1889)})
 
 (deftest earliest-bus-and-wait-time
   (testing "Can find the earliest bus available after time t"
-    (is (= [59 5] (t/earliest-bus-and-wait-time day13-sample1)))))
+    (is (= [59 5] (t/earliest-bus-and-wait-time d13-s00)))))
 
 (deftest earliest-time-for-consecutive-buses
   (testing "Can find the earliest time for consecutive buses to depart"
-    (is (= 1068781    (t/earliest-consecutive-buses day13-sample1)))
-    (is (= 3417       (t/earliest-consecutive-buses day13-sample2)))
-    (is (= 754018     (t/earliest-consecutive-buses day13-sample3)))
-    (is (= 779210     (t/earliest-consecutive-buses day13-sample4)))
-    (is (= 1261476    (t/earliest-consecutive-buses day13-sample5)))
-    (is (= 1202161486 (t/earliest-consecutive-buses day13-sample6)))))
+    (is (= 1068781    (t/earliest-consecutive-buses d13-s00)))
+    (is (= 3417       (t/earliest-consecutive-buses d13-s01)))
+    (is (= 754018     (t/earliest-consecutive-buses d13-s02)))
+    (is (= 779210     (t/earliest-consecutive-buses d13-s03)))
+    (is (= 1261476    (t/earliest-consecutive-buses d13-s04)))
+    (is (= 1202161486 (t/earliest-consecutive-buses d13-s05)))))
+
+(def day13-input (u/parse-puzzle-input t/parse 2020 13))
 
 (deftest day13-part1-soln
   (testing "Reproduces the answer for day13, part1"
-    (is (= 104 (t/day13-part1-soln)))))
+    (is (= 104 (t/day13-part1-soln day13-input)))))
 
 (deftest day13-part2-soln
   (testing "Reproduces the answer for day13, part2"
-    (is (= 842186186521918N (t/day13-part2-soln)))))
+    (is (= 842186186521918N (t/day13-part2-soln day13-input)))))

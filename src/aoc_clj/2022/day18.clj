@@ -9,8 +9,6 @@
   [input]
   (set (map u/str->vec input)))
 
-(def day18-input (parse (u/puzzle-input "inputs/2022/day18-input.txt")))
-
 ;;;; Puzzle logic
 
 (defn surface-area
@@ -83,10 +81,10 @@
 
 (defn day18-part1-soln
   "What is the surface area of your scanned lava droplet?"
-  []
-  (surface-area day18-input))
+  [input]
+  (surface-area input))
 
 (defn day18-part2-soln
   "What is the exterior surface area of your scanned lava droplet?"
-  []
-  (outer-surface-area day18-input))
+  [input]
+  (outer-surface-area input))

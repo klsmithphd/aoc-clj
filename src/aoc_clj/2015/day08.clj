@@ -1,9 +1,9 @@
 (ns aoc-clj.2015.day08
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/8"
+  (:require [clojure.string :as str]))
 
 (def hex-pattern #"\\x[0-9a-f]{2}")
-(def day08-input (u/puzzle-input "inputs/2015/day08-input.txt"))
+(def parse identity)
 
 (defn hex->str
   [h]
@@ -59,9 +59,9 @@
      (reduce + (map code-chars input))))
 
 (defn day08-part1-soln
-  []
-  (unescaped-difference day08-input))
+  [input]
+  (unescaped-difference input))
 
 (defn day08-part2-soln
-  []
-  (escaped-difference day08-input))
+  [input]
+  (escaped-difference input))

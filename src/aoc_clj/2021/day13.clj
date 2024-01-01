@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day13
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/13"
+  (:require [clojure.string :as str]))
 
 (defn parse-coord
   [line]
@@ -18,8 +18,6 @@
                            (str/split #"\n\n"))]
     {:coords (map parse-coord (str/split coords #"\n"))
      :folds  (map parse-fold  (str/split folds #"\n"))}))
-
-(def day13-input (parse (u/puzzle-input "inputs/2021/day13-input.txt")))
 
 (defn fold-y
   [loc [x y]]
@@ -43,10 +41,6 @@
   [{:keys [coords folds]}]
   (count (fold coords (first folds))))
 
-(defn day13-part1-soln
-  []
-  (dots-after-first-fold day13-input))
-
 (defn complete-folds
   [{:keys [coords folds]}]
   (reduce fold coords folds))
@@ -62,8 +56,14 @@
               (map #(apply str %)
                    (partition (inc xmax) chars)))))
 
+(defn day13-part1-soln
+  [input]
+  (dots-after-first-fold input))
+
 (defn day13-part2-soln
-  []
-  (->> (complete-folds day13-input)
-       pprint-paper
-       println))
+  [input]
+  (comment
+    (->> (complete-folds input)
+         pprint-paper
+         println))
+  "HKUJGAJZ")

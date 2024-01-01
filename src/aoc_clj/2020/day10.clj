@@ -1,8 +1,10 @@
 (ns aoc-clj.2020.day10
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/10"
+  (:require [clojure.string :as str]))
 
-(def day10-input (map read-string (u/puzzle-input "inputs/2020/day10-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn freq-steps
   [jolts]
@@ -30,10 +32,10 @@
          (reduce *))))
 
 (defn day10-part1-soln
-  []
-  (let [freqs (freq-steps day10-input)]
+  [input]
+  (let [freqs (freq-steps input)]
     (reduce * freqs)))
 
 (defn day10-part2-soln
-  []
-  (combination-count day10-input))
+  [input]
+  (combination-count input))

@@ -1,11 +1,12 @@
 (ns aoc-clj.2019.day21
+  "Solution to https://adventofcode.com/2019/day/21"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
 ;; FIXME Add code or documentation for where the springcode came from
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/22
 
-(def day21-input (u/firstv (u/puzzle-input "inputs/2019/day21-input.txt")))
+(def parse u/firstv)
 
 (def spring-codes-part1
   ["OR A T"
@@ -27,13 +28,13 @@
    "RUN"])
 
 (defn day21-part1-soln
-  []
+  [input]
   (->> (intcode/cmds->ascii spring-codes-part1)
-       (intcode/intcode-exec day21-input)
+       (intcode/intcode-exec input)
        intcode/last-out))
 
 (defn day21-part2-soln
-  []
+  [input]
   (->> (intcode/cmds->ascii spring-codes-part2)
-       (intcode/intcode-exec day21-input)
+       (intcode/intcode-exec input)
        intcode/last-out))

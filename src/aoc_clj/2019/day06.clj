@@ -1,9 +1,10 @@
 (ns aoc-clj.2019.day06
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2019/day/6"
+  (:require [clojure.string :as str]))
 
-(def day06-input
-  (->> (u/puzzle-input "inputs/2019/day06-input.txt")
+(defn parse
+  [input]
+  (->> input
        (map #(str/split % #"\)"))
        (mapcat reverse)
        (apply hash-map)))
@@ -49,9 +50,9 @@
        2)))
 
 (defn day06-part1-soln
-  []
-  (orbit-count day06-input))
+  [input]
+  (orbit-count input))
 
 (defn day06-part2-soln
-  []
-  (orbit-transfers day06-input "YOU" "SAN"))
+  [input]
+  (orbit-transfers input "YOU" "SAN"))

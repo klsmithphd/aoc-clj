@@ -1,8 +1,9 @@
 (ns aoc-clj.2021.day03-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2021.day03 :as t]))
 
-(def day03-sample
+(def d03-s00
   ["00100"
    "11110"
    "10110"
@@ -18,16 +19,18 @@
 
 (deftest power-consumption
   (testing "Computes gamma and epsilon values from sample data"
-    (is (= [22 9] (t/power-consumption day03-sample)))))
+    (is (= [22 9] (t/power-consumption d03-s00)))))
 
 (deftest gamma-and-epsilon
   (testing "Computes oxygen and co2 values from sample data"
-    (is (= [23 10] (t/life-support day03-sample)))))
+    (is (= [23 10] (t/life-support d03-s00)))))
+
+(def day03-input (u/parse-puzzle-input t/parse 2021 3))
 
 (deftest day03-part1-soln
   (testing "Reproduces the answer for day03, part1"
-    (is (= 3959450 (t/day03-part1-soln)))))
+    (is (= 3959450 (t/day03-part1-soln day03-input)))))
 
 (deftest day03-part2-soln
   (testing "Reproduces the answer for day03, part2"
-    (is (= 7440311 (t/day03-part2-soln)))))
+    (is (= 7440311 (t/day03-part2-soln day03-input)))))

@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day14
   "Solution to https://adventofcode.com/2022/day/14"
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.string :as str]))
 
 ;;;; Input parsing
 
@@ -30,8 +29,6 @@
 (defn parse
   [input]
   (rocks (map parse-line input)))
-
-(def day14-input (u/parse-puzzle-input parse 2022 14))
 
 ;;;; Puzzle logic
 
@@ -124,12 +121,12 @@
 (defn day14-part1-soln
   "Using your scan, simulate the falling sand. How many units of sand come 
    to rest before sand starts flowing into the abyss below?"
-  []
-  (sand-until-continuous-flow day14-input))
+  [input]
+  (sand-until-continuous-flow input))
 
 (defn day14-part2-soln
   "Using your scan, simulate the falling sand until the source of the sand 
    becomes blocked. How many units of sand come to rest?"
-  []
-  (sand-until-blocked day14-input))
+  [input]
+  (sand-until-blocked input))
 

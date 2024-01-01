@@ -1,5 +1,6 @@
 (ns aoc-clj.2019.day07-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2019.day07 :as t]))
 
 (def p1 [3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0])
@@ -49,10 +50,12 @@
     (is (= m4 (t/max-amplifier-loop-output p4)))
     (is (= m5 (t/max-amplifier-loop-output p5)))))
 
+(def day07-input (u/parse-puzzle-input t/parse 2019 7))
+
 (deftest day07-part1-soln-test
   (testing "Can reproduce the answer for part1"
-    (is (= 567045 (t/day07-part1-soln)))))
+    (is (= 567045 (t/day07-part1-soln day07-input)))))
 
 (deftest day07-part2-soln-test
   (testing "Can reproduce the answer for part2"
-    (is (= 39016654 (t/day07-part2-soln)))))
+    (is (= 39016654 (t/day07-part2-soln day07-input)))))

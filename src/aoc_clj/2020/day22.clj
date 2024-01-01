@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day22
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/22"
+  (:require [clojure.string :as str]))
 
 (defn parse-cards
   [cards-str]
@@ -8,15 +8,15 @@
        rest
        (mapv read-string)))
 
-(defn parse
+(defn intermediate-parse
   [input]
   (let [[player1 player2] (str/split input #"\n\n")]
     {:player1 (parse-cards player1)
      :player2 (parse-cards player2)}))
 
-(def day22-input
-  (parse
-   (str/join "\n" (u/puzzle-input "inputs/2020/day22-input.txt"))))
+(defn parse
+  [input]
+  (intermediate-parse (str/join "\n" input)))
 
 (defn round-results-simple
   [{:keys [player1 player2]}]
@@ -100,10 +100,10 @@
     (reduce + (map * deck (range cnt 0 -1)))))
 
 (defn day22-part1-soln
-  []
-  (score (combat day22-input)))
+  [input]
+  (score (combat input)))
 
 (defn day22-part2-soln
-  []
-  (score (recursive-combat day22-input)))
+  [input]
+  (score (recursive-combat input)))
 

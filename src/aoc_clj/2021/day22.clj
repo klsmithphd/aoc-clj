@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day22
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/22"
+  (:require [clojure.string :as str]))
 
 (defn parse-bounds
   [bounds]
@@ -20,8 +20,6 @@
 (defn parse
   [lines]
   (map parse-line lines))
-
-(def day22-input (parse (u/puzzle-input "inputs/2021/day22-input.txt")))
 
 (defn volume
   [{:keys [bounds sign]}]
@@ -71,9 +69,9 @@
        on-cubes))
 
 (defn day22-part1-soln
-  []
-  (on-cubes-in-init-area day22-input))
+  [input]
+  (on-cubes-in-init-area input))
 
 (defn day22-part2-soln
-  []
-  (on-cubes day22-input))
+  [input]
+  (on-cubes input))

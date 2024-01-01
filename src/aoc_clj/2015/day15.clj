@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day15
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/15"
+  (:require [clojure.string :as str]))
 
 (defn parse-line
   [line]
@@ -15,7 +15,6 @@
   [input]
   (into {} (mapv parse-line input)))
 
-(def day15-input (parse (u/puzzle-input "inputs/2015/day15-input.txt")))
 (def max-teaspoons 100)
 
 (defn score
@@ -54,11 +53,11 @@
     (apply max-key (partial score-fn input) opts)))
 
 (defn day15-part1-soln
-  []
-  (let [best-combo (find-max-score score day15-input)]
-    (score day15-input best-combo)))
+  [input]
+  (let [best-combo (find-max-score score input)]
+    (score input best-combo)))
 
 (defn day15-part2-soln
-  []
-  (let [best-combo (find-max-score score-with-500cal day15-input)]
-    (score day15-input best-combo)))
+  [input]
+  (let [best-combo (find-max-score score-with-500cal input)]
+    (score input best-combo)))

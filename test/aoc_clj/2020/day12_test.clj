@@ -1,16 +1,10 @@
 (ns aoc-clj.2020.day12-test
-  (:require [clojure.string :as str]
-            [clojure.test :refer [deftest testing is]]
+  (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2020.day12 :as t]))
 
 (def day12-sample
-  (map t/parse
-       (str/split
-        "F10
-N3
-F7
-R90
-F11" #"\n")))
+  (t/parse ["F10" "N3" "F7" "R90" "F11"]))
 
 (deftest part1-sample
   (testing "Reproduces the answer for part1 on the sample input"
@@ -20,10 +14,12 @@ F11" #"\n")))
   (testing "Reproduces the answer for part2 on the sample input"
     (is (= 286 (t/final-distance day12-sample t/exec-cmd2)))))
 
+(def day12-input (u/parse-puzzle-input t/parse 2020 12))
+
 (deftest day12-part1-soln
   (testing "Reproduces the answer for day12, part1"
-    (is (= 1533 (t/day12-part1-soln)))))
+    (is (= 1533 (t/day12-part1-soln day12-input)))))
 
 (deftest day12-part2-soln
   (testing "Reproduces the answer for day12, part2"
-    (is (= 25235 (t/day12-part2-soln)))))
+    (is (= 25235 (t/day12-part2-soln day12-input)))))

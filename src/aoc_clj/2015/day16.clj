@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day16
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/16"
+  (:require [clojure.string :as str]))
 
 (def criteria
   {:children 3
@@ -28,8 +28,6 @@
   [input]
   (into {} (mapv parse-line input)))
 
-(def day16-input (parse (u/puzzle-input "inputs/2015/day16-input.txt")))
-
 (defn exact-match?
   [[_ props]]
   (let [sub-criteria (select-keys criteria (keys props))]
@@ -54,9 +52,9 @@
   (ffirst (filter criteria aunts)))
 
 (defn day16-part1-soln
-  []
-  (matching-aunt exact-match? day16-input))
+  [input]
+  (matching-aunt exact-match? input))
 
 (defn day16-part2-soln
-  []
-  (matching-aunt range-match? day16-input))
+  [input]
+  (matching-aunt range-match? input))

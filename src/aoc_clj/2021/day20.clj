@@ -1,24 +1,15 @@
 (ns aoc-clj.2021.day20
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]
+  "Solution to https://adventofcode.com/2021/day/20"
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.core :as u]))
-
-;; TODO: Candidate for common utility
-(defn split-at-blankline
-  [input]
-  (let [chunks (-> (str/join "\n" input)
-                   (str/split #"\n\n"))]
-    (map #(str/split % #"\n") chunks)))
 
 (def char-map {\. 0 \# 1})
 
 (defn parse
   [input]
-  (let [[part1 part2] (split-at-blankline input)]
+  (let [[part1 part2] (u/split-at-blankline input)]
     {:algorithm (mapv char-map (first part1))
      :image (mapgrid/ascii->MapGrid2D char-map part2 :down true)}))
-
-(def day20-input (parse (u/puzzle-input "inputs/2021/day20-input.txt")))
 
 ;; TODO variant of adj-coords. Consider consolidating
 (defn three-by-cell
@@ -68,9 +59,9 @@
        count))
 
 (defn day20-part1-soln
-  []
-  (illuminated (enhance-n-times day20-input 2)))
+  [input]
+  (illuminated (enhance-n-times input 2)))
 
 (defn day20-part2-soln
-  []
-  (illuminated (enhance-n-times day20-input 50)))
+  [input]
+  (illuminated (enhance-n-times input 50)))

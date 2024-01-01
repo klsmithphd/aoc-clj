@@ -1,7 +1,7 @@
 (ns aoc-clj.2019.day03
+  "Solution to https://adventofcode.com/2019/day/3"
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
             [aoc-clj.utils.math :as math]))
 
 (defn parse-segment
@@ -12,8 +12,9 @@
   [segments]
   (map parse-segment segments))
 
-(def day03-input
-  (->> (u/puzzle-input "inputs/2019/day03-input.txt")
+(defn parse
+  [input]
+  (->> input
        (map #(str/split % #","))
        (map parse-segments)))
 
@@ -55,10 +56,6 @@
        sort
        ;; we take second because [0 0] is in the set
        second))
-
-(defn day03-part1-soln
-  []
-  (closest-intersection-dist day03-input))
 
 ;; Slightly convoluted. I want a mapping from a point
 ;; to the shortest distance to that point. Because 
@@ -111,6 +108,10 @@
 ;;                        (get path1-dists (first %))) path2-dists)]
 ;;     (second (sort dists))))
 
+(defn day03-part1-soln
+  [input]
+  (closest-intersection-dist input))
+
 (defn day03-part2-soln
-  []
-  (shortest-steps-to-intersection day03-input))
+  [input]
+  (shortest-steps-to-intersection input))

@@ -1,36 +1,37 @@
 (ns aoc-clj.2015.day11-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2015.day11 :as t]))
 
-(def day11-sample1 (t/str->nums "hijklmmn"))
-(def day11-sample2 (t/str->nums "abbceffg"))
-(def day11-sample3 (t/str->nums "abbcegjk"))
+(def d11-s00 (t/str->nums "hijklmmn"))
+(def d11-s01 (t/str->nums "abbceffg"))
+(def d11-s02 (t/str->nums "abbcegjk"))
 
-(def day11-sample4      "abcdefgh")
-(def day11-sample4-next "abcdffaa")
+(def d11-s03      "abcdefgh")
+(def d11-s03-next "abcdffaa")
 
-(def day11-sample5      "ghijklmn")
-(def day11-sample5-next "ghjaabcc")
+(def d11-s04      "ghijklmn")
+(def d11-s04-next "ghjaabcc")
 
 (deftest rules-test
   (testing "Correctly applies valid password rules"
-    (is (t/increasing-straight?     day11-sample1))
-    (is (not (t/no-disallowed?      day11-sample1)))
-    (is (not (t/two-distinct-pairs? day11-sample1)))
-    (is (not (t/valid-password?     day11-sample1)))
+    (is (t/increasing-straight?     d11-s00))
+    (is (not (t/no-disallowed?      d11-s00)))
+    (is (not (t/two-distinct-pairs? d11-s00)))
+    (is (not (t/valid-password?     d11-s00)))
 
-    (is (not (t/increasing-straight? day11-sample2)))
-    (is (t/no-disallowed?            day11-sample2))
-    (is (t/two-distinct-pairs?       day11-sample2))
-    (is (not (t/valid-password?      day11-sample2)))
+    (is (not (t/increasing-straight? d11-s01)))
+    (is (t/no-disallowed?            d11-s01))
+    (is (t/two-distinct-pairs?       d11-s01))
+    (is (not (t/valid-password?      d11-s01)))
 
-    (is (not (t/increasing-straight? day11-sample3)))
-    (is (t/no-disallowed?            day11-sample3))
-    (is (not (t/two-distinct-pairs?  day11-sample3)))
-    (is (not (t/valid-password?      day11-sample3)))
+    (is (not (t/increasing-straight? d11-s02)))
+    (is (t/no-disallowed?            d11-s02))
+    (is (not (t/two-distinct-pairs?  d11-s02)))
+    (is (not (t/valid-password?      d11-s02)))
 
-    (is (t/valid-password? (t/str->nums day11-sample4-next)))
-    (is (t/valid-password? (t/str->nums day11-sample5-next)))))
+    (is (t/valid-password? (t/str->nums d11-s03-next)))
+    (is (t/valid-password? (t/str->nums d11-s04-next)))))
 
 (deftest increment-test
   (testing "Verifying that incrementing works correctly"
@@ -43,13 +44,15 @@
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/3
 (deftest ^:slow next-valid-password-test
   (testing "Finds the next valid password"
-    (is (= day11-sample4-next (t/next-valid-password day11-sample4)))
-    (is (= day11-sample5-next (t/next-valid-password day11-sample5)))))
+    (is (= d11-s03-next (t/next-valid-password d11-s03)))
+    (is (= d11-s04-next (t/next-valid-password d11-s04)))))
+
+(def day11-input (u/parse-puzzle-input t/parse 2015 11))
 
 (deftest ^:slow day11-part1-soln
   (testing "Reproduces the answer for day11, part1"
-    (is (= "hxbxxyzz" (t/day11-part1-soln)))))
+    (is (= "hxbxxyzz" (t/day11-part1-soln day11-input)))))
 
 (deftest ^:slow day11-part2-soln
   (testing "Reproduces the answer for day11, part2"
-    (is (= "hxcaabcc" (t/day11-part2-soln)))))
+    (is (= "hxcaabcc" (t/day11-part2-soln day11-input)))))

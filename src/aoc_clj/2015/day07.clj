@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day07
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/7"
+  (:require [clojure.string :as str]))
 
 (defn tokenize
   [s]
@@ -23,7 +23,7 @@
   [s]
   {:op :assign :args (tokenize s)})
 
-(defn parse
+(defn parse-line
   [line]
   (let [[ops dest] (str/split line #" -> ")
         inst (cond
@@ -32,7 +32,9 @@
                :else (parse-assign ops))]
     [(tokenize dest) inst]))
 
-(def day07-input (into {} (map parse (u/puzzle-input "inputs/2015/day07-input.txt"))))
+(defn parse
+  [input]
+  (into {} (map parse-line input)))
 
 (def wire-val
   (memoize
@@ -55,12 +57,12 @@
   (assoc circuit "b" {:op :assign :args val}))
 
 (defn day07-part1-soln
-  []
-  (wire-val day07-input "a"))
+  [input]
+  (wire-val input "a"))
 
 (defn day07-part2-soln
-  []
-  (let [circuit day07-input
+  [input]
+  (let [circuit input
         wirea (wire-val circuit "a")
         newcircuit (override-wire-b circuit wirea)]
     (wire-val newcircuit "a")))

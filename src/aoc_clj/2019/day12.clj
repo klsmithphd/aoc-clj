@@ -1,4 +1,5 @@
 (ns aoc-clj.2019.day12
+  "Solution to https://adventofcode.com/2019/day/12"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.math :as math]))
@@ -11,8 +12,9 @@
            (str/split #"\s+"))
        (map read-string)))
 
-(def day12-input
-  (map parse-coord (u/puzzle-input "inputs/2019/day12-input.txt")))
+(defn parse
+  [input]
+  (map parse-coord input))
 
 (defn rotations
   [coll]
@@ -66,10 +68,6 @@
         kinetic-energies (map energy vels)]
     (reduce + (map * potential-energies kinetic-energies))))
 
-(defn day12-part1-soln
-  []
-  (total-energy (nth (simulate day12-input) 1000)))
-
 (def initial-velocity-axis
   (repeat 4 (repeat 1 0)))
 
@@ -89,6 +87,10 @@
   [moons]
   (* 2 (apply math/lcm (pmap axis-period [:x :y :z] (repeat moons)))))
 
+(defn day12-part1-soln
+  [input]
+  (total-energy (nth (simulate input) 1000)))
+
 (defn day12-part2-soln
-  []
-  (recurrence-period day12-input))
+  [input]
+  (recurrence-period input))

@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day14
+  "Solution to https://adventofcode.com/2021/day/14"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -13,8 +14,6 @@
                              (str/split #"\n\n"))]
     {:template template
      :rules (into {} (map parse-rule (str/split rules #"\n")))}))
-
-(def day14-input (parse (u/puzzle-input "inputs/2021/day14-input.txt")))
 
 (defn pair-insert
   [template rules]
@@ -39,10 +38,6 @@
         most  (second (last freqs))
         least (second (first freqs))]
     (- most least)))
-
-(defn day14-part1-soln
-  []
-  (direct-most-minus-least-common-at-n day14-input 10))
 
 (defn pair-freq-insert
   [rules [[a b] freq]]
@@ -84,6 +79,10 @@
         least (second (first freqs))]
     (- most least)))
 
+(defn day14-part1-soln
+  [input]
+  (direct-most-minus-least-common-at-n input 10))
+
 (defn day14-part2-soln
-  []
-  (most-minus-least-common-at-n day14-input 40))
+  [input]
+  (most-minus-least-common-at-n input 40))

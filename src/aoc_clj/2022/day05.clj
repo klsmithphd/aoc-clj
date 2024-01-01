@@ -53,8 +53,6 @@
     {:stacks (parse-stacks stacks)
      :moves  (parse-moves moves)}))
 
-(def day05-input (u/parse-puzzle-input parse 2022 5))
-
 ;;;; Puzzle logic
 
 (defn take-crates-2
@@ -106,8 +104,8 @@
 (defn day05-part1-soln
   "After the rearrangement procedure completes, 
    what crate ends up on top of each stack?"
-  []
-  (-> day05-input final-arrangement-1 stack-tops))
+  [input]
+  (-> input final-arrangement-1 stack-tops))
 
 (defn day05-part2-soln
   "The CrateMover 9001 is notable for many new and exciting features: 
@@ -116,5 +114,5 @@
    
    After the rearrangement procedure completes, 
    what crate ends up on top of each stack?"
-  []
-  (-> day05-input final-arrangement-2 stack-tops))
+  [input]
+  (-> input final-arrangement-2 stack-tops))

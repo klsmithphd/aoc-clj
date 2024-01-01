@@ -1,8 +1,8 @@
 (ns aoc-clj.2018.day02
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2018/day/2"
+  (:require [clojure.string :as str]))
 
-(def day02-input (u/puzzle-input "inputs/2018/day02-input.txt"))
+(def parse identity)
 
 (defn repeat-count
   [repeat-num coll]
@@ -51,9 +51,9 @@
     (chars-in-common (nth box-ids index1) (nth box-ids index2))))
 
 (defn day02-part1-soln
-  []
-  (compute-checksum day02-input))
+  [input]
+  (compute-checksum input))
 
 (defn day02-part2-soln
-  []
-  (find-closest-boxids day02-input))
+  [input]
+  (find-closest-boxids input))

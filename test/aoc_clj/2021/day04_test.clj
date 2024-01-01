@@ -1,9 +1,10 @@
 (ns aoc-clj.2021.day04-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2021.day04 :as t]))
 
 (def day04-sample
-  (t/parse-input
+  (t/parse
    ["7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1"
     ""
     "22 13 17 11  0"
@@ -32,10 +33,12 @@
   (testing "Computes the board score of the last winning bingo card"
     (is (= 1924 (t/last-winning-board-score day04-sample)))))
 
+(def day04-input (u/parse-puzzle-input t/parse 2021 4))
+
 (deftest day04-part1-soln
   (testing "Reproduces the answer for day04, part1"
-    (is (= 23177 (t/day04-part1-soln)))))
+    (is (= 23177 (t/day04-part1-soln day04-input)))))
 
 (deftest day04-part2-soln
   (testing "Reproduces the answer for day04, part2"
-    (is (= 6804 (t/day04-part2-soln)))))
+    (is (= 6804 (t/day04-part2-soln day04-input)))))

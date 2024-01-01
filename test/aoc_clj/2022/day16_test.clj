@@ -1,5 +1,6 @@
 (ns aoc-clj.2022.day16-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day16 :as t]))
 
 (def d16-s01
@@ -46,13 +47,15 @@
   (testing "Finds the optimum amount of pressure released"
     (is (= 1707 (t/best-pressure-2 d16-s01)))))
 
+(def day16-input (u/parse-puzzle-input t/parse 2022 16))
+
 ;; FIXME: The implementation is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/28
 
 (deftest ^:slow day16-part1-soln
   (testing "Reproduces the answer for day16, part1"
-    (is (= 1701 (t/day16-part1-soln)))))
+    (is (= 1701 (t/day16-part1-soln day16-input)))))
 
 (deftest ^:slow day16-part2-soln
   (testing "Reproduces the answer for day16, part2"
-    (is (= 2455 (t/day16-part2-soln)))))
+    (is (= 2455 (t/day16-part2-soln day16-input)))))

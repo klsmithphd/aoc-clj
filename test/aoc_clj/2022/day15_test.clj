@@ -1,8 +1,9 @@
 (ns aoc-clj.2022.day15-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day15 :as t]))
 
-(def d15-s01
+(def d15-s00
   (t/parse
    ["Sensor at x=2, y=18: closest beacon is at x=-2, y=15"
     "Sensor at x=9, y=16: closest beacon is at x=10, y=16"
@@ -21,7 +22,7 @@
 
 (deftest parse-test
   (testing "Correctly parses the sample input"
-    (is (= d15-s01
+    (is (= d15-s00
            [{:sensor [2 18],  :beacon [-2 15], :radius 7}
             {:sensor [9 16],  :beacon [10 16], :radius 1}
             {:sensor [13 2],  :beacon [15 3],  :radius 3}
@@ -40,20 +41,22 @@
 (deftest no-beacon-points-in-line-test
   (testing "Finds the right number of points that can't contain a beacon
             at a given line"
-    (is (= 26 (t/no-beacon-points-in-line d15-s01 10)))))
+    (is (= 26 (t/no-beacon-points-in-line d15-s00 10)))))
 
 (deftest gap-position
   (testing "Finds the point where there's no sensor coverage"
-    (is (= [14 11] (t/gap-position d15-s01)))))
+    (is (= [14 11] (t/gap-position d15-s00)))))
 
 (deftest tuning-frequency
   (testing "Computes the tuning frequency based on [x,y]"
     (is (= 56000011 (t/tuning-frequency [14 11])))))
 
+(def day15-input (u/parse-puzzle-input t/parse 2022 15))
+
 (deftest day15-part1-soln
   (testing "Reproduces the answer for day15, part1"
-    (is (= 4907780 (t/day15-part1-soln)))))
+    (is (= 4907780 (t/day15-part1-soln day15-input)))))
 
 (deftest day15-part2-soln
   (testing "Reproduces the answer for day15, part2"
-    (is (= 13639962836448 (t/day15-part2-soln)))))
+    (is (= 13639962836448 (t/day15-part2-soln day15-input)))))

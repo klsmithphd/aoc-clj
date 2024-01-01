@@ -1,4 +1,5 @@
 (ns aoc-clj.2020.day14
+  "Solution to https://adventofcode.com/2020/day/14"
   (:require [clojure.math.combinatorics :as combo]
             [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
@@ -36,24 +37,9 @@
     (parse-mask input-line)
     (parse-assign input-line)))
 
-(def day14-sample
-  (map parse-line
-       (str/split
-        "mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-mem[8] = 11
-mem[7] = 101
-mem[8] = 0" #"\n")))
-
-(def day14-sample2
-  (map parse-line
-       (str/split
-        "mask = 000000000000000000000000000000X1001X
-mem[42] = 100
-mask = 00000000000000000000000000000000X0XX
-mem[26] = 1" #"\n")))
-
-
-(def day14-input (map parse-line (u/puzzle-input "inputs/2020/day14-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn execute
   [instructions]
@@ -103,9 +89,9 @@ mem[26] = 1" #"\n")))
   (reduce + (vals (decoder input))))
 
 (defn day14-part1-soln
-  []
-  (register-sum day14-input execute))
+  [input]
+  (register-sum input execute))
 
 (defn day14-part2-soln
-  []
-  (register-sum day14-input execute2))
+  [input]
+  (register-sum input execute2))

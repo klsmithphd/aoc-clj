@@ -18,8 +18,6 @@
   [input]
   (map parse-line input))
 
-(def day16-input (u/parse-puzzle-input parse 2022 16))
-
 ;;;; Puzzle logic
 
 (defn edges
@@ -156,11 +154,11 @@
 (defn day16-part1-soln
   "Work out the steps to release the most pressure in 30 minutes. 
    What is the most pressure you can release?"
-  []
-  (best-pressure day16-input))
+  [input]
+  (best-pressure input))
 
 (defn day16-part2-soln
   "With you and an elephant working together for 26 minutes, what is the 
    most pressure you could release?"
-  []
-  (best-pressure-2 day16-input))
+  [input]
+  (best-pressure-2 input))

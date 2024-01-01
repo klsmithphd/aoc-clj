@@ -1,4 +1,5 @@
 (ns aoc-clj.2019.day24
+  "Solution to https://adventofcode.com/2019/day/24"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]))
@@ -11,8 +12,6 @@
 (defn parse
   [input]
   (:grid (mapgrid/ascii->MapGrid2D bug-map input :down true)))
-
-(def day24-input (parse (u/puzzle-input "inputs/2019/day24-input.txt")))
 
 (defn conway-rule
   [space pos neighbor-fn]
@@ -53,10 +52,6 @@
       (let [nextgrid (conway-step-2d grid)
             nextbio (biodiversity nextgrid)]
         (recur nextgrid nextbio (conj seen last))))))
-
-(defn day24-part1-soln
-  []
-  (find-recurrence day24-input))
 
 (defn base-neighbor-coords
   [[x y z]]
@@ -151,6 +146,10 @@
   [space3d]
   (u/count-if space3d #(= :bug (val %))))
 
+(defn day24-part1-soln
+  [input]
+  (find-recurrence input))
+
 (defn day24-part2-soln
-  []
-  (bug-count (simulate day24-input 200)))
+  [input]
+  (bug-count (simulate input 200)))

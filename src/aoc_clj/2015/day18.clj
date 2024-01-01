@@ -1,10 +1,11 @@
 (ns aoc-clj.2015.day18
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/18"
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 (def char-map {\. :off \# :on})
-(def day18-input
-  (mapgrid/ascii->MapGrid2D char-map (u/puzzle-input "inputs/2015/day18-input.txt")))
+(defn parse
+  [input]
+  (mapgrid/ascii->MapGrid2D char-map input))
 
 (defn adj-coords
   [[x y]]
@@ -66,9 +67,9 @@
          count)))
 
 (defn day18-part1-soln
-  []
-  (lights-on-at-step-n 100 day18-input))
+  [input]
+  (lights-on-at-step-n 100 input))
 
 (defn day18-part2-soln
-  []
-  (lights-on-at-step-n true 100 (corners-on day18-input)))
+  [input]
+  (lights-on-at-step-n true 100 (corners-on input)))

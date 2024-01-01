@@ -1,4 +1,5 @@
 (ns aoc-clj.2020.day20
+  "Solution to https://adventofcode.com/2020/day/20"
   (:require [clojure.string :as str]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.core :as u]))
@@ -24,16 +25,17 @@
               (str/split grid #"\n")
               :down true)]))
 
-(defn parse
+(defn intermediate-parse
   [input]
   (->> (str/split input #"\n\n")
        (map parse-tile)
        (into {})))
 
-(def day20-input
-  (->> (u/puzzle-input "inputs/2020/day20-input.txt")
+(defn parse
+  [input]
+  (->> input
        (str/join "\n")
-       parse))
+       intermediate-parse))
 
 (defn edge
   [grid edge-indices]
@@ -278,13 +280,13 @@
     (- ones (* sea-monsters (count sea-monster-pattern)))))
 
 (defn day20-part1-soln
-  []
-  (->> day20-input
+  [input]
+  (->> input
        tile-edge-map
        matching-edges
        corners
        (reduce *)))
 
 (defn day20-part2-soln
-  []
-  (sea-roughness day20-input))
+  [input]
+  (sea-roughness input))

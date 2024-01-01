@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day19
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/19"
+  (:require [clojure.string :as str]))
 
 (defn to-list
   [x]
@@ -16,13 +16,15 @@
                  (to-list rule-txt)))]
     [(read-string idx) rule]))
 
-(defn parse
+(defn intermediate-parse
   [input]
   (let [[rules messages] (str/split input #"\n\n")]
     {:rules (into {} (map parse-rule (str/split rules #"\n")))
      :messages (str/split messages #"\n")}))
 
-(def day19-input (parse (str/join "\n" (u/puzzle-input "inputs/2020/day19-input.txt"))))
+(defn parse
+  [input]
+  (intermediate-parse (str/join "\n" input)))
 
 (defn handle-special-eleven
   "I'm not proud of this, but it works"
@@ -71,9 +73,9 @@
           count))))
 
 (defn day19-part1-soln
-  []
-  (count-matches day19-input))
+  [input]
+  (count-matches input))
 
 (defn day19-part2-soln
-  []
-  (count-matches day19-input true))
+  [input]
+  (count-matches input true))

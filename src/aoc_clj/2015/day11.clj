@@ -1,7 +1,8 @@
 (ns aoc-clj.2015.day11
+  "Solution to https://adventofcode.com/2015/day/11"
   (:require [clojure.string :as str]))
 
-(def day11-input "hxbxwxba")
+(def parse first)
 
 (defn char->int
   [c]
@@ -74,9 +75,11 @@
          nums->str)))
 
 (defn day11-part1-soln
-  []
-  (next-valid-password day11-input))
+  [input]
+  (next-valid-password input))
 
 (defn day11-part2-soln
-  []
-  (next-valid-password (next-password (day11-part1-soln))))
+  [input]
+  (-> (day11-part1-soln input)
+      next-password
+      next-valid-password))

@@ -1,15 +1,13 @@
 (ns aoc-clj.2020.day11
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/11"
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
-(defn ferry-seatmap
+(defn parse
   [ascii-lines]
   (let [seat-mapping {\. :space
                       \# :occupied
                       \L :seat}]
     (mapgrid/ascii->MapGrid2D seat-mapping ascii-lines)))
-
-(def day11-input (ferry-seatmap (u/puzzle-input "inputs/2020/day11-input.txt")))
 
 (def dirs
   (->> (for [y (range -1 2)
@@ -91,9 +89,9 @@
     (zipmap seats (map (partial first-visible-seats seatmap) seats))))
 
 (defn day11-part1-soln
-  []
-  (occupied-seats-when-static day11-input 4 adjacency))
+  [input]
+  (occupied-seats-when-static input 4 adjacency))
 
 (defn day11-part2-soln
-  []
-  (occupied-seats-when-static day11-input 5 visibility))
+  [input]
+  (occupied-seats-when-static input 5 visibility))

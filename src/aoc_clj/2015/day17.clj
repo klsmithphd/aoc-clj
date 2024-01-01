@@ -1,8 +1,10 @@
 (ns aoc-clj.2015.day17
-  (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/17"
+  (:require [clojure.math.combinatorics :as combo]))
 
-(def day17-input (map read-string (u/puzzle-input "inputs/2015/day17-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn sums-to?
   [sum coll]
@@ -22,9 +24,9 @@
     (filter #(= min-containers (count %)) combos)))
 
 (defn day17-part1-soln
-  []
-  (count (combinations 150 day17-input)))
+  [input]
+  (count (combinations 150 input)))
 
 (defn day17-part2-soln
-  []
-  (count (minimal-combinations 150 day17-input)))
+  [input]
+  (count (minimal-combinations 150 input)))

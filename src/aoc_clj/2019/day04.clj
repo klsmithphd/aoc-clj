@@ -1,6 +1,9 @@
-(ns aoc-clj.2019.day04)
+(ns aoc-clj.2019.day04
+  "Solution to https://adventofcode.com/2019/day/4")
 
-(def day04-input [231832 767346])
+(defn parse
+  [input]
+  (map read-string (re-seq #"\d+" (first input))))
 
 (def my-any? (complement not-any?))
 
@@ -27,8 +30,8 @@
        (filter condition)))
 
 (defn day04-part1-soln
-  []
-  (count (satisfactory-numbers (apply range day04-input) all-conds-part1?)))
+  [input]
+  (count (satisfactory-numbers (apply range input) all-conds-part1?)))
 
 (defn pair-not-in-larger-group?
   [digits]
@@ -38,5 +41,5 @@
   (every-pred not-decreasing-digits? pair-not-in-larger-group?))
 
 (defn day04-part2-soln
-  []
-  (count (satisfactory-numbers (apply range day04-input) all-conds-part2?)))
+  [input]
+  (count (satisfactory-numbers (apply range input) all-conds-part2?)))

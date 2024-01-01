@@ -1,4 +1,5 @@
 (ns aoc-clj.2020.day16
+  "Solution to https://adventofcode.com/2020/day/16"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -17,7 +18,7 @@
   [ticket-str]
   (map read-string (str/split ticket-str #",")))
 
-(defn parse
+(defn intermediate-parse
   [input]
   (let [[rules tickets] (str/split input #"\n\nyour ticket:\n")
         [yours nearby]  (str/split tickets #"\n\nnearby tickets:\n")]
@@ -25,41 +26,9 @@
      :yours (parse-ticket yours)
      :nearby (map parse-ticket (str/split nearby #"\n"))}))
 
-(def day16-sample
-  (parse
-   "class: 1-3 or 5-7
-row: 6-11 or 33-44
-seat: 13-40 or 45-50
-
-your ticket:
-7,1,14
-
-nearby tickets:
-7,3,47
-40,4,50
-55,2,20
-38,6,12"))
-
-(def day16-sample2
-  (parse
-   "class: 0-1 or 4-19
-row: 0-5 or 8-19
-seat: 0-13 or 16-19
-
-your ticket:
-11,12,13
-
-nearby tickets:
-3,9,18
-15,1,5
-5,14,9"))
-
-day16-sample
-
-(def day16-input (->>
-                  (u/puzzle-input "inputs/2020/day16-input.txt")
-                  (str/join "\n")
-                  parse))
+(defn parse
+  [input]
+  (->> input (str/join "\n") intermediate-parse))
 
 (defn valid-values
   [rules]
@@ -108,14 +77,13 @@ day16-sample
   (let [mapping (identify-slots input)]
     (into {} (map-indexed (fn [idx val] [(get mapping idx) val]) yours))))
 
-
 (defn day16-part1-soln
-  []
-  (reduce + (invalid-nearby day16-input)))
+  [input]
+  (reduce + (invalid-nearby input)))
 
 (defn day16-part2-soln
-  []
-  (->> (resolved-ticket day16-input)
+  [input]
+  (->> (resolved-ticket input)
        (filter #(str/starts-with? (str (symbol (key %))) "departure"))
        (map second)
        (reduce *)))

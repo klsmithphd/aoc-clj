@@ -1,5 +1,6 @@
 (ns aoc-clj.2015.day22-test
   (:require [clojure.test :refer [deftest testing is]]
+            ;; [aoc-clj.utils.core :as u]
             [aoc-clj.2015.day22 :as t]))
 
 (def day22-sample1
@@ -25,6 +26,8 @@
             :boss   {:hit-points -1 :damage 8}
             :effects {:poison 3}}
            (reduce t/combat-round day22-sample2 day22-sample2-moves)))))
+
+;; (def day22-input (u/parse-puzzle-input t/parse 2015 22))
 
 (deftest day22-part1-soln
   (testing "Reproduces the answer for day22, part1"

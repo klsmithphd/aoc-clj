@@ -1,5 +1,6 @@
 (ns aoc-clj.2022.day09-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day09 :as t]))
 
 (def d09-s01
@@ -52,10 +53,12 @@
     (is (= 1  (t/distinct-tail-positions 10 d09-s01)))
     (is (= 36 (t/distinct-tail-positions 10 d09-s02)))))
 
+(def day09-input (u/parse-puzzle-input t/parse 2022 9))
+
 (deftest day09-part1-soln
   (testing "Reproduces the answer for day09, part1"
-    (is (= 5874 (t/day09-part1-soln)))))
+    (is (= 5874 (t/day09-part1-soln day09-input)))))
 
 (deftest day09-part2-soln
   (testing "Reproduces the answer for day09, part2"
-    (is (= 2467 (t/day09-part2-soln)))))
+    (is (= 2467 (t/day09-part2-soln day09-input)))))

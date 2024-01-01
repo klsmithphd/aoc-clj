@@ -1,27 +1,18 @@
 (ns aoc-clj.2020.day17
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]
+  "Solution to https://adventofcode.com/2020/day/17"
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.core :as u]))
 
 (defn twod->threed
   [[x y]]
   [x y 0])
 
-(defn initial-slice
+(defn parse
   [ascii-lines]
   (let [char-map {\. :inactive
                   \# :active}
         slice (mapgrid/ascii->MapGrid2D char-map ascii-lines)]
     (update slice :grid (partial u/kmap twod->threed))))
-
-(def day17-sample
-  (initial-slice
-   (str/split
-    ".#.
-..#
-###" #"\n")))
-
-(def day17-input (initial-slice (u/puzzle-input "inputs/2020/day17-input.txt")))
 
 (def adjacent-dirs-3d
   (->> (for [z (range -1 2)
@@ -110,21 +101,21 @@
             newvals (map (partial rules-4d statemap) locs)]
         (recur (zipmap locs newvals) (inc cnt))))))
 
-(defn day17-part1-soln
-  []
-  (->> (evolve-3d day17-input 6)
-       vals
-       (filter #{:active})
-       count))
-
 (defn promote-to-4d
   [{:keys [grid] :as input}]
   (let [add-dim (fn [[x y z]] [x y z 0])]
     (assoc input :grid (u/kmap add-dim grid))))
 
+(defn day17-part1-soln
+  [input]
+  (->> (evolve-3d input 6)
+       vals
+       (filter #{:active})
+       count))
+
 (defn day17-part2-soln
-  []
-  (->> (evolve-4d (promote-to-4d day17-input) 6)
+  [input]
+  (->> (evolve-4d (promote-to-4d input) 6)
        vals
        (filter #{:active})
        count))

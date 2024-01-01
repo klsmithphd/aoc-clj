@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day12
+  "Solution to https://adventofcode.com/2021/day/12"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -10,52 +11,6 @@
 (defn parse
   [lines]
   (u/fmap (partial map second) (group-by first (mapcat parse-line lines))))
-
-(def day12-sample1
-  (parse
-   ["start-A"
-    "start-b"
-    "A-c"
-    "A-b"
-    "b-d"
-    "A-end"
-    "b-end"]))
-
-(def day12-sample2
-  (parse
-   ["dc-end"
-    "HN-start"
-    "start-kj"
-    "dc-start"
-    "dc-HN"
-    "LN-dc"
-    "HN-end"
-    "kj-sa"
-    "kj-HN"
-    "kj-dc"]))
-
-(def day12-sample3
-  (parse
-   ["fs-end"
-    "he-DX"
-    "fs-he"
-    "start-DX"
-    "pj-DX"
-    "end-zg"
-    "zg-sl"
-    "zg-pj"
-    "pj-he"
-    "RW-he"
-    "fs-DX"
-    "pj-RW"
-    "zg-RW"
-    "start-pj"
-    "he-WI"
-    "zg-he"
-    "pj-fs"
-    "start-RW"]))
-
-(def day12-input (parse (u/puzzle-input "inputs/2021/day12-input.txt")))
 
 (defn big-cave?
   [cave]
@@ -121,9 +76,9 @@
    (split-by (complement #{"start"}) (map-cave-path graph ["start"] rule))))
 
 (defn day12-part1-soln
-  []
-  (count (map-cave day12-input)))
+  [input]
+  (count (map-cave input)))
 
 (defn day12-part2-soln
-  []
-  (count (map-cave day12-input allowed-part2?)))
+  [input]
+  (count (map-cave input allowed-part2?)))

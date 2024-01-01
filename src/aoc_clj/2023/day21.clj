@@ -3,7 +3,7 @@
             [aoc-clj.utils.grid.vecgrid :as vg]))
 
 (def steps-part1 64)
-(def steps-part2 26501365)
+;; (def steps-part2 26501365)
 
 (def charmap {\S :start \. :plot \# :rock})
 

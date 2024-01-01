@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day19
   "Solution to https://adventofcode.com/2022/day/19"
-  (:require [clojure.set :as set]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.set :as set]))
 
 ;;;; Constants
 
@@ -26,8 +25,6 @@
 (defn parse
   [input]
   (into {} (mapv parse-line input)))
-
-(def day19-input (u/parse-puzzle-input parse 2022 19))
 
 ;;;; Puzzle logic
 
@@ -170,8 +167,8 @@
   "Determine the quality level of each blueprint using the largest number of 
    geodes it could produce in 24 minutes. What do you get if you add up 
    the quality level of all of the blueprints in your list?"
-  []
-  (quality-level-sum day19-input))
+  [input]
+  (quality-level-sum input))
 
 (defn day19-part2-soln
   "You no longer have enough blueprints to worry about quality levels. 
@@ -181,5 +178,5 @@
    Don't worry about quality levels; instead, just determine the largest number
    of geodes you could open using each of the first three blueprints. 
    What do you get if you multiply these numbers together?"
-  []
-  (max-geode-product day19-input))
+  [input]
+  (max-geode-product input))

@@ -1,8 +1,8 @@
 (ns aoc-clj.2021.day10
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/10"
+  (:require [clojure.string :as str]))
 
-(def day10-input (u/puzzle-input "inputs/2021/day10-input.txt"))
+(def parse identity)
 
 (def illegal-char-points
   {\) 3
@@ -38,10 +38,6 @@
        (filter some?)
        (map illegal-char-points)
        (reduce +)))
-
-(defn day10-part1-soln
-  []
-  (syntax-error-score day10-input))
 
 (defn incomplete-segment
   [s]
@@ -83,6 +79,10 @@
         num    (count scores)]
     (nth scores (int (/ num 2)))))
 
+(defn day10-part1-soln
+  [input]
+  (syntax-error-score input))
+
 (defn day10-part2-soln
-  []
-  (middle-completion-score day10-input))
+  [input]
+  (middle-completion-score input))

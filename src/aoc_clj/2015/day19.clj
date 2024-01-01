@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day19
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/19"
+  (:require [clojure.string :as str]))
 
 (defn parse-replacement
   [line]
@@ -11,8 +11,6 @@
   (let [[replacements molecule] (str/split (str/join "\n" input) #"\n\n")]
     {:replacements (mapv parse-replacement (str/split replacements #"\n"))
      :molecule molecule}))
-
-(def day19-input (parse (u/puzzle-input "inputs/2015/day19-input.txt")))
 
 (defn indicesOf
   [s pattern]
@@ -55,9 +53,9 @@
                    (iterate de-fabricate (ordered-replacements input)))))
 
 (defn day19-part1-soln
-  []
-  (count (distinct-molecules day19-input)))
+  [input]
+  (count (distinct-molecules input)))
 
 (defn day19-part2-soln
-  []
-  (count (fabrication-steps day19-input)))
+  [input]
+  (count (fabrication-steps input)))

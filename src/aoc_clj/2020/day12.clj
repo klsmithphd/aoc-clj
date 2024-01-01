@@ -1,13 +1,16 @@
 (ns aoc-clj.2020.day12
+  "Solution to https://adventofcode.com/2020/day/12"
   (:require [aoc-clj.utils.core :as u]))
 
-(defn parse
+(defn parse-line
   [cmd]
   (let [dir (subs cmd 0 1)
         amount (read-string (subs cmd 1))]
     [dir amount]))
 
-(def day12-input (map parse (u/puzzle-input "inputs/2020/day12-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (def start {:pos [0 0] :waypoint [10 1] :heading :east})
 
@@ -80,9 +83,9 @@
        (reduce +)))
 
 (defn day12-part1-soln
-  []
-  (final-distance day12-input exec-cmd))
+  [input]
+  (final-distance input exec-cmd))
 
 (defn day12-part2-soln
-  []
-  (final-distance day12-input exec-cmd2))
+  [input]
+  (final-distance input exec-cmd2))

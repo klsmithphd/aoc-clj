@@ -1,9 +1,7 @@
 (ns aoc-clj.2016.day13
-  (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.binary :as b]
-            [aoc-clj.utils.graph :as g]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid :refer [->MapGrid2D]]
-            [aoc-clj.utils.maze :as maze :refer [->Maze]]))
+  "Solution to https://adventofcode.com/2016/day/13"
+  (:require [aoc-clj.utils.binary :as b]
+            [aoc-clj.utils.grid.mapgrid :as mapgrid :refer [->MapGrid2D]]))
 
 (def charmap
   {\. :open
@@ -33,14 +31,14 @@
                x (range width)]
            [[x y] (cell fav [x y])]))))
 
-(defn path-distance
-  [fav finish]
-  (let [start [1 1]
-        grid  (construct-grid fav 10 7)
-        maze  (->Maze (:grid grid) #(= :open %))
-        graph (-> maze maze/Maze->Graph (g/pruned #{start finish}))
-        path  (g/dijkstra graph start (u/equals? finish))]
-    (println graph)
-    (g/path-distance graph path)))
+;; (defn path-distance
+;;   [fav finish]
+;;   (let [start [1 1]
+;;         grid  (construct-grid fav 10 7)
+;;         maze  (->Maze (:grid grid) #(= :open %))
+;;         graph (-> maze maze/Maze->Graph (g/pruned #{start finish}))
+;;         path  (g/dijkstra graph start (u/equals? finish))]
+;;     (println graph)
+;;     (g/path-distance graph path)))
 
 ;; (path-distance 10 [7 4])

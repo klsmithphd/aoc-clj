@@ -1,10 +1,11 @@
 (ns aoc-clj.2019.day07
+  "Solution to https://adventofcode.com/2019/day/7"
   (:require [clojure.math.combinatorics :as combo]
             [manifold.stream :as s]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day05-input (u/firstv (u/puzzle-input "inputs/2019/day07-input.txt")))
+(def parse u/firstv)
 
 (defn amplifier
   "Creates an 'amplifier' `intcode` program to run on another thread
@@ -62,9 +63,9 @@
   (max-output intcode amplifier-loop [5 6 7 8 9]))
 
 (defn day07-part1-soln
-  []
-  (max-amplifier-chain-output day05-input))
+  [input]
+  (max-amplifier-chain-output input))
 
 (defn day07-part2-soln
-  []
-  (max-amplifier-loop-output day05-input))
+  [input]
+  (max-amplifier-loop-output input))

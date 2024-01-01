@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day01
+  "Solution to https://adventofcode.com/2016/day/1"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
             [aoc-clj.utils.math :as math]))
 
 (defn parse-cmd
@@ -10,10 +10,8 @@
     {:dir dir :dist dist}))
 
 (defn parse
-  [line]
-  (map parse-cmd (str/split line #", ")))
-
-(def day01-input (-> (u/puzzle-input "inputs/2016/day01-input.txt") first parse))
+  [input]
+  (map parse-cmd (str/split (first input) #", ")))
 
 (defn rotate
   [heading dir]
@@ -40,10 +38,6 @@
 (defn distance
   [steps]
   (-> steps move :pos (math/manhattan [0 0])))
-
-(defn day01-part1-soln
-  []
-  (distance day01-input))
 
 (defn all-steps
   [{:keys [visited heading]} {:keys [dir dist]}]
@@ -74,6 +68,10 @@
   [steps]
   (-> steps all-visited :visited first-duplicate (math/manhattan [0 0])))
 
+(defn day01-part1-soln
+  [input]
+  (distance input))
+
 (defn day01-part2-soln
-  []
-  (distance-to-first-duplicate day01-input))
+  [input]
+  (distance-to-first-duplicate input))

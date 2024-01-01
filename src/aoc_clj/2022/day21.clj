@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day21
   "Solution to https://adventofcode.com/2022/day/21"
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.string :as str]))
 
 ;;;; Input parsing
 
@@ -16,8 +15,6 @@
 (defn parse
   [input]
   (into {} (map parse-line input)))
-
-(def day21-input (u/parse-puzzle-input parse 2022 21))
 
 ;;;; Puzzle logic
 
@@ -118,10 +115,10 @@
 
 (defn day21-part1-soln
   "What number will the monkey named root yell?"
-  []
-  (root-yell day21-input))
+  [input]
+  (root-yell input))
 
 (defn day21-part2-soln
   "What number do you yell to pass root's equality test?"
-  []
-  (humn-value day21-input))
+  [input]
+  (humn-value input))

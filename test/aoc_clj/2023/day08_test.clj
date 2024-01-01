@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2023.day08 :as t]))
 
-(def d08-s01-raw ["RL"
+(def d08-s00-raw ["RL"
                   ""
                   "AAA = (BBB, CCC)"
                   "BBB = (DDD, EEE)"
@@ -13,13 +13,13 @@
                   "GGG = (GGG, GGG)"
                   "ZZZ = (ZZZ, ZZZ)"])
 
-(def d08-s02-raw ["LLR"
+(def d08-s01-raw ["LLR"
                   ""
                   "AAA = (BBB, BBB)"
                   "BBB = (AAA, ZZZ)"
                   "ZZZ = (ZZZ, ZZZ)"])
 
-(def d08-s03-raw ["LR"
+(def d08-s02-raw ["LR"
                   ""
                   "11A = (11B, XXX)"
                   "11B = (XXX, 11Z)"
@@ -30,7 +30,7 @@
                   "22Z = (22B, 22B)"
                   "XXX = (XXX, XXX)"])
 
-(def d08-s01
+(def d08-s00
   {:instructions [:right :left]
    :nodes {"AAA" {:left "BBB" :right "CCC"}
            "BBB" {:left "DDD" :right "EEE"}
@@ -40,13 +40,13 @@
            "GGG" {:left "GGG" :right "GGG"}
            "ZZZ" {:left "ZZZ" :right "ZZZ"}}})
 
-(def d08-s02
+(def d08-s01
   {:instructions [:left :left :right]
    :nodes {"AAA" {:left "BBB" :right "BBB"}
            "BBB" {:left "AAA" :right "ZZZ"}
            "ZZZ" {:left "ZZZ" :right "ZZZ"}}})
 
-(def d08-s03
+(def d08-s02
   {:instructions [:left :right]
    :nodes {"11A" {:left "11B" :right "XXX"}
            "11B" {:left "XXX" :right "11Z"}
@@ -59,23 +59,23 @@
 
 (deftest parse-test
   (testing "Correctly parses the input"
+    (is (= d08-s00 (t/parse d08-s00-raw)))
     (is (= d08-s01 (t/parse d08-s01-raw)))
-    (is (= d08-s02 (t/parse d08-s02-raw)))
-    (is (= d08-s03 (t/parse d08-s03-raw)))))
+    (is (= d08-s02 (t/parse d08-s02-raw)))))
 
 (deftest steps-to-zzz
   (testing "Correctly counts the number of steps to get to ZZZ"
-    (is (= 2 (t/steps-to-zzz d08-s01 "AAA")))
-    (is (= 6 (t/steps-to-zzz d08-s02 "AAA")))))
+    (is (= 2 (t/steps-to-zzz d08-s00 "AAA")))
+    (is (= 6 (t/steps-to-zzz d08-s01 "AAA")))))
 
 (deftest start-nodes-test
   (testing "Finds all the start nodes"
-    (is (= ["11A" "22A"] (t/start-nodes (:nodes d08-s03))))))
+    (is (= ["11A" "22A"] (t/start-nodes (:nodes d08-s02))))))
 
 (deftest ghost-steps-to-zzz
   (testing "Counts the number of steps for all starting points to get to a
             node ending in Z"
-    (is (= 6 (t/ghost-steps-to-zzz d08-s03)))))
+    (is (= 6 (t/ghost-steps-to-zzz d08-s02)))))
 
 (def day08-input (u/parse-puzzle-input t/parse 2023 8))
 

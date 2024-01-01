@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day08
+  "Solution to https://adventofcode.com/2021/day/8"
   (:require [clojure.string :as str]
             [clojure.set :as set]
             [aoc-clj.utils.core :as u]))
@@ -22,23 +23,10 @@
     {:patterns (str/split l #" ")
      :output (str/split r #" ")}))
 
-(def day08-input (map parse-line (u/puzzle-input "inputs/2021/day08-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
-(def day08-sample1
-  (parse-line "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"))
-
-(def day08-sample2
-  (map parse-line
-       ["be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe"
-        "edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc"
-        "fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg"
-        "fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb"
-        "aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea"
-        "fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb"
-        "dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe"
-        "bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef"
-        "egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb"
-        "gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce"]))
 
 (defn easy-digits-count
   [note]
@@ -50,15 +38,6 @@
 (defn total-easy-digits-count
   [notes]
   (reduce + (map easy-digits-count notes)))
-
-(total-easy-digits-count day08-sample2)
-
-(defn day08-part1-soln
-  []
-  (total-easy-digits-count day08-input))
-
-
-(frequencies (apply str (sort-by count (:patterns day08-sample1))))
 
 (def freq-map
   {4 #{\e}
@@ -83,8 +62,6 @@
         [x y] (filter (complement #{u v}) four)
         z     (first (filter (complement #{u v}) seven))]
     {u #{\c \f} v #{\c \f} x #{\b \d} y #{\b \d} z #{\a}}))
-
-(map (freq-rule (:patterns day08-sample1)) (keys (easy-digit-rule (:patterns day08-sample1))))
 
 (defn decode-mapping
   [patterns]
@@ -116,6 +93,11 @@
   [input]
   (reduce + (map decode-notes input)))
 
+(defn day08-part1-soln
+  [input]
+  (total-easy-digits-count input))
+
+
 (defn day08-part2-soln
-  []
-  (sum-of-decoded-digits day08-input))
+  [input]
+  (sum-of-decoded-digits input))

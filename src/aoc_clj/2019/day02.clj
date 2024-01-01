@@ -1,8 +1,9 @@
 (ns aoc-clj.2019.day02
+  "Solution to https://adventofcode.com/2019/day/2"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day02-input (u/firstv (u/puzzle-input "inputs/2019/day02-input.txt")))
+(def parse u/firstv)
 
 (defn override-intcode
   "Replace `intcode` with `noun` in position 1 and `verb` in position 2"
@@ -20,10 +21,6 @@
        :intcode
        first))
 
-(defn day02-part1-soln
-  []
-  (intcode-output day02-input [12 2]))
-
 (defn pair-produces-output
   "Find the noun/verb pair that will produce the `output` value for
    `intcode` program."
@@ -35,7 +32,11 @@
             #(not= output (intcode-output intcode %))
             candidates))))
 
+(defn day02-part1-soln
+  [input]
+  (intcode-output input [12 2]))
+
 (defn day02-part2-soln
-  []
-  (let [[noun verb] (pair-produces-output day02-input 19690720)]
+  [input]
+  (let [[noun verb] (pair-produces-output input 19690720)]
     (+ (* 100 noun) verb)))

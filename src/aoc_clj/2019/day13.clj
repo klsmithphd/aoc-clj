@@ -1,16 +1,11 @@
 (ns aoc-clj.2019.day13
+  "Solution to https://adventofcode.com/2019/day/13"
   (:require [lanterna.screen :as scr]
             [manifold.stream :as s]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day13-input (u/firstv (u/puzzle-input "inputs/2019/day13-input.txt")))
-
-(defn day13-part1-soln
-  []
-  (let [board (intcode/out-seq (intcode/intcode-exec day13-input []))
-        tile-values (flatten (partition 1 3 (drop 2 board)))]
-    (get (frequencies tile-values) 2)))
+(def parse u/firstv)
 
 (defn val->str
   [val]
@@ -58,11 +53,11 @@
    There's some indeterminism here due to the multithreaded
    implementation so the game won't always successfully
    complete"
-  []
+  [input]
   (let [in (s/stream)
         out (s/stream)
         screen (scr/get-screen :swing {:rows 25})
-        code (assoc day13-input 0 2)
+        code (assoc input 0 2)
         program (future (intcode/intcode-exec code in out))
         paddle-loc (atom 20)]
     (scr/start screen)
@@ -72,7 +67,14 @@
     @program
     (println "Finished!")))
 
+(defn day13-part1-soln
+  [input]
+  (let [board (intcode/out-seq (intcode/intcode-exec input []))
+        tile-values (flatten (partition 1 3 (drop 2 board)))]
+    (get (frequencies tile-values) 2)))
+
 (defn day13-part2-soln
   "After playing the `breakout` game above, 11140 is the max high score"
-  []
+  [input]
+  (comment (breakout input))
   11140)

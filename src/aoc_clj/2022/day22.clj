@@ -84,8 +84,6 @@
     (assoc (parse-map a)
            :path (parse-path (first b)))))
 
-(def day22-input (u/parse-puzzle-input parse 2022 22))
-
 ;;;; Puzzle logic
 
 (defn zone-match
@@ -190,12 +188,12 @@
 
 (defn day22-part1-soln
   "Follow the path given in the monkeys' notes. What is the final password?"
-  []
-  (final-password (follow-path (assoc day22-input :wrap-fn wrap-around))))
+  [input]
+  (final-password (follow-path (assoc input :wrap-fn wrap-around))))
 
 (defn day22-part2-soln
   "Fold the map into a cube, then follow the path given in the monkeys' notes. 
    What is the final password?"
-  []
-  (final-password (follow-path (assoc day22-input :wrap-fn cube-wrap-around))))
+  [input]
+  (final-password (follow-path (assoc input :wrap-fn cube-wrap-around))))
 

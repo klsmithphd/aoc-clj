@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day19
+  "Solution to https://adventofcode.com/2021/day/19"
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
@@ -18,20 +19,20 @@
 ;;    a common coordinate system
 
 ;; TODO Candidates for a common math utility
-(def rotation-x-90
-  [[1 0  0]
-   [0 0 -1]
-   [0 1  0]])
+;; (def rotation-x-90
+;;   [[1 0  0]
+;;    [0 0 -1]
+;;    [0 1  0]])
 
-(def rotation-y-90
-  [[0 0 1]
-   [0 1 0]
-   [-1 0 0]])
+;; (def rotation-y-90
+;;   [[0 0 1]
+;;    [0 1 0]
+;;    [-1 0 0]])
 
-(def rotation-z-90
-  [[0 -1 0]
-   [1 0  0]
-   [0 0 1]])
+;; (def rotation-z-90
+;;   [[0 -1 0]
+;;    [1 0  0]
+;;    [0 0 1]])
 
 (def all-orientation-permutations
   [[[1  0 0] [0  1  0] [0  0  1]]; identity
@@ -70,16 +71,12 @@
   (mapv #(read-string (str "[" % "]"))
         (rest (str/split sensor #"\n"))))
 
-(defn parse
+(defn intermediate-parse
   [input]
   (let [sensors (-> (str/join "\n" input)
                     (str/split #"\n\n"))]
     (zipmap (range (count sensors))
             (mapv #(assoc {} :beacons (parse-sensor %)) sensors))))
-
-;; (defn abs
-;;   [x]
-;;   (Math/abs x))
 
 (defn relative-vectors
   [beacons idx]
@@ -103,20 +100,9 @@
            :rel-vecs rel-vecs
            :rel-vec-sigs sigs)))
 
-(def day19-sample
-  (u/fmap add-relative-vectors
-          (parse
-           ["--- scanner 0 ---"
-            "0,2"
-            "4,1"
-            "3,3"
-            ""
-            "--- scanner 1 ---"
-            "-1,-1"
-            "-5,0"
-            "-2,1"])))
-
-(def day19-input  (u/fmap add-relative-vectors (parse (u/puzzle-input "inputs/2021/day19-input.txt"))))
+(defn parse
+  [input]
+  (u/fmap add-relative-vectors (intermediate-parse input)))
 
 (defn matrix-mult
   "Matrix multiply with v represented as a row (not column) vector"
@@ -205,10 +191,6 @@
   [sensors]
   (into #{} (mapcat :beacons (vals (orient-all-sensors sensors)))))
 
-(defn day19-part1-soln
-  []
-  (count (all-beacons day19-input)))
-
 (defn max-sensor-distance
   [sensors]
   (let [offsets (filter some? (map :offset (vals (orient-all-sensors sensors))))
@@ -218,6 +200,10 @@
          flatten
          (apply max))))
 
+(defn day19-part1-soln
+  [input]
+  (count (all-beacons input)))
+
 (defn day19-part2-soln
-  []
-  (max-sensor-distance day19-input))
+  [input]
+  (max-sensor-distance input))

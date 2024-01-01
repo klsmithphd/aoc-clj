@@ -1,10 +1,10 @@
 (ns aoc-clj.2021.day11-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2021.day11 :as t]))
 
 (def day11-sample
-  (->>
+  (t/parse
    ["5483143223"
     "2745854711"
     "5264556173"
@@ -14,10 +14,7 @@
     "2176841721"
     "6882881134"
     "4846848554"
-    "5283751526"]
-   (map t/parse-line)
-   mapgrid/lists->MapGrid2D
-   :grid))
+    "5283751526"]))
 
 (deftest flashes-after-100-steps
   (testing "Counts total number of flashes after 100 steps in sample data"
@@ -27,10 +24,12 @@
   (testing "Counts number of steps before all flashes are synchronized"
     (is (= 195 (t/steps-until-sync day11-sample)))))
 
+(def day11-input (u/parse-puzzle-input t/parse 2021 11))
+
 (deftest day11-part1-soln
   (testing "Reproduces the answer for day11, part1"
-    (is (= 1634 (t/day11-part1-soln)))))
+    (is (= 1634 (t/day11-part1-soln day11-input)))))
 
 (deftest day11-part2-soln
   (testing "Reproduces the answer for day11, part2"
-    (is (= 210 (t/day11-part2-soln)))))
+    (is (= 210 (t/day11-part2-soln day11-input)))))

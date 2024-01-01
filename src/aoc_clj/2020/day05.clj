@@ -1,8 +1,8 @@
 (ns aoc-clj.2020.day05
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/5"
+  (:require [clojure.string :as str]))
 
-(def day05-input (u/puzzle-input "inputs/2020/day05-input.txt"))
+(def parse identity)
 
 (defn seat-id
   [seat]
@@ -15,12 +15,12 @@
     (read-string (str "2r" bit-string))))
 
 (defn day05-part1-soln
-  []
-  (apply max (map seat-id day05-input)))
+  [input]
+  (apply max (map seat-id input)))
 
 (defn day05-part2-soln
-  []
-  (let [seat-ids (sort (map seat-id day05-input))]
+  [input]
+  (let [seat-ids (sort (map seat-id input))]
     (->> (map vector seat-ids (rest seat-ids))
          (filter #(= 2 (- (second %) (first %))))
          ffirst

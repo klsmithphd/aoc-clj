@@ -1,9 +1,8 @@
 (ns aoc-clj.2020.day04
+  "Solution to https://adventofcode.com/2020/day/2"
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
-
-(def day04-input (str/join "\n" (u/puzzle-input "inputs/2020/day04-input.txt")))
 
 (defn split-pair
   [pair]
@@ -12,8 +11,8 @@
 
 (defn parse
   [input]
-  (->> (str/split input #"\n\n")
-       (map #(str/replace % "\n" " "))
+  (->> (u/split-at-blankline input)
+       (map #(str/join " " %))
        (map #(str/split % #"\ "))
        (map (fn [x]
               (->> x
@@ -89,13 +88,9 @@
               pid-valid?))
 
 (defn day04-part1-soln
-  []
-  (->> (parse day04-input)
-       (filter keys-valid?)
-       count))
+  [input]
+  (count (filter keys-valid? input)))
 
 (defn day04-part2-soln
-  []
-  (->> (parse day04-input)
-       (filter passport-valid?)
-       count))
+  [input]
+  (count (filter passport-valid? input)))

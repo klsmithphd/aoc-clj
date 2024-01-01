@@ -1,8 +1,11 @@
 (ns aoc-clj.2021.day18
+  "Solution to https://adventofcode.com/2021/day/18"
   (:require [clojure.zip :as zip]
             [aoc-clj.utils.core :as u]))
 
-(def day18-input (map read-string (u/puzzle-input "inputs/2021/day18-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn iter-zip [zipper]
   (->> zipper
@@ -117,10 +120,6 @@
       (+ (* 3 (magnitude left))
          (* 2 (magnitude right))))))
 
-(defn day18-part1-soln
-  []
-  (magnitude (reduce snailfish-add day18-input)))
-
 (defn shift-sum
   [row]
   (map #(magnitude (snailfish-add (first row) %)) (rest row)))
@@ -133,6 +132,10 @@
          flatten
          (apply max))))
 
+(defn day18-part1-soln
+  [input]
+  (magnitude (reduce snailfish-add input)))
+
 (defn day18-part2-soln
-  []
-  (largest-magnitude-sum day18-input))
+  [input]
+  (largest-magnitude-sum input))

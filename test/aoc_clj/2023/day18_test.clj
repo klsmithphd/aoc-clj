@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2023.day18 :as t]))
 
-(def d18-s01-raw
+(def d18-s00-raw
   ["R 6 (#70c710)"
    "D 5 (#0dc571)"
    "L 2 (#5713f0)"
@@ -19,7 +19,7 @@
    "L 2 (#015232)"
    "U 2 (#7a21e3)"])
 
-(def d18-s01
+(def d18-s00
   [{:dir "R" :dist 6 :color "70c710"}
    {:dir "D" :dist 5 :color "0dc571"}
    {:dir "L" :dist 2 :color "5713f0"}
@@ -35,7 +35,7 @@
    {:dir "L" :dist 2 :color "015232"}
    {:dir "U" :dist 2 :color "7a21e3"}])
 
-(def d18-s01-reinterpreted
+(def d18-s00-reinterpreted
   [{:dir "R" :dist 461937}
    {:dir "D" :dist 56407}
    {:dir "R" :dist 356671}
@@ -51,29 +51,29 @@
    {:dir "L" :dist 5411}
    {:dir "U" :dist 500254}])
 
-(def d18-s01-vertices
+(def d18-s00-vertices
   [[6 0] [6 5] [4 5] [4 7] [6 7] [6 9] [1 9]
    [1 7] [0 7] [0 5] [2 5] [2 2] [0 2] [0 0]])
 
 (deftest parse-test
   (testing "Correctly parses the input"
-    (is (= d18-s01 (t/parse d18-s01-raw)))))
+    (is (= d18-s00 (t/parse d18-s00-raw)))))
 
 (deftest vertices-test
   (testing "Returns the collection of vertices for each segment"
-    (is (= d18-s01-vertices (t/vertices d18-s01)))))
+    (is (= d18-s00-vertices (t/vertices d18-s00)))))
 
 (deftest dig-area-test
   (testing "Computes the number of tiles excavated"
-    (is (= 62 (t/dig-area d18-s01)))))
+    (is (= 62 (t/dig-area d18-s00)))))
 
 (deftest interpret-hex-test
   (testing "Reinterprets the hex color codes as dist/dir values"
-    (is (= d18-s01-reinterpreted (map t/interpret-hex d18-s01)))))
+    (is (= d18-s00-reinterpreted (map t/interpret-hex d18-s00)))))
 
 (deftest dig-area-reinterpreted-test
   (testing "Computes the dig area with the hex reinterpretation of the input"
-    (is (= 952408144115 (t/dig-area-reinterpreted d18-s01)))))
+    (is (= 952408144115 (t/dig-area-reinterpreted d18-s00)))))
 
 (def day18-input (u/parse-puzzle-input t/parse 2023 18))
 

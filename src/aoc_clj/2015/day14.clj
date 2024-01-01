@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day14
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2015/day/14"
+  (:require [clojure.string :as str]))
 
 (defn parse-line
   [line]
@@ -15,7 +15,6 @@
   [input]
   (into {} (map parse-line input)))
 
-(def day14-input (parse (u/puzzle-input "inputs/2015/day14-input.txt")))
 
 (defn distance-at-time
   [time {:keys [speed fly rest]}]
@@ -37,9 +36,9 @@
     (mapv (partial reduce +) scores)))
 
 (defn day14-part1-soln
-  []
-  (apply max (map (partial distance-at-time 2503) (vals day14-input))))
+  [input]
+  (apply max (map (partial distance-at-time 2503) (vals input))))
 
 (defn day14-part2-soln
-  []
-  (apply max (points-at-time 2503 day14-input)))
+  [input]
+  (apply max (points-at-time 2503 input)))

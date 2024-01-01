@@ -1,13 +1,14 @@
 (ns aoc-clj.2019.day05
+  "Solution to https://adventofcode.com/2019/day/5"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day05-input (u/firstv (u/puzzle-input "inputs/2019/day05-input.txt")))
+(def parse u/firstv)
 
 (defn day05-part1-soln
-  []
-  (intcode/last-out (intcode/intcode-exec day05-input [1])))
+  [input]
+  (intcode/last-out (intcode/intcode-exec input [1])))
 
 (defn day05-part2-soln
-  []
-  (intcode/last-out (intcode/intcode-exec day05-input [5])))
+  [input]
+  (intcode/last-out (intcode/intcode-exec input [5])))

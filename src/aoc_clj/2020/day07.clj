@@ -1,4 +1,5 @@
 (ns aoc-clj.2020.day07
+  "Solution to https://adventofcode.com/2020/day/7"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -19,9 +20,9 @@
        []
        (map bag-description (str/split inner #",")))]))
 
-(def day07-input
-  (->> (u/puzzle-input "inputs/2020/day07-input.txt")
-       (map parse-rule)))
+(defn parse
+  [input]
+  (map parse-rule input))
 
 (defn contained-by
   [[outer inner]]
@@ -53,9 +54,9 @@
   (dec (satisfy-rule (into {} rules) 1 bag)))
 
 (defn day07-part1-soln
-  []
-  (count (all-outer-bags day07-input :shiny-gold)))
+  [input]
+  (count (all-outer-bags input :shiny-gold)))
 
 (defn day07-part2-soln
-  []
-  (count-inner-bags day07-input :shiny-gold))
+  [input]
+  (count-inner-bags input :shiny-gold))

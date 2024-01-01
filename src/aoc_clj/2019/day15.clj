@@ -1,11 +1,12 @@
 (ns aoc-clj.2019.day15
+  "Solution to https://adventofcode.com/2019/day/15"
   (:require [manifold.stream :as s]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intcode :as intcode]
             [aoc-clj.utils.graph :as g]
             [aoc-clj.utils.maze :as maze]))
 
-(def day15-input (u/firstv (u/puzzle-input "inputs/2019/day15-input.txt")))
+(def parse u/firstv)
 
 (def dir->code
   {:n 1
@@ -33,16 +34,20 @@
         _ (future (intcode/intcode-exec intcode in out))]
     (maze/map-maze probe #(= :wall %))))
 
-(def thismaze (map-maze-with-droid day15-input))
+(defn thismaze
+  [input]
+  (map-maze-with-droid input))
 
 (defn day15-part1-soln
-  []
-  (let [start [0 0]
+  [input]
+  (let [thismaze (thismaze input)
+        start [0 0]
         finish (maze/find-target thismaze :oxygen)
         simplified-maze (-> thismaze maze/Maze->Graph (g/pruned #{start finish}))
         path (g/dijkstra simplified-maze start (u/equals? finish))]
     (g/path-distance simplified-maze path)))
 
 (defn day15-part2-soln
-  []
-  (maze/flood-fill thismaze (maze/find-target thismaze :oxygen)))
+  [input]
+  (let [thismaze (thismaze input)]
+    (maze/flood-fill thismaze (maze/find-target thismaze :oxygen))))

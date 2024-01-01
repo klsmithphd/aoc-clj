@@ -1,32 +1,11 @@
 (ns aoc-clj.2016.day11
+  "Solution to https://adventofcode.com/2016/day/11"
   (:require [clojure.math.combinatorics :as combo]
             [clojure.set :as set]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.graph :as g :refer [Graph]]))
 
-"The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip."
-"The second floor contains a hydrogen generator."
-"The third floor contains a lithium generator."
-"The fourth floor contains nothing relevant."
-(def day11-sample
-  {:e 1
-  ;;  :move 0
-   1 #{[:m "H"] [:m "Li"]}
-   2 #{[:g "H"]}
-   3 #{[:g "Li"]}
-   4 #{}})
-
-"The first floor contains a thulium generator, a thulium-compatible microchip, a plutonium generator, and a strontium generator.
-The second floor contains a plutonium-compatible microchip and a strontium-compatible microchip.
-The third floor contains a promethium generator, a promethium-compatible microchip, a ruthenium generator, and a ruthenium-compatible microchip.
-The fourth floor contains nothing relevant."
-(def day11-input
-  {:e 1
-  ;;  :move 0
-   1 #{[:m "Tm"] [:g "Tm"] [:g "Pu"] [:g "Sr"]}
-   2 #{[:m "Pu"] [:m "Sr"]}
-   3 #{[:m "Pm"] [:m "Ru"] [:g "Pm"] [:g "Ru"]}
-   4 #{}})
+;; TODO - Should add a parse method
 
 (defn endstate
   [state]
@@ -107,14 +86,14 @@ The fourth floor contains nothing relevant."
        count
        dec))
 
-(defn day11-part1-soln
-  []
-  (move-count day11-input))
-
 (defn extra-items
   [state]
   (update state 1 conj [:m "El"] [:g "El"] [:m "Li2"] [:g "Li2"]))
 
+(defn day11-part1-soln
+  [input]
+  (move-count input))
+
 (defn day11-part2-soln
-  []
-  (move-count (extra-items day11-input)))
+  [input]
+  (move-count (extra-items input)))

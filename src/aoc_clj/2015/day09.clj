@@ -1,4 +1,5 @@
 (ns aoc-clj.2015.day09
+  "Solution to https://adventofcode.com/2015/day/9"
   (:require [clojure.string :as str]
             [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]))
@@ -15,8 +16,6 @@
   (->> (mapcat parse-line input)
        (group-by first)
        (u/fmap #(apply merge (map second %)))))
-
-(def day09-input (parse (u/puzzle-input "inputs/2015/day09-input.txt")))
 
 (defn route-distance
   [dists route]
@@ -39,9 +38,9 @@
   (apply max (route-distances dists)))
 
 (defn day09-part1-soln
-  []
-  (shortest-route-distance day09-input))
+  [input]
+  (shortest-route-distance input))
 
 (defn day09-part2-soln
-  []
-  (longest-route-distance day09-input))
+  [input]
+  (longest-route-distance input))

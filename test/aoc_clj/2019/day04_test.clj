@@ -1,5 +1,6 @@
 (ns aoc-clj.2019.day04-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2019.day04 :as t]))
 
 (deftest not-decreasing-condition
@@ -22,10 +23,12 @@
     (is (not (t/pair-not-in-larger-group? (t/digits 123444))))
     (is (t/pair-not-in-larger-group? (t/digits 111122)))))
 
+(def day04-input (u/parse-puzzle-input t/parse 2019 4))
+
 (deftest day04-part1-soln-test
   (testing "Can reproduce the answer for part1"
-    (is (= 1330 (t/day04-part1-soln)))))
+    (is (= 1330 (t/day04-part1-soln day04-input)))))
 
 (deftest day01-part2-soln-test
   (testing "Can reproduce the answer for part2"
-    (is (= 876 (t/day04-part2-soln)))))
+    (is (= 876 (t/day04-part2-soln day04-input)))))

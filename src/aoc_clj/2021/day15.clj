@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day15
+  "Solution to https://adventofcode.com/2021/day/15"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.graph :as g]
@@ -10,23 +11,7 @@
 
 (defn parse
   [lines]
-  (map parse-line lines))
-
-(def day15-sample
-  (mapgrid/lists->MapGrid2D
-   (parse
-    ["1163751742"
-     "1381373672"
-     "2136511328"
-     "3694931569"
-     "7463417111"
-     "1319128137"
-     "1359912421"
-     "3125421639"
-     "1293138521"
-     "2311944581"])))
-
-(def day15-input (mapgrid/lists->MapGrid2D (parse (u/puzzle-input "inputs/2021/day15-input.txt"))))
+  (mapgrid/lists->MapGrid2D (map parse-line lines)))
 
 (defn find-path-vals
   [{:keys [width height grid] :as input}]
@@ -38,10 +23,6 @@
 (defn path-risk
   [input]
   (reduce + (rest (find-path-vals input))))
-
-(defn day15-part1-soln
-  []
-  (path-risk day15-input))
 
 (defn tiled-value
   [{:keys [width height grid]} [x y]]
@@ -66,6 +47,10 @@
      :grid
      (zipmap coords (map (partial tiled-value input) coords))}))
 
+(defn day15-part1-soln
+  [input]
+  (path-risk input))
+
 (defn day15-part2-soln
-  []
-  (path-risk (tile day15-input 5)))
+  [input]
+  (path-risk (tile input 5)))
