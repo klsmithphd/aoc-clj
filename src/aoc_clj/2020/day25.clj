@@ -1,8 +1,10 @@
 (ns aoc-clj.2020.day25
-  (:require [aoc-clj.utils.math :as math]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/25"
+  (:require [aoc-clj.utils.math :as math]))
 
-(def day25-input (map read-string (u/puzzle-input "inputs/2020/day25-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn transform
   [loop-size subject-number]
@@ -18,5 +20,5 @@
     (transform door-loop-size card-public-key)))
 
 (defn day25-part1-soln
-  []
-  (encryption-key day25-input))
+  [input]
+  (encryption-key input))

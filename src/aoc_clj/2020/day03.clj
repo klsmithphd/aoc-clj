@@ -1,8 +1,8 @@
 (ns aoc-clj.2020.day03
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/3"
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
-(def day03-input (u/puzzle-input "inputs/2020/day03-input.txt"))
+(def parse identity)
 
 (defn forest-basemap
   [ascii-lines]
@@ -33,13 +33,13 @@
   (map (partial trees-along-slope basemap) slopes))
 
 (defn day03-part1-soln
-  []
-  (let [basemap (forest-basemap day03-input)
+  [input]
+  (let [basemap (forest-basemap input)
         slope   [3 1]]
     (trees-along-slope basemap slope)))
 
 (defn day03-part2-soln
-  []
-  (let [basemap (forest-basemap day03-input)
+  [input]
+  (let [basemap (forest-basemap input)
         slopes  [[1 1] [3 1] [5 1] [7 1] [1 2]]]
     (reduce * (trees-along-slopes basemap slopes))))

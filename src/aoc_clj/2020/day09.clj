@@ -1,7 +1,9 @@
 (ns aoc-clj.2020.day09
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/9")
 
-(def day09-input (map read-string (u/puzzle-input "inputs/2020/day09-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn first-non-sum
   [nums window]
@@ -27,9 +29,9 @@
           (recur (inc left) right))))))
 
 (defn day09-part1-soln
-  []
-  (first-non-sum day09-input 25))
+  [input]
+  (first-non-sum input 25))
 
 (defn day09-part2-soln
-  []
-  (reduce + (contiguous-range-to-sum day09-input (day09-part1-soln))))
+  [input]
+  (reduce + (contiguous-range-to-sum input (day09-part1-soln input))))

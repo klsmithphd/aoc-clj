@@ -1,9 +1,10 @@
 (ns aoc-clj.2020.day01
-  (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/1"
+  (:require [clojure.math.combinatorics :as combo]))
 
-(def day01-input
-  (map read-string (u/puzzle-input "inputs/2020/day01-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn find-pair-that-sums-to-total
   [total candidates]
@@ -22,9 +23,9 @@
          (filter candidate-set))))
 
 (defn day01-part1-soln
-  []
-  (apply * (find-pair-that-sums-to-total 2020 day01-input)))
+  [input]
+  (apply * (find-pair-that-sums-to-total 2020 input)))
 
 (defn day02-part2-soln
-  []
-  (apply * (find-triple-that-sums-to-total 2020 day01-input)))
+  [input]
+  (apply * (find-triple-that-sums-to-total 2020 input)))

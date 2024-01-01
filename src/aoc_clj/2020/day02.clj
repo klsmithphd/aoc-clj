@@ -1,8 +1,8 @@
 (ns aoc-clj.2020.day02
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/2"
+  (:require [clojure.string :as str]))
 
-(defn parse
+(defn parse-line
   [input]
   (let [segments  (str/split input #" ")
         limits    (str/split (first segments) #"-")
@@ -13,8 +13,9 @@
      :char character
      :pass password}))
 
-(def day02-input
-  (map parse (u/puzzle-input "inputs/2020/day02-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn part1-valid?
   [{:keys [min max char pass]}]
@@ -34,9 +35,9 @@
              (not (= a char))))))
 
 (defn day02-part1-soln
-  []
-  (count (filter part1-valid? day02-input)))
+  [input]
+  (count (filter part1-valid? input)))
 
 (defn day02-part2-soln
-  []
-  (count (filter part2-valid? day02-input)))
+  [input]
+  (count (filter part2-valid? input)))

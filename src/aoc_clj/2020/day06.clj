@@ -1,15 +1,11 @@
 (ns aoc-clj.2020.day06
+  "Solution to https://adventofcode.com/2020/day/6"
   (:require [clojure.set :as set]
-            [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
-
-(def day06-input (str/join "\n" (u/puzzle-input "inputs/2020/day06-input.txt")))
 
 (defn parse
   [input]
-  (->> (str/split input #"\n\n")
-       (map #(str/replace % "\n" " "))
-       (map #(str/split % #"\ "))))
+  (->> (u/split-at-blankline input)))
 
 (defn unique-answers-in-group
   [group]
@@ -25,14 +21,14 @@
 
 (defn sum-counts
   [input count-fn]
-  (->> (parse input)
+  (->> input
        (map (comp count count-fn))
        (reduce +)))
 
 (defn day06-part1-soln
-  []
-  (sum-counts day06-input unique-answers-in-group))
+  [input]
+  (sum-counts input unique-answers-in-group))
 
 (defn day06-part2-soln
-  []
-  (sum-counts day06-input common-answers-in-group))
+  [input]
+  (sum-counts input common-answers-in-group))

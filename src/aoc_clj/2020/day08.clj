@@ -1,15 +1,15 @@
 (ns aoc-clj.2020.day08
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/8"
+  (:require [clojure.string :as str]))
 
-
-
-(defn parse
+(defn parse-line
   [line]
   (let [[op arg] (str/split line #"\ ")]
     [(keyword op) (read-string arg)]))
 
-(def day08-input (map parse (u/puzzle-input "inputs/2020/day08-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn execute
   [{:keys [line acc] :as state} [op arg]]
@@ -67,9 +67,9 @@
        :acc))
 
 (defn day08-part1-soln
-  []
-  (acc-value-at-second-loop day08-input))
+  [input]
+  (acc-value-at-second-loop input))
 
 (defn day08-part2-soln
-  []
-  (acc-value-for-finite-loop day08-input))
+  [input]
+  (acc-value-for-finite-loop input))

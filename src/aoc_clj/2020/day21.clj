@@ -1,8 +1,8 @@
 (ns aoc-clj.2020.day21
+  "Solution to https://adventofcode.com/2020/day/21"
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
-
 
 (defn parse-line
   [line-str]
@@ -11,15 +11,9 @@
     {:ingredients (set (str/split ingreds #" "))
      :allergens (str/split allergens #", ")}))
 
-(def day21-sample
-  (map parse-line
-       (str/split
-        "mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
-trh fvjkl sbzzf mxmxvkd (contains dairy)
-sqjhc fvjkl (contains soy)
-sqjhc mxmxvkd sbzzf (contains fish)" #"\n")))
-
-(def day21-input (map parse-line (u/puzzle-input "inputs/2020/day21-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn allergen-to-ingreds
   [{:keys [ingredients allergens]}]
@@ -64,9 +58,9 @@ sqjhc mxmxvkd sbzzf (contains fish)" #"\n")))
        (str/join ",")))
 
 (defn day21-part1-soln
-  []
-  (count (safe-ingredients day21-input)))
+  [input]
+  (count (safe-ingredients input)))
 
 (defn day21-part2-soln
-  []
-  (allergen-sorted-unsafe-ingredients day21-input))
+  [input]
+  (allergen-sorted-unsafe-ingredients input))

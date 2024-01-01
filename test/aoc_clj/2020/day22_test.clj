@@ -1,9 +1,10 @@
 (ns aoc-clj.2020.day22-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2020.day22 :as t]))
 
 (def day22-sample
-  (t/parse "Player 1:
+  (t/intermediate-parse "Player 1:
 9
 2
 6
@@ -18,7 +19,7 @@ Player 2:
 10"))
 
 (def day22-infinite-sample
-  (t/parse "Player 1:
+  (t/intermediate-parse "Player 1:
 43
 19
 
@@ -46,12 +47,14 @@ Player 2:
             :deck [7 5 6 2 4 1 10 8 9 3]}
            (t/recursive-combat day22-sample)))))
 
+(def day22-input (u/parse-puzzle-input t/parse 2020 22))
+
 (deftest day22-part1-soln
   (testing "Reproduces the answer for day22, part1"
-    (is (= 33772 (t/day22-part1-soln)))))
+    (is (= 33772 (t/day22-part1-soln day22-input)))))
 
 ;; FIXME: 2020.day22 part 2 too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/13
 (deftest ^:slow day22-part2-soln
   (testing "Reproduces the answer for day22, part2"
-    (is (= 35070 (t/day22-part2-soln)))))
+    (is (= 35070 (t/day22-part2-soln day22-input)))))

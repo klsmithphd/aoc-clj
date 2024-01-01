@@ -1,11 +1,10 @@
 (ns aoc-clj.2020.day15
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2020/day/15"
+  (:require [clojure.string :as str]))
 
-(def day15-input (map read-string
-                      (-> (u/puzzle-input "inputs/2020/day15-input.txt")
-                          first
-                          (str/split #","))))
+(defn parse
+  [input]
+  (map read-string (str/split (first input) #",")))
 
 (defn rules
   [nums lastnum]
@@ -37,9 +36,9 @@
                  (inc cnt)))))))
 
 (defn day15-part1-soln
-  []
-  (last (memory-seq day15-input 2020)))
+  [input]
+  (last (memory-seq input 2020)))
 
 (defn day15-part2-soln
-  []
-  (last (memory-seq day15-input 30000000)))
+  [input]
+  (last (memory-seq input 30000000)))

@@ -1,7 +1,7 @@
 (ns aoc-clj.2020.day13
+  "Solution to https://adventofcode.com/2020/day/13"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.math :as math]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.utils.math :as math]))
 
 (defn parse
   [input]
@@ -10,8 +10,6 @@
                    (map read-string))]
     {:time (read-string time)
      :buses buses}))
-
-(def day13-input (parse (u/puzzle-input "inputs/2020/day13-input.txt")))
 
 (defn next-bus
   [time bus]
@@ -27,10 +25,6 @@
 (defn bus-id-by-wait-time
   [input]
   (reduce * (earliest-bus-and-wait-time input)))
-
-(defn day13-part1-soln
-  []
-  (bus-id-by-wait-time day13-input))
 
 (defn bus-terms
   "Computes the coefficients [a, b] of a linear formula f = a*x + b
@@ -72,6 +66,10 @@
         offsets (map (partial bus-terms main-bus) positions)]
     (* main-bus (second (reduce earliest-match offsets)))))
 
+(defn day13-part1-soln
+  [input]
+  (bus-id-by-wait-time input))
+
 (defn day13-part2-soln
-  []
-  (earliest-consecutive-buses day13-input))
+  [input]
+  (earliest-consecutive-buses input))

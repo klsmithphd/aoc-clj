@@ -1,9 +1,10 @@
 (ns aoc-clj.2020.day20-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2020.day20 :as t]))
 
 (def day20-sample
-  (t/parse
+  (t/intermediate-parse
    "Tile 2311:
 ..##.#..#.
 ##..#.....
@@ -205,10 +206,12 @@ Tile 3079:
   (testing "Can find the correct number of sea monsters in a reassembled image"
     (is (= 2 (t/sea-monster-count (t/flipv (t/rotate (t/reassembled-image day20-sample))))))))
 
+(def day20-input (u/parse-puzzle-input t/parse 2020 20))
+
 (deftest day20-part1-soln
   (testing "Reproduces the answer for day20, part1"
-    (is (= 79412832860579 (t/day20-part1-soln)))))
+    (is (= 79412832860579 (t/day20-part1-soln day20-input)))))
 
 (deftest day20-part2-soln
   (testing "Reproduces the answer for day20, part2"
-    (is (= 2155 (t/day20-part2-soln)))))
+    (is (= 2155 (t/day20-part2-soln day20-input)))))

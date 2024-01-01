@@ -1,7 +1,7 @@
 (ns aoc-clj.2020.day24
+  "Solution to https://adventofcode.com/2020/day/24"
   (:require [clojure.set :as set]
-            [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [clojure.string :as str]))
 
 (defn parse-line
   [line]
@@ -13,7 +13,9 @@
       str/trim
       (str/split #" ")))
 
-(def day24-input (map parse-line (u/puzzle-input "inputs/2020/day24-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (def dir->coord {"e"  [1  1  0]
                  "w"  [-1 -1  0]
@@ -73,9 +75,9 @@
     (nth (iterate evolve-tiles start) day)))
 
 (defn day24-part1-soln
-  []
-  (count (black-tiles day24-input)))
+  [input]
+  (count (black-tiles input)))
 
 (defn day24-part2-soln
-  []
-  (count (black-tiles-on-day day24-input 100)))
+  [input]
+  (count (black-tiles-on-day input 100)))
