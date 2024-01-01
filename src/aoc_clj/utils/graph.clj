@@ -90,9 +90,9 @@
   [g path]
   (reduce + (map #(apply (partial distance g) %) (partition 2 1 path))))
 
-(defn entries-in-set
-  [s m]
-  (filter (fn [[k _]] (s k)) m))
+;; (defn entries-in-set
+;;   [s m]
+;;   (filter (fn [[k _]] (s k)) m))
 
 (defn entries-not-in-set
   [s m]
