@@ -22,6 +22,10 @@
     options-summary]
    (str/join \newline)))
 
+(defn soln-ns
+  [year day]
+  (str "aoc-clj." year "." (format "%02d" day)))
+
 (defn -main [& args]
   (let [{:keys [options arguments summary]} (parse-opts args cli-options)]
     (if (or (options :help)
