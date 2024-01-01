@@ -1,4 +1,5 @@
 (ns aoc-clj.2019.day22
+  "Solution to https://adventofcode.com/2019/day/22"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.math :as math]))
@@ -12,8 +13,9 @@
             (str/replace #"cut" ":cut")
             (str/split #" "))))
 
-(def day22-input
-  (map parse-line (u/puzzle-input "inputs/2019/day22-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn deal-op
   "A deal into new stack is a mod-multiply by -1 and a mod-add of -1"
@@ -59,10 +61,6 @@
          lookup (vec deck)]
      (map lookup (map indices (range size))))))
 
-(defn day22-part1-soln
-  []
-  (u/index-of (u/equals? 2019) (shuffle-deck 10007 day22-input)))
-
 (defn card-after-multiple-shuffles
   [size steps times position]
   (let [pow-op (->> (reduced-ops size steps)
@@ -81,7 +79,11 @@
    five hundred eighty-two million, seventy-six thousand, six hundred sixty-one"
   101741582076661)
 
+(defn day22-part1-soln
+  [input]
+  (u/index-of (u/equals? 2019) (shuffle-deck 10007 input)))
+
 (defn day22-part2-soln
-  []
-  (card-after-multiple-shuffles card-count day22-input shuffle-count 2020))
+  [input]
+  (card-after-multiple-shuffles card-count input shuffle-count 2020))
 

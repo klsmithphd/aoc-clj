@@ -1,11 +1,12 @@
 (ns aoc-clj.2019.day11
+  "Solution to https://adventofcode.com/2019/day/11"
   (:require [manifold.stream :as s]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.grid.vecgrid :refer [->VecGrid2D]]
             [aoc-clj.utils.intcode :as intcode]))
 
-(def day11-input (u/firstv (u/puzzle-input "inputs/2019/day11-input.txt")))
+(def parse u/firstv)
 
 (defn turn-left-and-move
   [{:keys [direction] [x y] :position}]
@@ -51,28 +52,27 @@
         (recur (stepper state))))))
 
 (defn day11-part1-soln
-  []
-  (count (keys (:hull (paint-bot day11-input 0)))))
+  [input]
+  (count (keys (:hull (paint-bot input 0)))))
 
 (defn- derive-day11-part2-soln
-  []
-  (->> (paint-bot day11-input 1)
+  [input]
+  (->> (paint-bot input 1)
        :hull
        grid/mapgrid->vectors
        ->VecGrid2D
        (grid/Grid2D->ascii {\  0 \* 1})
        print))
 
-(comment
-  (derive-day11-part2-soln)
-  "Prints out:
-    **** *    **** ***  *  *   ** ***   **    
-       * *    *    *  * * *     * *  * *  *   
-      *  *    ***  ***  **      * *  * *  *   
-     *   *    *    *  * * *     * ***  ****   
-    *    *    *    *  * * *  *  * * *  *  *   
-    **** **** **** ***  *  *  **  *  * *  *   ")
-
 (defn day11-part2-soln
-  []
+  [input]
+  (comment
+    (derive-day11-part2-soln input)
+    "Prints out:
+      **** *    **** ***  *  *   ** ***   **    
+         * *    *    *  * * *     * *  * *  *   
+        *  *    ***  ***  **      * *  * *  *   
+       *   *    *    *  * * *     * ***  ****   
+      *    *    *    *  * * *  *  * * *  *  *   
+      **** **** **** ***  *  *  **  *  * *  *   ")
   "ZLEBKJRA")

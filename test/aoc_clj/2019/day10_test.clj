@@ -1,15 +1,16 @@
 (ns aoc-clj.2019.day10-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2019.day10 :as t]))
 
-(def d10-s1 (t/parse-map
+(def d10-s1 (t/parse
              [".#..#"
               "....."
               "#####"
               "....#"
               "...##"]))
 
-(def d10-s2 (t/parse-map
+(def d10-s2 (t/parse
              ["......#.#."
               "#..#.#...."
               "..#######."
@@ -21,7 +22,7 @@
               "##...#..#."
               ".#....####"]))
 
-(def d10-s3 (t/parse-map
+(def d10-s3 (t/parse
              ["#.#...#.#."
               ".###....#."
               ".#....#..."
@@ -33,7 +34,7 @@
               "......#..."
               ".####.###."]))
 
-(def d10-s4 (t/parse-map
+(def d10-s4 (t/parse
              [".#..#..###"
               "####.###.#"
               "....###.#."
@@ -45,7 +46,7 @@
               ".##...##.#"
               ".....#.#.."]))
 
-(def d10-s5 (t/parse-map
+(def d10-s5 (t/parse
              [".#..##.###...#######"
               "##.############..##."
               ".#.######.########.#"
@@ -67,7 +68,7 @@
               "#.#.#.#####.####.###"
               "###.##.####.##.#..##"]))
 
-(def d10-s6 (t/parse-map
+(def d10-s6 (t/parse
              [".#....#####...#.."
               "##...##.#####..##"
               "##...#...#.#####."
@@ -82,16 +83,11 @@
     (is (= '([6,3] 41) (t/best-location d10-s4)))
     (is (= '([11,13] 210) (t/best-location d10-s5)))))
 
-(deftest day10-part1-soln-test
-  (testing "Can reproduce the answer for part1"
-    (is (= 253 (second (t/day10-part1-soln))))))
-
 (def d10-s6-soln
   [[8,1] [9,0] [9,1] [10,0] [9,2] [11,1] [12,1] [11,2] [15,1]
    [12,2] [13,2] [14,2] [15,2] [12,3] [16,4] [15,4] [10,4] [4,4]
    [2,4] [2,3] [0,2] [1,2] [0,1] [1,1] [5,2] [1,0] [5,1]
    [6,1] [6,0] [7,0] [8,0] [10,1] [14,0] [16,1] [13,3] [14,3]])
-
 
 (deftest laser-test
   (testing "Laser hits the asteroids in the correct order"
@@ -109,6 +105,12 @@
       (is (= [10,9] (nth larger-test 200)))
       (is (= [11,1] (nth larger-test 298))))))
 
+(def day10-input (u/parse-puzzle-input t/parse 2019 10))
+
+(deftest day10-part1-soln-test
+  (testing "Can reproduce the answer for part1"
+    (is (= 253 (second (t/day10-part1-soln day10-input))))))
+
 (deftest day10-part2-soln-test
   (testing "Can reproduce the answer for part2"
-    (is (= 815 (t/day10-part2-soln)))))
+    (is (= 815 (t/day10-part2-soln day10-input)))))

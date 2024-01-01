@@ -1,5 +1,6 @@
 (ns aoc-clj.2019.day16-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2019.day16 :as t]))
 
 (deftest phase-test
@@ -25,10 +26,6 @@
                   (t/run-phases
                    (t/str->nums "69317163492948606335995924319873") 100)))))))
 
-(deftest day16-part1-soln-test
-  (testing "Can reproduce the answer for part1"
-    (is (= "70856418" (t/day16-part1-soln)))))
-
 (deftest real-signal-test
   (testing "Can compute handle the `real signal` challenge in part 2"
     (is (= "84462026"
@@ -44,8 +41,14 @@
             (t/real-signal
              (t/str->nums "03081770884921959731165446850517") 100))))))
 
+(def day16-input (u/parse-puzzle-input t/parse 2019 16))
+
+(deftest day16-part1-soln-test
+  (testing "Can reproduce the answer for part1"
+    (is (= "70856418" (t/day16-part1-soln day16-input)))))
+
 ;; FIXME: test is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/17
 (deftest ^:slow day16-part2-soln-test
   (testing "Can reproduce the answer for part2"
-    (is (= "87766336" (t/day16-part2-soln)))))
+    (is (= "87766336" (t/day16-part2-soln day16-input)))))

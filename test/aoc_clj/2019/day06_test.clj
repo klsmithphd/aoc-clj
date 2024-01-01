@@ -1,5 +1,6 @@
 (ns aoc-clj.2019.day06-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2019.day06 :as t]))
 
 (deftest orbit-count-test
@@ -32,10 +33,12 @@
                                  "YOU" "K"
                                  "SAN" "I"} "YOU" "SAN")))))
 
+(def day06-input (u/parse-puzzle-input t/parse 2019 6))
+
 (deftest day06-part1-soln-test
   (testing "Can reproduce the answer for part1"
-    (is (= 261306 (t/day06-part1-soln)))))
+    (is (= 261306 (t/day06-part1-soln day06-input)))))
 
 (deftest day06-part2-soln-test
   (testing "Can reproduce the answer for part2"
-    (is (= 382 (t/day06-part2-soln)))))
+    (is (= 382 (t/day06-part2-soln day06-input)))))

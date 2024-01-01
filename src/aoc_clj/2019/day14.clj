@@ -1,6 +1,6 @@
 (ns aoc-clj.2019.day14
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2019/day/14"
+  (:require [clojure.string :as str]))
 
 (defn parse-component
   [comp-str]
@@ -15,18 +15,15 @@
         [chem qty] (parse-component rhs)]
     {chem {:min-qty qty :comps components}}))
 
-(defn reactions
+(defn parse
   [input]
   (->> input
        (map parse-line)
        (apply merge)))
 
-(def day14-input
-  (reactions (u/puzzle-input "inputs/2019/day14-input.txt")))
-
-(defn multiply
-  [factor ingredients]
-  (mapcat (fn [[chem qty]] [chem (* factor qty)]) (partition 2 ingredients)))
+;; (defn multiply
+;;   [factor ingredients]
+;;   (mapcat (fn [[chem qty]] [chem (* factor qty)]) (partition 2 ingredients)))
 
 (defn consume
   [inventory used [chemical qty]]
@@ -64,10 +61,6 @@
   ([recipes amount]
    (get-in (ingredients-used recipes :FUEL amount) [:consumed :ORE])))
 
-(defn day14-part1-soln
-  []
-  (ore-amount day14-input))
-
 (def available-ore 1000000000000)
 
 (defn binary-search
@@ -90,6 +83,10 @@
         end-guess (int (* 1.3 start-guess))]
     (first (binary-search (partial ore-amount recipes) available-ore start-guess end-guess))))
 
+(defn day14-part1-soln
+  [input]
+  (ore-amount input))
+
 (defn day14-part2-soln
-  []
-  (max-fuel day14-input))
+  [input]
+  (max-fuel input))

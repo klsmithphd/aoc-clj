@@ -1,4 +1,5 @@
 (ns aoc-clj.2019.day18
+  "Solution to https://adventofcode.com/2019/day/18"
   (:require [clojure.data.priority-map :refer [priority-map]]
             [clojure.set :as set]
             [clojure.string :as str]
@@ -12,7 +13,7 @@
 ;; FIXME: This implementation is too complex and not sufficiently documented
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/19
 
-(def day18-input (vec (u/puzzle-input "inputs/2019/day18-input.txt")))
+(def parse vec)
 
 (defn maze-map
   [char]
@@ -177,9 +178,6 @@
         path (locked-dijkstra graph)]
     (g/path-distance graph path)))
 
-(defn day18-part1-soln
-  []
-  (shortest-path (load-graph (load-maze day18-input))))
 
 (defn fix-maze
   [{:keys [entrances maze nodes] :as input}]
@@ -203,6 +201,10 @@
            :nodes (into (filter (partial not= [x y]) nodes) newents)
            :entrances (zipmap newents (map str (range))))))
 
+(defn day18-part1-soln
+  [input]
+  (shortest-path (load-graph (load-maze input))))
+
 (defn day18-part2-soln
-  []
-  (shortest-path (load-graph (fix-maze (load-maze day18-input)))))
+  [input]
+  (shortest-path (load-graph (fix-maze (load-maze input)))))

@@ -1,4 +1,5 @@
 (ns aoc-clj.2019.day20
+  "Solution to https://adventofcode.com/2019/day/20"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.graph :as g :refer [Graph ->MapGraph without-vertex]]
@@ -8,7 +9,7 @@
 ;; TODO: 2019 Day 20 implementation is too complex and undocumented 
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/21
 
-(def day20-input (vec (u/puzzle-input "inputs/2019/day20-input.txt")))
+(def parse vec)
 
 (defn maze-dims
   [maze]
@@ -140,10 +141,6 @@
         graph (:graph state)]
     (g/path-distance graph (g/dijkstra graph start end))))
 
-(defn day20-part1-soln
-  []
-  (solve-maze day20-input))
-
 (defrecord RecursiveMaze [lookup3d]
   Graph
   (vertices
@@ -204,6 +201,10 @@
         rmaze (recursive-maze state)]
     (g/path-distance rmaze (g/dijkstra rmaze start end :limit 100000))))
 
+(defn day20-part1-soln
+  [input]
+  (solve-maze input))
+
 (defn day20-part2-soln
-  []
-  (solve-recursive-maze day20-input))
+  [input]
+  (solve-recursive-maze input))

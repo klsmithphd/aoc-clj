@@ -1,5 +1,6 @@
 (ns aoc-clj.2019.day01-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2019.day01 :as t]))
 
 (deftest fuel-test
@@ -15,10 +16,12 @@
     (is (= 966 (t/total-fuel 1969)))
     (is (= 50346 (t/total-fuel 100756)))))
 
+(def day01-input (u/parse-puzzle-input t/parse 2019 1))
+
 (deftest day01-part1-soln-test
   (testing "Can reproduce the answer for part1"
-    (is (= 3152038 (t/day01-part1-soln)))))
+    (is (= 3152038 (t/day01-part1-soln day01-input)))))
 
 (deftest day01-part2-soln-test
   (testing "Can reproduce the answer for part2"
-    (is (= 4725210 (t/day01-part2-soln)))))
+    (is (= 4725210 (t/day01-part2-soln day01-input)))))

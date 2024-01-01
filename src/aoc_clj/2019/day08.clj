@@ -1,18 +1,12 @@
 (ns aoc-clj.2019.day08
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2019/day/8"
+  (:require [clojure.string :as str]))
 
-(def day08-input
-  (->> (u/puzzle-input "inputs/2019/day08-input.txt")
+(defn parse
+  [input]
+  (->> input
        first
        (map (comp read-string str))))
-
-(defn day08-part1-soln
-  []
-  (let [layers (partition (* 25 6) day08-input)
-        layer-freqs (map frequencies layers)
-        min-zero-layer (apply min-key #(get % 0) layer-freqs)]
-    (* (get min-zero-layer 1) (get min-zero-layer 2))))
 
 (defn final-pixel
   [pixels]
@@ -31,9 +25,17 @@
     (doseq [line (partition width legible-pixels)]
       (println (str/join line)))))
 
+(defn day08-part1-soln
+  [input]
+  (let [layers (partition (* 25 6) input)
+        layer-freqs (map frequencies layers)
+        min-zero-layer (apply min-key #(get % 0) layer-freqs)]
+    (* (get min-zero-layer 1) (get min-zero-layer 2))))
+
 (defn day08-part2-soln
-  []
-  ;; (pprint-image (decode-image day08-input 25 6) 25)
+  [input]
+  (comment
+    (pprint-image (decode-image input 25 6) 25)
   ;; Displays:
   ;; *  * ****  **  **** *  *
   ;; *  *    * *  *    * *  *
@@ -41,4 +43,5 @@
   ;; *  *  *   *     *   *  *
   ;; *  * *    *  * *    *  *
   ;; *  * ****  **  ****  **
+    )
   "HZCZU")
