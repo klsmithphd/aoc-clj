@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day06
+  "Solution to https://adventofcode.com/2021/day/6"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -7,7 +8,6 @@
   (->> (str/split (first input) #",")
        (map read-string)))
 
-(def day06-input (parse (u/puzzle-input "inputs/2021/day06-input.txt")))
 (def zero-counts (vec (take 9 (repeat 0))))
 
 (defn step
@@ -22,10 +22,10 @@
     (reduce + (nth (iterate step counts) days))))
 
 (defn day06-part1-soln
-  []
-  (fish-after-n-days day06-input 80))
+  [input]
+  (fish-after-n-days input 80))
 
 
 (defn day06-part2-soln
-  []
-  (fish-after-n-days day06-input 256))
+  [input]
+  (fish-after-n-days input 256))

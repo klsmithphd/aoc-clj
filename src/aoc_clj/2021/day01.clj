@@ -1,8 +1,9 @@
 (ns aoc-clj.2021.day01
-  (:require [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/1")
 
-(def day01-input
-  (map read-string (u/puzzle-input "inputs/2021/day01-input.txt")))
+(defn parse
+  [input]
+  (map read-string input))
 
 (defn increases
   [depths]
@@ -12,16 +13,16 @@
        (filter identity)
        count))
 
-(defn day01-part1-soln
-  []
-  (increases day01-input))
-
 (defn sliding-window-sum
   [depths]
   (->> depths
        (partition 3 1)
        (map #(reduce + %))))
 
+(defn day01-part1-soln
+  [input]
+  (increases input))
+
 (defn day01-part2-soln
-  []
-  (increases (sliding-window-sum day01-input)))
+  [input]
+  (increases (sliding-window-sum input)))

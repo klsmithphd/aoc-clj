@@ -1,13 +1,11 @@
 (ns aoc-clj.2021.day07
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/7"
+  (:require [clojure.string :as str]))
 
 (defn parse
   [line]
   (->> (str/split (first line) #",")
        (map read-string)))
-
-(def day07-input (parse (u/puzzle-input "inputs/2021/day07-input.txt")))
 
 (defn mean
   [vals]
@@ -31,10 +29,6 @@
          (map #(Math/abs (- % med)))
          (reduce +))))
 
-(defn day07-part1-soln
-  []
-  (min-fuel day07-input))
-
 (defn gauss-sum
   [n]
   (/ (* n (inc n)) 2))
@@ -52,6 +46,10 @@
     (min (fuel-part2 positions mn)
          (fuel-part2 positions (inc mn)))))
 
+(defn day07-part1-soln
+  [input]
+  (min-fuel input))
+
 (defn day07-part2-soln
-  []
-  (min-fuel-part2 day07-input))
+  [input]
+  (min-fuel-part2 input))

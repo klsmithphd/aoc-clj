@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day23
+  "Solution to https://adventofcode.com/2021/day/23"
   (:require [aoc-clj.utils.core :as u]))
 
 ;; Position labeling scheme
@@ -11,67 +12,49 @@
 ;;       a2    b2    c2    d2
 ;;       a3    b3    c3    d3
 
-(def adjacencies-part1
-  {:h0 {:h1 1}
-   :h1 {:h0 1 :a0 2 :h2 2}
-   :h2 {:h1 1 :a0 2 :b0 2 :h3 2}
-   :h3 {:h2 2 :b0 2 :c0 2 :h4 2}
-   :h4 {:h3 2 :c0 2 :d0 2 :h5 2}
-   :h5 {:h4 2 :d0 2 :h6 1}
-   :h6 {:h5 1}
-   :a0 {:h1 2 :h2 2 :a1 1}
-   :a1 {:a0 1}
-   :b0 {:h2 2 :h3 2 :b1 1}
-   :b1 {:b0 1}
-   :c0 {:h3 2 :h4 2 :c1 1}
-   :c1 {:c0 1}
-   :d0 {:h4 2 :h5 2 :d1 1}
-   :d1 {:d0 1}})
+;; (def adjacencies-part1
+;;   {:h0 {:h1 1}
+;;    :h1 {:h0 1 :a0 2 :h2 2}
+;;    :h2 {:h1 1 :a0 2 :b0 2 :h3 2}
+;;    :h3 {:h2 2 :b0 2 :c0 2 :h4 2}
+;;    :h4 {:h3 2 :c0 2 :d0 2 :h5 2}
+;;    :h5 {:h4 2 :d0 2 :h6 1}
+;;    :h6 {:h5 1}
+;;    :a0 {:h1 2 :h2 2 :a1 1}
+;;    :a1 {:a0 1}
+;;    :b0 {:h2 2 :h3 2 :b1 1}
+;;    :b1 {:b0 1}
+;;    :c0 {:h3 2 :h4 2 :c1 1}
+;;    :c1 {:c0 1}
+;;    :d0 {:h4 2 :h5 2 :d1 1}
+;;    :d1 {:d0 1}})
 
-(def adjacencies-part2
-  (merge adjacencies-part1
-         {:a1 {:a0 1 :a2 1}
-          :a2 {:a1 1 :a3 1}
-          :a3 {:a2 1}
-          :b1 {:b0 1 :b2 1}
-          :b2 {:b1 1 :b3 1}
-          :b3 {:b2 1}
-          :c1 {:c0 1 :c2 1}
-          :c2 {:c1 1 :c3 1}
-          :c3 {:c2 1}
-          :d1 {:d0 1 :d2 1}
-          :d2 {:d1 1 :d3 1}
-          :d3 {:d2 1}}))
+;; (def adjacencies-part2
+;;   (merge adjacencies-part1
+;;          {:a1 {:a0 1 :a2 1}
+;;           :a2 {:a1 1 :a3 1}
+;;           :a3 {:a2 1}
+;;           :b1 {:b0 1 :b2 1}
+;;           :b2 {:b1 1 :b3 1}
+;;           :b3 {:b2 1}
+;;           :c1 {:c0 1 :c2 1}
+;;           :c2 {:c1 1 :c3 1}
+;;           :c3 {:c2 1}
+;;           :d1 {:d0 1 :d2 1}
+;;           :d2 {:d1 1 :d3 1}
+;;           :d3 {:d2 1}}))
 
-(def day23-sample1
-  ;; "#############"
-  ;; "#...........#"
-  ;; "###B#C#B#D###"
-  ;; "  #A#D#C#A#  "
-  ;; "  #########  "
-  {:a0 {:type :b}
-   :a1 {:type :a}
-   :b0 {:type :c}
-   :b1 {:type :d}
-   :c0 {:type :b}
-   :c1 {:type :c}
-   :d0 {:type :d}
-   :d1 {:type :a}})
+(def charmap
+  {"A" {:type :a}
+   "B" {:type :b}
+   "C" {:type :c}
+   "D" {:type :d}})
 
-(def day23-input
-;; "#############"
-;; "#...........#"
-;; "###D#D#A#A###"
-;; "  #C#C#B#B#  "
-;; "  #########  "
-  {:a0 {:type :d}
-   :a1 {:type :c}
-   :b0 {:type :d}
-   :b1 {:type :c}
-   :c0 {:type :a}
-   :c1 {:type :b}
-   :d0 {:type :a}
-   :d1 {:type :b}})
+(defn parse
+  [input]
+  (let [relevant-rows (take 2 (drop 2 input))
+        chars  (mapcat #(re-seq #"[A-D]" %) relevant-rows)]
+    (zipmap [:a0 :b0 :c0 :d0 :a1 :b1 :c1 :d1] (map charmap chars))))
 
 (def distances
   {:h0 {:h1 1  :h2 3  :h3 5 :h4 7 :h5 9 :h6 10 :a0 3  :a1 4  :a2 5  :a3 6  :b0 5  :b1 6 :b2 7  :b3 8  :c0 7  :c1 8  :c2 9  :c3 10 :d0 9  :d1 10 :d2 11 :d3 12}
@@ -154,10 +137,6 @@
        (map :cost)
        (reduce +)))
 
-(defn day23-part1-soln
-  []
-  (cost-of-moves day23-input day23-input-soln))
-
 (defn unfold-input
   [input]
   (-> (select-keys input [:a0 :b0 :c0 :d0])
@@ -201,6 +180,10 @@
    [:h5 :b0]
    [:h6 :c0]])
 
+(defn day23-part1-soln
+  [input]
+  (cost-of-moves input day23-input-soln))
+
 (defn day23-part2-soln
-  []
-  (cost-of-moves (unfold-input day23-input) day23-input-soln-part2))
+  [input]
+  (cost-of-moves (unfold-input input) day23-input-soln-part2))

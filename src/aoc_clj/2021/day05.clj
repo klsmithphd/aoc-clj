@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day05
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/5"
+  (:require [clojure.string :as str]))
 
 (defn parse-point
   [point]
@@ -11,20 +11,9 @@
   [line]
   (mapv parse-point (str/split line #" -> ")))
 
-(def day05-sample
-  (map parse-line
-       ["0,9 -> 5,9"
-        "8,0 -> 0,8"
-        "9,4 -> 3,4"
-        "2,2 -> 2,1"
-        "7,0 -> 7,4"
-        "6,4 -> 2,0"
-        "0,9 -> 2,9"
-        "3,4 -> 1,4"
-        "0,0 -> 8,8"
-        "5,5 -> 8,2"]))
-
-(def day05-input (map parse-line (u/puzzle-input "inputs/2021/day05-input.txt")))
+(defn parse
+  [input]
+  (map parse-line input))
 
 (defn diagonal?
   [[[x1 y1] [x2 y2]]]
@@ -55,10 +44,10 @@
          count)))
 
 (defn day05-part1-soln
-  []
-  (overlapping-points day05-input false))
+  [input]
+  (overlapping-points input false))
 
 (defn day05-part2-soln
-  []
-  (overlapping-points day05-input true))
+  [input]
+  (overlapping-points input true))
 

@@ -1,15 +1,15 @@
 (ns aoc-clj.2021.day09
-  (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid :as grid]
+  "Solution to https://adventofcode.com/2021/day/9"
+  (:require [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 (defn parse-line
   [line]
   (map (comp read-string str) line))
 
-(def day09-input
-  (->> (u/puzzle-input "inputs/2021/day09-input.txt")
-       (map parse-line)
+(defn parse
+  [input]
+  (->> (map parse-line input)
        mapgrid/lists->MapGrid2D
        :grid))
 
@@ -31,10 +31,6 @@
         low-vals   (map input low-points)
         risks      (map risk-level low-vals)]
     (reduce + risks)))
-
-(defn day09-part1-soln
-  []
-  (risk-level-sum day09-input))
 
 (defn non-nine-neighbors
   [grid pos]
@@ -64,6 +60,10 @@
        (take 3)
        (reduce *)))
 
+(defn day09-part1-soln
+  [input]
+  (risk-level-sum input))
+
 (defn day09-part2-soln
-  []
-  (three-largest-basins-product day09-input))
+  [input]
+  (three-largest-basins-product input))

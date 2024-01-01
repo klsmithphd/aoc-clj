@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day04
+  "Solution to https://adventofcode.com/2021/day/4"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
@@ -23,13 +24,11 @@
     {:values (into {} (map vector (flatten rows) bingo-grid))
      :drawn (vec (repeat 25 false))}))
 
-(defn parse-input
+(defn parse
   [lines]
   (let [groups (str/split (str/join "\n" lines) #"\n\n")]
     {:drawings (parse-drawings (first groups))
      :boards (mapv parse-board (rest groups))}))
-
-(def day04-input (parse-input (u/puzzle-input "inputs/2021/day04-input.txt")))
 
 (defn winning-board?
   [drawn]
@@ -91,10 +90,6 @@
         winning-board (first (filter (comp winning-board? :drawn) boards))]
     (board-score last-drawn winning-board)))
 
-(defn day04-part1-soln
-  []
-  (first-winning-board-score day04-input))
-
 (defn last-winning-board-score
   [input]
   (loop [round (next-winning-round input)]
@@ -103,6 +98,10 @@
       (let [losing-boards (filter (complement (comp winning-board? :drawn)) (:boards round))]
         (recur (next-winning-round (assoc round :boards losing-boards)))))))
 
+(defn day04-part1-soln
+  [input]
+  (first-winning-board-score input))
+
 (defn day04-part2-soln
-  []
-  (last-winning-board-score day04-input))
+  [input]
+  (last-winning-board-score input))

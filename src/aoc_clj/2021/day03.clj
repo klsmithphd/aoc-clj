@@ -1,9 +1,8 @@
 (ns aoc-clj.2021.day03
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/3"
+  (:require [clojure.string :as str]))
 
-(def day03-input
-  (u/puzzle-input "inputs/2021/day03-input.txt"))
+(def parse identity)
 
 (defn most-common-nth-bit
   [signals bit]
@@ -35,10 +34,6 @@
          (map str/join)
          (map #(Integer/parseInt % 2)))))
 
-(defn day03-part1-soln
-  []
-  (reduce * (power-consumption day03-input)))
-
 (defn bit-criteria
   [signals bit-check]
   (loop [bit-pos 0 remaining signals]
@@ -60,6 +55,10 @@
   [(Integer/parseInt (oxygen-generator signals) 2)
    (Integer/parseInt (co2-scrubber signals) 2)])
 
+(defn day03-part1-soln
+  [input]
+  (reduce * (power-consumption input)))
+
 (defn day03-part2-soln
-  []
-  (reduce * (life-support day03-input)))
+  [input]
+  (reduce * (life-support input)))

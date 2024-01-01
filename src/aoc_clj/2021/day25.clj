@@ -1,14 +1,12 @@
 (ns aoc-clj.2021.day25
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.core :as u]))
+  "Solution to https://adventofcode.com/2021/day/25"
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 (def charmap {\v :down \> :right \. :open})
 
-(def day25-input
-  (mapgrid/ascii->MapGrid2D
-   charmap
-   (u/puzzle-input "inputs/2021/day25-input.txt")
-   :down true))
+(defn parse
+  [input]
+  (mapgrid/ascii->MapGrid2D charmap input :down true))
 
 (defn available?
   [grid pos]
@@ -51,5 +49,5 @@
       (recur curr-state (step curr-state) (inc steps)))))
 
 (defn day25-part1-soln
-  []
-  (first (evolve-until-stop day25-input)))
+  [input]
+  (first (evolve-until-stop input)))

@@ -1,8 +1,9 @@
 (ns aoc-clj.2021.day01-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2021.day01 :as t]))
 
-(def day01-sample
+(def d01-s00
   [199
    200
    208
@@ -16,7 +17,7 @@
 
 (deftest number-of-increases
   (testing "Finds the number of times the depth increases relative to the previous value"
-    (is (= 7 (t/increases day01-sample)))))
+    (is (= 7 (t/increases d01-s00)))))
 
 (deftest sliding-window-sums
   (testing "Correctly adds up each triplet of 3 values in a sliding window"
@@ -28,12 +29,14 @@
          716
          769
          792]
-        (t/sliding-window-sum day01-sample))))
+        (t/sliding-window-sum d01-s00))))
+
+(def day01-input (u/parse-puzzle-input t/parse 2021 1))
 
 (deftest day01-part1-soln
   (testing "Reproduces the answer for day01, part1"
-    (is (= 1292 (t/day01-part1-soln)))))
+    (is (= 1292 (t/day01-part1-soln day01-input)))))
 
 (deftest day01-part2-soln
   (testing "Reproduces the answer for day01, part2"
-    (is (= 1262 (t/day01-part2-soln)))))
+    (is (= 1262 (t/day01-part2-soln day01-input)))))

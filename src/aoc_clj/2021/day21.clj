@@ -1,8 +1,14 @@
 (ns aoc-clj.2021.day21
+  "Solution to https://adventofcode.com/2021/day/21"
   (:require [aoc-clj.utils.core :as u]))
 
-;; (def day21-input (u/puzzle-input "day21-input.txt"))
-(def day21-input [8 9])
+(defn parse-line
+  [line]
+  (->> line (re-seq #"\d+$") first read-string dec))
+
+(defn parse
+  [input]
+  (mapv parse-line input))
 
 (defn deterministic-die
   [roll]
@@ -39,10 +45,6 @@
 (defn loser-score-times-die-rolls
   [{:keys [score roll]}]
   (* 3 roll (apply min score)))
-
-(defn day21-part1-soln
-  []
-  (loser-score-times-die-rolls (play-until-win day21-input)))
 
 (def dirac-rolls
   {3 1
@@ -88,6 +90,10 @@
       win-tally
       (mapv + win-tally (win-counts remaining (mod (inc player) 2))))))
 
+(defn day21-part1-soln
+  [input]
+  (loser-score-times-die-rolls (play-until-win input)))
+
 (defn day21-part2-soln
-  []
-  (apply max (win-counts {[[0 0] day21-input] 1} 0)))
+  [input]
+  (apply max (win-counts {[[0 0] input] 1} 0)))

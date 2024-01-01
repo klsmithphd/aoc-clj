@@ -1,4 +1,5 @@
 (ns aoc-clj.2021.day11
+  "Solution to https://adventofcode.com/2021/day/11"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]))
@@ -7,9 +8,9 @@
   [line]
   (map (comp read-string str) line))
 
-(def day11-input
-  (->> (u/puzzle-input "inputs/2021/day11-input.txt")
-       (map parse-line)
+(defn parse
+  [input]
+  (->> (map parse-line input)
        mapgrid/lists->MapGrid2D
        :grid))
 
@@ -45,10 +46,6 @@
   [grid]
   (first (nth (iterate step [0 grid]) 100)))
 
-(defn day11-part1-soln
-  []
-  (flashes-after-100-steps day11-input))
-
 (defn steps-until-sync
   [grid]
   (->> (iterate step [0 grid])
@@ -57,6 +54,11 @@
           [idx (every? zero? (vals new-grid))]))
        (filter second)
        ffirst))
+
+(defn day11-part1-soln
+  [input]
+  (flashes-after-100-steps input))
+
 (defn day11-part2-soln
-  []
-  (steps-until-sync day11-input))
+  [input]
+  (steps-until-sync input))

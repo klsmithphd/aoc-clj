@@ -1,13 +1,16 @@
 (ns aoc-clj.2021.day23-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2021.day23 :as t]))
 
-(def day23-sample1
-  ;; "#############"
-  ;; "#...........#"
-  ;; "###B#C#B#D###"
-  ;; "  #A#D#C#A#  "
-  ;; "  #########  "
+(def d23-s00-raw
+  ["#############"
+   "#...........#"
+   "###B#C#B#D###"
+   "  #A#D#C#A#  "
+   "  #########  "])
+
+(def d23-s00
   {:a0 {:type :b}
    :a1 {:type :a}
    :b0 {:type :c}
@@ -17,7 +20,7 @@
    :d0 {:type :d}
    :d1 {:type :a}})
 
-(def day23-sample1-soln
+(def d23-s00-soln
   [[:c0 :h2]
    [:b0 :c0]
    [:b1 :h3]
@@ -29,7 +32,7 @@
    [:h3 :d0]
    [:h5 :a0]])
 
-(def day23-sample1-part2-soln
+(def d23-s00-part2-soln
   [[:d0 :h6]
    [:d1 :h0]
    [:c0 :h5]
@@ -54,19 +57,24 @@
    [:h5 :a0]
    [:h6 :d0]])
 
+(deftest parse-test
+  (testing "Correctly parses the input"
+    (is (= d23-s00 (t/parse d23-s00-raw)))))
+
 (deftest cost-of-moves
   (testing "Computes the costs of the moves identified in sample solution"
-    (is (= 12521 (t/cost-of-moves day23-sample1 day23-sample1-soln)))))
+    (is (= 12521 (t/cost-of-moves d23-s00 d23-s00-soln)))))
 
 (deftest cost-of-moves-part2
   (testing "Computes the costs of the moves identified in sample solution in part2 "
-    (is (= 44169 (t/cost-of-moves (t/unfold-input day23-sample1) day23-sample1-part2-soln)))))
+    (is (= 44169 (t/cost-of-moves (t/unfold-input d23-s00) d23-s00-part2-soln)))))
 
+(def day23-input (u/parse-puzzle-input t/parse 2021 23))
 
 (deftest day23-part1-soln
   (testing "Reproduces the answer for day23, part1"
-    (is (= 16489 (t/day23-part1-soln)))))
+    (is (= 16489 (t/day23-part1-soln day23-input)))))
 
 (deftest day23-part2-soln
   (testing "Reproduces the answer for day23, part2"
-    (is (= 43413 (t/day23-part2-soln)))))
+    (is (= 43413 (t/day23-part2-soln day23-input)))))
