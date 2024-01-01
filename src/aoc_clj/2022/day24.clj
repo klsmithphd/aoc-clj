@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day24
   "Solution to https://adventofcode.com/2022/day/24"
-  (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.graph :as graph :refer [Graph]]
+  (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
             [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.math :as math]))
@@ -23,8 +22,6 @@
     {:x-bound   (- width 2)
      :y-bound   (- height 2)
      :blizzards (blizzards grid)}))
-
-(def day24-input (u/parse-puzzle-input parse 2022 24))
 
 ;;;; Puzzle logic
 
@@ -153,11 +150,11 @@
 (defn day24-part1-soln
   "What is the fewest number of minutes required to avoid the blizzards and
    reach the goal?"
-  []
-  (shortest-time-to-exit day24-input))
+  [input]
+  (shortest-time-to-exit input))
 
 (defn day24-part2-soln
   "What is the fewest number of minutes required to reach the goal, 
    go back to the start, then reach the goal again?"
-  []
-  (shortest-roundtrip-to-exit day24-input))
+  [input]
+  (shortest-roundtrip-to-exit input))

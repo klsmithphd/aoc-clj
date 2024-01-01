@@ -11,8 +11,6 @@
   [input]
   (mapv parse-row input))
 
-(def day08-input (u/parse-puzzle-input parse 2022 8))
-
 ;;;; Puzzle logic
 
 (defn visible?
@@ -99,20 +97,20 @@
        (flatten (grid-view-distance grid))
        (flatten (transpose-fn grid-view-distance grid))))
 
-;;;; Puzzle solutions
-
 (defn max-scenic-score
   "Find the maximum scenic score of any tree in the grid"
   [input]
   (apply max (scenic-score input)))
 
+;;;; Puzzle solutions
+
 (defn day08-part1-soln
   "Consider your map; how many trees are visible from outside the grid?"
-  []
-  (visible-trees day08-input))
+  [input]
+  (visible-trees input))
 
 (defn day08-part2-soln
   "Consider each tree on your map. What is the highest scenic score 
    possible for any tree?"
-  []
-  (max-scenic-score day08-input))
+  [input]
+  (max-scenic-score input))

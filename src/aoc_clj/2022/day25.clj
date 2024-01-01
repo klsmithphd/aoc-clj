@@ -15,7 +15,6 @@
 ;;;; Input parsing
 
 (def parse identity)
-(def day25-input (u/parse-puzzle-input parse 2022 25))
 
 ;;;; Puzzle logic
 
@@ -95,6 +94,6 @@
 
 (defn day25-part1-soln
   "What SNAFU number do you supply to Bob's console?"
-  []
-  (requirements-sum day25-input))
+  [input]
+  (requirements-sum input))
 

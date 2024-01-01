@@ -1,15 +1,16 @@
 (ns aoc-clj.2022.day14-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day14 :as t]))
 
-(def d14-s01
+(def d14-s00
   (t/parse
    ["498,4 -> 498,6 -> 496,6"
     "503,4 -> 502,4 -> 502,9 -> 494,9"]))
 
 (deftest parse-test
   (testing "Correctly parses the sample input"
-    (is (= d14-s01
+    (is (= d14-s00
            #{[498 4]
              [498 5]
              [498 6]
@@ -41,7 +42,7 @@
                         [-1 1]
                         [1 1]} [0 0])))))
 
-(def sample (t/init-state d14-s01))
+(def sample (t/init-state d14-s00))
 (deftest deposit-sand-grain-test
   (testing "Updates the grid with a newly deposited sand grain"
     (is (= [500 8]
@@ -70,12 +71,14 @@
 
 (deftest sand-until-continuous-flow-test
   (testing "Finds the amount of sand that sticks before continuous flow"
-    (is (= 24 (t/sand-until-continuous-flow d14-s01)))))
+    (is (= 24 (t/sand-until-continuous-flow d14-s00)))))
+
+(def day14-input (u/parse-puzzle-input t/parse 2022 14))
 
 (deftest day14-part1-soln
   (testing "Reproduces the answer for day14, part1"
-    (is (= 913 (t/day14-part1-soln)))))
+    (is (= 913 (t/day14-part1-soln day14-input)))))
 
 (deftest day14-part2-soln
   (testing "Reproduces the answer for day14, part2"
-    (is (= 30762 (t/day14-part2-soln)))))
+    (is (= 30762 (t/day14-part2-soln day14-input)))))

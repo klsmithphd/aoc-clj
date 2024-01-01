@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day17
   "Solution to https://adventofcode.com/2022/day/17"
-  (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.math :as math]))
+  (:require [aoc-clj.utils.math :as math]))
 
 ;;;; Constants
 
@@ -30,7 +29,6 @@
 ;;;; Input parsing
 
 (def parse first)
-(def day17-input (u/parse-puzzle-input parse 2022 17))
 
 ;;;; Puzzle logic
 
@@ -208,10 +206,10 @@
 (defn day17-part1-soln
   "How many units tall will the tower of rocks be after 2022 rocks have 
    stopped falling?"
-  []
-  (tower-height-after-n day17-input 2022))
+  [input]
+  (tower-height-after-n input 2022))
 
 (defn day17-part2-soln
   "How tall will the tower be after 1000000000000 rocks have stopped?"
-  []
-  (tower-height-after-n day17-input 1000000000000))
+  [input]
+  (tower-height-after-n input 1000000000000))

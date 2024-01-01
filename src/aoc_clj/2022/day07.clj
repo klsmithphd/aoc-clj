@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day07
   "Solution to https://adventofcode.com/2022/day/7"
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.string :as str]))
 
 ;;;; Constants
 
@@ -77,8 +76,6 @@
       (:tree state)
       (recur (process state)))))
 
-(def day07-input (u/parse-puzzle-input parse 2022 7))
-
 ;;;; Puzzle logic
 
 (defn node-size
@@ -135,12 +132,12 @@
 (defn day07-part1-soln
   "Find all of the directories with a total size of at most 100000. 
    What is the sum of the total sizes of those directories?"
-  []
-  (dir-total-below-100k day07-input))
+  [input]
+  (dir-total-below-100k input))
 
 (defn day07-part2-soln
   "Find the smallest directory that, if deleted, would free up enough space 
    on the filesystem to run the update. What is the total size of that 
    directory?"
-  []
-  (smallest-dir-size-to-remove day07-input))
+  [input]
+  (smallest-dir-size-to-remove input))

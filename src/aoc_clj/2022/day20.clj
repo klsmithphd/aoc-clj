@@ -12,8 +12,6 @@
   [input]
   (mapv read-string input))
 
-(def day20-input (u/parse-puzzle-input parse 2022 20))
-
 ;;;; Puzzle logic
 
 (defn remove-and-insert
@@ -93,11 +91,11 @@
 (defn day20-part1-soln
   "Mix your encrypted file exactly once. 
    What is the sum of the three numbers that form the grove coordinates?"
-  []
-  (grove-coordinates (mixed day20-input)))
+  [input]
+  (grove-coordinates (mixed input)))
 
 (defn day20-part2-soln
   "Apply the decryption key and mix your encrypted file ten times. 
    What is the sum of the three numbers that form the grove coordinates?"
-  []
-  (decrypt-and-mix-ten day20-input))
+  [input]
+  (decrypt-and-mix-ten input))

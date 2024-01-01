@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day10
   "Solution to https://adventofcode.com/2022/day/10"
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.string :as str]))
 
 ;;;; Input parsing
 
@@ -14,8 +13,6 @@
 (defn parse
   [input]
   (map parse-line input))
-
-(def day10-input (u/parse-puzzle-input parse 2022 10))
 
 ;;;; Puzzle logic
 
@@ -76,20 +73,19 @@
 (defn day10-part1-soln
   "Find the signal strength during the 20th, 60th, 100th, 140th, 180th, 
    and 220th cycles. What is the sum of these six signal strengths?"
-  []
-  (sampled-signal-strength-sums day10-input))
-
-(comment
-  (print (screen day10-input))
-  "####  ##  #### #  # ####  ##  #    ###  
-   #    #  #    # #  #    # #  # #    #  # 
-   ###  #      #  #  #   #  #  # #    #  # 
-   #    #     #   #  #  #   #### #    ###  
-   #    #  # #    #  # #    #  # #    # #  
-   ####  ##  ####  ##  #### #  # #### #  #")
+  [input]
+  (sampled-signal-strength-sums input))
 
 (defn day10-part2-soln
   "Render the image given by your program. 
    What eight capital letters appear on your CRT?"
-  []
+  [input]
+  (comment
+    (print (screen input))
+    "####  ##  #### #  # ####  ##  #    ###  
+     #    #  #    # #  #    # #  # #    #  # 
+     ###  #      #  #  #   #  #  # #    #  # 
+     #    #     #   #  #  #   #### #    ###  
+     #    #  # #    #  # #    #  # #    # #  
+     ####  ##  ####  ##  #### #  # #### #  #")
   "ECZUZALR")

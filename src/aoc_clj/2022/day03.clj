@@ -1,11 +1,9 @@
 (ns aoc-clj.2022.day03
   "Solution to https://adventofcode.com/2022/day/3"
-  (:require [clojure.set :as set]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.set :as set]))
 
 ;;;; Input parsing
 (def parse identity)
-(def day03-input (u/parse-puzzle-input parse 2022 3))
 
 ;;;; Puzzle logic
 
@@ -57,11 +55,11 @@
 (defn day03-part1-soln
   "Find the item type that appears in both compartments of each rucksack. 
    What is the sum of the priorities of those item types?"
-  []
-  (overlap-priority-sum ::halfway day03-input))
+  [input]
+  (overlap-priority-sum ::halfway input))
 
 (defn day03-part2-soln
   "Find the item type that corresponds to the badges of each three-Elf group. 
    What is the sum of the priorities of those item types?"
-  []
-  (overlap-priority-sum ::thirds day03-input))
+  [input]
+  (overlap-priority-sum ::thirds input))

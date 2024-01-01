@@ -1,8 +1,9 @@
 (ns aoc-clj.2022.day13-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day13 :as t]))
 
-(def d13-s01
+(def d13-s00
   (t/parse
    ["[1,1,3,1,1]"
     "[1,1,5,1,1]"
@@ -30,7 +31,7 @@
 
 (deftest parse-test
   (testing "Correctly parses the sample input"
-    (is (= d13-s01
+    (is (= d13-s00
            [[[1 1 3 1 1] [1 1 5 1 1]]
             [[[1] [2 3 4]] [[1] 4]]
             [[9] [[8 7 6]]]
@@ -41,7 +42,7 @@
             [[1 [2 [3 [4 [5 6 7]]]] 8 9]
              [1 [2 [3 [4 [5 6 0]]]] 8 9]]]))))
 
-(def d13-s01-sorted
+(def d13-s00-sorted
   [[]
    [[]]
    [[[]]]
@@ -66,32 +67,34 @@
     ;; If the right list runs out of items first, 
     ;; the inputs are not in the right order.
     (is (true? (t/in-order? [1 2] [2])))
-    (is (true?  (apply t/in-order? (nth d13-s01 0))))
-    (is (true?  (apply t/in-order? (nth d13-s01 1))))
-    (is (false? (apply t/in-order? (nth d13-s01 2))))
-    (is (true?  (apply t/in-order? (nth d13-s01 3))))
-    (is (false? (apply t/in-order? (nth d13-s01 4))))
-    (is (true?  (apply t/in-order? (nth d13-s01 5))))
-    (is (false? (apply t/in-order? (nth d13-s01 6))))
-    (is (false? (apply t/in-order? (nth d13-s01 7))))))
+    (is (true?  (apply t/in-order? (nth d13-s00 0))))
+    (is (true?  (apply t/in-order? (nth d13-s00 1))))
+    (is (false? (apply t/in-order? (nth d13-s00 2))))
+    (is (true?  (apply t/in-order? (nth d13-s00 3))))
+    (is (false? (apply t/in-order? (nth d13-s00 4))))
+    (is (true?  (apply t/in-order? (nth d13-s00 5))))
+    (is (false? (apply t/in-order? (nth d13-s00 6))))
+    (is (false? (apply t/in-order? (nth d13-s00 7))))))
 
 (deftest right-order-packet-id-sum-test
   (testing "The sum of the packet pair ids for in-order packets"
-    (is (= 13 (t/right-order-packet-id-sum d13-s01)))))
+    (is (= 13 (t/right-order-packet-id-sum d13-s00)))))
 
 (deftest sorted-test
   (testing "Returns the packets in-order, with the divider packets"
-    (is (= d13-s01-sorted (t/sorted d13-s01)))))
+    (is (= d13-s00-sorted (t/sorted d13-s00)))))
 
 (deftest decoder-key-test
   (testing "Computes the decoder key (product of indices of two divider 
             packets)"
-    (is (= 140 (t/decoder-key d13-s01)))))
+    (is (= 140 (t/decoder-key d13-s00)))))
+
+(def day13-input (u/parse-puzzle-input t/parse 2022 13))
 
 (deftest day13-part1-soln
   (testing "Reproduces the answer for day13, part1"
-    (is (= 5503 (t/day13-part1-soln)))))
+    (is (= 5503 (t/day13-part1-soln day13-input)))))
 
 (deftest day13-part2-soln
   (testing "Reproduces the answer for day13, part2"
-    (is (= 20952 (t/day13-part2-soln)))))
+    (is (= 20952 (t/day13-part2-soln day13-input)))))

@@ -21,8 +21,6 @@
        (map first)
        (into #{})))
 
-(def day23-input (u/parse-puzzle-input parse 2022 23))
-
 ;;;; Puzzle logic
 
 (defn done?
@@ -138,11 +136,11 @@
   "Simulate the Elves' process and find the smallest rectangle that contains 
    the Elves after 10 rounds. How many empty ground tiles does that 
    rectangle contain?"
-  []
-  (empty-tiles-after-ten-rounds day23-input))
+  [input]
+  (empty-tiles-after-ten-rounds input))
 
 (defn day23-part2-soln
   "Figure out where the Elves need to go. What is the number of the first 
    round where no Elf moves?"
-  []
-  (rounds-until-static day23-input))
+  [input]
+  (rounds-until-static input))

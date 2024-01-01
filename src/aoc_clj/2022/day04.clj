@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day04
   "Solution to https://adventofcode.com/2022/day/4"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
             [aoc-clj.utils.intervals :as ivs]))
 
 ;;;; Input parsing
@@ -21,16 +20,14 @@
   [input]
   (mapv parse-line input))
 
-(def day04-input (u/parse-puzzle-input parse 2022 4))
-
 ;;;; Puzzle solutions
 
 (defn day04-part1-soln
   "In how many assignment pairs does one range fully contain the other?"
-  []
-  (count (filter #(apply ivs/fully-contained? %) day04-input)))
+  [input]
+  (count (filter #(apply ivs/fully-contained? %) input)))
 
 (defn day04-part2-soln
   "In how many assignment pairs do the ranges overlap?"
-  []
-  (count (filter #(apply ivs/overlap? %) day04-input)))
+  [input]
+  (count (filter #(apply ivs/overlap? %) input)))

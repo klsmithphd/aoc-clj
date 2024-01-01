@@ -1,8 +1,9 @@
 (ns aoc-clj.2022.day21-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day21 :as t]))
 
-(def d21-s01
+(def d21-s00
   (t/parse
    ["root: pppw + sjmn"
     "dbpl: 5"
@@ -22,7 +23,7 @@
 
 (deftest parse-test
   (testing "Correctly parses the sample input"
-    (is (= d21-s01
+    (is (= d21-s00
            {"root" ["pppw" "+" "sjmn"]
             "dbpl" 5
             "cczh" ["sllz" "+" "lgvd"]
@@ -41,7 +42,7 @@
 
 (deftest yell-test
   (testing "Yells out the value for root on the sample data"
-    (is (= 152 (t/root-yell d21-s01)))))
+    (is (= 152 (t/root-yell d21-s00)))))
 
 (deftest solve-for-x-test
   (testing "Inverts an equation to solve for the unknown"
@@ -57,12 +58,14 @@
 
 (deftest humn-value-test
   (testing "Computes the value the human should yell"
-    (is (= 301 (t/humn-value d21-s01)))))
+    (is (= 301 (t/humn-value d21-s00)))))
+
+(def day21-input (u/parse-puzzle-input t/parse 2022 21))
 
 (deftest day21-part1-soln
   (testing "Reproduces the answer for day21, part1"
-    (is (= 63119856257960 (t/day21-part1-soln)))))
+    (is (= 63119856257960 (t/day21-part1-soln day21-input)))))
 
 (deftest day21-part2-soln
   (testing "Reproduces the answer for day21, part2"
-    (is (= 3006709232464 (t/day21-part2-soln)))))
+    (is (= 3006709232464 (t/day21-part2-soln day21-input)))))

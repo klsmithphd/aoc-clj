@@ -2,8 +2,7 @@
   "Solution to https://adventofcode.com/2022/day/15"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.intervals :as ivs]
-            [aoc-clj.utils.math :as math]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.utils.math :as math]))
 
 ;;;; Input parsing
 
@@ -15,8 +14,6 @@
 (defn parse
   [input]
   (map parse-line input))
-
-(def day15-input (u/parse-puzzle-input parse 2022 15))
 
 ;;;; Puzzle logic
 
@@ -119,11 +116,11 @@
 (defn day15-part1-soln
   "Consult the report from the sensors you just deployed. In the row where 
    y=2000000, how many positions cannot contain a beacon?"
-  []
-  (no-beacon-points-in-line day15-input 2000000))
+  [input]
+  (no-beacon-points-in-line input 2000000))
 
 (defn day15-part2-soln
   "Find the only possible position for the distress beacon. 
    What is its tuning frequency?"
-  []
-  (tuning-frequency (gap-position day15-input)))
+  [input]
+  (tuning-frequency (gap-position input)))

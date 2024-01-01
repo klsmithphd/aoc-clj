@@ -1,14 +1,15 @@
 (ns aoc-clj.2022.day10-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day10 :as t]))
 
-(def d10-01
+(def d10-s00
   (t/parse
    ["noop"
     "addx 3"
     "addx -5"]))
 
-(def d10-02
+(def d10-s01
   (t/parse
    ["addx 15"
     "addx -11"
@@ -157,7 +158,7 @@
     "noop"
     "noop"]))
 
-(def d10-02-screen
+(def d10-s01-screen
   "##..##..##..##..##..##..##..##..##..##..
 ###...###...###...###...###...###...###.
 ####....####....####....####....####....
@@ -167,25 +168,27 @@
 
 (deftest parse-test
   (testing "Correctly parses the sample input"
-    (is (= d10-01
+    (is (= d10-s00
            [::t/noop 3 -5]))))
 
 (deftest register-values-test
   (testing "Computes the register value over time given the instructions"
-    (is (= [1 1 1 4 4 -1] (t/register-values d10-01)))))
+    (is (= [1 1 1 4 4 -1] (t/register-values d10-s00)))))
 
 (deftest sampled-signal-strength-sums-test
   (testing "Computes the sum of the signal strengths sampled every 40 ticks"
-    (is (= 13140 (t/sampled-signal-strength-sums d10-02)))))
+    (is (= 13140 (t/sampled-signal-strength-sums d10-s01)))))
 
 (deftest screen-test
   (testing "The screen lighting logic produces the test pattern"
-    (is (= d10-02-screen (t/screen d10-02)))))
+    (is (= d10-s01-screen (t/screen d10-s01)))))
+
+(def day10-input (u/parse-puzzle-input t/parse 2022 10))
 
 (deftest day10-part1-soln
   (testing "Reproduces the answer for day10, part1"
-    (is (= 16020 (t/day10-part1-soln)))))
+    (is (= 16020 (t/day10-part1-soln day10-input)))))
 
 (deftest day10-part2-soln
   (testing "Reproduces the answer for day10, part2"
-    (is (= "ECZUZALR" (t/day10-part2-soln)))))
+    (is (= "ECZUZALR" (t/day10-part2-soln day10-input)))))

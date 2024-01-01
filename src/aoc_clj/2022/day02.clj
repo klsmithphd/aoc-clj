@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day02
   "Solution to https://adventofcode.com/2022/day/2"
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.string :as str]))
 
 ;;;; Constants
 
@@ -59,8 +58,6 @@
   [input]
   (map #(str/split % #" ") input))
 
-(def day02-input (u/parse-puzzle-input parse 2022 2))
-
 (defn interpret
   "Interpret the input data according to the guidance of part1 or part2,
    as given by the `interpret-fn` for the second column"
@@ -98,11 +95,11 @@
 (defn day02-part1-soln
   "What would your total score be if everything goes exactly according to 
    your strategy guide?"
-  []
-  (reduce + (map score-part1 (interpret-part1 day02-input))))
+  [input]
+  (reduce + (map score-part1 (interpret-part1 input))))
 
 (defn day02-part2-soln
   "Following the Elf's instructions for the second column, what would your 
    total score be if everything goes exactly according to your strategy guide?"
-  []
-  (reduce + (map score-part2 (interpret-part2 day02-input))))
+  [input]
+  (reduce + (map score-part2 (interpret-part2 input))))

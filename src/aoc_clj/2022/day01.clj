@@ -14,8 +14,6 @@
   [input]
   (->> input u/split-at-blankline (map parse-segment)))
 
-(def day01-input (u/parse-puzzle-input parse 2022 1))
-
 ;;;; Puzzle logic
 
 (defn sorted-totals
@@ -33,11 +31,11 @@
 (defn day01-part1-soln
   "Find the Elf carrying the most Calories. 
    How many total Calories is that Elf carrying?"
-  []
-  (top-n-capacity-sum 1 day01-input))
+  [input]
+  (top-n-capacity-sum 1 input))
 
 (defn day01-part2-soln
   "Find the top three Elves carrying the most Calories. 
    How many Calories are those Elves carrying in total?"
-  []
-  (top-n-capacity-sum 3 day01-input))
+  [input]
+  (top-n-capacity-sum 3 input))

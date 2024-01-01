@@ -1,7 +1,6 @@
 (ns aoc-clj.2022.day09
   "Solution to https://adventofcode.com/2022/day/9"
-  (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+  (:require [clojure.string :as str]))
 
 ;;;; Constants
 
@@ -25,8 +24,6 @@
 (defn parse
   [input]
   (expand (map parse-line input)))
-
-(def day09-input (u/parse-puzzle-input parse 2022 9))
 
 ;;;; Puzzle logic
 
@@ -81,12 +78,12 @@
 (defn day09-part1-soln
   "Simulate your complete hypothetical series of motions. How many positions 
    does the tail of the rope visit at least once?"
-  []
-  (distinct-tail-positions 2 day09-input))
+  [input]
+  (distinct-tail-positions 2 input))
 
 (defn day09-part2-soln
   "Simulate your complete series of motions on a larger rope with ten knots. 
    How many positions does the tail of the rope visit at least once?"
-  []
-  (distinct-tail-positions 10 day09-input))
+  [input]
+  (distinct-tail-positions 10 input))
 

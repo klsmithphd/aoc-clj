@@ -1,8 +1,9 @@
 (ns aoc-clj.2022.day24-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day24 :as t]))
 
-(def d24-s01
+(def d24-s00
   (t/parse
    ["#.#####"
     "#.....#"
@@ -12,7 +13,7 @@
     "#.....#"
     "#####.#"]))
 
-(def d24-s02
+(def d24-s01
   (t/parse
    ["#.######"
     "#>>.<^<#"
@@ -23,13 +24,13 @@
 
 (deftest parse-test
   (testing "Correctly parses the sample input"
-    (is (= d24-s01
+    (is (= d24-s00
            {:x-bound 5, :y-bound 5, :blizzards '([[4 4] :d] [[1 2] :r])}))))
 
 (deftest blizzard-sim-test
   (testing "Evolves the map one step at a time, moving all blizzards to their
             new locations"
-    (let [sim (t/blizzard-sim d24-s01)]
+    (let [sim (t/blizzard-sim d24-s00)]
       ;; Initial state:
       (is (= #{[1 2] [4 4]} (sim 0)))
       ;; Bottommost blizzard moves down one, leftmost blizzard moves right
@@ -49,28 +50,28 @@
     ;; At t=0, the only possible move at the beginning is to stay put at the
     ;; start or to move down to [1 1]
     (is (= [[1 [1 0]] [1 [1 1]]]
-           (t/next-possible-states (t/augment d24-s02) [0 [1 0]])))
+           (t/next-possible-states (t/augment d24-s01) [0 [1 0]])))
     ;; At t=1, at [1 1], the elves can stay at [1 1] or move down to [1 2]
     (is (= [[2 [1 1]] [2 [1 2]] [2 [1 0]]]
-           (t/next-possible-states (t/augment d24-s02) [1 [1 1]])))
+           (t/next-possible-states (t/augment d24-s01) [1 [1 1]])))
     ;; At t=2, if the elves stayed at [1 1], the only option is now [1 2]
     (is (= [[3 [1 2]] [3 [1 0]]]
-           (t/next-possible-states (t/augment d24-s02) [2 [1 1]])))
+           (t/next-possible-states (t/augment d24-s01) [2 [1 1]])))
     ;; At t=2, if the elves were at [1 2], they can only stay put
     (is (= [[3 [1 2]]]
-           (t/next-possible-states (t/augment d24-s02) [2 [1 2]])))
+           (t/next-possible-states (t/augment d24-s01) [2 [1 2]])))
     ;; At t=3, at [1 2], elves can only move back up to [1 1]
     (is (= [[4 [1 1]]]
-           (t/next-possible-states (t/augment d24-s02) [3 [1 2]])))
+           (t/next-possible-states (t/augment d24-s01) [3 [1 2]])))
     ;; At t=4, at [1 1], elves can only move right to [2 1]
     (is (= [[5 [2 1]] [5 [1 0]]]
-           (t/next-possible-states (t/augment d24-s02) [4 [1 1]])))
+           (t/next-possible-states (t/augment d24-s01) [4 [1 1]])))
     ;; At t=5, at [2 1], elves can only move right to [3 1]
     (is (= [[6 [3 1]]]
-           (t/next-possible-states (t/augment d24-s02) [5 [2 1]])))
+           (t/next-possible-states (t/augment d24-s01) [5 [2 1]])))
     ;; At t=6, at [3 1], elves can only move down to [3 2]
     (is (= [[7 [3 2]]]
-           (t/next-possible-states (t/augment d24-s02) [6 [3 1]])))))
+           (t/next-possible-states (t/augment d24-s01) [6 [3 1]])))))
 
 (deftest path-to-exit-test
   (testing "Returns a shortest path that the elves can take, exploring the
@@ -95,23 +96,25 @@
             [6 3] ;; From t= 16, move down to...
             [6 4] ;; This is one move away from the destination 
             ]
-           (map second (t/path-to-exit d24-s02 0))))))
+           (map second (t/path-to-exit d24-s01 0))))))
 
 (deftest shortest-time-to-exit-test
   (testing "Computes the shortest amount of time required to navigate
             the evolving blizzard maze"
-    (is (= 18 (t/shortest-time-to-exit d24-s02)))))
+    (is (= 18 (t/shortest-time-to-exit d24-s01)))))
 
 (deftest shortest-roundtrip-to-exit-test
   (testing "Computes the shortest amount of time required to navigate
             the evolving blizzard maze from the start to the exit,
             back to the start, and back to the exit"
-    (is (= 54 (t/shortest-roundtrip-to-exit d24-s02)))))
+    (is (= 54 (t/shortest-roundtrip-to-exit d24-s01)))))
+
+(def day24-input (u/parse-puzzle-input t/parse 2022 24))
 
 (deftest day24-part1-soln
   (testing "Reproduces the answer for day24, part1"
-    (is (= 286 (t/day24-part1-soln)))))
+    (is (= 286 (t/day24-part1-soln day24-input)))))
 
 (deftest day24-part2-soln
   (testing "Reproduces the answer for day24, part2"
-    (is (= 820 (t/day24-part2-soln)))))
+    (is (= 820 (t/day24-part2-soln day24-input)))))

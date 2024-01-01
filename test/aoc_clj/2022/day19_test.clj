@@ -1,5 +1,6 @@
 (ns aoc-clj.2022.day19-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day19 :as t]))
 
 (def d19-s01
@@ -37,12 +38,14 @@
   (testing "Computes the sum of all the quality levels of all the blueprints"
     (is (= 33 (t/quality-level-sum d19-s01)))))
 
+(def day19-input (u/parse-puzzle-input t/parse 2022 19))
+
 ;; FIXME: Solution is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/33
 (deftest ^:slow day19-part1-soln
   (testing "Reproduces the answer for day19, part1"
-    (is (= 1395 (t/day19-part1-soln)))))
+    (is (= 1395 (t/day19-part1-soln day19-input)))))
 
 (deftest ^:slow day19-part2-soln
   (testing "Reproduces the answer for day19, part2"
-    (is (= 2700 (t/day19-part2-soln)))))
+    (is (= 2700 (t/day19-part2-soln day19-input)))))

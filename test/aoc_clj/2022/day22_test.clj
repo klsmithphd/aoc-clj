@@ -1,8 +1,9 @@
 (ns aoc-clj.2022.day22-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2022.day22 :as t]))
 
-(def d22-s01
+(def d22-s00
   (t/parse
    ["        ...#"
     "        .#.."
@@ -21,7 +22,7 @@
 
 (deftest parse-test
   (testing "Correctly parses the sample input"
-    (is (= (select-keys d22-s01 [:start :h-zones :v-zones :path])
+    (is (= (select-keys d22-s00 [:start :h-zones :v-zones :path])
            {;; The start point is the upper-leftmost non-empty cell
             :start [9 1]
             ;; Horizontal zones are broken down to indicate areas
@@ -64,27 +65,29 @@
 
 (deftest wrap-around-test
   (testing "Computes the wrap-around positions correctly"
-    (is (= [9 1]  (:pos (t/wrap-around d22-s01 :R [13 1]))))
-    (is (= [12 1] (:pos (t/wrap-around d22-s01 :L [8 1]))))
-    (is (= [9 12] (:pos (t/wrap-around d22-s01 :U [9 0]))))
-    (is (= [12 5] (:pos (t/wrap-around d22-s01 :L [0 5]))))))
+    (is (= [9 1]  (:pos (t/wrap-around d22-s00 :R [13 1]))))
+    (is (= [12 1] (:pos (t/wrap-around d22-s00 :L [8 1]))))
+    (is (= [9 12] (:pos (t/wrap-around d22-s00 :U [9 0]))))
+    (is (= [12 5] (:pos (t/wrap-around d22-s00 :L [0 5]))))))
 
 (deftest follow-path-test
   (testing "Follows the path and arrives at the correct final position/orientation"
     (is (= {:pos [8 6] :facing :R}
-           (t/follow-path (assoc d22-s01 :wrap-fn t/wrap-around))))))
+           (t/follow-path (assoc d22-s00 :wrap-fn t/wrap-around))))))
 
 (deftest final-password-test
   (testing "Computes the final password given the final position/orientation"
     (is (= 6032 (t/final-password
-                 (t/follow-path (assoc d22-s01 :wrap-fn t/wrap-around)))))
+                 (t/follow-path (assoc d22-s00 :wrap-fn t/wrap-around)))))
     (is (= 5031 (t/final-password
-                 (t/follow-path (assoc d22-s01 :wrap-fn sample-cube-wrap-around)))))))
+                 (t/follow-path (assoc d22-s00 :wrap-fn sample-cube-wrap-around)))))))
+
+(def day22-input (u/parse-puzzle-input t/parse 2022 22))
 
 (deftest day22-part1-soln
   (testing "Reproduces the answer for day22, part1"
-    (is (= 1428 (t/day22-part1-soln)))))
+    (is (= 1428 (t/day22-part1-soln day22-input)))))
 
 (deftest day22-part2-soln
   (testing "Reproduces the answer for day22, part2"
-    (is (= 142380 (t/day22-part2-soln)))))
+    (is (= 142380 (t/day22-part2-soln day22-input)))))

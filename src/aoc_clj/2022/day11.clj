@@ -38,8 +38,6 @@
   [input]
   (mapv parse-monkey (u/split-at-blankline input)))
 
-(def day11-input (u/parse-puzzle-input parse 2022 11))
-
 ;;;; Puzzle logic
 
 (defn items
@@ -161,13 +159,13 @@
 (defn day11-part1-soln
   "What is the level of monkey business after 20 rounds of stuff-slinging 
    simian shenanigans?"
-  []
-  (monkey-business-1 day11-input 20))
+  [input]
+  (monkey-business-1 input 20))
 
 (defn day11-part2-soln
   "Worry levels are no longer divided by three after each item is inspected; 
    you'll need to find another way to keep your worry levels manageable. 
    Starting again from the initial state in your puzzle input, what is the 
    level of monkey business after 10000 rounds?"
-  []
-  (monkey-business-2 (part2-augment day11-input) 10000))
+  [input]
+  (monkey-business-2 (part2-augment input) 10000))
