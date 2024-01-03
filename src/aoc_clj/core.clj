@@ -5,7 +5,7 @@
   (:gen-class))
 
 (def cli-options
-  [["-i" "--input PATH" "Puzzle input file"]
+  [["-i" "--input PATH" "Puzzle input file to use instead of default"]
    ["-v" "--verbose" "Verbose printing"]
    ["-h" "--help" "Display usage"]])
 
@@ -22,9 +22,17 @@
     options-summary]
    (str/join \newline)))
 
-(defn soln-ns
+(defn- resolve-fn
+  [ns fn-name]
+  (requiring-resolve (symbol (str ns "/" fn-name))))
+
+(defn- soln-fns
   [year day]
-  (str "aoc-clj." year "." (format "%02d" day)))
+  (let [day-str (str "day"  (format "%02d" day))
+        ns  (str "aoc-clj." year "." day-str)]
+    {:parse (resolve-fn ns "parse")
+     :part1 (resolve-fn ns (str day-str "-part1-soln"))
+     :part2 (resolve-fn ns (str day-str "-part2-soln"))}))
 
 (defn -main [& args]
   (let [{:keys [options arguments summary]} (parse-opts args cli-options)]
@@ -33,5 +41,8 @@
       (println (usage summary))
       (let [[year day]              (map read-string arguments)
             {:keys [input]} options
-            filename (if input input (u/default-puzzle-input-path year day))]
-        (println filename)))))
+            filename (if input input (u/default-puzzle-input-path year day))
+            puzzle   (u/puzzle-input filename)
+            {:keys [parse part1 part2]} (soln-fns year day)]
+        (println (part1 (parse puzzle)))
+        (println (part2 (parse puzzle)))))))

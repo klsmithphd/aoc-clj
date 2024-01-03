@@ -7,7 +7,7 @@
    a seq, with each line in the input as an element in the seq"
   [filename]
   (->> filename
-       io/resource
+      ;;  io/resource
        io/reader
        line-seq))
 
@@ -18,7 +18,7 @@
    convention `inputs/${year}/day${day}-input.txt`, where ${day} is a 
    zero-padded two-digit number from 01-25"
   [year day]
-  (str "inputs/" year "/day" (format "%02d" day) "-input.txt"))
+  (str "resources/inputs/" year "/day" (format "%02d" day) "-input.txt"))
 
 (defn parse-puzzle-input
   "Load and parse the default puzzle input for the given `year` and `day`, 
