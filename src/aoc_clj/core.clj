@@ -40,9 +40,16 @@
             (< (count arguments) 2))
       (println (usage summary))
       (let [[year day]              (map read-string arguments)
-            {:keys [input]} options
+            {:keys [input verbose]} options
             filename (if input input (u/default-puzzle-input-path year day))
             puzzle   (u/puzzle-input filename)
             {:keys [parse part1 part2]} (soln-fns year day)]
+        (when verbose
+          (println (format "Advent of Code %s, Day %s, using %s" year day filename))
+          (println "\nPart 1 solution")
+          (println (:doc (meta part1))))
         (println (part1 (parse puzzle)))
+        (when verbose
+          (println "\nPart 2 solution")
+          (println (:doc (meta part2))))
         (println (part2 (parse puzzle)))))))
