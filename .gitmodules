@@ -1,3 +1,0 @@
-[submodule "resources/inputs"]
-	path = resources/inputs
-	url = git@github.com:klsmithphd/aoc-inputs.git
