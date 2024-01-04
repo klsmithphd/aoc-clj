@@ -3,23 +3,27 @@
             [clojure.string :as str]))
 
 (defn puzzle-input
-  "Load a puzzle input (from the resources directory in your project) as
+  "Load a puzzle input from the provided `filename` path as
    a seq, with each line in the input as an element in the seq"
   [filename]
   (->> filename
-       io/resource
        io/reader
        line-seq))
 
-(defn parse-puzzle-input
-  "Load and parse the puzzle input for the given `year` and `day`, 
-   using the provided `parse` function.
+(defn default-puzzle-input-path
+  "Returns the default puzzle input path for a given year and day.
    
    This expects that all puzzle input files are saved with the naming
    convention `inputs/${year}/day${day}-input.txt`, where ${day} is a 
    zero-padded two-digit number from 01-25"
+  [year day]
+  (str "inputs/" year "/day" (format "%02d" day) "-input.txt"))
+
+(defn parse-puzzle-input
+  "Load and parse the default puzzle input for the given `year` and `day`, 
+   using the provided `parse` function."
   [parse year day]
-  (-> (str "inputs/" year "/day" (format "%02d" day) "-input.txt")
+  (-> (default-puzzle-input-path year day)
       puzzle-input
       parse))
 
