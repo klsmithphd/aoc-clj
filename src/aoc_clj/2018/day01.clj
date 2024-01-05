@@ -20,10 +20,10 @@
         freq
         (recur (rest freqs) (conj observed freq))))))
 
-(defn day01-part1-soln
+(defn part1
   [input]
   (net-freq-change input))
 
-(defn day01-part2-soln
+(defn part2
   [input]
   (find-first-repeated-freq input))

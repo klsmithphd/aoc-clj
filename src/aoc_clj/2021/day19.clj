@@ -200,10 +200,10 @@
          flatten
          (apply max))))
 
-(defn day19-part1-soln
+(defn part1
   [input]
   (count (all-beacons input)))
 
-(defn day19-part2-soln
+(defn part2
   [input]
   (max-sensor-distance input))

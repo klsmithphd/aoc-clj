@@ -20,10 +20,10 @@
                      (filter #(zero? (rem house %))))]
     (* 11 (reduce + factors))))
 
-(defn day20-part1-soln
+(defn part1
   [input]
   (first-house-with-n-presents house-presents 776159 input))
 
-(defn day20-part2-soln
+(defn part2
   [input]
   (first-house-with-n-presents house-presents-part2 786239 input))

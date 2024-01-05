@@ -37,10 +37,10 @@
   [dists]
   (apply max (route-distances dists)))
 
-(defn day09-part1-soln
+(defn part1
   [input]
   (shortest-route-distance input))
 
-(defn day09-part2-soln
+(defn part2
   [input]
   (longest-route-distance input))

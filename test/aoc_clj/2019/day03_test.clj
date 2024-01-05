@@ -38,13 +38,13 @@
 (def dist3 135)
 (def steps3 410)
 
-(deftest part1-test
+(deftest closest-intersection-dist-test
   (testing "Find closest intersection of the wire paths"
     (is (= dist1 (t/closest-intersection-dist input1)))
     (is (= dist2 (t/closest-intersection-dist input2)))
     (is (= dist3 (t/closest-intersection-dist input3)))))
 
-(deftest part2-test
+(deftest shortest-steps-to-intersection-test
   (testing "Find fewest number of steps to first intersection of the wire paths"
     (is (= steps1 (t/shortest-steps-to-intersection input1)))
     (is (= steps2 (t/shortest-steps-to-intersection input2)))
@@ -52,10 +52,10 @@
 
 (def day03-input (u/parse-puzzle-input t/parse 2019 3))
 
-(deftest day03-part1-soln-test
+(deftest part1-test
   (testing "Can reproduce the answer for part1"
-    (is (= 375 (t/day03-part1-soln day03-input)))))
+    (is (= 375 (t/part1 day03-input)))))
 
-(deftest day03-part2-soln-test
+(deftest part2-test
   (testing "Can reproduce the answer for part2"
-    (is (= 14746 (t/day03-part2-soln day03-input)))))
+    (is (= 14746 (t/part2 day03-input)))))

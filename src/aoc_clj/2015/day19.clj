@@ -52,10 +52,10 @@
        (take-while #(not= "e" (:molecule %))
                    (iterate de-fabricate (ordered-replacements input)))))
 
-(defn day19-part1-soln
+(defn part1
   [input]
   (count (distinct-molecules input)))
 
-(defn day19-part2-soln
+(defn part2
   [input]
   (count (fabrication-steps input)))

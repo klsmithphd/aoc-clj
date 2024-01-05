@@ -79,12 +79,12 @@
 
 ;;;; Puzzle solutions
 
-(defn day18-part1-soln
+(defn part1
   "What is the surface area of your scanned lava droplet?"
   [input]
   (surface-area input))
 
-(defn day18-part2-soln
+(defn part2
   "What is the exterior surface area of your scanned lava droplet?"
   [input]
   (outer-surface-area input))

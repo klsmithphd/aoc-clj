@@ -47,13 +47,13 @@
   (->> (map #(steps-to-zzz input %) (start-nodes nodes))
        (apply math/lcm)))
 
-(defn day08-part1-soln
+(defn part1
   "Starting at AAA, follow the left/right instructions.
    How many steps are required to reach ZZZ?"
   [input]
   (steps-to-zzz input "AAA"))
 
-(defn day08-part2-soln
+(defn part2
   "Simultaneously start on every node that ends with A.
    How many steps does it take before you're only on nodes that end with Z?"
   [input]

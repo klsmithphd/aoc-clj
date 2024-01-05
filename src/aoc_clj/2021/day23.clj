@@ -180,10 +180,10 @@
    [:h5 :b0]
    [:h6 :c0]])
 
-(defn day23-part1-soln
+(defn part1
   [input]
   (cost-of-moves input day23-input-soln))
 
-(defn day23-part2-soln
+(defn part2
   [input]
   (cost-of-moves (unfold-input input) day23-input-soln-part2))

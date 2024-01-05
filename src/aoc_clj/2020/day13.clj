@@ -66,10 +66,10 @@
         offsets (map (partial bus-terms main-bus) positions)]
     (* main-bus (second (reduce earliest-match offsets)))))
 
-(defn day13-part1-soln
+(defn part1
   [input]
   (bus-id-by-wait-time input))
 
-(defn day13-part2-soln
+(defn part2
   [input]
   (earliest-consecutive-buses input))

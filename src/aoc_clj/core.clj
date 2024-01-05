@@ -1,4 +1,5 @@
 (ns aoc-clj.core
+  "Core command-line interface to AoC solutions"
   (:require [clojure.string :as str]
             [clojure.tools.cli :refer [parse-opts]]
             [aoc-clj.utils.core :as u])
@@ -31,8 +32,8 @@
   (let [day-str (str "day"  (format "%02d" day))
         ns  (str "aoc-clj." year "." day-str)]
     {:parse (resolve-fn ns "parse")
-     :part1 (resolve-fn ns (str day-str "-part1-soln"))
-     :part2 (resolve-fn ns (str day-str "-part2-soln"))}))
+     :part1 (resolve-fn ns "part1")
+     :part2 (resolve-fn ns "part2")}))
 
 (defn -main [& args]
   (let [{:keys [options arguments summary]} (parse-opts args cli-options)]

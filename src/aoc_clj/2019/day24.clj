@@ -146,10 +146,10 @@
   [space3d]
   (u/count-if space3d #(= :bug (val %))))
 
-(defn day24-part1-soln
+(defn part1
   [input]
   (find-recurrence input))
 
-(defn day24-part2-soln
+(defn part2
   [input]
   (bug-count (simulate input 200)))

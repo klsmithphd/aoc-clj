@@ -27,13 +27,13 @@
    "AND T J"
    "RUN"])
 
-(defn day21-part1-soln
+(defn part1
   [input]
   (->> (intcode/cmds->ascii spring-codes-part1)
        (intcode/intcode-exec input)
        intcode/last-out))
 
-(defn day21-part2-soln
+(defn part2
   [input]
   (->> (intcode/cmds->ascii spring-codes-part2)
        (intcode/intcode-exec input)

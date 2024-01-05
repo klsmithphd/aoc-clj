@@ -35,10 +35,10 @@
 (def first-to-start-with-six-zeros
   (partial first-to-meet-condition starts-with-six-zeros?))
 
-(defn day04-part1-soln
+(defn part1
   [input]
   (first-to-start-with-five-zeros input))
 
-(defn day04-part2-soln
+(defn part2
   [input]
   (first-to-start-with-six-zeros input))

@@ -88,10 +88,10 @@
   [input decoder]
   (reduce + (vals (decoder input))))
 
-(defn day14-part1-soln
+(defn part1
   [input]
   (register-sum input execute))
 
-(defn day14-part2-soln
+(defn part2
   [input]
   (register-sum input execute2))

@@ -48,10 +48,10 @@
   (let [max-inst (count instructions)]
     (first (drop-while #(not-done? max-inst (:next-inst %)) (iterate (partial apply-inst instructions) init)))))
 
-(defn day23-part1-soln
+(defn part1
   [input]
   (:b (run-program input {:a 0 :b 0 :next-inst 0})))
 
-(defn day23-part2-soln
+(defn part2
   [input]
   (:b (run-program input {:a 1 :b 0 :next-inst 0})))

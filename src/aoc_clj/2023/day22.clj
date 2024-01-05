@@ -156,14 +156,14 @@
     (->> (map #(fall-number supports supported-by %) brick-ids)
          (reduce +))))
 
-(defn day22-part1-soln
+(defn part1
   "Figure how the blocks will settle based on the snapshot. 
    Once they've settled, consider disintegrating a single brick; 
    how many bricks could be safely chosen as the one to get disintegrated?"
   [input]
   (disintegratable-count input))
 
-(defn day22-part2-soln
+(defn part2
   "For each brick, determine how many other bricks would fall if that brick 
    were disintegrated. 
    What is the sum of the number of other bricks that would fall?"

@@ -43,10 +43,10 @@
         [guard [minute _]] (apply max-key (comp second val) max-minutes)]
     [guard minute]))
 
-(defn day04-part1-soln
+(defn part1
   [input]
   (reduce * (sleepiest-guard-and-optimal-minute input)))
 
-(defn day04-part2-soln
+(defn part2
   [input]
   (reduce * (guard-most-frequently-asleep-at-minute input)))

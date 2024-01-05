@@ -118,13 +118,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day14-part1-soln
+(defn part1
   "Using your scan, simulate the falling sand. How many units of sand come 
    to rest before sand starts flowing into the abyss below?"
   [input]
   (sand-until-continuous-flow input))
 
-(defn day14-part2-soln
+(defn part2
   "Using your scan, simulate the falling sand until the source of the sand 
    becomes blocked. How many units of sand come to rest?"
   [input]

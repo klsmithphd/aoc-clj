@@ -34,10 +34,10 @@
    non-overlapping-pair?
    repeat-with-letter-between?))
 
-(defn day05-part1-soln
+(defn part1
   [input]
   (count (filter nice? input)))
 
-(defn day05-part2-soln
+(defn part2
   [input]
   (count (filter new-nice? input)))

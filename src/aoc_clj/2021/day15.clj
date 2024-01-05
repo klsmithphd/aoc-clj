@@ -47,10 +47,10 @@
      :grid
      (zipmap coords (map (partial tiled-value input) coords))}))
 
-(defn day15-part1-soln
+(defn part1
   [input]
   (path-risk input))
 
-(defn day15-part2-soln
+(defn part2
   [input]
   (path-risk (tile input 5)))

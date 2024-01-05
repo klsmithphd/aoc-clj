@@ -90,13 +90,13 @@
          (apply mapcat vector)
          (filter some?))))
 
-(defn day10-part1-soln
+(defn part1
   [input]
   (best-location input))
 
-(defn day10-part2-soln
+(defn part2
   [input]
-  (let [pos (first (day10-part1-soln input))
+  (let [pos (first (part1 input))
         [x y] (nth (asteroids-laser-order pos input) 199)]
     (+ (* 100 x) y)))
 

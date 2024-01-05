@@ -7,10 +7,10 @@
 
 ;; FIXME: 2015.day06 solution is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/2
-(deftest ^:slow day06-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day06, part1"
-    (is (= 377891 (t/day06-part1-soln day06-input)))))
+    (is (= 377891 (t/part1 day06-input)))))
 
-(deftest ^:slow day06-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day06, part2"
-    (is (= 14110788 (t/day06-part2-soln day06-input)))))
+    (is (= 14110788 (t/part2 day06-input)))))

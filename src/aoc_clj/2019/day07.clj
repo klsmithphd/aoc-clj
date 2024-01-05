@@ -62,10 +62,10 @@
   [intcode]
   (max-output intcode amplifier-loop [5 6 7 8 9]))
 
-(defn day07-part1-soln
+(defn part1
   [input]
   (max-amplifier-chain-output input))
 
-(defn day07-part2-soln
+(defn part2
   [input]
   (max-amplifier-loop-output input))

@@ -22,10 +22,10 @@
     (->> candidates
          (filter candidate-set))))
 
-(defn day01-part1-soln
+(defn part1
   [input]
   (apply * (find-pair-that-sums-to-total 2020 input)))
 
-(defn day02-part2-soln
+(defn part2
   [input]
   (apply * (find-triple-that-sums-to-total 2020 input)))

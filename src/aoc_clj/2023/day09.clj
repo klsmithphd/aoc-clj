@@ -40,13 +40,13 @@
                  (map (comp last right-extrapolate) input))]
      (reduce + added))))
 
-(defn day09-part1-soln
+(defn part1
   "Analyze your OASIS report and extrapolate the next value for each history.
    What is the sum of these extrapolated values?"
   [input]
   (extrapolation-sum input))
 
-(defn day09-part2-soln
+(defn part2
   "Analyze your OASIS report again, this time extrapolating the previous value
    for each history. What is the sum of these extrapolated values?"
   [input]

@@ -53,7 +53,7 @@
          intcode/read-ascii-output
          println)))
 
-(defn day25-part1-soln
+(defn part1
   [input commands]
   (comment
     (text-adventure-walkthrough input commands)

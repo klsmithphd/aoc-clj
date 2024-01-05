@@ -55,13 +55,13 @@
         init     {:card-cnt card-cnt :total 0}]
     (:total (reduce update-card-count init scores))))
 
-(defn day04-part1-soln
+(defn part1
   "Take a seat in the large pile of colorful cards.
    How many points are they worth in total?"
   [input]
   (points-sum input))
 
-(defn day04-part2-soln
+(defn part2
   "Process all of the original and copied scratchcards until no more 
    scratchcards are won. Including the original set of scratchcards, 
    how many total scratchcards do you end up with?"

@@ -93,14 +93,14 @@
   [games]
   (reduce + (map power-fewest-cubes games)))
 
-(defn day02-part1-soln
+(defn part1
   "Determine which games would have been possible if the bag had been loaded 
    with only 12 red cubes, 13 green cubes, and 14 blue cubes. 
    What is the sum of the IDs of those games?"
   [input]
   (possible-game-id-sum input))
 
-(defn day02-part2-soln
+(defn part2
   "For each game, find the minimum set of cubes that must have been present. 
    What is the sum of the power of these sets?"
   [input]

@@ -32,13 +32,13 @@
   [basemap slopes]
   (map (partial trees-along-slope basemap) slopes))
 
-(defn day03-part1-soln
+(defn part1
   [input]
   (let [basemap (forest-basemap input)
         slope   [3 1]]
     (trees-along-slope basemap slope)))
 
-(defn day03-part2-soln
+(defn part2
   [input]
   (let [basemap (forest-basemap input)
         slopes  [[1 1] [3 1] [5 1] [7 1] [1 2]]]

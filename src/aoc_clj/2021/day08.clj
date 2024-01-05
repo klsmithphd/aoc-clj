@@ -93,11 +93,11 @@
   [input]
   (reduce + (map decode-notes input)))
 
-(defn day08-part1-soln
+(defn part1
   [input]
   (total-easy-digits-count input))
 
 
-(defn day08-part2-soln
+(defn part2
   [input]
   (sum-of-decoded-digits input))

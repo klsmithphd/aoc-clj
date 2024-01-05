@@ -16,10 +16,10 @@
 (def most-frequent-chars (partial frequent-chars max-key))
 (def least-frequent-chars (partial frequent-chars min-key))
 
-(defn day06-part1-soln
+(defn part1
   [input]
   (most-frequent-chars input))
 
-(defn day06-part2-soln
+(defn part2
   [input]
   (least-frequent-chars input))

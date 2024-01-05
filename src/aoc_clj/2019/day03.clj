@@ -108,10 +108,10 @@
 ;;                        (get path1-dists (first %))) path2-dists)]
 ;;     (second (sort dists))))
 
-(defn day03-part1-soln
+(defn part1
   [input]
   (closest-intersection-dist input))
 
-(defn day03-part2-soln
+(defn part2
   [input]
   (shortest-steps-to-intersection input))

@@ -99,13 +99,13 @@
   [grid]
   (longest-path (full-graph (grid->graph grid)) [1 0] (finish grid)))
 
-(defn day23-part1-soln
+(defn part1
   "Find the longest hike you can take through the hiking trails listed on 
    our map. How many steps long is the longest hike?"
   [input]
   (longest-downslope-path input))
 
-(defn day23-part2-soln
+(defn part2
   "Find the longest hike you can take through the surprisingly dry hiking 
    trails listed on your map. How many steps long is the longest hike?"
   [input]

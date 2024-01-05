@@ -25,10 +25,10 @@
 
 ;; FIXME: 2015.day18 solution is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/4
-(deftest ^:slow day18-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day18, part1"
-    (is (= 1061 (t/day18-part1-soln day18-input)))))
+    (is (= 1061 (t/part1 day18-input)))))
 
-(deftest ^:slow day18-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day18, part2"
-    (is (= 1006 (t/day18-part2-soln day18-input)))))
+    (is (= 1006 (t/part2 day18-input)))))

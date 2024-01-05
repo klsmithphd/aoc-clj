@@ -48,10 +48,10 @@
        (reduce set-char [\* \* \* \* \* \* \* \*])
        (apply str)))
 
-(defn day05-part1-soln
+(defn part1
   [input]
   (password input day05-input-valid-offsets))
 
-(defn day05-part2-soln
+(defn part2
   [input]
   (password-part2 input day05-input-valid-offsets))

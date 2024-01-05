@@ -132,14 +132,14 @@
 
 ;;;; Puzzle solutions
 
-(defn day23-part1-soln
+(defn part1
   "Simulate the Elves' process and find the smallest rectangle that contains 
    the Elves after 10 rounds. How many empty ground tiles does that 
    rectangle contain?"
   [input]
   (empty-tiles-after-ten-rounds input))
 
-(defn day23-part2-soln
+(defn part2
   "Figure out where the Elves need to go. What is the number of the first 
    round where no Elf moves?"
   [input]

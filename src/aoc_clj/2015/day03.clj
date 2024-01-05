@@ -30,10 +30,10 @@
          set
          count)))
 
-(defn day03-part1-soln
+(defn part1
   [input]
   (houses-visited input))
 
-(defn day03-part2-soln
+(defn part2
   [input]
   (split-houses-visited input))

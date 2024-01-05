@@ -68,10 +68,10 @@
   [steps]
   (-> steps all-visited :visited first-duplicate (math/manhattan [0 0])))
 
-(defn day01-part1-soln
+(defn part1
   [input]
   (distance input))
 
-(defn day01-part2-soln
+(defn part2
   [input]
   (distance-to-first-duplicate input))

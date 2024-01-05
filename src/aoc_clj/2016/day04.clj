@@ -52,10 +52,10 @@
        first
        :sector-id))
 
-(defn day04-part1-soln
+(defn part1
   [input]
   (real-room-sector-id-sum input))
 
-(defn day04-part2-soln
+(defn part2
   [input]
   (north-pole-objects-room input))

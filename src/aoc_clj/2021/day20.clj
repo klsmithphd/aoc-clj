@@ -58,10 +58,10 @@
        (filter pos?)
        count))
 
-(defn day20-part1-soln
+(defn part1
   [input]
   (illuminated (enhance-n-times input 2)))
 
-(defn day20-part2-soln
+(defn part2
   [input]
   (illuminated (enhance-n-times input 50)))

@@ -79,10 +79,10 @@
         least (second (first freqs))]
     (- most least)))
 
-(defn day14-part1-soln
+(defn part1
   [input]
   (direct-most-minus-least-common-at-n input 10))
 
-(defn day14-part2-soln
+(defn part2
   [input]
   (most-minus-least-common-at-n input 40))

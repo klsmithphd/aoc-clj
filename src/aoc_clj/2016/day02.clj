@@ -45,10 +45,10 @@
 (def square-bathroom-code   (partial bathroom-code square-keypad))
 (def diagonal-bathroom-code (partial bathroom-code diagonal-keypad))
 
-(defn day02-part1-soln
+(defn part1
   [input]
   (square-bathroom-code input))
 
-(defn day02-part2-soln
+(defn part2
   [input]
   (diagonal-bathroom-code input))

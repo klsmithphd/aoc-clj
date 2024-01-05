@@ -156,13 +156,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day11-part1-soln
+(defn part1
   "What is the level of monkey business after 20 rounds of stuff-slinging 
    simian shenanigans?"
   [input]
   (monkey-business-1 input 20))
 
-(defn day11-part2-soln
+(defn part2
   "Worry levels are no longer divided by three after each item is inspected; 
    you'll need to find another way to keep your worry levels manageable. 
    Starting again from the initial state in your puzzle input, what is the 

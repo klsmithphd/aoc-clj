@@ -74,10 +74,10 @@
   (let [start (black-tiles input)]
     (nth (iterate evolve-tiles start) day)))
 
-(defn day24-part1-soln
+(defn part1
   [input]
   (count (black-tiles input)))
 
-(defn day24-part2-soln
+(defn part2
   [input]
   (count (black-tiles-on-day input 100)))

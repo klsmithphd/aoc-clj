@@ -19,6 +19,6 @@
   (let [door-loop-size (loop-size door-public-key)]
     (transform door-loop-size card-public-key)))
 
-(defn day25-part1-soln
+(defn part1
   [input]
   (encryption-key input))

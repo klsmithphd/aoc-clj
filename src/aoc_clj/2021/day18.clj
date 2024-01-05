@@ -132,10 +132,10 @@
          flatten
          (apply max))))
 
-(defn day18-part1-soln
+(defn part1
   [input]
   (magnitude (reduce snailfish-add input)))
 
-(defn day18-part2-soln
+(defn part2
   [input]
   (largest-magnitude-sum input))

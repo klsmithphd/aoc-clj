@@ -14,11 +14,11 @@
                                  "R" "1"})]
     (read-string (str "2r" bit-string))))
 
-(defn day05-part1-soln
+(defn part1
   [input]
   (apply max (map seat-id input)))
 
-(defn day05-part2-soln
+(defn part2
   [input]
   (let [seat-ids (sort (map seat-id input))]
     (->> (map vector seat-ids (rest seat-ids))

@@ -75,10 +75,10 @@
   ([graph rule]
    (split-by (complement #{"start"}) (map-cave-path graph ["start"] rule))))
 
-(defn day12-part1-soln
+(defn part1
   [input]
   (count (map-cave input)))
 
-(defn day12-part2-soln
+(defn part2
   [input]
   (count (map-cave input allowed-part2?)))

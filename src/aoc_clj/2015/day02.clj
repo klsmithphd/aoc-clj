@@ -21,10 +21,10 @@
     (+ (* 2 (reduce + smallest))
        (* l w h))))
 
-(defn day02-part1-soln
+(defn part1
   [input]
   (reduce + (map wrapping-paper-area input)))
 
-(defn day02-part2-soln
+(defn part2
   [input]
   (reduce + (map ribbon-length input)))

@@ -51,11 +51,11 @@
         state
         (recur (stepper state))))))
 
-(defn day11-part1-soln
+(defn part1
   [input]
   (count (keys (:hull (paint-bot input 0)))))
 
-(defn- derive-day11-part2-soln
+(defn- derive-part2
   [input]
   (->> (paint-bot input 1)
        :hull
@@ -64,10 +64,10 @@
        (grid/Grid2D->ascii {\  0 \* 1})
        print))
 
-(defn day11-part2-soln
+(defn part2
   [input]
   (comment
-    (derive-day11-part2-soln input)
+    (derive-part2 input)
     "Prints out:
       **** *    **** ***  *  *   ** ***   **    
          * *    *    *  * * *     * *  * *  *   

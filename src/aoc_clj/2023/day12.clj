@@ -60,14 +60,14 @@
   [input]
   (num-arrangements-sum (map unfold input)))
 
-(defn day12-part1-soln
+(defn part1
   "For each row, count all of the different arrangements of operational and 
    broken springs that meet the given criteria. 
    What is the sum of those counts?"
   [input]
   (num-arrangements-sum input))
 
-(defn day12-part2-soln
+(defn part2
   "Unfold your condition records; what is the new sum of 
    possible arrangement counts?"
   [input]

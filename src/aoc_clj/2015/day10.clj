@@ -10,10 +10,10 @@
         counts (map #(vector (str  (count %)) (str (first %))) chunks)]
     (str/join  (flatten  counts))))
 
-(defn day10-part1-soln
+(defn part1
   [input]
   (count (nth (iterate look-and-say input) 40)))
 
-(defn day10-part2-soln
+(defn part2
   [input]
   (count (nth (iterate look-and-say input) 50)))

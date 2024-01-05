@@ -58,13 +58,13 @@
   [steps]
   (dig-area (map interpret-hex steps)))
 
-(defn day18-part1-soln
+(defn part1
   "The Elves are concerned the lagoon won't be large enough; 
    if they follow their dig plan, how many cubic meters of lava could it hold?"
   [input]
   (dig-area input))
 
-(defn day18-part2-soln
+(defn part2
   "Convert the hexadecimal color codes into the correct instructions; 
    if the Elves follow this new dig plan, how many cubic meters of lava 
    could the lagoon hold?"

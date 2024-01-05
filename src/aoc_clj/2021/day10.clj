@@ -79,10 +79,10 @@
         num    (count scores)]
     (nth scores (int (/ num 2)))))
 
-(defn day10-part1-soln
+(defn part1
   [input]
   (syntax-error-score input))
 
-(defn day10-part2-soln
+(defn part2
   [input]
   (middle-completion-score input))

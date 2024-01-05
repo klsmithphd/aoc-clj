@@ -92,13 +92,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day02-part1-soln
+(defn part1
   "What would your total score be if everything goes exactly according to 
    your strategy guide?"
   [input]
   (reduce + (map score-part1 (interpret-part1 input))))
 
-(defn day02-part2-soln
+(defn part2
   "Following the Elf's instructions for the second column, what would your 
    total score be if everything goes exactly according to your strategy guide?"
   [input]

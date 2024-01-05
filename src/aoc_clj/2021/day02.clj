@@ -29,10 +29,10 @@
   [cmds rules]
   (reduce rules [0 0 0] cmds))
 
-(defn day02-part1-soln
+(defn part1
   [input]
   (reduce * (sub-end-state input part1-rules)))
 
-(defn day02-part2-soln
+(defn part2
   [input]
   (reduce * (drop-last (sub-end-state input part2-rules))))

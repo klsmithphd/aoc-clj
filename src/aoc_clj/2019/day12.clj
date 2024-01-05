@@ -87,10 +87,10 @@
   [moons]
   (* 2 (apply math/lcm (pmap axis-period [:x :y :z] (repeat moons)))))
 
-(defn day12-part1-soln
+(defn part1
   [input]
   (total-energy (nth (simulate input) 1000)))
 
-(defn day12-part2-soln
+(defn part2
   [input]
   (recurrence-period input))

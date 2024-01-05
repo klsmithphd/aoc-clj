@@ -11,12 +11,12 @@
                  x (range size)]
              (intcode/out-seq (intcode/intcode-exec intcode [x y])))))
 
-(defn day19-part1-soln
+(defn part1
   [input]
   (count (filter pos? (tractor-beam input 50))))
 
 ;; TODO: Add algorithmic solution for day19 part 2
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/20
-(defn day19-part2-soln
+(defn part2
   [_]
   12201460)

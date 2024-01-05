@@ -168,10 +168,10 @@
 
 ;; worked this out by hand while iterating through the character logic
 (def largest-input [9 8 9 9 8 5 1 9 5 9 6 9 9 7])
-(defn day24-part1-soln
+(defn part1
   [_]
   (Long/parseLong (apply str largest-input)))
 
-(defn day24-part2-soln
+(defn part2
   [_]
   (Long/parseLong (apply str (first (smallest-model-number)))))

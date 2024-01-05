@@ -79,11 +79,11 @@
    five hundred eighty-two million, seventy-six thousand, six hundred sixty-one"
   101741582076661)
 
-(defn day22-part1-soln
+(defn part1
   [input]
   (u/index-of (u/equals? 2019) (shuffle-deck 10007 input)))
 
-(defn day22-part2-soln
+(defn part2
   [input]
   (card-after-multiple-shuffles card-count input shuffle-count 2020))
 

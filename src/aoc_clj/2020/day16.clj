@@ -77,11 +77,11 @@
   (let [mapping (identify-slots input)]
     (into {} (map-indexed (fn [idx val] [(get mapping idx) val]) yours))))
 
-(defn day16-part1-soln
+(defn part1
   [input]
   (reduce + (invalid-nearby input)))
 
-(defn day16-part2-soln
+(defn part2
   [input]
   (->> (resolved-ticket input)
        (filter #(str/starts-with? (str (symbol (key %))) "departure"))

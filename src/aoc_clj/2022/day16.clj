@@ -151,13 +151,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day16-part1-soln
+(defn part1
   "Work out the steps to release the most pressure in 30 minutes. 
    What is the most pressure you can release?"
   [input]
   (best-pressure input))
 
-(defn day16-part2-soln
+(defn part2
   "With you and an elephant working together for 26 minutes, what is the 
    most pressure you could release?"
   [input]

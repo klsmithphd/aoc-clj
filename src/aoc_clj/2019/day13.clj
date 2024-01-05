@@ -67,13 +67,13 @@
     @program
     (println "Finished!")))
 
-(defn day13-part1-soln
+(defn part1
   [input]
   (let [board (intcode/out-seq (intcode/intcode-exec input []))
         tile-values (flatten (partition 1 3 (drop 2 board)))]
     (get (frequencies tile-values) 2)))
 
-(defn day13-part2-soln
+(defn part2
   "After playing the `breakout` game above, 11140 is the max high score"
   [input]
   (comment (breakout input))

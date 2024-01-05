@@ -114,12 +114,12 @@
 ;; TODO - These ought to be implemented so that they work on abitrary
 ;; inputs rather than hard-coding the winning plays
 (def winning-plays [:poison :recharge :shield :poison :recharge :magic-missile :poison :drain :magic-missile])
-(defn day22-part1-soln
+(defn part1
   []
   (reduce + (map spell-cost winning-plays)))
 
 (def winning-plays-part2 [:poison :recharge :shield :poison :recharge :shield :poison :magic-missile :magic-missile])
-(defn day22-part2-soln
+(defn part2
   []
   (reduce + (map spell-cost winning-plays-part2)))
 

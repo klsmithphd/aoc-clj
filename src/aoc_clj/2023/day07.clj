@@ -116,12 +116,12 @@
   [hands]
   (winnings (map jokerize-hand hands) true))
 
-(defn day07-part1-soln
+(defn part1
   "Find the rank of every hand in your set. What are the total winnings?"
   [input]
   (winnings input))
 
-(defn day07-part2-soln
+(defn part2
   "Using the new joker rule, find the rank of every hand in your set. 
    What are the new total winnings?"
   [input]

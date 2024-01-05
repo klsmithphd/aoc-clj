@@ -19,10 +19,10 @@
        (partition 3 1)
        (map #(reduce + %))))
 
-(defn day01-part1-soln
+(defn part1
   [input]
   (increases input))
 
-(defn day01-part2-soln
+(defn part2
   [input]
   (increases (sliding-window-sum input)))

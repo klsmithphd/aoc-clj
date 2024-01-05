@@ -50,10 +50,10 @@
         index2 (quot closest box-id-count)]
     (chars-in-common (nth box-ids index1) (nth box-ids index2))))
 
-(defn day02-part1-soln
+(defn part1
   [input]
   (compute-checksum input))
 
-(defn day02-part2-soln
+(defn part2
   [input]
   (find-closest-boxids input))

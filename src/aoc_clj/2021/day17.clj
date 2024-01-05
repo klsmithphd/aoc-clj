@@ -70,10 +70,10 @@
         candidates (filter (partial hits-target? target) trajectories)]
     (count candidates)))
 
-(defn day17-part1-soln
+(defn part1
   [input]
   (highest-point input))
 
-(defn day17-part2-soln
+(defn part2
   [input]
   (viable-init-vels input 100))

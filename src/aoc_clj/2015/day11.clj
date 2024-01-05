@@ -74,12 +74,12 @@
          first
          nums->str)))
 
-(defn day11-part1-soln
+(defn part1
   [input]
   (next-valid-password input))
 
-(defn day11-part2-soln
+(defn part2
   [input]
-  (-> (day11-part1-soln input)
+  (-> (part1 input)
       next-password
       next-valid-password))

@@ -23,10 +23,10 @@
         min-containers (apply min (map count combos))]
     (filter #(= min-containers (count %)) combos)))
 
-(defn day17-part1-soln
+(defn part1
   [input]
   (count (combinations 150 input)))
 
-(defn day17-part2-soln
+(defn part2
   [input]
   (count (minimal-combinations 150 input)))

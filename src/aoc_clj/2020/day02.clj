@@ -34,10 +34,10 @@
         (and (= b char)
              (not (= a char))))))
 
-(defn day02-part1-soln
+(defn part1
   [input]
   (count (filter part1-valid? input)))
 
-(defn day02-part2-soln
+(defn part2
   [input]
   (count (filter part2-valid? input)))

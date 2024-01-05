@@ -31,6 +31,6 @@
       first-code
       (m/mod-mul modulus (m/mod-pow modulus multiplier (dec code-num)) first-code))))
 
-(defn day25-part1-soln
+(defn part1
   [[row col]]
   (code row col))

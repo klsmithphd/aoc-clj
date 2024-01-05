@@ -101,13 +101,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day05-part1-soln
+(defn part1
   "After the rearrangement procedure completes, 
    what crate ends up on top of each stack?"
   [input]
   (-> input final-arrangement-1 stack-tops))
 
-(defn day05-part2-soln
+(defn part2
   "The CrateMover 9001 is notable for many new and exciting features: 
    air conditioning, leather seats, an extra cup holder, and 
    the ability to pick up and move multiple crates at once.

@@ -28,10 +28,10 @@
        rest ;; drop the original mass itself
        (reduce +)))
 
-(defn day01-part1-soln
+(defn part1
   [input]
   (reduce + (map fuel input)))
 
-(defn day01-part2-soln
+(defn part2
   [input]
   (reduce + (map total-fuel input)))

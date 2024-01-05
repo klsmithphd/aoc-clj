@@ -163,14 +163,14 @@
 
 ;;;; Puzzle solutions
 
-(defn day19-part1-soln
+(defn part1
   "Determine the quality level of each blueprint using the largest number of 
    geodes it could produce in 24 minutes. What do you get if you add up 
    the quality level of all of the blueprints in your list?"
   [input]
   (quality-level-sum input))
 
-(defn day19-part2-soln
+(defn part2
   "You no longer have enough blueprints to worry about quality levels. 
    Instead, for each of the first three blueprints, determine the largest 
    number of geodes you could open; then, multiply these three values together.

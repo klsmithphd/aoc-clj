@@ -109,10 +109,10 @@
       6 (if (< (first subvals) (second subvals)) 1 0)
       7 (if (= (first subvals) (second subvals)) 1 0))))
 
-(defn day16-part1-soln
+(defn part1
   [input]
   (version-sum 0 (decode input)))
 
-(defn day16-part2-soln
+(defn part2
   [input]
   (apply-operator (decode input)))

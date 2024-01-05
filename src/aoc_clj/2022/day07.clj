@@ -129,13 +129,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day07-part1-soln
+(defn part1
   "Find all of the directories with a total size of at most 100000. 
    What is the sum of the total sizes of those directories?"
   [input]
   (dir-total-below-100k input))
 
-(defn day07-part2-soln
+(defn part2
   "Find the smallest directory that, if deleted, would free up enough space 
    on the filesystem to run the update. What is the total size of that 
    directory?"

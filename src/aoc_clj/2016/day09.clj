@@ -39,10 +39,10 @@
           (recur (+ (* (decompress-count repeat-string) repeats)
                     char-count open-marker-loc) new))))))
 
-(defn day09-part1-soln
+(defn part1
   [input]
   (count (decompress input)))
 
-(defn day09-part2-soln
+(defn part2
   [input]
   (decompress-count input))

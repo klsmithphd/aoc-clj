@@ -62,10 +62,10 @@
   (let [lotsa-cups (augment-cups input)]
     (take 10 (order-after-moves lotsa-cups moves))))
 
-(defn day23-part1-soln
+(defn part1
   [input]
   (str/join (drop 1 (order-after-moves input 100))))
 
-(defn day23-part2-soln
+(defn part2
   [input]
   (reduce * (take 2 (drop 1 (star-cups input 10000000)))))

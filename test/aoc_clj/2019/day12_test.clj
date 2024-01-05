@@ -28,12 +28,12 @@
 
 (def day12-input (u/parse-puzzle-input t/parse 2019 12))
 
-(deftest day12-part1-soln-test
+(deftest part1-test
   (testing "Can reproduce the answer for part1"
-    (is (= 8310 (t/day12-part1-soln day12-input)))))
+    (is (= 8310 (t/part1 day12-input)))))
 
 ;; FIXME: Test is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/15
-(deftest ^:slow day12-part2-soln-test
+(deftest ^:slow part2-test
   (testing "Can reproduce the answer for part2"
-    (is (= 319290382980408 (t/day12-part2-soln day12-input)))))
+    (is (= 319290382980408 (t/part2 day12-input)))))

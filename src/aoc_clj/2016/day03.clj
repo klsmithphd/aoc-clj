@@ -26,10 +26,10 @@
                (map #(nth % 2) input))
        (partition 3)))
 
-(defn day03-part1-soln
+(defn part1
   [input]
   (count-of-valid-triangles input))
 
-(defn day03-part2-soln
+(defn part2
   [input]
   (-> input group-by-columns count-of-valid-triangles))

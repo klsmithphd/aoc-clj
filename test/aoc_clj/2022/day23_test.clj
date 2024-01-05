@@ -73,12 +73,12 @@
 
 (def day23-input (u/parse-puzzle-input t/parse 2022 23))
 
-(deftest day23-part1-soln
+(deftest part1-test
   (testing "Reproduces the answer for day23, part1"
-    (is (= 4172 (t/day23-part1-soln day23-input)))))
+    (is (= 4172 (t/part1 day23-input)))))
 
 ;; TODO - Investigate whether there's a faster approach to part 2
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/30
-(deftest ^:slow day23-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day23, part2"
-    (is (= 942 (t/day23-part2-soln day23-input)))))
+    (is (= 942 (t/part2 day23-input)))))

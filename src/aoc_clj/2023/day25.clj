@@ -60,7 +60,7 @@
    #{"sjr" "jlt"}
    #{"fjn" "mzb"}])
 
-(defn day25-part1-soln
+(defn part1
   "Find the three wires you need to disconnect in order to divide the 
    components into two separate groups. What do you get if you multiply the 
    sizes of these two groups together?"

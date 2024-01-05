@@ -55,10 +55,10 @@
        (filter second)
        ffirst))
 
-(defn day11-part1-soln
+(defn part1
   [input]
   (flashes-after-100-steps input))
 
-(defn day11-part2-soln
+(defn part2
   [input]
   (steps-until-sync input))

@@ -84,11 +84,11 @@
          (take-last 8)
          reverse)))
 
-(defn day16-part1-soln
+(defn part1
   [input]
   (nums->str (take 8 (run-phases input 100))))
 
-(defn day16-part2-soln
+(defn part2
   [input]
   (nums->str (real-signal input 100)))
 

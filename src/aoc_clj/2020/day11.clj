@@ -88,10 +88,10 @@
   (let [seats (seats grid)]
     (zipmap seats (map (partial first-visible-seats seatmap) seats))))
 
-(defn day11-part1-soln
+(defn part1
   [input]
   (occupied-seats-when-static input 4 adjacency))
 
-(defn day11-part2-soln
+(defn part2
   [input]
   (occupied-seats-when-static input 5 visibility))
