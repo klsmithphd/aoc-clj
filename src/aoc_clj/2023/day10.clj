@@ -106,14 +106,14 @@
       geo/interior-count
       int))
 
-(defn day10-part1-soln
+(defn part1
   "Find the single giant loop starting at S. How many steps along the loop does
    it take to get from the starting position to the point farthest from the 
    starting position?"
   [input]
   (farthest-steps-from-start input))
 
-(defn day10-part2-soln
+(defn part2
   "Figure out whether you have time to search for the nest by calculating the 
    area within the loop. How many tiles are enclosed by the loop?"
   [input]

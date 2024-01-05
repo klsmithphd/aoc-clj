@@ -83,10 +83,10 @@
         end-guess (int (* 1.3 start-guess))]
     (first (binary-search (partial ore-amount recipes) available-ore start-guess end-guess))))
 
-(defn day14-part1-soln
+(defn part1
   [input]
   (ore-amount input))
 
-(defn day14-part2-soln
+(defn part2
   [input]
   (max-fuel input))

@@ -104,8 +104,8 @@
 
 (deftest ^:slow day18-part1-test
   (testing "Can reproduce the solution for part1"
-    (is (= 7048 (t/day18-part1-soln day18-input)))))
+    (is (= 7048 (t/part1 day18-input)))))
 
 (deftest ^:slow day18-part2-test
   (testing "Can reproduce the solution for part2"
-    (is (= 1836 (t/day18-part2-soln day18-input)))))
+    (is (= 1836 (t/part2 day18-input)))))

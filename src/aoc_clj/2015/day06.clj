@@ -73,11 +73,11 @@
   (reduce + (filter some? (vals grid))))
 
 (def update-grid-part1 (partial update-grid commands))
-(defn day06-part1-soln
+(defn part1
   [input]
   (count-on (reduce update-grid-part1 {} input)))
 
 (def update-grid-part2 (partial update-grid commands2))
-(defn day06-part2-soln
+(defn part2
   [input]
   (brightness (reduce update-grid-part2 {} input)))

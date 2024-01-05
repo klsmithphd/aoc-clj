@@ -98,10 +98,10 @@
       (let [losing-boards (filter (complement (comp winning-board? :drawn)) (:boards round))]
         (recur (next-winning-round (assoc round :boards losing-boards)))))))
 
-(defn day04-part1-soln
+(defn part1
   [input]
   (first-winning-board-score input))
 
-(defn day04-part2-soln
+(defn part2
   [input]
   (last-winning-board-score input))

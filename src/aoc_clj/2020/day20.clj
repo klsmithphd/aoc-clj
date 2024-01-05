@@ -279,7 +279,7 @@
         sea-monsters (apply max (map sea-monster-count (all-orientations image)))]
     (- ones (* sea-monsters (count sea-monster-pattern)))))
 
-(defn day20-part1-soln
+(defn part1
   [input]
   (->> input
        tile-edge-map
@@ -287,6 +287,6 @@
        corners
        (reduce *)))
 
-(defn day20-part2-soln
+(defn part2
   [input]
   (sea-roughness input))

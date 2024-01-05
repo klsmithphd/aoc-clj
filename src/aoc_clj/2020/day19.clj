@@ -72,10 +72,10 @@
           (filter some?)
           count))))
 
-(defn day19-part1-soln
+(defn part1
   [input]
   (count-matches input))
 
-(defn day19-part2-soln
+(defn part2
   [input]
   (count-matches input true))

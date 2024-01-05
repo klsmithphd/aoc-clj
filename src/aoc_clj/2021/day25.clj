@@ -48,6 +48,6 @@
       [steps curr-state]
       (recur curr-state (step curr-state) (inc steps)))))
 
-(defn day25-part1-soln
+(defn part1
   [input]
   (first (evolve-until-stop input)))

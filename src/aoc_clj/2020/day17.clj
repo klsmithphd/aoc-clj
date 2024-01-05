@@ -106,14 +106,14 @@
   (let [add-dim (fn [[x y z]] [x y z 0])]
     (assoc input :grid (u/kmap add-dim grid))))
 
-(defn day17-part1-soln
+(defn part1
   [input]
   (->> (evolve-3d input 6)
        vals
        (filter #{:active})
        count))
 
-(defn day17-part2-soln
+(defn part2
   [input]
   (->> (evolve-4d (promote-to-4d input) 6)
        vals

@@ -46,10 +46,10 @@
     (min (fuel-part2 positions mn)
          (fuel-part2 positions (inc mn)))))
 
-(defn day07-part1-soln
+(defn part1
   [input]
   (min-fuel input))
 
-(defn day07-part2-soln
+(defn part2
   [input]
   (min-fuel-part2 input))

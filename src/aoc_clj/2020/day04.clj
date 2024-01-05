@@ -87,10 +87,10 @@
               ecl-valid?
               pid-valid?))
 
-(defn day04-part1-soln
+(defn part1
   [input]
   (count (filter keys-valid? input)))
 
-(defn day04-part2-soln
+(defn part2
   [input]
   (count (filter passport-valid? input)))

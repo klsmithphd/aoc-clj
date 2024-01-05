@@ -137,14 +137,14 @@
 
 (def part1-limits [200000000000000 400000000000000])
 
-(defn day24-part1-soln
+(defn part1
   "Considering only the X and Y axes, check all pairs of hailstones' 
    future paths for intersections. How many of these intersections occur 
    within the test area?"
   [input]
   (intersections-within-area part1-limits input))
 
-(defn day24-part2-soln
+(defn part2
   "Determine the exact position and velocity the rock needs to have at 
    time 0 so that it perfectly collides with every hailstone. 
    What do you get if you add up the X, Y, and Z coordinates of that 

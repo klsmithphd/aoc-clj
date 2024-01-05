@@ -59,11 +59,11 @@
         overlap-ids (overlapping-swath-ids swaths)]
     (first (set/difference all-ids overlap-ids))))
 
-(defn day03-part1-soln
+(defn part1
   [input]
   (overlapping-squares input))
 
-(defn day03-part2-soln
+(defn part2
   [input]
   (nonoverlapping-swath input))
 

@@ -28,10 +28,10 @@
   (->> (smallest-groups 4 input)
        best-quantum-entanglement))
 
-(defn day24-part1-soln
+(defn part1
   [input]
   (best-qe-thirds input))
 
-(defn day24-part2-soln
+(defn part2
   [input]
   (best-qe-fourths input))

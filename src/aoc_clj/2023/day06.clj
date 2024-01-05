@@ -43,13 +43,13 @@
     {:time (read-string (apply str times))
      :dist (read-string (apply str dists))}))
 
-(defn day06-part1-soln
+(defn part1
   "Determine the number of ways you could beat the record in each race. 
    What do you get if you multiply these numbers together?"
   [input]
   (win-count-multiplied input))
 
-(defn day06-part2-soln
+(defn part2
   "How many ways can you beat the record in this one much longer race?"
   [input]
   (winning-options-count (long-race input)))

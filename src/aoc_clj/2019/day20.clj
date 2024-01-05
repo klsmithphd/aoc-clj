@@ -201,10 +201,10 @@
         rmaze (recursive-maze state)]
     (g/path-distance rmaze (g/dijkstra rmaze start end :limit 100000))))
 
-(defn day20-part1-soln
+(defn part1
   [input]
   (solve-maze input))
 
-(defn day20-part2-soln
+(defn part2
   [input]
   (solve-recursive-maze input))

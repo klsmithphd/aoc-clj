@@ -78,10 +78,10 @@
         losers (remove (partial player-wins? boss) options)]
     (apply max-key :cost losers)))
 
-(defn day21-part1-soln
+(defn part1
   [input]
   (:cost (cheapest-winning-combo input)))
 
-(defn day21-part2-soln
+(defn part2
   [input]
   (:cost (priciest-losing-combo input)))

@@ -28,10 +28,10 @@
 
 ;; FIXME: 2020.day11 too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/12
-(deftest ^:slow day11-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day11, part1"
-    (is (= 2222 (t/day11-part1-soln day11-input)))))
+    (is (= 2222 (t/part1 day11-input)))))
 
-(deftest ^:slow day11-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day11, part2"
-    (is (= 2032 (t/day11-part2-soln day11-input)))))
+    (is (= 2032 (t/part2 day11-input)))))

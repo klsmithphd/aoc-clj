@@ -56,11 +56,11 @@
               (map #(apply str %)
                    (partition (inc xmax) chars)))))
 
-(defn day13-part1-soln
+(defn part1
   [input]
   (dots-after-first-fold input))
 
-(defn day13-part2-soln
+(defn part2
   [input]
   (comment
     (->> (complete-folds input)

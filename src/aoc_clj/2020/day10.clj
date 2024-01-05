@@ -31,11 +31,11 @@
          (map combo-mapping)
          (reduce *))))
 
-(defn day10-part1-soln
+(defn part1
   [input]
   (let [freqs (freq-steps input)]
     (reduce * freqs)))
 
-(defn day10-part2-soln
+(defn part2
   [input]
   (combination-count input))

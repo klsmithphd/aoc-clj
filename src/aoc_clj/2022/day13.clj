@@ -83,13 +83,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day13-part1-soln
+(defn part1
   "Determine which pairs of packets are already in the right order. 
    What is the sum of the indices of those pairs?"
   [input]
   (right-order-packet-id-sum input))
 
-(defn day13-part2-soln
+(defn part2
   "Organize all of the packets into the correct order. 
    What is the decoder key for the distress signal?"
   [input]

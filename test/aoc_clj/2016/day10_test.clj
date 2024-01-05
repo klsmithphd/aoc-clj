@@ -20,10 +20,10 @@
 
 (def day10-input (u/parse-puzzle-input t/parse 2016 10))
 
-(deftest day10-part1-soln
+(deftest part1-test
   (testing "Reproduces the answer for day10, part1"
-    (is (= 93 (t/day10-part1-soln day10-input)))))
+    (is (= 93 (t/part1 day10-input)))))
 
-(deftest day10-part2-soln
+(deftest part2-test
   (testing "Reproduces the answer for day10, part2"
-    (is (= 47101 (t/day10-part2-soln day10-input)))))
+    (is (= 47101 (t/part2 day10-input)))))

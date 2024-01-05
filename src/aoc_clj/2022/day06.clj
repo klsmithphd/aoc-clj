@@ -19,13 +19,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day06-part1-soln
+(defn part1
   "How many characters need to be processed before the 
    first start-of-packet marker is detected?"
   [input]
   (chars-to-distinct-run 4 input))
 
-(defn day06-part2-soln
+(defn part2
   "How many characters need to be processed before the 
    first start-of-message marker is detected?"
   [input]

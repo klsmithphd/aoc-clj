@@ -85,10 +85,10 @@
 ;;         (state :status)
 ;;         (recur (stepper state))))))
 
-(defn day23-part1-soln
+(defn part1
   [_]
   23886)
 
-(defn day23-part2-soln
+(defn part2
   [_]
   18333)

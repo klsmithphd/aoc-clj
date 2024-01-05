@@ -92,7 +92,7 @@
 
 ;;;; Puzzle solutions
 
-(defn day25-part1-soln
+(defn part1
   "What SNAFU number do you supply to Bob's console?"
   [input]
   (requirements-sum input))

@@ -49,10 +49,10 @@
 
 (def day11-input (u/parse-puzzle-input t/parse 2015 11))
 
-(deftest ^:slow day11-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day11, part1"
-    (is (= "hxbxxyzz" (t/day11-part1-soln day11-input)))))
+    (is (= "hxbxxyzz" (t/part1 day11-input)))))
 
-(deftest ^:slow day11-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day11, part2"
-    (is (= "hxcaabcc" (t/day11-part2-soln day11-input)))))
+    (is (= "hxcaabcc" (t/part2 day11-input)))))

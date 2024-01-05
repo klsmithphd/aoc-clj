@@ -58,10 +58,10 @@
   (- (reduce + (map escaped-chars input))
      (reduce + (map code-chars input))))
 
-(defn day08-part1-soln
+(defn part1
   [input]
   (unescaped-difference input))
 
-(defn day08-part2-soln
+(defn part2
   [input]
   (escaped-difference input))

@@ -42,10 +42,10 @@
 
 ;; FIXME: Solution is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/33
-(deftest ^:slow day19-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day19, part1"
-    (is (= 1395 (t/day19-part1-soln day19-input)))))
+    (is (= 1395 (t/part1 day19-input)))))
 
-(deftest ^:slow day19-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day19, part2"
-    (is (= 2700 (t/day19-part2-soln day19-input)))))
+    (is (= 2700 (t/part2 day19-input)))))

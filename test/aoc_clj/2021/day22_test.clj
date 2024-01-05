@@ -49,12 +49,12 @@
 
 (def day22-input (u/parse-puzzle-input t/parse 2021 22))
 
-(deftest day22-part1-soln
+(deftest part1-test
   (testing "Reproduces the answer for day22, part1"
-    (is (= 503864 (t/day22-part1-soln day22-input)))))
+    (is (= 503864 (t/part1 day22-input)))))
 
 ;; FIXME 2021.day22 part2 is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/8
-(deftest ^:slow day22-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day22, part2"
-    (is (= 1255547543528356 (t/day22-part2-soln day22-input)))))
+    (is (= 1255547543528356 (t/part2 day22-input)))))

@@ -44,10 +44,10 @@
   (let [new-table (u/fmap #(assoc % "Me" 0) table)]
     (assoc new-table "Me" (zipmap (keys new-table) (repeat 0)))))
 
-(defn day13-part1-soln
+(defn part1
   [input]
   (max-happiness input))
 
-(defn day13-part2-soln
+(defn part2
   [input]
   (max-happiness (add-me input)))

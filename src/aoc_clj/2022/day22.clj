@@ -186,12 +186,12 @@
          (<= 101 y 150) {:pos [150 (+ 1 (- 150 y))]  :facing :L}
          (<= 151 y 200) {:pos [(+ 51 (- y 151)) 150] :facing :U})))
 
-(defn day22-part1-soln
+(defn part1
   "Follow the path given in the monkeys' notes. What is the final password?"
   [input]
   (final-password (follow-path (assoc input :wrap-fn wrap-around))))
 
-(defn day22-part2-soln
+(defn part2
   "Fold the map into a cube, then follow the path given in the monkeys' notes. 
    What is the final password?"
   [input]

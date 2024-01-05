@@ -104,12 +104,12 @@
 
 ;;;; Puzzle solutions
 
-(defn day08-part1-soln
+(defn part1
   "Consider your map; how many trees are visible from outside the grid?"
   [input]
   (visible-trees input))
 
-(defn day08-part2-soln
+(defn part2
   "Consider each tree on your map. What is the highest scenic score 
    possible for any tree?"
   [input]

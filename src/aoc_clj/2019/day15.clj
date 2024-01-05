@@ -38,7 +38,7 @@
   [input]
   (map-maze-with-droid input))
 
-(defn day15-part1-soln
+(defn part1
   [input]
   (let [thismaze (thismaze input)
         start [0 0]
@@ -47,7 +47,7 @@
         path (g/dijkstra simplified-maze start (u/equals? finish))]
     (g/path-distance simplified-maze path)))
 
-(defn day15-part2-soln
+(defn part2
   [input]
   (let [thismaze (thismaze input)]
     (maze/flood-fill thismaze (maze/find-target thismaze :oxygen))))

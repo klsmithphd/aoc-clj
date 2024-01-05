@@ -53,10 +53,10 @@
   [rules bag]
   (dec (satisfy-rule (into {} rules) 1 bag)))
 
-(defn day07-part1-soln
+(defn part1
   [input]
   (count (all-outer-bags input :shiny-gold)))
 
-(defn day07-part2-soln
+(defn part2
   [input]
   (count-inner-bags input :shiny-gold))

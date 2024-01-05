@@ -157,14 +157,14 @@
        (map path-option-count)
        (reduce +)))
 
-(defn day19-part1-soln
+(defn part1
   "Sort through all of the parts you've been given; what do you get if you 
    add together all of the rating numbers for all of the parts that 
    ultimately get accepted?"
   [input]
   (accepted-parts-sum input))
 
-(defn day19-part2-soln
+(defn part2
   "Consider only your list of workflows; the list of part ratings that the 
    Elves wanted you to sort is no longer relevant. How many distinct 
    combinations of ratings will be accepted by the Elves' workflows?"

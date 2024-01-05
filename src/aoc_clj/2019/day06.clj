@@ -49,10 +49,10 @@
           (distance-to-ancestor orbits objB ancestor))
        2)))
 
-(defn day06-part1-soln
+(defn part1
   [input]
   (orbit-count input))
 
-(defn day06-part2-soln
+(defn part2
   [input]
   (orbit-transfers input "YOU" "SAN"))

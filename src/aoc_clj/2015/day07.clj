@@ -56,11 +56,11 @@
   [circuit val]
   (assoc circuit "b" {:op :assign :args val}))
 
-(defn day07-part1-soln
+(defn part1
   [input]
   (wire-val input "a"))
 
-(defn day07-part2-soln
+(defn part2
   [input]
   (let [circuit input
         wirea (wire-val circuit "a")

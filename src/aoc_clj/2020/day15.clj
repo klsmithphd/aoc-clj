@@ -35,10 +35,10 @@
                  (update nums nextnum #(conjv % cnt))
                  (inc cnt)))))))
 
-(defn day15-part1-soln
+(defn part1
   [input]
   (last (memory-seq input 2020)))
 
-(defn day15-part2-soln
+(defn part2
   [input]
   (last (memory-seq input 30000000)))

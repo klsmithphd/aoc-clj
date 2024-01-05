@@ -18,14 +18,14 @@
        count))
 
 ;; Puzzle solutions
-(defn day01-part1-soln
+(defn part1
   "Interepting `(` as going up one floor and `)` as going down
    one floor what floor do you end up on given a string of 
    parentheses as input"
   [input]
   (final-floor input))
 
-(defn day01-part2-soln
+(defn part2
   "Still interpreting `(` as up one floor and `)` as down one
    floor, what's the first character in the input string that 
    causes the elevator to reach the basement (floor -1) "

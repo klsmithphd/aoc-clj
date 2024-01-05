@@ -45,10 +45,10 @@
 
 ;; FIXME: Implementation is far too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/29
-(deftest ^:slow day20-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day20, part1"
-    (is (= 9866 (t/day20-part1-soln day20-input)))))
+    (is (= 9866 (t/part1 day20-input)))))
 
-(deftest ^:slow day20-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day20, part2"
-    (is (= 12374299815791 (t/day20-part2-soln day20-input)))))
+    (is (= 12374299815791 (t/part2 day20-input)))))

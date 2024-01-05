@@ -25,14 +25,14 @@
     (doseq [line (partition width legible-pixels)]
       (println (str/join line)))))
 
-(defn day08-part1-soln
+(defn part1
   [input]
   (let [layers (partition (* 25 6) input)
         layer-freqs (map frequencies layers)
         min-zero-layer (apply min-key #(get % 0) layer-freqs)]
     (* (get min-zero-layer 1) (get min-zero-layer 2))))
 
-(defn day08-part2-soln
+(defn part2
   [input]
   (comment
     (pprint-image (decode-image input 25 6) 25)

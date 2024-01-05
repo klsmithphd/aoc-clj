@@ -60,10 +60,10 @@
        (take 3)
        (reduce *)))
 
-(defn day09-part1-soln
+(defn part1
   [input]
   (risk-level-sum input))
 
-(defn day09-part2-soln
+(defn part2
   [input]
   (three-largest-basins-product input))

@@ -90,10 +90,10 @@
   [state]
   (update state 1 conj [:m "El"] [:g "El"] [:m "Li2"] [:g "Li2"]))
 
-(defn day11-part1-soln
+(defn part1
   [input]
   (move-count input))
 
-(defn day11-part2-soln
+(defn part2
   [input]
   (move-count (extra-items input)))

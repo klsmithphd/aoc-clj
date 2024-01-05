@@ -29,7 +29,7 @@
        (map digits)
        (filter condition)))
 
-(defn day04-part1-soln
+(defn part1
   [input]
   (count (satisfactory-numbers (apply range input) all-conds-part1?)))
 
@@ -40,6 +40,6 @@
 (def all-conds-part2?
   (every-pred not-decreasing-digits? pair-not-in-larger-group?))
 
-(defn day04-part2-soln
+(defn part2
   [input]
   (count (satisfactory-numbers (apply range input) all-conds-part2?)))

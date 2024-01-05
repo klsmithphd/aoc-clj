@@ -22,12 +22,12 @@
 
 ;;;; Puzzle solutions
 
-(defn day04-part1-soln
+(defn part1
   "In how many assignment pairs does one range fully contain the other?"
   [input]
   (count (filter #(apply ivs/fully-contained? %) input)))
 
-(defn day04-part2-soln
+(defn part2
   "In how many assignment pairs do the ranges overlap?"
   [input]
   (count (filter #(apply ivs/overlap? %) input)))

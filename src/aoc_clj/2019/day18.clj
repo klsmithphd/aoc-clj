@@ -201,10 +201,10 @@
            :nodes (into (filter (partial not= [x y]) nodes) newents)
            :entrances (zipmap newents (map str (range))))))
 
-(defn day18-part1-soln
+(defn part1
   [input]
   (shortest-path (load-graph (load-maze input))))
 
-(defn day18-part2-soln
+(defn part2
   [input]
   (shortest-path (load-graph (fix-maze (load-maze input)))))

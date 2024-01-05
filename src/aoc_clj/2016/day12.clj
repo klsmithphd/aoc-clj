@@ -52,11 +52,11 @@
         state
         (recur (apply-cmd state cmd))))))
 
-(defn day12-part1-soln
+(defn part1
   [input]
   (:a (execute init-state input)))
 
-(defn day12-part2-soln
+(defn part2
   [input]
   (:a (execute (assoc init-state :c 1) input)))
 

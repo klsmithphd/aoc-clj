@@ -113,12 +113,12 @@
 
 ;;;; Puzzle solutions
 
-(defn day21-part1-soln
+(defn part1
   "What number will the monkey named root yell?"
   [input]
   (root-yell input))
 
-(defn day21-part2-soln
+(defn part2
   "What number do you yell to pass root's equality test?"
   [input]
   (humn-value input))

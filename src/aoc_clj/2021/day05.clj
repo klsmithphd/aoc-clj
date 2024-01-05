@@ -43,11 +43,11 @@
          (filter #(>= (val %) 2))
          count)))
 
-(defn day05-part1-soln
+(defn part1
   [input]
   (overlapping-points input false))
 
-(defn day05-part2-soln
+(defn part2
   [input]
   (overlapping-points input true))
 

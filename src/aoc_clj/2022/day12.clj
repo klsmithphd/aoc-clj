@@ -66,13 +66,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day12-part1-soln
+(defn part1
   "What is the fewest steps required to move from your current position to the 
    location that should get the best signal?"
   [input]
   (shortest-path-from-start input))
 
-(defn day12-part2-soln
+(defn part2
   "What is the fewest steps required to move starting from any square with 
    elevation `a` to the location that should get the best signal?"
   [input]

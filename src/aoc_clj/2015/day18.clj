@@ -66,10 +66,10 @@
          (filter #(= :on (val %)))
          count)))
 
-(defn day18-part1-soln
+(defn part1
   [input]
   (lights-on-at-step-n 100 input))
 
-(defn day18-part2-soln
+(defn part2
   [input]
   (lights-on-at-step-n true 100 (corners-on input)))

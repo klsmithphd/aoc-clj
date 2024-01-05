@@ -203,13 +203,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day17-part1-soln
+(defn part1
   "How many units tall will the tower of rocks be after 2022 rocks have 
    stopped falling?"
   [input]
   (tower-height-after-n input 2022))
 
-(defn day17-part2-soln
+(defn part2
   "How tall will the tower be after 1000000000000 rocks have stopped?"
   [input]
   (tower-height-after-n input 1000000000000))

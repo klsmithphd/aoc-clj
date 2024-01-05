@@ -56,13 +56,13 @@
        (map #(apply math/manhattan %))
        (reduce +)))
 
-(defn day11-part1-soln
+(defn part1
   "Expand the universe, then find the length of the shortest path between every
    pair of galaxies. What is the sum of these lengths?"
   [input]
   (pairwise-distance-sum (expanded-coords input 2)))
 
-(defn day11-part2-soln
+(defn part2
   "Starting with the same initial image, expand the universe according to these
    new rules, then find the length of the shortest path between every pair of
    galaxies. What is the sum of these lengths?"

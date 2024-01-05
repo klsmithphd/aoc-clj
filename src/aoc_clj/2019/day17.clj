@@ -50,13 +50,13 @@
    "L,12,L,8,R,10\n"
    "n\n"))
 
-(defn day17-part1-soln
+(defn part1
   [input]
   (->> (day17-map input)
        intersections
        alignment-sum))
 
-(defn day17-part2-soln
+(defn part2
   [input]
   (let [code (assoc input 0 2)]
     (->> path

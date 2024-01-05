@@ -6,6 +6,6 @@
 (def day25-input (u/parse-puzzle-input t/parse 2019 25))
 (def day25-cmds  (u/puzzle-input "inputs/2019/day25-cmds.txt"))
 
-(deftest day25-part1-soln-test
+(deftest part1-test
   (testing "Can reproduce the answer for part1"
-    (is (= 16410 (t/day25-part1-soln day25-input day25-cmds)))))
+    (is (= 16410 (t/part1 day25-input day25-cmds)))))

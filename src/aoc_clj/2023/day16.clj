@@ -105,13 +105,13 @@
   [grid]
   (apply max (map #(energized-count grid %) (start-points grid))))
 
-(defn day16-part1-soln
+(defn part1
   "With the beam starting in the top-left heading right, 
    how many tiles end up being energized?"
   [input]
   (energized-count input part1-start))
 
-(defn day16-part2-soln
+(defn part2
   "Find the initial beam configuration that energizes the largest number of 
    tiles; how many tiles are energized in that configuration?"
   [input]

@@ -35,10 +35,10 @@
         scores (apply (partial map vector) (map score positions))]
     (mapv (partial reduce +) scores)))
 
-(defn day14-part1-soln
+(defn part1
   [input]
   (apply max (map (partial distance-at-time 2503) (vals input))))
 
-(defn day14-part2-soln
+(defn part2
   [input]
   (apply max (points-at-time 2503 input)))

@@ -52,13 +52,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day03-part1-soln
+(defn part1
   "Find the item type that appears in both compartments of each rucksack. 
    What is the sum of the priorities of those item types?"
   [input]
   (overlap-priority-sum ::halfway input))
 
-(defn day03-part2-soln
+(defn part2
   "Find the item type that corresponds to the badges of each three-Elf group. 
    What is the sum of the priorities of those item types?"
   [input]

@@ -23,7 +23,7 @@
 
 ;; FIXME: 2021.day25 solution is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/9
-(deftest ^:slow day25-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day25, part1"
-    (is (= 429 (t/day25-part1-soln day25-input)))))
+    (is (= 429 (t/part1 day25-input)))))
 

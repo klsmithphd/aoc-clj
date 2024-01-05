@@ -208,10 +208,10 @@ Tile 3079:
 
 (def day20-input (u/parse-puzzle-input t/parse 2020 20))
 
-(deftest day20-part1-soln
+(deftest part1-test
   (testing "Reproduces the answer for day20, part1"
-    (is (= 79412832860579 (t/day20-part1-soln day20-input)))))
+    (is (= 79412832860579 (t/part1 day20-input)))))
 
-(deftest day20-part2-soln
+(deftest part2-test
   (testing "Reproduces the answer for day20, part2"
-    (is (= 2155 (t/day20-part2-soln day20-input)))))
+    (is (= 2155 (t/part2 day20-input)))))

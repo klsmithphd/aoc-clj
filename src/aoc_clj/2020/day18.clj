@@ -33,10 +33,10 @@
          ((operize oper) acc y)))
      init (partition 2 (rest expr)))))
 
-(defn day18-part1-soln
+(defn part1
   [input]
   (reduce + (map (comp infix interpret) input)))
 
-(defn day18-part2-soln
+(defn part2
   [input]
   (reduce + (map (comp infix interpret2) input)))

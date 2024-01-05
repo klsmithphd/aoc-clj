@@ -66,10 +66,10 @@
        first
        :acc))
 
-(defn day08-part1-soln
+(defn part1
   [input]
   (acc-value-at-second-loop input))
 
-(defn day08-part2-soln
+(defn part2
   [input]
   (acc-value-for-finite-loop input))

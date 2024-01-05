@@ -18,10 +18,10 @@
     (is (= '(0 1 1 0) (t/decode-image [0 2 2 2 1 1 2 2 2 2 1 2 0 0 0 0] 2 2)))
     (is (= decoded-output (t/decode-image day08-input 25 6)))))
 
-(deftest day08-part1-soln-test
+(deftest part1-test
   (testing "Can reproduce the answer for part1"
-    (is (= 2016 (t/day08-part1-soln day08-input)))))
+    (is (= 2016 (t/part1 day08-input)))))
 
-(deftest day08-part2-soln-test
+(deftest part2-test
   (testing "Can reproduce the answer for part2"
-    (is (= "HZCZU" (t/day08-part2-soln day08-input)))))
+    (is (= "HZCZU" (t/part2 day08-input)))))

@@ -25,10 +25,10 @@
        (map (comp count count-fn))
        (reduce +)))
 
-(defn day06-part1-soln
+(defn part1
   [input]
   (sum-counts input unique-answers-in-group))
 
-(defn day06-part2-soln
+(defn part2
   [input]
   (sum-counts input common-answers-in-group))

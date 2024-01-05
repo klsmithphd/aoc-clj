@@ -38,7 +38,7 @@
       (nth n)
       count))
 
-(defn day21-part1-soln
+(defn part1
   "Starting from the garden plot marked S on your map, how many garden plots 
    could the Elf reach in exactly 64 steps?"
   [input]

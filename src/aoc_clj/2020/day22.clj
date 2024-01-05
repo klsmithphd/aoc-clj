@@ -99,11 +99,11 @@
   (let [cnt (count deck)]
     (reduce + (map * deck (range cnt 0 -1)))))
 
-(defn day22-part1-soln
+(defn part1
   [input]
   (score (combat input)))
 
-(defn day22-part2-soln
+(defn part2
   [input]
   (score (recursive-combat input)))
 

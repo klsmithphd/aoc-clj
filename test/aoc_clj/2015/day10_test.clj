@@ -12,12 +12,12 @@
 
 (def day10-input (u/parse-puzzle-input t/parse 2015 10))
 
-(deftest day10-part1-soln
+(deftest part1-test
   (testing "Reproduces the answer for day10, part1"
-    (is (= 252594 (t/day10-part1-soln day10-input)))))
+    (is (= 252594 (t/part1 day10-input)))))
 
 ;; FIXME: 2015.day10 solution is slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/5
-(deftest ^:slow day10-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day10, part2"
-    (is (= 3579328 (t/day10-part2-soln day10-input)))))
+    (is (= 3579328 (t/part2 day10-input)))))

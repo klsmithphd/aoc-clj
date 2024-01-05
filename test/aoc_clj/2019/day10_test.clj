@@ -107,10 +107,10 @@
 
 (def day10-input (u/parse-puzzle-input t/parse 2019 10))
 
-(deftest day10-part1-soln-test
+(deftest part1-test
   (testing "Can reproduce the answer for part1"
-    (is (= 253 (second (t/day10-part1-soln day10-input))))))
+    (is (= 253 (second (t/part1 day10-input))))))
 
-(deftest day10-part2-soln-test
+(deftest part2-test
   (testing "Can reproduce the answer for part2"
-    (is (= 815 (t/day10-part2-soln day10-input)))))
+    (is (= 815 (t/part2 day10-input)))))

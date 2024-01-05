@@ -40,11 +40,11 @@
        (some identity)
        boolean))
 
-(defn day07-part1-soln
+(defn part1
   [input]
   (count (filter supports-tls? input)))
 
-(defn day07-part2-soln
+(defn part2
   [input]
   (count (filter supports-ssl? input)))
 

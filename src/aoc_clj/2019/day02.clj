@@ -32,11 +32,11 @@
             #(not= output (intcode-output intcode %))
             candidates))))
 
-(defn day02-part1-soln
+(defn part1
   [input]
   (intcode-output input [12 2]))
 
-(defn day02-part2-soln
+(defn part2
   [input]
   (let [[noun verb] (pair-produces-output input 19690720)]
     (+ (* 100 noun) verb)))

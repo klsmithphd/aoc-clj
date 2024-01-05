@@ -52,12 +52,12 @@
         opts (all-options max-teaspoons vars)]
     (apply max-key (partial score-fn input) opts)))
 
-(defn day15-part1-soln
+(defn part1
   [input]
   (let [best-combo (find-max-score score input)]
     (score input best-combo)))
 
-(defn day15-part2-soln
+(defn part2
   [input]
   (let [best-combo (find-max-score score-with-500cal input)]
     (score input best-combo)))

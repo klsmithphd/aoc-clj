@@ -28,10 +28,10 @@
           (recur left (inc right))
           (recur (inc left) right))))))
 
-(defn day09-part1-soln
+(defn part1
   [input]
   (first-non-sum input 25))
 
-(defn day09-part2-soln
+(defn part2
   [input]
-  (reduce + (contiguous-range-to-sum input (day09-part1-soln input))))
+  (reduce + (contiguous-range-to-sum input (part1 input))))

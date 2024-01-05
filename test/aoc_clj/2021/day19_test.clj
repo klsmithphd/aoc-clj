@@ -34,10 +34,10 @@
 
 ;; FIXME: 2021.day19 is too slow to unit test
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/7
-(deftest ^:slow day19-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day19, part1"
-    (is (= 449 (t/day19-part1-soln day19-input)))))
+    (is (= 449 (t/part1 day19-input)))))
 
-(deftest ^:slow day19-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day19, part2"
-    (is (= 13128 (t/day19-part2-soln day19-input)))))
+    (is (= 13128 (t/part2 day19-input)))))

@@ -55,10 +55,10 @@
   [(Integer/parseInt (oxygen-generator signals) 2)
    (Integer/parseInt (co2-scrubber signals) 2)])
 
-(defn day03-part1-soln
+(defn part1
   [input]
   (reduce * (power-consumption input)))
 
-(defn day03-part2-soln
+(defn part2
   [input]
   (reduce * (life-support input)))

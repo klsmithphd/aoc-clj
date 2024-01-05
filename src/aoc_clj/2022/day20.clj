@@ -88,13 +88,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day20-part1-soln
+(defn part1
   "Mix your encrypted file exactly once. 
    What is the sum of the three numbers that form the grove coordinates?"
   [input]
   (grove-coordinates (mixed input)))
 
-(defn day20-part2-soln
+(defn part2
   "Apply the decryption key and mix your encrypted file ten times. 
    What is the sum of the three numbers that form the grove coordinates?"
   [input]

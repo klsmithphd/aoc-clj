@@ -108,13 +108,13 @@
        (map box-focusing-power)
        (reduce +)))
 
-(defn day15-part1-soln
+(defn part1
   "Run the HASH algorithm on each step in the initialization sequence. 
    What is the sum of the results?"
   [input]
   (hash-sum input))
 
-(defn day15-part2-soln
+(defn part2
   "With the help of an over-enthusiastic reindeer in a hard hat, follow the 
    initialization sequence. What is the focusing power of the resulting lens 
    configuration?"

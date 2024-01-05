@@ -20,11 +20,11 @@
       (mapv drop-red s)
       s)))
 
-(defn day12-part1-soln
+(defn part1
   [input]
   (reduce + (all-numbers input)))
 
-(defn day12-part2-soln
+(defn part2
   [input]
   (->> (c/parse-string input)
        drop-red

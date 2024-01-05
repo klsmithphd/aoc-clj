@@ -113,13 +113,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day15-part1-soln
+(defn part1
   "Consult the report from the sensors you just deployed. In the row where 
    y=2000000, how many positions cannot contain a beacon?"
   [input]
   (no-beacon-points-in-line input 2000000))
 
-(defn day15-part2-soln
+(defn part2
   "Find the only possible position for the distress beacon. 
    What is its tuning frequency?"
   [input]

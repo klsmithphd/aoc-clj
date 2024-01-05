@@ -17,10 +17,10 @@
 
 ;; FIXME: 2015.day17 solution is slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/6
-(deftest ^:slow day17-part1-soln
+(deftest ^:slow part1
   (testing "Reproduces the answer for day17, part1"
-    (is (= 654 (t/day17-part1-soln day17-input)))))
+    (is (= 654 (t/part1 day17-input)))))
 
-(deftest ^:slow day17-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day17, part2"
-    (is (= 57 (t/day17-part2-soln day17-input)))))
+    (is (= 57 (t/part2 day17-input)))))

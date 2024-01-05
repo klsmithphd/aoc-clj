@@ -51,10 +51,10 @@
   [criteria aunts]
   (ffirst (filter criteria aunts)))
 
-(defn day16-part1-soln
+(defn part1
   [input]
   (matching-aunt exact-match? input))
 
-(defn day16-part2-soln
+(defn part2
   [input]
   (matching-aunt range-match? input))

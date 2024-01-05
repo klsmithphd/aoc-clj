@@ -68,10 +68,10 @@
   (->> (filter init-area? cuboids)
        on-cubes))
 
-(defn day22-part1-soln
+(defn part1
   [input]
   (on-cubes-in-init-area input))
 
-(defn day22-part2-soln
+(defn part2
   [input]
   (on-cubes input))

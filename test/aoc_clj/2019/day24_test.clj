@@ -67,12 +67,12 @@
 
 (def day24-input (u/parse-puzzle-input t/parse 2019 24))
 
-(deftest day24-part1-soln-test
+(deftest part1-test
   (testing "Can reproduce the answer for part1"
-    (is (= 17863711 (t/day24-part1-soln day24-input)))))
+    (is (= 17863711 (t/part1 day24-input)))))
 
 ;; FIXME: 2019 Day 24 part 2 solutiion is a bit slow to test
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/24
-(deftest ^:slow day24-part2-soln-test
+(deftest ^:slow part2-test
   (testing "Can reproduce the answer for part2"
-    (is (= 1937 (t/day24-part2-soln day24-input)))))
+    (is (= 1937 (t/part2 day24-input)))))

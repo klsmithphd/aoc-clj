@@ -21,11 +21,11 @@
   (let [counts (reduce #(assoc %1 (key %2) (val %2)) zero-counts (frequencies input))]
     (reduce + (nth (iterate step counts) days))))
 
-(defn day06-part1-soln
+(defn part1
   [input]
   (fish-after-n-days input 80))
 
 
-(defn day06-part2-soln
+(defn part2
   [input]
   (fish-after-n-days input 256))

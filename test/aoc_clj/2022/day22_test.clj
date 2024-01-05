@@ -84,10 +84,10 @@
 
 (def day22-input (u/parse-puzzle-input t/parse 2022 22))
 
-(deftest day22-part1-soln
+(deftest part1-test
   (testing "Reproduces the answer for day22, part1"
-    (is (= 1428 (t/day22-part1-soln day22-input)))))
+    (is (= 1428 (t/part1 day22-input)))))
 
-(deftest day22-part2-soln
+(deftest part2-test
   (testing "Reproduces the answer for day22, part2"
-    (is (= 142380 (t/day22-part2-soln day22-input)))))
+    (is (= 142380 (t/part2 day22-input)))))

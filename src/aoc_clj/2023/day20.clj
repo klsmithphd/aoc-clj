@@ -220,11 +220,11 @@
        (map presses-until-single-rx-low-pulse)
        (apply math/lcm)))
 
-(defn day20-part1-soln
+(defn part1
   [input]
   (pulses-after-1000-brute-force input))
 
-(defn day20-part2-soln
+(defn part2
   [input]
   (buttons-till-rx input))
 

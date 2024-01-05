@@ -82,11 +82,11 @@
        (filter #{:on})
        count))
 
-(defn day08-part1-soln
+(defn part1
   [input]
   (lit-pixels 50 6 input))
 
-(defn day08-part2-soln
+(defn part2
   [input]
   ;; Execute the code in the comment to print the message
   (comment

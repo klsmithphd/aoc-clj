@@ -91,12 +91,12 @@
        (map #(reduce * %))
        (reduce +)))
 
-(defn day03-part1-soln
+(defn part1
   "What is the sum of all of the part numbers in the engine schematic?"
   [input]
   (part-numbers-sum input))
 
-(defn day03-part2-soln
+(defn part2
   "What is the sum of all of the gear ratios in your engine schematic?"
   [input]
   (gear-ratio-sum input))

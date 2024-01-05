@@ -82,10 +82,10 @@
        (map #(Math/abs %))
        (reduce +)))
 
-(defn day12-part1-soln
+(defn part1
   [input]
   (final-distance input exec-cmd))
 
-(defn day12-part2-soln
+(defn part2
   [input]
   (final-distance input exec-cmd2))

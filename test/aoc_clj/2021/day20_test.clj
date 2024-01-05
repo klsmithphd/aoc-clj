@@ -20,12 +20,12 @@
 
 (def day20-input (u/parse-puzzle-input t/parse 2021 20))
 
-(deftest day20-part1-soln
+(deftest part1-test
   (testing "Reproduces the answer for day20, part1"
-    (is (= 5097 (t/day20-part1-soln day20-input)))))
+    (is (= 5097 (t/part1 day20-input)))))
 
 ;; FIXME: 2021.day20 part 2 is too slow
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/10
-(deftest ^:slow day20-part2-soln
+(deftest ^:slow part2
   (testing "Reproduces the answer for day20, part2"
-    (is (= 17987 (t/day20-part2-soln day20-input)))))
+    (is (= 17987 (t/part2 day20-input)))))

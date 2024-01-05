@@ -5,10 +5,10 @@
 
 (def parse u/firstv)
 
-(defn day09-part1-soln
+(defn part1
   [input]
   (intcode/last-out (intcode/intcode-exec input [1])))
 
-(defn day09-part2-soln
+(defn part2
   [input]
   (intcode/last-out (intcode/intcode-exec input [2])))

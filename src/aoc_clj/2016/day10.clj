@@ -85,10 +85,10 @@
          (map first)
          (reduce *))))
 
-(defn day10-part1-soln
+(defn part1
   [input]
   (bot-that-compares input #{17 61}))
 
-(defn day10-part2-soln
+(defn part2
   [input]
   (output-values input))

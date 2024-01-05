@@ -57,10 +57,10 @@
        (map second)
        (str/join ",")))
 
-(defn day21-part1-soln
+(defn part1
   [input]
   (count (safe-ingredients input)))
 
-(defn day21-part2-soln
+(defn part2
   [input]
   (allergen-sorted-unsafe-ingredients input))

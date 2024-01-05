@@ -147,13 +147,13 @@
 
 ;;;; Puzzle solutions
 
-(defn day24-part1-soln
+(defn part1
   "What is the fewest number of minutes required to avoid the blizzards and
    reach the goal?"
   [input]
   (shortest-time-to-exit input))
 
-(defn day24-part2-soln
+(defn part2
   "What is the fewest number of minutes required to reach the goal, 
    go back to the start, then reach the goal again?"
   [input]

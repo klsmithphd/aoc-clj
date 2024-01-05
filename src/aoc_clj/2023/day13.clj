@@ -77,13 +77,13 @@
        (map summarize-math)
        (reduce +)))
 
-(defn day13-part1-soln
+(defn part1
   "Find the line of reflection in each of the patterns in your notes. 
    What number do you get after summarizing all of your notes?"
   [input]
   (summarize 0 input))
 
-(defn day13-part2-soln
+(defn part2
   "In each pattern, fix the smudge and find the different line of reflection. 
    What number do you get after summarizing the new reflection line in each 
    pattern in your notes?"

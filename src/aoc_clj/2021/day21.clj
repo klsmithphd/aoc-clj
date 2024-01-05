@@ -90,10 +90,10 @@
       win-tally
       (mapv + win-tally (win-counts remaining (mod (inc player) 2))))))
 
-(defn day21-part1-soln
+(defn part1
   [input]
   (loser-score-times-die-rolls (play-until-win input)))
 
-(defn day21-part2-soln
+(defn part2
   [input]
   (apply max (win-counts {[[0 0] input] 1} 0)))

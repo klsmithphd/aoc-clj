@@ -98,7 +98,7 @@
 
 (def day25-input (u/parse-puzzle-input t/parse 2022 25))
 
-(deftest day25-part1-soln
+(deftest part1-test
   (testing "Reproduces the answer for day25, part1"
     (is (= "2=--00--0220-0-21==1"
-           (t/day25-part1-soln day25-input)))))
+           (t/part1 day25-input)))))
