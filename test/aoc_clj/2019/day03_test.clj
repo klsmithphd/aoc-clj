@@ -38,13 +38,13 @@
 (def dist3 135)
 (def steps3 410)
 
-(deftest part1-test
+(deftest closest-intersection-dist-test
   (testing "Find closest intersection of the wire paths"
     (is (= dist1 (t/closest-intersection-dist input1)))
     (is (= dist2 (t/closest-intersection-dist input2)))
     (is (= dist3 (t/closest-intersection-dist input3)))))
 
-(deftest part2-test
+(deftest shortest-steps-to-intersection-test
   (testing "Find fewest number of steps to first intersection of the wire paths"
     (is (= steps1 (t/shortest-steps-to-intersection input1)))
     (is (= steps2 (t/shortest-steps-to-intersection input2)))
