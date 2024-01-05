@@ -16,7 +16,7 @@
 (def d01-s09 (d01/parse [")"]))
 (def d01-s10 (d01/parse ["()())"]))
 
-(deftest final-floor
+(deftest final-floor-test
   (testing "Correctly determines the final floor"
     (is (= 0  (d01/final-floor d01-s00)))
     (is (= 0  (d01/final-floor d01-s01)))
@@ -28,7 +28,7 @@
     (is (= -3 (d01/final-floor d01-s07)))
     (is (= -3 (d01/final-floor d01-s08)))))
 
-(deftest first-pos-in-basement
+(deftest first-pos-in-basement-test
   (testing "Finds the first position where the sum equals -1"
     (is (= 1 (d01/first-pos-in-basement d01-s09)))
     (is (= 5 (d01/first-pos-in-basement d01-s10)))))

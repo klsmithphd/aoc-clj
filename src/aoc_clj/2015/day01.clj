@@ -8,10 +8,13 @@
 
 ;; Puzzle logic
 (defn final-floor
+  "Compute the final floor as the sum of all the up and down moves"
   [input]
   (reduce + 0 input))
 
 (defn first-pos-in-basement
+  "Determine the first time the elevator reaches the basement by counting
+   how many moves it takes until the sum becomes -1"
   [input]
   (->> (reductions + 0 input)
        (take-while #(not= -1 %))
@@ -19,16 +22,14 @@
 
 ;; Puzzle solutions
 (defn part1
-  "Interepting `(` as going up one floor and `)` as going down
-   one floor what floor do you end up on given a string of 
-   parentheses as input"
+  "Given a list of `1`s and `-1`s, each representing an elevator moving up or 
+   down one floor, return the floor reached at the end of the moves."
   [input]
   (final-floor input))
 
 (defn part2
-  "Still interpreting `(` as up one floor and `)` as down one
-   floor, what's the first character in the input string that 
-   causes the elevator to reach the basement (floor -1) "
+  "Given the same list of `1`s and `-1`s, each representing an elevator moving
+   up or down one floor, return the position of the first move in the
+   sequence where the elevator reaches the basement (at -1)"
   [input]
   (first-pos-in-basement input))
-
