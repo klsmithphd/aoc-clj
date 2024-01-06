@@ -1,39 +1,50 @@
 (ns aoc-clj.2015.day05-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.2015.day05 :as t]))
+            [aoc-clj.2015.day05 :as d05]))
 
-(deftest nice-strings
+(def d05-s00 "ugknbfddgicrmopn")
+(def d05-s01 "aaa")
+(def d05-s02 "jchzalrnumimnmhp")
+(def d05-s03 "haegwjzuvuyypxyu")
+(def d05-s04 "dvszwmarrgswjxmb")
+
+(def d05-s05 "qjhvhtzxzqqjkmpb")
+(def d05-s06 "xxyxx")
+(def d05-s07 "uurcxstgmygtbstg")
+(def d05-s08 "ieodomkazucvgmuy")
+
+(deftest part1-nice-test
   (testing "Identifies niceness using the first set of rules"
-    (is (t/nice? "ugknbfddgicrmopn"))
-    (is (t/nice? "aaa"))
+    (is (d05/part1-nice? d05-s00))
+    (is (d05/part1-nice? d05-s01))
     ;; No repeated character
-    (is (not (t/nice? "jchzalrnumimnmhp")))
-    (is (not (t/repeated-char? "jchzalrnumimnmhp")))
+    (is (not (d05/repeated-char? d05-s02)))
+    (is (not (d05/part1-nice? d05-s02)))
     ;; Has one of the banned pairs (xy)
-    (is (not (t/nice? "haegwjzuvuyypxyu")))
-    (is (not (t/no-invalid-pairs? "haegwjzuvuyypxyu")))
+    (is (not (d05/no-invalid-pairs? d05-s03)))
+    (is (not (d05/part1-nice? d05-s03)))
     ;; Not enough vowels
-    (is (not (t/nice? "dvszwmarrgswjxmb")))
-    (is (not (t/three-vowels? "dvszwmarrgswjxmb")))))
+    (is (not (d05/three-vowels? d05-s04)))
+    (is (not (d05/part1-nice? d05-s04)))))
 
-(deftest new-nice-strings
+(deftest part2-nice-test
   (testing "Identifies niceness using the second set of rules"
-    (is (t/new-nice? "qjhvhtzxzqqjkmpb"))
-    (is (t/new-nice? "xxyxx"))
+    (is (d05/part2-nice? d05-s05))
+    (is (d05/part2-nice? d05-s06))
     ;; Missing repeating letter with intervening letter
-    (is (not (t/new-nice? "uurcxstgmygtbstg")))
-    (is (not (t/repeat-with-letter-between? "uurcxstgmygtbstg")))
+    (is (not (d05/repeat-with-letter-between? d05-s07)))
+    (is (not (d05/part2-nice? d05-s07)))
     ;; Missing repeated pair
-    (is (not (t/new-nice? "ieodomkazucvgmuy")))
-    (is (not (t/non-overlapping-pair? "ieodomkazucvgmuy")))))
+    (is (not (d05/non-overlapping-pair? d05-s08)))
+    (is (not (d05/part2-nice? d05-s08)))))
 
-(def day05-input (u/parse-puzzle-input t/parse 2015 5))
+(def day05-input (u/parse-puzzle-input d05/parse 2015 5))
 
 (deftest part1-test
   (testing "Reproduces the answer for day05, part1"
-    (is (= 255 (t/part1 day05-input)))))
+    (is (= 255 (d05/part1 day05-input)))))
 
 (deftest part2-test
   (testing "Reproduces the answer for day05, part2"
-    (is (= 55 (t/part2 day05-input)))))
+    (is (= 55 (d05/part2 day05-input)))))
