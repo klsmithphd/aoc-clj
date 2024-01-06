@@ -1,23 +1,23 @@
 (ns aoc-clj.2015.day04-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.2015.day04 :as t]))
+            [aoc-clj.2015.day04 :as d04]))
 
-;; FIXME: 2015.day04 solution is too slow to unit test
-;; https://github.com/Ken-2scientists/aoc-clj/issues/1
-;; SUPER SLOW!
-(deftest ^:slow first-with-five-zeros
-  (testing "Finds the earliest number to result in md5 hash starting with five zeros"
-    (is (= 609043  (t/first-to-start-with-five-zeros "abcdef")))
-    (is (= 1048970 (t/first-to-start-with-five-zeros "pqrstuv")))))
+(def d04-s00 "abcdef")
+(def d04-s01 "pqrstuv")
 
-(def day04-input (u/parse-puzzle-input t/parse 2015 4))
+(deftest first-with-five-zeros
+  (testing "Finds the earliest number to result in md5 hash starting 
+            with five zeros"
+    (is (= 609043  (d04/first-integer d04/five-zero-start? d04-s00)))
+    (is (= 1048970 (d04/first-integer d04/five-zero-start? d04-s01)))))
 
-(deftest ^:slow part1
+(def day04-input (u/parse-puzzle-input d04/parse 2015 4))
+
+(deftest part1-test
   (testing "Reproduces the answer for day04, part1"
-    (is (= 282749 (t/part1 day04-input)))))
+    (is (= 282749 (d04/part1 day04-input)))))
 
-;; ULTRA SLOW!
-(deftest ^:slow part2
+(deftest ^:slow part2-test
   (testing "Reproduces the answer for day04, part2"
-    (is (= 9962624 (t/part2 day04-input)))))
+    (is (= 9962624 (d04/part2 day04-input)))))

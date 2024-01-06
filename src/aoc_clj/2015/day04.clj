@@ -2,43 +2,39 @@
   "Solution to https://adventofcode.com/2015/day/4"
   (:import java.security.MessageDigest))
 
+;; Input parsing
 (def parse first)
+
+;; Puzzle logic
 (def md5-alg (MessageDigest/getInstance "MD5"))
-
-(defn md5-bytes
+(defn md5-byte-prefix
+  "First 3 bytes (as signed ints) of the MD5 hash of the supplied string"
   [^String s]
-  (.digest md5-alg (.getBytes s)))
+  (vec (take 3 (.digest md5-alg (.getBytes s)))))
 
-(defn starts-with-five-zeros?
+(defn five-zero-start?
+  "Whether the three bytes correspond in hex to starting with five zeroes"
+  [[a b c]]
+  (and (zero? a) (zero? b) (<= 0 c 15)))
+
+(defn six-zero-start?
+  "Whether the three bytes correspond in hex to starting with six zeroes"
   [bytes]
-  (and (zero? (aget bytes 0))
-       (zero? (aget bytes 1))
-       (>= (aget bytes 2) 0)
-       (< (aget bytes 2) 16)))
+  (every? zero? bytes))
 
-(defn starts-with-six-zeros?
-  [bytes]
-  (and (zero? (aget bytes 0))
-       (zero? (aget bytes 1))
-       (zero? (aget bytes 2))))
+(defn first-integer
+  "The first integer that satifies the supplied `pred` given the `secret`"
+  [pred secret]
+  (let [passing-hash? #(pred (md5-byte-prefix (str secret %)))]
+    (first (filter passing-hash? (range)))))
 
-(defn first-to-meet-condition
-  [condition secret-key]
-  (let [thehash #(md5-bytes (str secret-key %))]
-    (->>  (range)
-          (filter (comp condition thehash))
-          first)))
-
-(def first-to-start-with-five-zeros
-  (partial first-to-meet-condition starts-with-five-zeros?))
-
-(def first-to-start-with-six-zeros
-  (partial first-to-meet-condition starts-with-six-zeros?))
-
+;; Puzzle solutions
 (defn part1
+  "The first integer whose MD5 hash in hex starts with five zeroes"
   [input]
-  (first-to-start-with-five-zeros input))
+  (first-integer five-zero-start? input))
 
 (defn part2
+  "The first integer whose MD5 hash in hex starts with six zeros"
   [input]
-  (first-to-start-with-six-zeros input))
+  (first-integer six-zero-start? input))
