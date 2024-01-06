@@ -7,16 +7,17 @@
 (def d04-s01 "pqrstuv")
 
 (deftest first-with-five-zeros
-  (testing "Finds the earliest number to result in md5 hash starting with five zeros"
+  (testing "Finds the earliest number to result in md5 hash starting 
+            with five zeros"
     (is (= 609043  (d04/first-integer d04/five-zero-start? d04-s00)))
     (is (= 1048970 (d04/first-integer d04/five-zero-start? d04-s01)))))
 
 (def day04-input (u/parse-puzzle-input d04/parse 2015 4))
 
-(deftest part1
+(deftest part1-test
   (testing "Reproduces the answer for day04, part1"
     (is (= 282749 (d04/part1 day04-input)))))
 
-(deftest ^:slow part2
+(deftest ^:slow part2-test
   (testing "Reproduces the answer for day04, part2"
     (is (= 9962624 (d04/part2 day04-input)))))
