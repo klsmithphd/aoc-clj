@@ -45,13 +45,17 @@
    non-overlapping-pair?
    repeat-with-letter-between?))
 
+(defn nice-count
+  [pred strings]
+  (count (filter pred strings)))
+
 ;; Puzzle solutions
 (defn part1
   "The number of input strings that are nice using the rules in part1"
   [input]
-  (count (filter part1-nice? input)))
+  (nice-count part1-nice? input))
 
 (defn part2
   "The number of input strings that are nice using the rules in part2"
   [input]
-  (count (filter part2-nice? input)))
+  (nice-count part2-nice? input))
