@@ -34,9 +34,6 @@
     (is (= 3  (d03/distinct-visits d03-s01 d03/split-visits)))
     (is (= 11 (d03/distinct-visits d03-s02 d03/split-visits)))))
 
-(deftest split-houses-visited
-  (testing "Counts houses visited by Santa and Robo-Santa"))
-
 (def day03-input (u/parse-puzzle-input d03/parse 2015 3))
 
 (deftest part1-test
