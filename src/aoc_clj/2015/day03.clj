@@ -1,39 +1,41 @@
 (ns aoc-clj.2015.day03
   "Solution to https://adventofcode.com/2015/day/3")
 
+;; Constants
+(def dir-map {\^ [0 1] \v [0 -1] \> [1 0] \< [-1 0]})
+
+;; Input parsing
 (def parse first)
 
-(def dir-map
-  {\^ [0 -1]
-   \v [0 1]
-   \> [1 0]
-   \< [-1 0]})
+;; Puzzle logic
+(defn vec-add
+  "Sum of two vecs"
+  [a b]
+  (mapv + a b))
 
-(defn vec-add [a b]
-  (map + a b))
+(defn visits
+  "Positions visited by following `dirs`"
+  [dirs]
+  (reductions vec-add [0 0] (map dir-map dirs)))
 
-(defn houses-visited
-  [input]
-  (->> (map dir-map input)
-       (reductions vec-add [0 0])
-       set
-       count))
+(defn split-visits
+  "Positions visited by santa and his robot clone when splitting `dirs`"
+  [dirs]
+  (concat (visits (take-nth 2 dirs))
+          (visits (take-nth 2 (rest dirs)))))
 
-(defn split-houses-visited
-  [input]
-  (let [steps (map dir-map input)
-        steps1 (take-nth 2 steps)
-        steps2 (take-nth 2 (rest steps))
-        houses1 (reductions vec-add [0 0] steps1)
-        houses2 (reductions vec-add [0 0] steps2)]
-    (->> (concat houses1 houses2)
-         set
-         count)))
+(defn distinct-visits
+  "Count of distinct positions visited"
+  [input visits]
+  (count (set (visits input))))
 
+;; Puzzle solutions
 (defn part1
+  "Count of distinct houses visited by santa following the directions"
   [input]
-  (houses-visited input))
+  (distinct-visits input visits))
 
 (defn part2
+  "Count of distinct houses visited by santa and his robot splitting the dirs"
   [input]
-  (split-houses-visited input))
+  (distinct-visits input split-visits))
