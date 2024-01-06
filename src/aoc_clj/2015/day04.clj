@@ -23,12 +23,10 @@
   (every? zero? bytes))
 
 (defn first-integer
-  "The first integer that satifies the supplied `condition` given the `secret`"
-  [condition secret-key]
-  (let [thehash #(md5-byte-prefix (str secret-key %))]
-    (->>  (range)
-          (filter (comp condition thehash))
-          first)))
+  "The first integer that satifies the supplied `pred` given the `secret`"
+  [pred secret]
+  (let [passing-hash? #(pred (md5-byte-prefix (str secret %)))]
+    (first (filter passing-hash? (range)))))
 
 ;; Puzzle solutions
 (defn part1
