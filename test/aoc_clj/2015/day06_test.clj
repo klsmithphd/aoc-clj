@@ -8,9 +8,9 @@
                   "turn off 499,499 through 500,500"])
 
 (def d06-s00
-  [{:cmd :on     :start [0 0]     :end [999 999]}
-   {:cmd :toggle :start [0 0]     :end [999 0]}
-   {:cmd :off    :start [499 499] :end [500 500]}])
+  [{:cmd :on  :start [0 0]     :end [999 999]}
+   {:cmd :tog :start [0 0]     :end [999 0]}
+   {:cmd :off :start [499 499] :end [500 500]}])
 
 (deftest parse-test
   (testing "Correctly parses the input"
