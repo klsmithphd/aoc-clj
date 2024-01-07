@@ -2,66 +2,48 @@
   "Solution to https://adventofcode.com/2015/day/8"
   (:require [clojure.string :as str]))
 
-(def hex-pattern #"\\x[0-9a-f]{2}")
+;; Input parsing
 (def parse identity)
 
-(defn hex->str
-  [h]
-  (->> (str "0x" (subs h 2))
-       read-string
-       char
-       str))
+;; Puzzle logic
+(defn hex->unicode
+  "Takes a hex representation like `\\xNN` and changes it to a
+   Java/Clojure Unicode representation like `\\u00NN`"
+  [s]
+  (str "\\u00" (subs s 2)))
 
 (defn unescape
+  "Unescape the string"
   [s]
-  (let [news (-> s
-                 (str/replace hex-pattern #(hex->str %))
-                 (str/replace #"\\\"" "\"")
-                 (str/replace #"\\\\" "\\\\"))
-        len (count news)]
-    (subs news 1 (dec len))))
-
-(defn escape-fn
-  [c]
-  (case c
-    \" [\\ \"]
-    \\ [\\ \\]
-    [c]))
+  (read-string (str/replace s #"\\x[0-9a-f]{2}" #(hex->unicode %))))
 
 (defn escape
+  "Escape backslashes and double-quote characters and wrap in new double-quotes"
   [s]
-  (str/join (flatten [[\"]
-                      (mapcat escape-fn s)
-                      [\"]])))
-
-(escape "\"abc\"")
-
-(defn code-chars
-  [s]
-  (count s))
-
-(defn unescaped-chars
-  [s]
-  (count (unescape s)))
-
-(defn escaped-chars
-  [s]
-  (count (escape s)))
+  (let [new-s (-> s (str/replace "\\" "\\\\") (str/replace "\"" "\\\""))]
+    (str/join ["\"" new-s "\""])))
 
 (defn unescaped-difference
+  "The total difference in size between the code for the string literals
+   and the actual strings"
   [input]
-  (- (reduce + (map code-chars input))
-     (reduce + (map unescaped-chars input))))
+  (- (reduce + (map count input))
+     (reduce + (map (comp count unescape) input))))
 
 (defn escaped-difference
+  "The total difference in size between the re-escaped string literals
+   and the code for the string literals"
   [input]
-  (- (reduce + (map escaped-chars input))
-     (reduce + (map code-chars input))))
+  (- (reduce + (map (comp count escape) input))
+     (reduce + (map count input))))
 
+;; Puzzle solutions
 (defn part1
+  "Difference in size between unescaped and escaped strings"
   [input]
   (unescaped-difference input))
 
 (defn part2
+  "Difference in size between doubly escaped and escaped strings"
   [input]
   (escaped-difference input))
