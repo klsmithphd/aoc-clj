@@ -40,19 +40,17 @@
     (is [0 0 0 0 0 0 1 0]  (t/increment [0 0 0 0 0 0 0 25]))
     (is [1 0 0 0 0 0 0 0]  (t/increment [0 25 25 25 25 25 25 25]))))
 
-;; FIXME: 2015.day11 solution is too slow
-;; https://github.com/Ken-2scientists/aoc-clj/issues/3
-(deftest ^:slow next-valid-password-test
+(deftest next-valid-password-test
   (testing "Finds the next valid password"
     (is (= d11-s03-next (t/next-valid-password d11-s03)))
     (is (= d11-s04-next (t/next-valid-password d11-s04)))))
 
 (def day11-input (u/parse-puzzle-input t/parse 2015 11))
 
-(deftest ^:slow part1
+(deftest part1-test
   (testing "Reproduces the answer for day11, part1"
     (is (= "hxbxxyzz" (t/part1 day11-input)))))
 
-(deftest ^:slow part2
+(deftest part2-test
   (testing "Reproduces the answer for day11, part2"
     (is (= "hxcaabcc" (t/part2 day11-input)))))
