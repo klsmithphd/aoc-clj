@@ -45,6 +45,22 @@
     (is (= d11-s03-next (t/next-valid-password d11-s03)))
     (is (= d11-s04-next (t/next-valid-password d11-s04)))))
 
+(deftest next-without-disallowed-chars-test
+  (testing "Can increment the password the next potentially allowed
+            number if it contains disallowed chars"
+    (is (= "hjaaaaaa" (-> "hijklmn"
+                          t/str->nums
+                          t/next-without-disallowed-chars
+                          t/nums->str)))
+    (is (= "jaaaaaaa" (-> "ijklmnopq"
+                          t/str->nums
+                          t/next-without-disallowed-chars
+                          t/nums->str)))
+    (is (= "abcdefgh" (-> "abcdefgh"
+                          t/str->nums
+                          t/next-without-disallowed-chars
+                          t/nums->str)))))
+
 (def day11-input (u/parse-puzzle-input t/parse 2015 11))
 
 (deftest part1-test

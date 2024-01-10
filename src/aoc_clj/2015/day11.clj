@@ -1,6 +1,7 @@
 (ns aoc-clj.2015.day11
   "Solution to https://adventofcode.com/2015/day/11"
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [aoc-clj.utils.core :as u]))
 
 ;; Constants
 (def a-val 97)
@@ -124,6 +125,37 @@
 ;; Finally, if the leftmost 3 chars don't contain a triplet or a pair, figure
 ;; out to get to a sequence like aabcc in the last 5 places. This should
 ;; be determined by wheter char[3] < char[4] or char[3] >= char[4]
+
+(defn next-without-disallowed-chars
+  [nums]
+  (if-let [index (u/index-of disallowed nums)]
+    (into [] (concat (take index nums)
+                     [(inc (nth nums index))]
+                     (repeat (- 7 index) 0)))
+    nums))
+
+(def has-a-pair? identity)
+
+(def next-trip-pair identity)
+(def next-aabcc identity)
+
+(defn next-pairs
+  ;; There's actually a lot of nuance here --- this isn't capturing it all yet.
+  [[a b c d e f g h]]
+  (cond
+    (< e f) [a b c d f f 0 0]
+    (> e f) [a b c d e e 0 0]
+    :else   (if (< h g)
+              [a b c d e e g g]
+              [a b c d e e h h])))
+
+(defn next-password-fast
+  [nums]
+  (let [pw (next-without-disallowed-chars (increment nums))]
+    (cond
+      (increasing-triplet? (subvec pw 0 3)) (next-pairs pw)
+      (has-a-pair? (subvec pw 0 3))         (next-trip-pair pw)
+      :else                                 (next-aabcc pw))))
 
 ;; Puzzle solutions
 (defn part1
