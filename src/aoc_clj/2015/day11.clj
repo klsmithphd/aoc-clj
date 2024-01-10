@@ -98,6 +98,33 @@
        first
        nums->str))
 
+
+;; New approach
+;; Don't exhaustively search naively through single increments. Jump to the
+;; next solution based on the rules.
+
+;; First, increment the starting point by 1 just in case the input already
+;; satisfies the rules (you're looking for the *next* valid password)
+
+;; Then, check to see if any of the letters are disallowed. Increment the
+;; leftmost disallowed number by 1, and set ever letter to the right of it
+;; to 'a' (0). 
+
+;; Now, does the leftmost 3 characters satisfy the triplet condition?
+;; If so, we just need to find the next value that has two distinct pairs
+;; in the last 4 character slots. If char[4] < char[5], we need to increment
+;; to char[5] char[5] 0 0.  If char [4] >= char[5], we need to increment to
+;; char[4] char[4] 0 0.
+
+;; If the leftmost 3 chars don't contain a triplet, does it contain a pair?
+;; If so, figure out the next possible sequence of aabc up to xxyz that is
+;; reachable in the last four chars, such that aa or xx don't match the
+;; already available pair.
+
+;; Finally, if the leftmost 3 chars don't contain a triplet or a pair, figure
+;; out to get to a sequence like aabcc in the last 5 places. This should
+;; be determined by wheter char[3] < char[4] or char[3] >= char[4]
+
 ;; Puzzle solutions
 (defn part1
   "Finds the next valid password after the one provided as input"
