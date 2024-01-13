@@ -140,14 +140,15 @@
 (def next-aabcc identity)
 
 (defn next-pairs
-  ;; There's actually a lot of nuance here --- this isn't capturing it all yet.
-  [[a b c d e f g h]]
-  (cond
-    (< e f) [a b c d f f 0 0]
-    (> e f) [a b c d e e 0 0]
-    :else   (if (< h g)
-              [a b c d e e g g]
-              [a b c d e e h h])))
+  [[d0 d1 d2 d3 d4 d5 d6 d7 :as nums]]
+  (if (= d4 d5 d6 d7)
+    (next-pairs (increment nums))
+    (cond
+      (< d4 d5) [d0 d1 d2 d3 d5 d5 0 0]
+      (> d4 d5) [d0 d1 d2 d3 d4 d4 0 0]
+      :else (if (<= d7 d6)
+              [d0 d1 d2 d3 d4 d4 d6 d6]
+              [d0 d1 d2 d3 d4 d4 d7 d7]))))
 
 (defn next-password-fast
   [nums]

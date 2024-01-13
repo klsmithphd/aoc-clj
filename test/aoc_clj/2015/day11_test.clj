@@ -1,11 +1,11 @@
 (ns aoc-clj.2015.day11-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.2015.day11 :as t]))
+            [aoc-clj.2015.day11 :as d11]))
 
-(def d11-s00 (t/str->nums "hijklmmn"))
-(def d11-s01 (t/str->nums "abbceffg"))
-(def d11-s02 (t/str->nums "abbcegjk"))
+(def d11-s00 (d11/str->nums "hijklmmn"))
+(def d11-s01 (d11/str->nums "abbceffg"))
+(def d11-s02 (d11/str->nums "abbcegjk"))
 
 (def d11-s03      "abcdefgh")
 (def d11-s03-next "abcdffaa")
@@ -15,58 +15,81 @@
 
 (deftest rules-test
   (testing "Correctly applies valid password rules"
-    (is (t/increasing-straight?     d11-s00))
-    (is (not (t/no-disallowed?      d11-s00)))
-    (is (not (t/two-distinct-pairs? d11-s00)))
-    (is (not (t/valid-password?     d11-s00)))
+    (is (d11/increasing-straight?     d11-s00))
+    (is (not (d11/no-disallowed?      d11-s00)))
+    (is (not (d11/two-distinct-pairs? d11-s00)))
+    (is (not (d11/valid-password?     d11-s00)))
 
-    (is (not (t/increasing-straight? d11-s01)))
-    (is (t/no-disallowed?            d11-s01))
-    (is (t/two-distinct-pairs?       d11-s01))
-    (is (not (t/valid-password?      d11-s01)))
+    (is (not (d11/increasing-straight? d11-s01)))
+    (is (d11/no-disallowed?            d11-s01))
+    (is (d11/two-distinct-pairs?       d11-s01))
+    (is (not (d11/valid-password?      d11-s01)))
 
-    (is (not (t/increasing-straight? d11-s02)))
-    (is (t/no-disallowed?            d11-s02))
-    (is (not (t/two-distinct-pairs?  d11-s02)))
-    (is (not (t/valid-password?      d11-s02)))
+    (is (not (d11/increasing-straight? d11-s02)))
+    (is (d11/no-disallowed?            d11-s02))
+    (is (not (d11/two-distinct-pairs?  d11-s02)))
+    (is (not (d11/valid-password?      d11-s02)))
 
-    (is (t/valid-password? (t/str->nums d11-s03-next)))
-    (is (t/valid-password? (t/str->nums d11-s04-next)))))
+    (is (d11/valid-password? (d11/str->nums d11-s03-next)))
+    (is (d11/valid-password? (d11/str->nums d11-s04-next)))))
 
 (deftest increment-test
   (testing "Verifying that incrementing works correctly"
-    (is [0 0 0 0 0 0 0 1]  (t/increment [0 0 0 0 0 0 0 0]))
-    (is [0 0 0 0 0 0 0 25] (t/increment [0 0 0 0 0 0 0 24]))
-    (is [0 0 0 0 0 0 1 0]  (t/increment [0 0 0 0 0 0 0 25]))
-    (is [1 0 0 0 0 0 0 0]  (t/increment [0 25 25 25 25 25 25 25]))))
+    (is [0 0 0 0 0 0 0 1]  (d11/increment [0 0 0 0 0 0 0 0]))
+    (is [0 0 0 0 0 0 0 25] (d11/increment [0 0 0 0 0 0 0 24]))
+    (is [0 0 0 0 0 0 1 0]  (d11/increment [0 0 0 0 0 0 0 25]))
+    (is [1 0 0 0 0 0 0 0]  (d11/increment [0 25 25 25 25 25 25 25]))))
 
 (deftest next-valid-password-test
   (testing "Finds the next valid password"
-    (is (= d11-s03-next (t/next-valid-password d11-s03)))
-    (is (= d11-s04-next (t/next-valid-password d11-s04)))))
+    (is (= d11-s03-next (d11/next-valid-password d11-s03)))
+    (is (= d11-s04-next (d11/next-valid-password d11-s04)))))
 
 (deftest next-without-disallowed-chars-test
   (testing "Can increment the password the next potentially allowed
             number if it contains disallowed chars"
     (is (= "hjaaaaaa" (-> "hijklmn"
-                          t/str->nums
-                          t/next-without-disallowed-chars
-                          t/nums->str)))
+                          d11/str->nums
+                          d11/next-without-disallowed-chars
+                          d11/nums->str)))
     (is (= "jaaaaaaa" (-> "ijklmnopq"
-                          t/str->nums
-                          t/next-without-disallowed-chars
-                          t/nums->str)))
+                          d11/str->nums
+                          d11/next-without-disallowed-chars
+                          d11/nums->str)))
     (is (= "abcdefgh" (-> "abcdefgh"
-                          t/str->nums
-                          t/next-without-disallowed-chars
-                          t/nums->str)))))
+                          d11/str->nums
+                          d11/next-without-disallowed-chars
+                          d11/nums->str)))))
 
-(def day11-input (u/parse-puzzle-input t/parse 2015 11))
+(deftest next-pairs-test
+  (testing "Finds the next password with two distinct pairs"
+    (is (= "abcdffaa" (-> "abcdefgh"
+                          d11/str->nums
+                          d11/next-pairs
+                          d11/nums->str)))
+    (is (= "abcdffaa" (-> "abcdfeba"
+                          d11/str->nums
+                          d11/next-pairs
+                          d11/nums->str)))
+    (is (= "abcdffbb" (-> "abcdffab"
+                          d11/str->nums
+                          d11/next-pairs
+                          d11/nums->str)))
+    (is (= "abcdffgg" (-> "abcdffff"
+                          d11/str->nums
+                          d11/next-pairs
+                          d11/nums->str)))
+    (is (= "abceaabb" (-> "abcdzzzz"
+                          d11/str->nums
+                          d11/next-pairs
+                          d11/nums->str)))))
+
+(def day11-input (u/parse-puzzle-input d11/parse 2015 11))
 
 (deftest part1-test
   (testing "Reproduces the answer for day11, part1"
-    (is (= "hxbxxyzz" (t/part1 day11-input)))))
+    (is (= "hxbxxyzz" (d11/part1 day11-input)))))
 
 (deftest part2-test
   (testing "Reproduces the answer for day11, part2"
-    (is (= "hxcaabcc" (t/part2 day11-input)))))
+    (is (= "hxcaabcc" (d11/part2 day11-input)))))
