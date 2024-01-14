@@ -52,6 +52,13 @@
     (is (= "jaaaaaaa" (d11/nums-fn d11/next-wo-disallowed-chars "ijklmnop")))
     (is (= "abcdefgh" (d11/nums-fn d11/next-wo-disallowed-chars "abcdefgh")))))
 
+(deftest next-aabcc-test
+  (testing "Can skip ahead to the next valid aabcc-style pattern"
+    (is (= "hacaabcc" (d11/nums-fn d11/next-aabcc "habxxzzz")))
+    (is (= "habxxyzz" (d11/nums-fn d11/next-aabcc "habxxyzz")))
+    (is (= "habbbcdd" (d11/nums-fn d11/next-aabcc "habaabcd")))
+    (is (= "ghjaabcc" (d11/nums-fn d11/next-aabcc "ghjaaaaa")))))
+
 (def day11-input (u/parse-puzzle-input d11/parse 2015 11))
 
 (deftest part1-test
