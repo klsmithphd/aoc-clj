@@ -52,24 +52,6 @@
     (is (= "jaaaaaaa" (d11/nums-fn d11/next-wo-disallowed-chars "ijklmnop")))
     (is (= "abcdefgh" (d11/nums-fn d11/next-wo-disallowed-chars "abcdefgh")))))
 
-(deftest next-pairs-test
-  (testing "Finds the next password with two distinct pairs"
-    (is (= "abcdffaa" (d11/nums-fn d11/next-pairs "abcdefgh")))
-    (is (= "abcdffaa" (d11/nums-fn d11/next-pairs "abcdfeba")))
-    (is (= "abcdffbb" (d11/nums-fn d11/next-pairs "abcdffab")))
-    (is (= "abcdffgg" (d11/nums-fn d11/next-pairs "abcdffff")))
-    (is (= "abceaabb" (d11/nums-fn d11/next-pairs "abcdzzzz")))))
-
-(deftest next-trip-pair-test
-  (testing "Finds the next password that has a pair-triplet sequence"
-    (is (= "aacdabcc" (d11/nums-fn d11/next-trip-pair "aacdaazz")))
-    (is (= "ddcdabcc" (d11/nums-fn d11/next-trip-pair "ddcdaazz")))
-    (is (= "ddcdaabc" (d11/nums-fn d11/next-trip-pair "ddcdaaaa")))
-    (is (= "ddcdbbcd" (d11/nums-fn d11/next-trip-pair "ddcdaabd")))
-    (is (= "xxddaabc" (d11/nums-fn d11/next-trip-pair "xxdcxxxx")))))
-
-(d11/next-valid-password "aacdaazz")
-
 (def day11-input (u/parse-puzzle-input d11/parse 2015 11))
 
 (deftest part1-test

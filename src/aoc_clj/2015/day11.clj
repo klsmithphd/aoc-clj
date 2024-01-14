@@ -8,6 +8,9 @@
 (def rightmost-index
   "The passwords are all 8 chars long, so the rightmost index is 7"
   7)
+(def x 23)
+(def y 24)
+(def z 25)
 (def alphabet-length 26)
 
 ;; Input parsing
@@ -34,6 +37,13 @@
   [nums]
   (str/join (map int->char nums)))
 
+(defn nums-fn
+  "Converts the `password` string to the numeric representation,
+   applies `f` to the numeric representation, and converts back to the string
+   representation"
+  [f password]
+  (-> password str->nums f nums->str))
+
 (defn increasing-triplet?
   "Whether the three values are consecutively increasing"
   [[a b c]]
@@ -50,6 +60,10 @@
   "Whether the pair matches"
   [[a b]]
   (= a b))
+
+(defn has-a-pair?
+  [[d0 d1 d2]]
+  (or (= d0 d1) (= d1 d2)))
 
 (defn two-distinct-pairs?
   "Are there at least two distinct matching pairs in the set"
@@ -85,50 +99,6 @@
       (recur (dec index)
              (assoc nums index 0)))))
 
-(defn next-password
-  "Increment the password by exactly one character"
-  [password]
-  (-> password str->nums increment nums->str))
-
-(defn next-valid-password
-  "Scans through password values until finding one that satisfies the criteria"
-  [password]
-  (->> (str->nums password)
-       (iterate increment)
-       (filter valid-password?)
-       first
-       nums->str))
-
-(defn nums-fn
-  [f password]
-  (-> password str->nums f nums->str))
-
-;; New approach
-;; Don't exhaustively search naively through single increments. Jump to the
-;; next solution based on the rules.
-
-;; First, increment the starting point by 1 just in case the input already
-;; satisfies the rules (you're looking for the *next* valid password)
-
-;; Then, check to see if any of the letters are disallowed. Increment the
-;; leftmost disallowed number by 1, and set ever letter to the right of it
-;; to 'a' (0). 
-
-;; Now, does the leftmost 3 characters satisfy the triplet condition?
-;; If so, we just need to find the next value that has two distinct pairs
-;; in the last 4 character slots. If char[4] < char[5], we need to increment
-;; to char[5] char[5] 0 0.  If char [4] >= char[5], we need to increment to
-;; char[4] char[4] 0 0.
-
-;; If the leftmost 3 chars don't contain a triplet, does it contain a pair?
-;; If so, figure out the next possible sequence of aabc up to xxyz that is
-;; reachable in the last four chars, such that aa or xx don't match the
-;; already available pair.
-
-;; Finally, if the leftmost 3 chars don't contain a triplet or a pair, figure
-;; out to get to a sequence like aabcc in the last 5 places. This should
-;; be determined by wheter char[3] < char[4] or char[3] >= char[4]
-
 (defn next-wo-disallowed-chars
   "Returns the next password number sequence that doesn't contain
    any disallowed characters."
@@ -139,63 +109,56 @@
                      (repeat (- 7 index) 0)))
     nums))
 
-
-(def next-aabcc identity)
-
-(defn next-pairs
-  "Returns the next sequence that has two distinct, non-overlapping pairs
-   in the last four digits"
+(defn next-aabcc
+  "Returns the next eight-digit sequence that has an `aabcc` pattern in 
+   the lowest digits, i.e. a pattern that consists of two pairs sandwiching
+   a 3-digit increasing straight"
   [[d0 d1 d2 d3 d4 d5 d6 d7 :as nums]]
-  (if (= d4 d5 d6 d7)
-    (next-pairs (increment nums))
-    (cond
-      (< d4 d5) [d0 d1 d2 d3 d5 d5 0 0]
-      (> d4 d5) [d0 d1 d2 d3 d4 d4 0 0]
-      :else (if (<= d7 d6)
-              [d0 d1 d2 d3 d4 d4 d6 d6]
-              [d0 d1 d2 d3 d4 d4 d7 d7]))))
-
-(defn has-a-pair?
-  [[d0 d1 d2]]
-  (or (= d0 d1) (= d1 d2)))
-
-(defn next-trip
-  [nums]
-  nums)
-
-(defn next-trip-pair
-  "Returns the next sequence that has a triplet-pair sequence, either
-   aabc or abcc"
-  [[d0 d1 d2 d3 d4 d5 d6 d7 :as nums]]
-  (case (compare [d4 d5 d6 d7] [23 23 24 25])
-    1  [d0 d1 d2 (inc d3) 0 0 1 2]
+  ;; Check whether the last five chars are past xxyzz
+  (case (compare [d3 d4 d5 d6 d7] [x x y z z])
+    ;; If past xxyzz, the next option is aabcc, with the char before inc'd
+    1  [d0 d1 (inc d2) 0 0 1 2 2]
+    ;; If exactly xxyzz, then we hava a valid password
     0  nums
-    -1 (let [pair (if (= d0 d1) d0 d1)
-             base (max d4 d5)]
-         (if (= pair base)
-           (next-trip-pair [d0 d1 d2 d3 (inc base) (inc base) 0 0])
-           (if (and (<= d6 (+ base 1)) (<= d7 (+ base 2)))
-             [d0 d1 d2 d3 base base (+ base 1) (+ base 2)]
-             [d0 d1 d2 d3 (+ base 1) (+ base 1) (+ base 2) (+ base 3)])))))
+    ;; If less than xxyzz, then we can jump to the next aabcc option to try
+    -1 (let [a (max d3 d4)
+             b (inc a)
+             c (inc b)]
+         (if (= 1 (compare [d5 d6 d7] [b c c]))
+           ;; If the last three digits are already past bcc, we need to bump a
+           ;; and try the next option
+           (next-aabcc [d0 d1 d2 b b 0 0 0])
+           ;; Else, we can return the aabcc pattern
+           [d0 d1 d2 a a b c c]))))
 
-(defn next-password-fast
+(defn increment-fast
+  "Exploit the fact that if there's no triplet or pair in the first three chars,
+   then we can jump past a lot of options to find the sequence aabcc, as this
+   is sequence is required to meet the two distinct pairs and increasing
+   straight requirement
+   
+   Other optimizations are possible, but this is the minimum one needed
+   to make the solution not take forever."
   [nums]
-  (let [pw (next-wo-disallowed-chars (increment nums))]
-    (cond
-      ;; If the first three digits are a triplet, we only need to find
-      ;; the next distinct pairs
-      (increasing-triplet? (subvec pw 0 3)) (next-pairs pw)
-      ;; If the first four digits contain two pairs, only need to find the
-      ;; next increasing triplet
-      (two-distinct-pairs? (subvec pw 0 4)) (next-trip pw)
-      ;; The first three digits contain a pair, we only need to find the
-      ;; next pair-triplet sequence (aabc to xxyz)
-      (has-a-pair? (subvec pw 0 3))         (next-trip-pair pw)
-      ;; Finally, if all else fails, we need to find the next pair-triplet-pair
-      ;; sequence (aabcc to xxyzz)
-      :else                                 (next-aabcc pw))))
+  (let [new-nums (next-wo-disallowed-chars (increment nums))]
+    (if (and (not (increasing-triplet? (subvec new-nums 0 3)))
+             (not (has-a-pair? (subvec new-nums 0 3))))
+      (next-aabcc new-nums)
+      new-nums)))
 
-(compare [7 7 9 0] [7 7 9 0])
+(defn next-password
+  "Increment the password by exactly one character"
+  [password]
+  (nums-fn increment password))
+
+(defn next-valid-password
+  "Scans through password values until finding one that satisfies the criteria"
+  [password]
+  (->> (str->nums password)
+       (iterate increment-fast)
+       (filter valid-password?)
+       first
+       nums->str))
 
 ;; Puzzle solutions
 (defn part1
