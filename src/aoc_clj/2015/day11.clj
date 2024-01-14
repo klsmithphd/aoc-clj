@@ -99,6 +99,9 @@
        first
        nums->str))
 
+(defn nums-fn
+  [f password]
+  (-> password str->nums f nums->str))
 
 ;; New approach
 ;; Don't exhaustively search naively through single increments. Jump to the
@@ -126,7 +129,9 @@
 ;; out to get to a sequence like aabcc in the last 5 places. This should
 ;; be determined by wheter char[3] < char[4] or char[3] >= char[4]
 
-(defn next-without-disallowed-chars
+(defn next-wo-disallowed-chars
+  "Returns the next password number sequence that doesn't contain
+   any disallowed characters."
   [nums]
   (if-let [index (u/index-of disallowed nums)]
     (into [] (concat (take index nums)
@@ -134,12 +139,12 @@
                      (repeat (- 7 index) 0)))
     nums))
 
-(def has-a-pair? identity)
 
-(def next-trip-pair identity)
 (def next-aabcc identity)
 
 (defn next-pairs
+  "Returns the next sequence that has two distinct, non-overlapping pairs
+   in the last four digits"
   [[d0 d1 d2 d3 d4 d5 d6 d7 :as nums]]
   (if (= d4 d5 d6 d7)
     (next-pairs (increment nums))
@@ -150,13 +155,47 @@
               [d0 d1 d2 d3 d4 d4 d6 d6]
               [d0 d1 d2 d3 d4 d4 d7 d7]))))
 
+(defn has-a-pair?
+  [[d0 d1 d2]]
+  (or (= d0 d1) (= d1 d2)))
+
+(defn next-trip
+  [nums]
+  nums)
+
+(defn next-trip-pair
+  "Returns the next sequence that has a triplet-pair sequence, either
+   aabc or abcc"
+  [[d0 d1 d2 d3 d4 d5 d6 d7 :as nums]]
+  (case (compare [d4 d5 d6 d7] [23 23 24 25])
+    1  [d0 d1 d2 (inc d3) 0 0 1 2]
+    0  nums
+    -1 (let [pair (if (= d0 d1) d0 d1)
+             base (max d4 d5)]
+         (if (= pair base)
+           (next-trip-pair [d0 d1 d2 d3 (inc base) (inc base) 0 0])
+           (if (and (<= d6 (+ base 1)) (<= d7 (+ base 2)))
+             [d0 d1 d2 d3 base base (+ base 1) (+ base 2)]
+             [d0 d1 d2 d3 (+ base 1) (+ base 1) (+ base 2) (+ base 3)])))))
+
 (defn next-password-fast
   [nums]
-  (let [pw (next-without-disallowed-chars (increment nums))]
+  (let [pw (next-wo-disallowed-chars (increment nums))]
     (cond
+      ;; If the first three digits are a triplet, we only need to find
+      ;; the next distinct pairs
       (increasing-triplet? (subvec pw 0 3)) (next-pairs pw)
+      ;; If the first four digits contain two pairs, only need to find the
+      ;; next increasing triplet
+      (two-distinct-pairs? (subvec pw 0 4)) (next-trip pw)
+      ;; The first three digits contain a pair, we only need to find the
+      ;; next pair-triplet sequence (aabc to xxyz)
       (has-a-pair? (subvec pw 0 3))         (next-trip-pair pw)
+      ;; Finally, if all else fails, we need to find the next pair-triplet-pair
+      ;; sequence (aabcc to xxyzz)
       :else                                 (next-aabcc pw))))
+
+(compare [7 7 9 0] [7 7 9 0])
 
 ;; Puzzle solutions
 (defn part1

@@ -48,41 +48,27 @@
 (deftest next-without-disallowed-chars-test
   (testing "Can increment the password the next potentially allowed
             number if it contains disallowed chars"
-    (is (= "hjaaaaaa" (-> "hijklmn"
-                          d11/str->nums
-                          d11/next-without-disallowed-chars
-                          d11/nums->str)))
-    (is (= "jaaaaaaa" (-> "ijklmnopq"
-                          d11/str->nums
-                          d11/next-without-disallowed-chars
-                          d11/nums->str)))
-    (is (= "abcdefgh" (-> "abcdefgh"
-                          d11/str->nums
-                          d11/next-without-disallowed-chars
-                          d11/nums->str)))))
+    (is (= "hjaaaaaa" (d11/nums-fn d11/next-wo-disallowed-chars "hijklmno")))
+    (is (= "jaaaaaaa" (d11/nums-fn d11/next-wo-disallowed-chars "ijklmnop")))
+    (is (= "abcdefgh" (d11/nums-fn d11/next-wo-disallowed-chars "abcdefgh")))))
 
 (deftest next-pairs-test
   (testing "Finds the next password with two distinct pairs"
-    (is (= "abcdffaa" (-> "abcdefgh"
-                          d11/str->nums
-                          d11/next-pairs
-                          d11/nums->str)))
-    (is (= "abcdffaa" (-> "abcdfeba"
-                          d11/str->nums
-                          d11/next-pairs
-                          d11/nums->str)))
-    (is (= "abcdffbb" (-> "abcdffab"
-                          d11/str->nums
-                          d11/next-pairs
-                          d11/nums->str)))
-    (is (= "abcdffgg" (-> "abcdffff"
-                          d11/str->nums
-                          d11/next-pairs
-                          d11/nums->str)))
-    (is (= "abceaabb" (-> "abcdzzzz"
-                          d11/str->nums
-                          d11/next-pairs
-                          d11/nums->str)))))
+    (is (= "abcdffaa" (d11/nums-fn d11/next-pairs "abcdefgh")))
+    (is (= "abcdffaa" (d11/nums-fn d11/next-pairs "abcdfeba")))
+    (is (= "abcdffbb" (d11/nums-fn d11/next-pairs "abcdffab")))
+    (is (= "abcdffgg" (d11/nums-fn d11/next-pairs "abcdffff")))
+    (is (= "abceaabb" (d11/nums-fn d11/next-pairs "abcdzzzz")))))
+
+(deftest next-trip-pair-test
+  (testing "Finds the next password that has a pair-triplet sequence"
+    (is (= "aacdabcc" (d11/nums-fn d11/next-trip-pair "aacdaazz")))
+    (is (= "ddcdabcc" (d11/nums-fn d11/next-trip-pair "ddcdaazz")))
+    (is (= "ddcdaabc" (d11/nums-fn d11/next-trip-pair "ddcdaaaa")))
+    (is (= "ddcdbbcd" (d11/nums-fn d11/next-trip-pair "ddcdaabd")))
+    (is (= "xxddaabc" (d11/nums-fn d11/next-trip-pair "xxdcxxxx")))))
+
+(d11/next-valid-password "aacdaazz")
 
 (def day11-input (u/parse-puzzle-input d11/parse 2015 11))
 
