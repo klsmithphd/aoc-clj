@@ -62,6 +62,7 @@
   (= a b))
 
 (defn has-a-pair?
+  "Is there a matching pair among the first 3 characters?"
   [[d0 d1 d2]]
   (or (= d0 d1) (= d1 d2)))
 
@@ -140,9 +141,10 @@
    Other optimizations are possible, but this is the minimum one needed
    to make the solution not take forever."
   [nums]
-  (let [new-nums (next-wo-disallowed-chars (increment nums))]
-    (if (and (not (increasing-triplet? (subvec new-nums 0 3)))
-             (not (has-a-pair? (subvec new-nums 0 3))))
+  (let [new-nums (next-wo-disallowed-chars (increment nums))
+        first-three (subvec new-nums 0 3)]
+    (if (and (not (increasing-triplet? first-three))
+             (not (has-a-pair? first-three)))
       (next-aabcc new-nums)
       new-nums)))
 
