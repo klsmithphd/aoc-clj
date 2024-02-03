@@ -1,44 +1,54 @@
 (ns aoc-clj.2015.day14
   "Solution to https://adventofcode.com/2015/day/14"
-  (:require [clojure.string :as str]))
+  (:require [aoc-clj.utils.core :as u]))
 
+;; Input parsing
 (defn parse-line
   [line]
-  (let [bits (str/split line #" ")
-        reindeer (nth bits 0)
-        speed (read-string  (nth bits 3))
-        fly-duration (read-string (nth bits 6))
-        rest-duration (read-string (nth bits 13))]
-    [reindeer {:speed speed :fly fly-duration :rest rest-duration}]))
+  (let [[speed fly-time rest-time] (map read-string (re-seq #"\d+" line))]
+    {:speed speed :fly fly-time :span (+ fly-time rest-time)}))
 
 (defn parse
   [input]
-  (into {} (map parse-line input)))
+  (map parse-line input))
 
-
-(defn distance-at-time
-  [time {:keys [speed fly rest]}]
-  (let [span (+ fly rest)
-        intervals (quot time span)
-        remainder (min fly (- time (* intervals span)))]
+;; Puzzle logic
+(defn position
+  "Position of a single reindeer at a given `time`"
+  [time {:keys [speed fly span]}]
+  (let [intervals (quot time span)
+        remainder (min fly (rem time span))]
     (+ (* intervals fly speed) (* remainder speed))))
 
-(defn score
+(defn positions
+  "Positions of all reindeer at a given `time`"
+  [time reindeers]
+  (map #(position time %) reindeers))
+
+(defn points
+  "Computes the points allocated to each reindeer, where any reindeer in the
+   lead get 1, and everyone else gets 0"
   [positions]
   (let [lead (apply max positions)]
-    (mapv #(if (= lead %) 1 0) positions)))
+    (map #(if (= lead %) 1 0) positions)))
 
-(defn points-at-time
+(defn cumulative_points
+  "Constructs the number of points each reindeer has accumulated as of `time`"
   [time stats]
-  (let [times (range 1 (inc time))
-        positions (mapv (fn [t] (mapv #(distance-at-time t %) (vals stats))) times)
-        scores (apply (partial map vector) (map score positions))]
-    (mapv (partial reduce +) scores)))
+  (let [times     (range 1 (inc time))
+        ;; "Rows" are times, "Columns" are reindeer positions
+        positions (mapv #(positions % stats) times)
+        ;; "Rows" are reindeer, "Columns" are scores at each time
+        scores    (u/transpose (map points positions))]
+    (map (partial reduce +) scores)))
 
+;; Puzzle solutions
 (defn part1
+  "Distance that the winning reindeer traveled after exactly 2503 seconds"
   [input]
-  (apply max (map (partial distance-at-time 2503) (vals input))))
+  (apply max (map (partial position 2503) input)))
 
 (defn part2
+  "Maximum number of points any reindeer has accumulated after 2503 seconds"
   [input]
-  (apply max (points-at-time 2503 input)))
+  (apply max (cumulative_points 2503 input)))

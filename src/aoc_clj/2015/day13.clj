@@ -53,7 +53,7 @@
    the clockwise/counter-clockwise orderings around the table are equivalent"
   [prefs]
   (let [guests (keys prefs)]
-    (map #(into [(first guests)] %) (combo/permutations (rest guests)))))
+    (map #(concat [(first guests)] %) (combo/permutations (rest guests)))))
 
 (defn max-happiness
   "Find the maximum happiness of any possible configuration of guests"
