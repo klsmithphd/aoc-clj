@@ -1,63 +1,75 @@
 (ns aoc-clj.2015.day15
-  "Solution to https://adventofcode.com/2015/day/15"
-  (:require [clojure.string :as str]))
+  "Solution to https://adventofcode.com/2015/day/15")
 
+;; Constants
+(def max-teaspoons 100)
+
+;; Input parsing
 (defn parse-line
   [line]
-  (let [[ingredient props] (str/split line #": ")
-        pairs (map str/trim (str/split props #","))
-        data (mapv (fn [x]
-                     (let [[_ v] (str/split x #" ")]
-                       (read-string v))) pairs)]
-    [ingredient data]))
+  (mapv read-string (re-seq #"-?\d+" line)))
 
 (defn parse
   [input]
-  (into {} (mapv parse-line input)))
+  (mapv parse-line input))
 
-(def max-teaspoons 100)
+;; Puzzle logic
+(defn score-vec
+  "Computes the score component vector, where each element is the sum of 
+   the products of each ingredient property and the quantity of that
+   ingredient"
+  [ingredients quantities]
+  (->> (map #(map (partial * %2) %1) ingredients quantities)
+       (apply (partial map +))
+       (map #(if (neg? %) 0 %))))
 
 (defn score
-  [props amounts]
-  (let [foo (map (fn [[_ v1] v2]
-                   (mapv (partial * v2) v1)) props amounts)
-        bar (apply (partial map +) foo)
-        baz (map #(if (neg? %) 0 %) bar)]
-    (reduce * (take 4 baz))))
+  "The score is the product of the first four properties"
+  [score-vec]
+  (->> score-vec (take 4) (reduce *)))
 
-(defn score-with-500cal
-  [props amounts]
-  (let [foo (map (fn [[_ v1] v2]
-                   (mapv (partial * v2) v1)) props amounts)
-        bar (apply (partial map +) foo)
-        baz (map #(if (neg? %) 0 %) bar)]
-    (if (not= 500 (nth baz 4))
-      0
-      (reduce * (take 4 baz)))))
+(defn five-hundred-cal?
+  "Returns true if this combination results in exactly 500 calories"
+  [[_ _ _ _ cals]]
+  (= 500 cals))
 
 (defn all-options
-  [total vars]
-  (if (= 2 vars)
-    (if (zero? total)
-      [(repeat vars 0)]
-      (map #(list (- total %) %) (range (inc total))))
-    (mapcat (fn [x]
-              (mapv #(concat [(- total x)] %)
-                    (all-options x (dec vars))))
-            (range (inc total)))))
+  "Returns a sequence of all possible combinations of `n` items that sum
+   to `total`"
+  [total n]
+  ;; sub-options is a function that "pins" the first value as total minus x
+  ;; and computes all combinations for the remaining values that sum to x
+  (letfn [(sub-options [x]
+            (mapv #(concat [(- total x)] %) (all-options x (dec n))))]
+    (if (= 2 n)
+      (map #(vector (- total %) %) (range (inc total)))
+      (mapcat sub-options (range (inc total))))))
 
-(defn find-max-score
-  [score-fn input]
-  (let [vars (count (keys input))
-        opts (all-options max-teaspoons vars)]
-    (apply max-key (partial score-fn input) opts)))
+(defn max-score
+  "Computes the maximum possible score for the given ingredients. If
+   `cal-constraint` is `true`, only combinations that have exactly 500
+   calories will be considered"
+  [ingredients cal-constraint]
+  (->>
+   ;; Generate all valid options for the quantities of each ingredient
+   (all-options max-teaspoons (count ingredients))
+   ;; Compute the score component vector for each option
+   (map #(score-vec ingredients %))
+   ;; If `cal-constraint` is true, restrict to options that have 500 calories
+   (filter (if cal-constraint five-hundred-cal? identity))
+   ;; Compute the final score
+   (map score)
+   ;; Select the maximum
+   (apply max)))
 
+;; Puzzle solutions
 (defn part1
+  "Computes the maximum cookie score for the given ingredients"
   [input]
-  (let [best-combo (find-max-score score input)]
-    (score input best-combo)))
+  (max-score input false))
 
 (defn part2
+  "Computes the maximum cookie score for the given ingredients with the 
+   restriction that the cookies must have exactly 500 calories"
   [input]
-  (let [best-combo (find-max-score score-with-500cal input)]
-    (score input best-combo)))
+  (max-score input true))
