@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day14
   "Solution to https://adventofcode.com/2015/day/14"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.utils.vectors :as v]))
 
 ;; Input parsing
 (defn parse-line
@@ -34,13 +34,10 @@
 
 (defn cumulative_points
   "Constructs the number of points each reindeer has accumulated as of `time`"
-  [time stats]
-  (let [times     (range 1 (inc time))
-        ;; "Rows" are times, "Columns" are reindeer positions
-        positions (mapv #(positions % stats) times)
-        ;; "Rows" are reindeer, "Columns" are scores at each time
-        scores    (u/transpose (map points positions))]
-    (map (partial reduce +) scores)))
+  [time reindeers]
+  (->> (range 1 (inc time))
+       (map #(points (positions % reindeers)))
+       v/vec-sum))
 
 ;; Puzzle solutions
 (defn part1

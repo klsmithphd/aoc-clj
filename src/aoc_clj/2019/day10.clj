@@ -1,7 +1,7 @@
 (ns aoc-clj.2019.day10
   "Solution to https://adventofcode.com/2019/day/10"
   (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.utils.vectors :as v]))
 
 (defn parse
   [ascii-asteroids]
@@ -67,7 +67,7 @@
 
 (defn sort-by-distance
   [x others]
-  (sort-by (partial math/manhattan x) others))
+  (sort-by (partial v/manhattan x) others))
 
 (defn pad-coll
   [size coll]

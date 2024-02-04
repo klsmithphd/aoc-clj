@@ -1,30 +1,5 @@
 (ns aoc-clj.utils.math
-  (:require [clojure.math :as m]))
-
-(defn manhattan
-  "Computes the Manhattan distance (L1 norm) between two vectors"
-  [v1 v2]
-  (->> (map (comp abs -) v2 v1)
-       (reduce +)))
-
-(defn euclidean
-  "Computes the Euclidean distance (L2 norm) between two vectors"
-  [v1 v2]
-  (->> (map #(m/pow (- %2 %1) 2) v1 v2)
-       (reduce +)
-       m/sqrt))
-
-(defn l1-norm
-  "Computes the L1 norm of a vector"
-  [v]
-  (reduce + (map abs v)))
-
-(defn l2-norm
-  "Computes the L2 norm of a vector"
-  [v]
-  (->> (map #(m/pow % 2) v)
-       (reduce +)
-       (m/sqrt)))
+  "Mathematical helper utilities")
 
 (defn gcd
   "Greatest common divisor between a and b"

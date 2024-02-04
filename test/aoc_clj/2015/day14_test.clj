@@ -20,7 +20,7 @@
     (is (= 1120 (d14/position 1000 (nth d14-s00 0))))
     (is (= 1056 (d14/position 1000 (nth d14-s00 1))))))
 
-(deftest points-test
+(deftest cumulative-points-test
   (testing "Finds the points scored by each reindeer after 1000 seconds"
     (is (= [312 689] (d14/cumulative_points 1000 d14-s00)))))
 

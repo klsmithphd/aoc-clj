@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day01
   "Solution to https://adventofcode.com/2016/day/1"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.utils.vectors :as v]))
 
 (defn parse-cmd
   [cmd]
@@ -37,7 +37,7 @@
 
 (defn distance
   [steps]
-  (-> steps move :pos (math/manhattan [0 0])))
+  (-> steps move :pos (v/manhattan [0 0])))
 
 (defn all-steps
   [{:keys [visited heading]} {:keys [dir dist]}]
@@ -66,7 +66,7 @@
 
 (defn distance-to-first-duplicate
   [steps]
-  (-> steps all-visited :visited first-duplicate (math/manhattan [0 0])))
+  (-> steps all-visited :visited first-duplicate (v/manhattan [0 0])))
 
 (defn part1
   [input]

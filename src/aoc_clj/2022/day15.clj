@@ -2,14 +2,14 @@
   "Solution to https://adventofcode.com/2022/day/15"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.intervals :as ivs]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.utils.vectors :as v]))
 
 ;;;; Input parsing
 
 (defn parse-line
   [line]
   (let [[x y bx by] (map read-string (re-seq #"\-?\d+" line))]
-    {:sensor [x y] :beacon [bx by] :radius (math/manhattan [x y] [bx by])}))
+    {:sensor [x y] :beacon [bx by] :radius (v/manhattan [x y] [bx by])}))
 
 (defn parse
   [input]
@@ -45,7 +45,7 @@
 
 (defn sensor-gap
   [s1 s2]
-  (- (math/manhattan (:sensor s1) (:sensor s2))
+  (- (v/manhattan (:sensor s1) (:sensor s2))
      (:radius s1)
      (:radius s2)))
 

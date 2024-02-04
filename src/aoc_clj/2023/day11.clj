@@ -3,7 +3,7 @@
             [clojure.set :as set]
             [aoc-clj.utils.grid :as grid :refer [height width value]]
             [aoc-clj.utils.grid.vecgrid :as vg]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.utils.vectors :as v]))
 
 (def charmap {\. :empty \# :galaxy})
 
@@ -53,7 +53,7 @@
    n*(n-1)/2 pairs of points"
   [locs]
   (->> (combo/combinations locs 2)
-       (map #(apply math/manhattan %))
+       (map #(apply v/manhattan %))
        (reduce +)))
 
 (defn part1

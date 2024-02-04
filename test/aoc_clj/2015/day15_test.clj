@@ -37,6 +37,11 @@
                                 [0 2 0 0] [0 1 1 0] [0 1 0 1]
                                 [0 0 2 0] [0 0 1 1] [0 0 0 2]]))))
 
+(deftest max-score-test
+  (testing "Finds the maximum score for all combinations"
+    (is (= 62842880 (t/max-score d15-s00 false)))
+    (is (= 57600000 (t/max-score d15-s00 true)))))
+
 (def day15-input (u/parse-puzzle-input t/parse 2015 15))
 
 (deftest part1-test

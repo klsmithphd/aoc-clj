@@ -1,7 +1,7 @@
 (ns aoc-clj.utils.geometry
   "Utility functions for dealing with polygonal geometry"
-  (:require [aoc-clj.utils.math :as math]
-            [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.vectors :as v]))
 
 (defn vertices->edges
   "Take an ordered collection of the vertices and return a collection of all 
@@ -14,7 +14,7 @@
   "Given the vertices of a polygon, compute the distance"
   [edges]
   (->> edges
-       (map #(apply math/euclidean %))
+       (map #(apply v/euclidean %))
        (reduce +)))
 
 (defn shoelace-step

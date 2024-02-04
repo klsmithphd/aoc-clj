@@ -3,7 +3,8 @@
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
             [aoc-clj.utils.grid :as grid]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.utils.math :as math]
+            [aoc-clj.utils.vectors :as v]))
 
 ;;;; Constants
 
@@ -96,7 +97,7 @@
 (defn heuristic
   [location]
   (fn [[_ pos]]
-    (math/manhattan pos location)))
+    (v/manhattan pos location)))
 
 (defn find-path
   "Use the A* algorithm to find the shortest path from the start to
