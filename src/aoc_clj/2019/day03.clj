@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2019/day/3"
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.utils.vectors :as v]))
 
 (defn parse-segment
   [segment]
@@ -52,7 +52,7 @@
    each described by their segments"
   [wires]
   (->> (intersections wires)
-       (map (partial math/manhattan [0 0]))
+       (map (partial v/manhattan [0 0]))
        sort
        ;; we take second because [0 0] is in the set
        second))

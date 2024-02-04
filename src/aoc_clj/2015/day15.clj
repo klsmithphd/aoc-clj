@@ -1,8 +1,10 @@
 (ns aoc-clj.2015.day15
-  "Solution to https://adventofcode.com/2015/day/15")
+  "Solution to https://adventofcode.com/2015/day/15"
+  (:require [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
 (def max-teaspoons 100)
+(def calorie-limit 500)
 
 ;; Input parsing
 (defn parse-line
@@ -19,8 +21,8 @@
    the products of each ingredient property and the quantity of that
    ingredient"
   [ingredients quantities]
-  (->> (map #(map (partial * %2) %1) ingredients quantities)
-       (apply (partial map +))
+  (->> (map v/scalar-mult ingredients quantities)
+       v/vec-sum
        (map #(if (neg? %) 0 %))))
 
 (defn score
@@ -31,32 +33,30 @@
 (defn five-hundred-cal?
   "Returns true if this combination results in exactly 500 calories"
   [[_ _ _ _ cals]]
-  (= 500 cals))
+  (= calorie-limit cals))
 
 (defn all-options
   "Returns a sequence of all possible combinations of `n` items that sum
    to `total`"
   [total n]
-  ;; sub-options is a function that "pins" the first value as total minus x
-  ;; and computes all combinations for the remaining values that sum to x
-  (letfn [(sub-options [x]
-            (mapv #(concat [(- total x)] %) (all-options x (dec n))))]
-    (if (= 2 n)
-      (map #(vector (- total %) %) (range (inc total)))
-      (mapcat sub-options (range (inc total))))))
+  (if (= 2 n)
+    (map #(vector (- total %) %) (range (inc total)))
+    (for [x (range (inc total))
+          sub-option (all-options x (dec n))]
+      (concat [(- total x)] sub-option))))
 
 (defn max-score
   "Computes the maximum possible score for the given ingredients. If
-   `cal-constraint` is `true`, only combinations that have exactly 500
+   `cal-constraint?` is `true`, only combinations that have exactly 500
    calories will be considered"
-  [ingredients cal-constraint]
+  [ingredients cal-constraint?]
   (->>
    ;; Generate all valid options for the quantities of each ingredient
    (all-options max-teaspoons (count ingredients))
    ;; Compute the score component vector for each option
    (map #(score-vec ingredients %))
    ;; If `cal-constraint` is true, restrict to options that have 500 calories
-   (filter (if cal-constraint five-hundred-cal? identity))
+   (filter (if cal-constraint? five-hundred-cal? any?))
    ;; Compute the final score
    (map score)
    ;; Select the maximum
