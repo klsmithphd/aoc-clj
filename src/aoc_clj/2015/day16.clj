@@ -16,14 +16,17 @@
    :perfumes 1})
 
 ;; Input parsing
+(defn parse-pair
+  [pair]
+  (let [[k v] (str/split pair #": ")]
+    [(keyword k) (read-string v)]))
+
 (defn parse-line
   [line]
   (let [[aunt props] (str/split line #": " 2)
-        aunt-num     (read-string (subs aunt 4 (count aunt)))
+        aunt-num     (read-string (subs aunt 4))
         pairs        (str/split props #", ")
-        attrs        (mapv (fn [pair]
-                             (let [[k v] (str/split pair #": ")]
-                               [(keyword k) (read-string v)])) pairs)]
+        attrs        (mapv parse-pair pairs)]
     [aunt-num (into {} attrs)]))
 
 (defn parse
@@ -40,14 +43,14 @@
   "For four properties (cats, trees, pomerians, and goldfish), the value
    must be greater than or less than, not equal to the expected value. 
    For all others, we're looking for an exact match"
-  [[attr actual-val]]
-  (let [expected-val (criteria attr)]
+  [[attr val]]
+  (let [expected (criteria attr)]
     (case attr
-      :cats        (> actual-val expected-val)
-      :trees       (> actual-val expected-val)
-      :pomeranians (< actual-val expected-val)
-      :goldfish    (< actual-val expected-val)
-      (= actual-val expected-val))))
+      :cats        (> val expected)
+      :trees       (> val expected)
+      :pomeranians (< val expected)
+      :goldfish    (< val expected)
+      (= val expected))))
 
 (defn range-match?
   "Use the logic of part 2 where some attributes need to be greater
@@ -57,7 +60,7 @@
   (every? true? (map attr-compare props)))
 
 (defn matching-aunt
-  "Use the supplied criteria filter-"
+  "Use the supplied criteria filter to find the correct aunt"
   [criteria aunts]
   (-> (filter criteria aunts) first key))
 
@@ -68,6 +71,6 @@
   (matching-aunt exact-match? input))
 
 (defn part2
-  "Find the aunt whose properties satisfied the range comparisonsß"
+  "Find the aunt whose properties satisfied the range comparisons"
   [input]
   (matching-aunt range-match? input))
