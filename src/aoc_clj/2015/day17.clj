@@ -2,6 +2,9 @@
   "Solution to https://adventofcode.com/2015/day/17"
   (:require [clojure.math.combinatorics :as combo]))
 
+;; Constants
+(def target-qty 150)
+
 ;; Input parsing
 (defn parse
   [input]
@@ -53,10 +56,10 @@
 ;; Puzzle solutions
 (defn part1
   [input]
-  (total-options 150 input)
+  (total-options target-qty input)
   ;; (count (combinations 150 input))
   )
 
 (defn part2
   [input]
-  (count (minimal-combinations 150 input)))
+  (count (minimal-combinations target-qty input)))
