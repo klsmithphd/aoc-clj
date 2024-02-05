@@ -6,6 +6,8 @@
   (width [_] (count (first v)))
   (height [_] (count v))
   (value [_ [x y]] (get-in v [y x]))
+  (positions [this] (grid/pos-seq this))
+  (values [_] (flatten v))
   (in-grid? [this pos] (grid/within-grid? this pos))
   (slice
     [_ dim idx]
