@@ -11,6 +11,10 @@
 
 ;; Puzzle logic
 (defn combinations
+  "Returns a collection of the different container combinations that sum
+   to `total`. `containers` is assumed to be pre-sorted in decscending
+   order. The values in `containers` need not be unique, but each 
+   occurrence will treated independently."
   ([total containers]
    (combinations total containers []))
   ([total containers used]
@@ -38,10 +42,13 @@
                         (conj used (nth ctrs %))))))))))
 
 (defn total-options
+  "Counts the number of combinations of `containers` that sum to `total`"
   [total containers]
   (count (combinations total containers)))
 
 (defn min-container-total-options
+  "Counts the number of combinations of `containers` that sum to `total`
+   using the minimum number of containers."
   [total containers]
   (let [freqs (->> (combinations total containers)
                    (map count)
@@ -51,9 +58,12 @@
 
 ;; Puzzle solutions
 (defn part1
+  "Counts the number of combinations of `containers` that sum to `total`"
   [input]
   (total-options target-qty input))
 
 (defn part2
+  "Counts the number of combinations of `containers` that sum to `total`
+   using the minimum number of containers."
   [input]
   (min-container-total-options target-qty input))
