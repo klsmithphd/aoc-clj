@@ -1,6 +1,8 @@
 (ns aoc-clj.2015.day18
   "Solution to https://adventofcode.com/2015/day/18"
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+  (:require [aoc-clj.utils.grid :as grid :refer [height value pos-seq val-seq]]
+            [aoc-clj.utils.grid.vecgrid :as vg]
+            [aoc-clj.utils.core :as u]))
 
 ;; Constants
 (def soln-steps 100)
@@ -9,74 +11,64 @@
 (def char-map {\. :off \# :on})
 (defn parse
   [input]
-  (mapgrid/ascii->MapGrid2D char-map input))
+  (vg/ascii->VecGrid2D char-map input :down true))
 
 ;; Puzzle logic
-(defn adj-coords
-  [[x y]]
-  (filter #(not= [x y] %) (for [y (range (dec y) (+ y 2))
-                                x (range (dec x) (+ x 2))]
-                            [x y])))
-
-(defn neighbors
-  [grid pos]
-  (let [locs (adj-coords pos)]
-    (zipmap locs (map grid locs))))
-
-(defn corner?
-  "Is the given position one of the four corner cells?"
-  [{:keys [width height]} pos]
-  (or (= pos [0 0])
-      (= pos [0 (dec height)])
-      (= pos [(dec width) 0])
-      (= pos [(dec width) (dec height)])))
-
 (defn corners-on
   "Force set the four corners to an on position"
-  [{:keys [width height grid] :as input}]
-  (assoc input :grid (assoc grid
-                            [0 0] :on
-                            [(dec width) 0] :on
-                            [0 (dec height)] :on
-                            [(dec width) (dec height)] :on)))
+  [grid]
+  (let [x (dec (height grid))]
+    (-> grid
+        (assoc-in [:v 0 0] :on)
+        (assoc-in [:v x 0] :on)
+        (assoc-in [:v 0 x] :on)
+        (assoc-in [:v x x] :on))))
+
+(defn next-light-value
+  "Computes the value of the light for the next step.
+   
+   A light which is on stays on when 2 or 3 neighbors are on, turns off otherwise.
+   A light which is off turns on if 3 neighbors are on, stays off otherwise."
+  [light on-neighbors]
+  (case light
+    :on  (if (<= 2 on-neighbors 3) :on :off)
+    :off (if (= 3 on-neighbors)    :on :off)))
 
 (defn update-lights
   "Update the light value in the grid at the given `position`, based
    on current neighbor values"
-  ([input pos]
-   (update-lights false input pos))
-  ([corners-on? {:keys [grid] :as input} pos]
-   (if (and corners-on? (corner? input pos))
-     :on
-     (let [state (grid pos)
-           on-neighs (count (filter #(= :on (val %)) (neighbors grid pos)))]
-       (case state
-         :on  (if (or (= 2 on-neighs) (= 3 on-neighs))
-                :on
-                :off)
-         :off (if (= 3 on-neighs)
-                :on
-                :off))))))
+  [grid pos]
+  (let [light (value grid pos)
+        on-neighbors (->> (grid/neighbor-data grid pos :diagonals true)
+                          (map :val)
+                          (filter (u/equals? :on))
+                          count)]
+    (next-light-value light on-neighbors)))
 
 (defn step
   "Update all lights in the grid based on their neighbors."
-  ([input]
-   (step false input))
-  ([corners-on? {:keys [grid] :as input}]
-   (assoc input :grid
-          (zipmap (keys grid)
-                  (map (partial update-lights corners-on? input) (keys grid))))))
+  ([grid]
+   (step false grid))
+  ([corners-on? grid]
+   (let [new-data (->> (pos-seq grid)
+                       (map #(update-lights grid %))
+                       (partition (height grid))
+                       (mapv vec)
+                       vg/->VecGrid2D)]
+     (if corners-on?
+       (corners-on new-data)
+       new-data))))
 
 (defn lights-on-at-step-n
   "Evolve the light grid to the nth step"
-  ([n input]
-   (lights-on-at-step-n false n input))
-  ([corners-on? n input]
-   (->>  (iterate (partial step corners-on?) input)
+  ([n grid]
+   (lights-on-at-step-n false n grid))
+  ([corners-on? n grid]
+   (->>  (iterate (partial step corners-on?) grid)
          (drop n)
          first
-         :grid
-         (filter #(= :on (val %)))
+         val-seq
+         (filter (u/equals? :on))
          count)))
 
 ;; Puzzle solutions
