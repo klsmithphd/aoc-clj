@@ -1,6 +1,7 @@
 (ns aoc-clj.utils.grid.vecgrid-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.grid :refer [width height value slice neighbors-4 neighbors-8]]
+            [aoc-clj.utils.grid :refer
+             [width height value pos-seq val-seq slice neighbors-4 neighbors-8]]
             [aoc-clj.utils.grid.vecgrid :as vg :refer [->VecGrid2D]]))
 
 (def sample
@@ -12,6 +13,8 @@
     (is (= 3 (width sample)))
     (is (= 2 (height sample)))
     (is (= 5 (value sample [1 1])))
+    (is (= [[0 0] [1 0] [2 0] [0 1] [1 1] [2 1]] (pos-seq sample)))
+    (is (= [1 2 3 4 5 6] (val-seq sample)))
     (is (= (->VecGrid2D [[4 5 6]])
            (slice sample :row 1)))
     (is (= (->VecGrid2D [[3] [6]])
