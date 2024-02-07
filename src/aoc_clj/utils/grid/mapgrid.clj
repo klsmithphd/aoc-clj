@@ -7,6 +7,8 @@
   (width [_] width)
   (height [_] height)
   (value [_ pos] (get grid pos))
+  (pos-seq [this] (grid/positions this))
+  (val-seq [this] (map grid (grid/positions this)))
   (in-grid? [this pos] (grid/within-grid? this pos))
   (slice
     [_ dim idx]

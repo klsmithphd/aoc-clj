@@ -1,75 +1,101 @@
 (ns aoc-clj.2015.day18
   "Solution to https://adventofcode.com/2015/day/18"
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+  (:require [clojure.set :as set]
+            [aoc-clj.utils.grid :as grid]))
 
-(def char-map {\. :off \# :on})
+;; Constants
+(def iterations 100)
+
+;; Input parsing
+(def grid
+  "Returns a list of all NxN [x y] position vecs in a grid of size N"
+  (memoize
+   (fn [size]
+     (for [y (range size) x (range size)] [x y]))))
+
+(defn char-at
+  "Returns the character in the input data at the yth row and xth column."
+  [input [x y]]
+  (get-in (vec input) [y x]))
+
 (defn parse
   [input]
-  (mapgrid/ascii->MapGrid2D char-map input))
+  (let [size   (count input)
+        lights (->> (grid size)
+                    (filter #(= \# (char-at input %)))
+                    set)]
+    [size lights]))
 
-(defn adj-coords
-  [[x y]]
-  (filter #(not= [x y] %) (for [y (range (dec y) (+ y 2))
-                                x (range (dec x) (+ x 2))]
-                            [x y])))
+;; Puzzle logic
+(def neighbors
+  "Generates a list of the 8 neighboring coordinates for position `pos`.
 
-(defn neighbors
-  [grid pos]
-  (let [locs (adj-coords pos)]
-    (zipmap locs (map grid locs))))
+    This function is memoized (cached) because it's going to be called
+    O(100) times for each cell in the grid, and the result is identical
+    every time"
+  (memoize
+   (fn [pos]
+     (grid/adj-coords-2d pos :include-diagonals true))))
 
-(defn corner?
-  [{:keys [width height]} pos]
-  (or (= pos [0 0])
-      (= pos [0 (dec height)])
-      (= pos [(dec width) 0])
-      (= pos [(dec width) (dec height)])))
+(defn on-neighbors
+  "Counts the number of neighbors of `pos` that are currently on by 
+   testing whether they're in the `lights` set"
+  [lights pos]
+  (->> (neighbors pos) (filter lights) count))
+
+(def corners
+  "Returns a set of the four corner positions"
+  (memoize
+   (fn [size]
+     #{[0 0] [(dec size) 0] [0 (dec size)] [(dec size) (dec size)]})))
 
 (defn corners-on
-  [{:keys [width height grid] :as input}]
-  (assoc input :grid (assoc grid
-                            [0 0] :on
-                            [(dec width) 0] :on
-                            [0 (dec height)] :on
-                            [(dec width) (dec height)] :on)))
+  "Updates the state to ensure that the corners are on"
+  [[size lights]]
+  [size (set/union (corners size) lights)])
 
-(defn update-lights
-  ([input pos]
-   (update-lights false input pos))
-  ([corners-on? {:keys [grid] :as input} pos]
-   (if (and corners-on? (corner? input pos))
-     :on
-     (let [state (grid pos)
-           on-neighs (count (filter #(= :on (val %)) (neighbors grid pos)))]
-       (case state
-         :on  (if (or (= 2 on-neighs) (= 3 on-neighs))
-                :on
-                :off)
-         :off (if (= 3 on-neighs)
-                :on
-                :off))))))
+(defn on-condition
+  "A predicate that returns true if the light should be on in the next step.
+  
+   A light which is on stays on when 2 or 3 neighbors are on; turns off otherwise.
+   A light which is off turns on if 3 neighbors are on; stays off otherwise."
+  [lights pos]
+  (if (lights pos)
+    (<= 2 (on-neighbors lights pos) 3)
+    (== 3 (on-neighbors lights pos))))
 
 (defn step
-  ([input]
-   (step false input))
-  ([corners-on? {:keys [grid] :as input}]
-   (assoc input :grid
-          (zipmap (keys grid)
-                  (map (partial update-lights corners-on? input) (keys grid))))))
+  "Given `state`, which is a vec of `[size, lights]`, where `size`
+   is the dimension of the square grid, and `lights` is a set of all the
+   positions of currently on lights, compute the next state according to the
+   neighbor rules."
+  [[size lights]]
+  [size (->> (grid size)
+             (filter #(on-condition lights %))
+             set)])
 
-(defn lights-on-at-step-n
-  ([n input]
-   (lights-on-at-step-n false n input))
-  ([corners-on? n input]
-   (->>  (nth (iterate (partial step corners-on?) input) n)
-         :grid
-         (filter #(= :on (val %)))
-         count)))
+(defn corner-step
+  "Similar to `step` above, but ensures that corners are set to on."
+  [state]
+  (corners-on (step state)))
 
+(defn lights-at-n
+  "Returns the number of lights that are on as of iteration `n`
+
+   If `corners?` is set to `true`, the four corners will be forced to be
+   in an `on` state at all times."
+  ([state n]
+   (lights-at-n state n false))
+  ([state n corners?]
+   (-> (iterate (if corners? corner-step step) state) (nth n) second count)))
+
+;; Puzzle solutions
 (defn part1
+  "How many lights are on after 100 steps"
   [input]
-  (lights-on-at-step-n 100 input))
+  (lights-at-n input iterations))
 
 (defn part2
+  "How many lights are on after 100 steps when the corners are kept always on"
   [input]
-  (lights-on-at-step-n true 100 (corners-on input)))
+  (lights-at-n (corners-on input) iterations true))
