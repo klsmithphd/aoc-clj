@@ -13,51 +13,71 @@
    (fn [size]
      (for [y (range size) x (range size)] [x y]))))
 
+(defn char-at
+  "Returns the character in the input data at the yth row and xth column."
+  [input [x y]]
+  (get-in (vec input) [y x]))
+
 (defn parse
   [input]
   (let [size   (count input)
         lights (->> (grid size)
-                    (filter #(= \# (get-in (vec input) (vec (reverse %)))))
+                    (filter #(= \# (char-at input %)))
                     set)]
     [size lights]))
 
 ;; Puzzle logic
 (def neighbors
+  "Generates a list of the 8 neighboring coordinates for position `pos`.
+
+    This function is memoized (cached) because it's going to be called
+    O(100) times for each cell in the grid, and the result is identical
+    every time"
   (memoize
    (fn [pos]
      (grid/adj-coords-2d pos :include-diagonals true))))
 
 (defn on-neighbors
+  "Counts the number of neighbors of `pos` that are currently on by 
+   testing whether they're in the `lights` set"
   [lights pos]
   (->> (neighbors pos) (filter lights) count))
 
 (def corners
+  "Returns a set of the four corner positions"
   (memoize
    (fn [size]
      #{[0 0] [(dec size) 0] [0 (dec size)] [(dec size) (dec size)]})))
 
 (defn corners-on
+  "Updates the state to ensure that the corners are on"
   [[size lights]]
   [size (set/union (corners size) lights)])
 
 (defn on-condition
+  "A predicate that returns true if the light should be on in the next step.
+  
+   A light which is on stays on when 2 or 3 neighbors are on; turns off otherwise.
+   A light which is off turns on if 3 neighbors are on; stays off otherwise."
   [lights pos]
   (if (lights pos)
     (<= 2 (on-neighbors lights pos) 3)
     (== 3 (on-neighbors lights pos))))
 
 (defn step
-  ([state]
-   (step state false))
+  "Given `state`, which is a vec of `[size, lights]`, where `size`
+   is the dimension of the square grid, and `lights` is a set of all the
+   positions of currently on lights, compute the next state according to the
+   neighbor rules."
+  [[size lights]]
+  [size (->> (grid size)
+             (filter #(on-condition lights %))
+             set)])
 
-  ([[size lights] corners?]
-   (let [new-lights (->> (grid size)
-                         (filter #(on-condition lights %))
-                         set)
-         new-state [size new-lights]]
-     (if corners?
-       (corners-on new-state)
-       new-state))))
+(defn corner-step
+  "Similar to `step` above, but ensures that corners are set to on."
+  [state]
+  (corners-on (step state)))
 
 (defn lights-at-n
   "Returns the number of lights that are on as of iteration `n`
@@ -67,9 +87,9 @@
   ([state n]
    (lights-at-n state n false))
   ([state n corners?]
-   (-> (iterate #(step % corners?) state) (nth n) second count)))
+   (-> (iterate (if corners? corner-step step) state) (nth n) second count)))
 
-;; ;; Puzzle solutions
+;; Puzzle solutions
 (defn part1
   "How many lights are on after 100 steps"
   [input]
@@ -79,80 +99,3 @@
   "How many lights are on after 100 steps when the corners are kept always on"
   [input]
   (lights-at-n (corners-on input) iterations true))
-
-
-;; (defn on-set
-;;   [input]
-;;   (let [height (count input)
-;;         width  (count (first input))]
-;;     (->>
-;;      (for [y (u/rev-range height)
-;;            x (range width)]
-;;        (when (= \# (get-in input [y x])) [x y]))
-;;      (filter some?)
-;;      set)))
-
-;; (def neighbor-positions
-;;   (memoize
-;;    (fn [n]
-;;      (for [y (range n)
-;;            x (range n)]
-;;        (grid/adj-coords-2d [x y] :include-diagonals :true)))))
-
-
-;; (defn corners-on
-;;   "Force set the four corners to an on position"
-;;   [grid]
-;;   (let [x (dec (height grid))]
-;;     (-> grid
-;;         (assoc-in [:v 0 0] :on)
-;;         (assoc-in [:v x 0] :on)
-;;         (assoc-in [:v 0 x] :on)
-;;         (assoc-in [:v x x] :on))))
-
-;; (defn next-light-value
-;;   "Computes the value of the light for the next step.
-
-;;    A light which is on stays on when 2 or 3 neighbors are on, turns off otherwise.
-;;    A light which is off turns on if 3 neighbors are on, stays off otherwise."
-;;   [light on-neighbors]
-;;   (case light
-;;     :on  (if (<= 2 on-neighbors 3) :on :off)
-;;     :off (if (= 3 on-neighbors)    :on :off)))
-
-;; (defn update-lights
-;;   "Update the light value in the grid at the given `position`, based
-;;    on current neighbor values"
-;;   [grid pos]
-;;   (let [light (value grid pos)
-;;         on-neighbors (->> (grid/neighbor-data grid pos :diagonals true)
-;;                           (map :val)
-;;                           (filter (u/equals? :on))
-;;                           count)]
-;;     (next-light-value light on-neighbors)))
-
-;; (defn step
-;;   "Update all lights in the grid based on their neighbors."
-;;   ([grid]
-;;    (step false grid))
-;;   ([corners-on? grid]
-;;    (let [new-data (->> (pos-seq grid)
-;;                        (map #(update-lights grid %))
-;;                        (partition (height grid))
-;;                        (mapv vec)
-;;                        vg/->VecGrid2D)]
-;;      (if corners-on?
-;;        (corners-on new-data)
-;;        new-data))))
-
-;; (defn lights-on-at-step-n
-;;   "Evolve the light grid to the nth step"
-;;   ([n grid]
-;;    (lights-on-at-step-n false n grid))
-;;   ([corners-on? n grid]
-;;    (->>  (iterate (partial step corners-on?) grid)
-;;          (drop n)
-;;          first
-;;          val-seq
-;;          (filter (u/equals? :on))
-;;          count)))

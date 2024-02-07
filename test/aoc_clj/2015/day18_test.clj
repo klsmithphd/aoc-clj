@@ -59,6 +59,12 @@
     "......"
     "......"]))
 
+(def on-neighbors-test
+  (testing "Counts the number of neighbors in an on state"
+    (is (= 1 (d18/on-neighbors (second d18-s00) [0 0])))
+    (is (= 4 (d18/on-neighbors (second d18-s00) [4 0])))
+    (is (= 2 (d18/on-neighbors (second d18-s00) [5 3])))))
+
 (deftest step-test
   (testing "Correctly applies the Game of Life rules to update to next step"
     (is (= d18-s00-step1 (d18/step d18-s00)))
@@ -87,8 +93,6 @@
 
 (def day18-input (u/parse-puzzle-input d18/parse 2015 18))
 
-;; FIXME: 2015.day18 solution is too slow
-;; https://github.com/Ken-2scientists/aoc-clj/issues/4
 (deftest part1
   (testing "Reproduces the answer for day18, part1"
     (is (= 1061 (d18/part1 day18-input)))))
