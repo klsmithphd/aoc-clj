@@ -22,7 +22,7 @@
 
 (def day20-input (u/parse-puzzle-input d20/parse 2015 20))
 
-(deftest ^:slow part1-test
+(deftest part1-test
   (testing "Reproduces the answer for day20, part1"
     (is (= 776160 (d20/part1 day20-input)))))
 
