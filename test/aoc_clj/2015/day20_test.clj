@@ -5,8 +5,20 @@
 
 (deftest presents-test
   (testing "Counts the right number of presents at the first few houses"
-    (is (= [10 30 40 70 60 120 80 150 130]
-           (map d20/house-presents (range 1 10))))))
+    (is (= {1 1
+            2 3
+            3 4
+            4 7
+            5 6
+            6 12
+            7 8
+            8 15
+            9 13} (d20/presents 10 0)))))
+
+(deftest house-with-n-presents-test
+  (testing "Finds the first house with at least n presents delivered"
+    (is (= 4 (d20/house-with-n-presents 5 10)))
+    (is (= 8 (d20/house-with-n-presents 14 10)))))
 
 (def day20-input (u/parse-puzzle-input d20/parse 2015 20))
 
