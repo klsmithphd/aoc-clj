@@ -35,7 +35,7 @@
 
 (def d19-s01 (d19/parse d19-s01-raw))
 
-(deftest match-indices-test
+(deftest match-ranges-test
   (testing "Finds the indices of all matching substrings in a string"
     (is (= [[0 2] [2 4] [4 6]] (d19/match-ranges "HOHOHO" "HO")))
     (is (= [[1 3] [3 5]]       (d19/match-ranges "HOHOHO" "OH")))
