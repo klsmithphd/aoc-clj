@@ -3,6 +3,17 @@
             ;; [aoc-clj.utils.core :as u]
             [aoc-clj.2015.day22 :as t]))
 
+(def d22-s00-raw
+  ["Hit Points: 58"
+   "Damage: 9"])
+
+(def d22-s00
+  {:hit-points 58 :damage 9})
+
+(deftest parse-test
+  (testing "Correctly parses the input"
+    (is (= d22-s00 (t/parse d22-s00-raw)))))
+
 (def day22-sample1
   {:player {:hit-points 10 :mana 250 :armor 0}
    :boss   {:hit-points 13 :damage 8}
