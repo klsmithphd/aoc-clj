@@ -19,6 +19,13 @@
 
 (deftest all-item-combos-test
   (testing "Creates the correct number of weapon/armor/ring combos"
+    ;; Weapon choices = 5
+    ;; Armor choices = 6 (1 option for no armor plus 5 choices)
+    ;; Rings choices = 22:
+    ;;   1 option for no ring plus
+    ;;   6 options for one ring plus
+    ;;   15 options (combinations of six rings take 2)
+    ;; 660 = 5 * 6 * 22
     (is (= 660 (count (d21/all-item-combos))))))
 
 (deftest player-stats-test
