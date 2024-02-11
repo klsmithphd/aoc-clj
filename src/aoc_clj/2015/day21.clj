@@ -4,7 +4,8 @@
             [clojure.math.combinatorics :as combo]))
 
 ;; Constants
-(def player {:hit-points 100 :damage 0 :armor 0 :cost 0})
+(def empty-stats  {:cost 0 :damage 0 :armor 0})
+(def player-start (assoc empty-stats :hit-points 100))
 
 (def weapons
   {:dagger     {:cost 8   :damage 4 :armor 0}
@@ -42,11 +43,12 @@
 (defn all-item-combos
   "Returns a collection of all the possible legal item combos"
   []
-  (->>  (for [weapon (keys weapons)
-              armor  (concat (repeat 5 nil) (keys armors))
-              ring   (concat (repeat 6 nil) (keys rings) (combo/combinations (keys rings) 2))]
-          {:weapon weapon :armor armor :ring (flatten (list ring))})
-        distinct))
+  (for [weapon (vals weapons)
+        armor  (concat [empty-stats] (vals armors))
+        ring   (concat [[empty-stats]]
+                       (mapv vector (vals rings))
+                       (combo/combinations (vals rings) 2))]
+    (concat [weapon armor] ring)))
 
 (defn total
   "Add the given item's buff stats to our overall total"
@@ -56,13 +58,16 @@
        (update :damage + damage)
        (update :armor  + armor)))
 
-(defn combo-total
+(defn player-stats
   "For a given combination of a weapon, armor, and rings, compute the
    player's overall stats"
-  [{:keys [weapon armor ring]}]
-  (->> (flatten [[(weapons weapon)] [(armors armor)] (map rings ring)])
-       (filter some?)
-       (reduce total player)))
+  [combos]
+  (reduce total player-start combos))
+
+(defn all-players
+  "A collection of all possible player stats"
+  []
+  (map player-stats (all-item-combos)))
 
 (defn player-wins?
   "We don't need to simulate the game, because once the stats are known,
@@ -81,24 +86,26 @@
 (defn cheapest-winning-combo
   "Of all the item combos, finds the winning scenario with the cheapest cost"
   [boss]
-  (let [options (map combo-total (all-item-combos))
-        winners (filter (partial player-wins? boss) options)]
-    (apply min-key :cost winners)))
+  (->> (all-players)
+       (filter #(player-wins? boss %))
+       (map :cost)
+       (apply min)))
 
 (defn priciest-losing-combo
   "Of all the item combos, finds the losing scenario with the maximum cost"
   [boss]
-  (let [options (map combo-total (all-item-combos))
-        losers (remove (partial player-wins? boss) options)]
-    (apply max-key :cost losers)))
+  (->> (all-players)
+       (remove #(player-wins? boss %))
+       (map :cost)
+       (apply max)))
 
 ;; Puzzle solutions
 (defn part1
   "Least amount of gold to spend and still win the fight"
   [input]
-  (:cost (cheapest-winning-combo input)))
+  (cheapest-winning-combo input))
 
 (defn part2
   "Most amount of gold to spend and still lose the fight"
   [input]
-  (:cost (priciest-losing-combo input)))
+  (priciest-losing-combo input))

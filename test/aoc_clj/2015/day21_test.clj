@@ -17,10 +17,16 @@
   (testing "Correctly parses the input"
     (is (= d21-s00 (d21/parse d21-s00-raw)))))
 
-(deftest combo-total-test
+(deftest all-item-combos-test
+  (testing "Creates the correct number of weapon/armor/ring combos"
+    (is (= 660 (count (d21/all-item-combos))))))
+
+(deftest player-stats-test
   (testing "Correctly totals up a combo option"
     (is (= {:hit-points 100 :damage 7 :armor 5 :cost 210}
-           (d21/combo-total {:weapon :dagger :armor :platemail :ring [:damage+3]})))))
+           (d21/player-stats [(d21/weapons :dagger)
+                              (d21/armors :platemail)
+                              (d21/rings :damage+3)])))))
 
 (deftest player-wins-test
   (testing "Correctly assesses whether the player can win"
