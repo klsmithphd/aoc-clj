@@ -1,6 +1,8 @@
 (ns aoc-clj.2015.day22
   "Solution to https://adventofcode.com/2015/day/22"
-  (:require [aoc-clj.2015.day21 :as d21]))
+  (:require [aoc-clj.2015.day21 :as d21]
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.graph :as g :refer [Graph]]))
 
 ;; Constants
 (def spell-cost
@@ -104,7 +106,8 @@
   "Cast the given spell and return the updated game state"
   [state spell]
   (-> ((spells spell) state)
-      (deduct-mana-cost spell)))
+      (deduct-mana-cost spell)
+      (assoc :last-spell spell)))
 
 (defn boss-attack
   "Apply the boss's attack and return the updated game state"
@@ -151,35 +154,66 @@
    (-> (player-round hard? state spell)
        boss-round)))
 
-;; (defn player-wins?
-;;   [{:keys [player boss]}]
-;;   (and
-;;    (not (pos? (:hit-points boss)))
-;;    (pos? (:hit-points player))))
+(defn player-wins?
+  "True if the player has won (boss's hit points are zero while player's
+   hit points are greater than zero)"
+  [{:keys [player boss] :as state}]
+  (and
+   state
+   (not (pos? (:hit-points boss)))
+   (pos? (:hit-points player))))
 
-;; (defn available-spells
-;;   [{:keys [player effects]}]
-;;   (if (<= (:hit-points player) 0)
-;;     []
-;;     (let [active-effects (map first (filter #(> 1 (val %)) effects))]
-;;       (->> (u/without-keys spell-cost active-effects)
-;;            (filter #(>= (:mana player) (val %)))
-;;            (map first)))))
+(defn available-spells
+  "At a given game state, returns the list of spells that the player could
+   choose to cast at any given time."
+  [{:keys [player effects]}]
+  (if (<= (:hit-points player) 0)
+    []
+    (let [active-effects (map first (filter #(> (val %) 1) effects))]
+      (->> (u/without-keys spell-cost active-effects)
+           (filter #(>= (:mana player) (val %)))
+           (map first)))))
+
+;; We use Dijkstra's algorithm, where the nodes in the graph
+;; are game states, and possible new game states are connected
+;; by edges. The "distance" is the amount of mana spent to cast
+;; a spell
+(defrecord GameGraph [hard?]
+  Graph
+  (edges
+    [_ state]
+    (map #(combat-round hard? state %) (available-spells state)))
+
+  (distance
+    [_ _ state]
+    (spell-cost (:last-spell state))))
+
+(defn winning-spells
+  "Find a sequence of spells that allows the player to win with the least
+   mana spent."
+  ([boss]
+   (winning-spells false boss))
+  ([hard? boss]
+   (let [start {:player player-start
+                :boss   boss
+                :effects {}}]
+     (->>
+      (g/dijkstra (->GameGraph hard?) start player-wins? :limit 5000)
+      (map :last-spell)
+      (drop 1)))))
 
 
 ;; Puzzle solutions
-
-;; TODO - These ought to be implemented so that they work on abitrary
-;; inputs rather than hard-coding the winning plays
-(def winning-plays [:poison :recharge :shield :poison :recharge :magic-missile :poison :drain :magic-missile])
 (defn part1
-  []
-  (reduce + (map spell-cost winning-plays)))
+  "Least amount of mana to spend to win the game"
+  [input]
+  (reduce + (map spell-cost (winning-spells input))))
 
-(def winning-plays-part2 [:poison :recharge :shield :poison :recharge :shield :poison :magic-missile :magic-missile])
+
 (defn part2
-  []
-  (reduce + (map spell-cost winning-plays-part2)))
+  "Least amount of mana to spend to win the game in hard mode"
+  [input]
+  (reduce + (map spell-cost (winning-spells true input))))
 
 
 
