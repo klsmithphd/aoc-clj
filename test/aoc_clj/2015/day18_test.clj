@@ -59,7 +59,7 @@
     "......"
     "......"]))
 
-(def on-neighbors-test
+(deftest on-neighbors-test
   (testing "Counts the number of neighbors in an on state"
     (is (= 1 (d18/on-neighbors (second d18-s00) [0 0])))
     (is (= 4 (d18/on-neighbors (second d18-s00) [4 0])))
