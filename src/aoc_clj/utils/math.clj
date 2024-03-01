@@ -50,7 +50,9 @@
 (defn mod-pow
   "Computes a^n mod m"
   [m a n]
-  (reduce (partial mod-mul m) (repeat n a)))
+  (if (zero? n)
+    1
+    (reduce (partial mod-mul m) (repeat n a))))
 
 (defn mod-pow-fast
   "Computes a^n mod m"
