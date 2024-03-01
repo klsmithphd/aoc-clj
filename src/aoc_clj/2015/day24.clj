@@ -20,7 +20,7 @@
   ;; that match the compartment weight target, starting with the fewest
   ;; items possible (two)
   (let [target (/ (reduce + weights) n)]
-    (loop [size 2 partitions []]
+    (loop [size 1 partitions []]
       (if (seq partitions)
         partitions
         (recur

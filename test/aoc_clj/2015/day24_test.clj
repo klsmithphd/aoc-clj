@@ -3,7 +3,12 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2015.day24 :as d24]))
 
-(def d24-s00 (concat (range 1 6) (range 7 12)))
+(def d24-s00-raw ["1" "2" "3" "4" "5" "7" "8" "9" "10" "11"])
+(def d24-s00 [1 2 3 4 5 7 8 9 10 11])
+
+(deftest parse-test
+  (testing "Correctly parses the input"
+    (is (= d24-s00 (d24/parse d24-s00-raw)))))
 
 (deftest smallest-passenger-packages-test
   (testing "Computes the combinations of packages for the passenger compartment
