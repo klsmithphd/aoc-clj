@@ -13,14 +13,6 @@
   (map read-string (re-seq #"\d+" (first input))))
 
 ;; Puzzle logic
-(defn next-code
-  "Computes the next code based on the value of the last code.
-   
-   The logic is to multiply the previous code by `multiplier`, modulo
-   `modulus`"
-  [last-code]
-  (m/mod-mul modulus last-code multiplier))
-
 (defn lazy-caterer
   "Computes the nth value in the lazy caterer's sequence using the formula
    p = (n^2 + n + 2)/2
@@ -49,7 +41,7 @@
   ;;  4 |  4   5   6   7   8   9
   ;;  5 |  5   6   7   8   9  10
   ;;  6 |  6   7   8   9  10  11
-  ;; 
+
   ;; The tier then tells us where we are in the lazy caterer's sequence,
   ;; and then we add in the column offset to get the code number
   (let [tier (+ row col -1)]

@@ -12,3 +12,9 @@
   (testing "Computes the Least Common Multiple (LCM)"
     (is (= 12 (math/lcm 4 6)))
     (is (= 36 (math/lcm 4 6 9)))))
+
+(deftest mod-pow-test
+  (testing "Computes powers of an integer modulo m"
+    (is (= 1 (math/mod-pow 15 2 0)))
+    (is (= 8 (math/mod-pow 10 2 3)))
+    (is (= 2 (math/mod-pow 3 2 5)))))

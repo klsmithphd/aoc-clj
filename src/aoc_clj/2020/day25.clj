@@ -8,7 +8,7 @@
 
 (defn transform
   [loop-size subject-number]
-  (math/mod-pow-fast 20201227 subject-number loop-size))
+  (math/mod-pow 20201227 subject-number loop-size))
 
 (defn loop-size
   [public-key]

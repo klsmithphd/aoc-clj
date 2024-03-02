@@ -39,6 +39,11 @@
   [m a b]
   (mod (*' a b) m))
 
+(defn mod-sq
+  "Computes a^2 mod m"
+  [m a]
+  (mod (*' a a) m))
+
 (defn mod-div
   "Computes a / b mod m
    Note that b^-1 does not always exist for all b for all m (b and m must be co-prime)"
@@ -52,15 +57,17 @@
   [m a n]
   (if (zero? n)
     1
-    (reduce (partial mod-mul m) (repeat n a))))
-
-(defn mod-pow-fast
-  "Computes a^n mod m"
-  [m a n]
-  (let [bitmask (reverse (map (comp read-string str) (Long/toBinaryString n)))
-        powers (take (count bitmask) (iterate (fn [x] (mod-mul m x x)) a))
-        terms (for [[x bit] (map vector powers bitmask) :when (= bit 1)] x)]
-    (reduce (partial mod-mul m) terms)))
+    ;; Applies the square-and-multiply method to perform fast
+    ;; exponentiation of an integer a to the power n modulo m, using
+    ;; the binary representation of n
+    (letfn [(sq-and-mul [acc bit]
+              (if (= \0 bit)
+                ;; If the next bit is a zero, return the square of acc (mod m)
+                (mod-sq m acc)
+                ;; If the next bit is a one, return the square of acc times a
+                ;; (modulo m)
+                (mod-mul m a (mod-sq m acc))))]
+      (reduce sq-and-mul 1 (Long/toBinaryString n)))))
 
 (defn mod-linear-comp
   "Takes two linear functions of the form f(x) = a1*x + b1 and g(x) = a2*x + b2 (both modulo m), and
@@ -95,4 +102,4 @@
    
    Should be equivalent to (first (drop n (iterate (partial mod-linear-comp m) [a b])))"
   [m n [a b]]
-  [(mod-pow-fast m a n) (mod-mul m b (mod-geometric-sum m a (dec n)))])
+  [(mod-pow m a n) (mod-mul m b (mod-geometric-sum m a (dec n)))])

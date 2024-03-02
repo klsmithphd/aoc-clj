@@ -21,11 +21,6 @@
     (is (= 12 (d25/code-number 4 2)))
     (is (= 15 (d25/code-number 1 5)))))
 
-(deftest code-sequence-test
-  (testing "Computes the code sequence correctly"
-    (is (= [20151125 31916031 18749137 16080970 21629792 17289845 24592653 8057251 16929656 30943339]
-           (take 10 (iterate d25/next-code d25/first-code))))))
-
 (deftest code-at-position-test
   (testing "Computes the code at given row/col position"
     (is (= 20151125 (d25/code 1 1)))
