@@ -1,5 +1,5 @@
 (ns aoc-clj.2015.day12
-  "Solution to https://adventofcode.com/2015/day/11"
+  "Solution to https://adventofcode.com/2015/day/12"
   (:require [cheshire.core :as c]
             [aoc-clj.utils.core :as u]))
 
