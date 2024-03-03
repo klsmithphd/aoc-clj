@@ -14,6 +14,10 @@
     (is (= [1 2 3]    (v/vec-sum [[0 0 0] [1 2 3]])))
     (is (= [12 15 18] (v/vec-sum [[1 2 3] [4 5 6] [7 8 9]])))))
 
+(deftest vec-add-test
+  (testing "Sum of two vectors"
+    (is (= [6 8] (v/vec-add [2 10] [4 -2])))))
+
 (deftest manhattan-test
   (testing "Demonstration of manhattan - computes the Manhattan distance 
             (L1 norm) between two vectors"

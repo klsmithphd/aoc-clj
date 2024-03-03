@@ -10,7 +10,12 @@
 (defn vec-sum
   "Computes the sum of any collection of vectors"
   [vectors]
-  (apply (partial map +) vectors))
+  (apply (partial mapv +) vectors))
+
+(defn vec-add
+  "Computes the sum of two vectors"
+  [a b]
+  (vec-sum [a b]))
 
 (defn manhattan
   "Computes the Manhattan distance (L1 norm) between two vectors"

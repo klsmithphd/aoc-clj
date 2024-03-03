@@ -1,5 +1,6 @@
 (ns aoc-clj.2015.day03
-  "Solution to https://adventofcode.com/2015/day/3")
+  "Solution to https://adventofcode.com/2015/day/3"
+  (:require [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
 (def dir-map {\^ [0 1] \v [0 -1] \> [1 0] \< [-1 0]})
@@ -8,15 +9,10 @@
 (def parse first)
 
 ;; Puzzle logic
-(defn vec-add
-  "Sum of two vecs"
-  [a b]
-  (mapv + a b))
-
 (defn visits
   "Positions visited by following `dirs`"
   [dirs]
-  (reductions vec-add [0 0] (map dir-map dirs)))
+  (reductions v/vec-add [0 0] (map dir-map dirs)))
 
 (defn split-visits
   "Positions visited by santa and his robot clone when splitting `dirs`"
