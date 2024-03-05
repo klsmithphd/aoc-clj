@@ -4,12 +4,16 @@
             [aoc-clj.utils.vectors :as v]
             [aoc-clj.utils.grid :as grid]))
 
+;; Constants
+(def origin [0 0])
+(def start {:pos origin :heading :n})
+
 ;; Input parsing
 (defn parse-cmd
   [cmd]
-  (let [dir  ({"R" :right "L" :left} (subs cmd 0 1))
-        dist (read-string (subs cmd 1))]
-    {:dir dir :dist dist}))
+  (let [bearing  ({"R" :right "L" :left} (subs cmd 0 1))
+        dist     (read-string (subs cmd 1))]
+    [bearing dist]))
 
 (defn parse
   [input]
@@ -17,44 +21,59 @@
 
 ;; Puzzle logic
 (defn step
-  [state {:keys [dir dist]}]
+  "Given an instruction to turn and then move forward a certain distance,
+   determine the new state of the walker"
+  [state [bearing dist]]
   (-> state
-      (grid/turn dir)
+      (grid/turn bearing)
       (grid/forward dist)))
 
 (defn move
-  [steps]
-  (reduce step {:pos [0 0] :heading :n} steps))
+  "Given all the instructions, determine the final state of the walker"
+  [instructions]
+  (reduce step start instructions))
 
 (defn distance
-  [steps]
-  (-> steps move :pos (v/manhattan [0 0])))
+  "Compute the Manhattan distance from the starting point after following
+   the instructions"
+  [instructions]
+  (-> instructions move :pos (v/manhattan origin)))
 
 (defn all-points
-  [steps]
-  (->> (reductions step {:pos [0 0] :heading :n} steps)
+  "Determine all the points passed through by the walker following
+   the instructions"
+  [instructions]
+  (->> (reductions step start instructions)
        (map :pos)
        (partition 2 1)
        (mapcat grid/interpolated)
        dedupe))
 
 (defn first-duplicate
+  "Given a collection, find the first element that's a duplicate of
+   any element earlier in the collection.
+   
+   Returns nil if there are no duplicates. If `coll` contains nil,
+   this may be misleading"
   [coll]
   (loop [seen #{} xs coll]
     (let [x (first xs)]
-      (if (seen x)
+      (if (or (seen x) (empty? xs))
         x
         (recur (conj seen x) (rest xs))))))
 
 (defn distance-to-first-duplicate
+  "Manhattan distance to the first location visited twice"
   [steps]
-  (->> steps all-points first-duplicate (v/manhattan [0 0])))
+  (->> steps all-points first-duplicate (v/manhattan origin)))
 
 ;; Puzzle solutions
 (defn part1
+  "Distance to Easter Bunny HQ given the instructions"
   [input]
   (distance input))
 
 (defn part2
+  "Distance to first location visited twice given the instructions"
   [input]
   (distance-to-first-duplicate input))
