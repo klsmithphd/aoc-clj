@@ -1,26 +1,16 @@
 (ns aoc-clj.2022.day14
   "Solution to https://adventofcode.com/2022/day/14"
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [aoc-clj.utils.grid :as grid]))
 
 ;;;; Input parsing
-
 (defn parse-line
   [line]
   (mapv #(read-string (str "[" % "]")) (str/split line #" \-\> ")))
 
-(defn points
-  "Given a start point and end point for a line segment, return all
-   the points along the line segment"
-  [[[x1 y1] [x2 y2]]]
-  (let [dir-y (if (<= y1 y2) +1 -1)
-        dir-x (if (<= x1 x2) +1 -1)]
-    (for [y (range y1 (+ y2 dir-y) dir-y)
-          x (range x1 (+ x2 dir-x) dir-x)]
-      [x y])))
-
 (defn trace-lines
   [line]
-  (concat (mapcat points (partition 2 1 line))))
+  (concat (mapcat grid/interpolated (partition 2 1 line))))
 
 (defn rocks
   [input]

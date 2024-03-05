@@ -189,4 +189,17 @@
                   (get m [x y] not-found))]
      (mapv vec (partition width values)))))
 
+(defn interpolated
+  "Given a start point and end point for a line segment
+   (assumed to be either horizontal or vertical), return all
+   the points along the line segment.
+   
+   The collection returned will include both the start and end points"
+  [[[x1 y1] [x2 y2]]]
+  (let [dir-y (if (<= y1 y2) +1 -1)
+        dir-x (if (<= x1 x2) +1 -1)]
+    (for [y (range y1 (+ y2 dir-y) dir-y)
+          x (range x1 (+ x2 dir-x) dir-x)]
+      [x y])))
+
 
