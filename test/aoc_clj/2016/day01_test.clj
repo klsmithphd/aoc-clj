@@ -8,6 +8,8 @@
 (def d01-s02 (t/parse ["R5, L5, R5, R3"]))
 (def d01-s03 (t/parse ["R8, R4, R4, R8"]))
 
+
+
 (deftest move-test
   (testing "Moves to the correct location on sample data"
     (is (= [2 3]  (:pos (t/move d01-s00))))
@@ -22,7 +24,7 @@
 
 (deftest first-location-visited-twice-test
   (testing "Finds the first location visited twice"
-    (is (= [4 0] (t/first-duplicate (:visited (t/all-visited d01-s03))))))
+    (is (= [4 0] (t/first-duplicate (t/all-points d01-s03)))))
   (testing "Finds distance to the first location visited twice"
     (is (= 4 (t/distance-to-first-duplicate d01-s03)))))
 
