@@ -1,8 +1,9 @@
 (ns aoc-clj.2016.day01
   "Solution to https://adventofcode.com/2016/day/1"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.vectors :as v]
-            [aoc-clj.utils.grid :as grid]))
+            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
 (def origin [0 0])
@@ -24,9 +25,7 @@
   "Given an instruction to turn and then move forward a certain distance,
    determine the new state of the walker"
   [state [bearing dist]]
-  (-> state
-      (grid/turn bearing)
-      (grid/forward dist)))
+  (-> state (grid/turn bearing) (grid/forward dist)))
 
 (defn move
   "Given all the instructions, determine the final state of the walker"
@@ -49,23 +48,10 @@
        (mapcat grid/interpolated)
        dedupe))
 
-(defn first-duplicate
-  "Given a collection, find the first element that's a duplicate of
-   any element earlier in the collection.
-   
-   Returns nil if there are no duplicates. If `coll` contains nil,
-   this may be misleading"
-  [coll]
-  (loop [seen #{} xs coll]
-    (let [x (first xs)]
-      (if (or (seen x) (empty? xs))
-        x
-        (recur (conj seen x) (rest xs))))))
-
 (defn distance-to-first-duplicate
   "Manhattan distance to the first location visited twice"
-  [steps]
-  (->> steps all-points first-duplicate (v/manhattan origin)))
+  [instructions]
+  (->> instructions all-points u/first-duplicate (v/manhattan origin)))
 
 ;; Puzzle solutions
 (defn part1

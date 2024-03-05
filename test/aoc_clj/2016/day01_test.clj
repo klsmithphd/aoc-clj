@@ -28,7 +28,7 @@
 
 (deftest first-location-visited-twice-test
   (testing "Finds the first location visited twice"
-    (is (= [4 0] (d01/first-duplicate (d01/all-points d01-s03)))))
+    (is (= [4 0] (u/first-duplicate (d01/all-points d01-s03)))))
   (testing "Finds distance to the first location visited twice"
     (is (= 4 (d01/distance-to-first-duplicate d01-s03)))))
 

@@ -125,6 +125,19 @@
   [coll pred]
   (count (filter pred coll)))
 
+(defn first-duplicate
+  "Given a collection, find the first element that's a duplicate of
+   any element earlier in the collection.
+   
+   Returns nil if there are no duplicates. If `coll` contains nil,
+   this may be misleading"
+  [coll]
+  (loop [seen #{} xs coll]
+    (let [x (first xs)]
+      (if (or (seen x) (empty? xs))
+        x
+        (recur (conj seen x) (rest xs))))))
+
 (defn rev-range
   "A shorthand for a reverse range, i.e. one that counts down.
    Logically equivalent to `(reverse (range end))` or

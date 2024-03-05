@@ -78,6 +78,11 @@
   (testing "Demonstration of count-if: find the number of elements of coll that satisfy pred"
     (is (= 5 (u/count-if (range 10) odd?)))))
 
+(deftest first-duplicate-test
+  (testing "Demonstration of first-duplicate: find the first duplicated element in a collection"
+    (is (= 2 (u/first-duplicate [1 2 3 4 5 2 3 4 5])))
+    (is (= nil (u/first-duplicate (range 10))))))
+
 (deftest rev-range-test
   (testing "Demonstration of rev-range: returns a countdown range"
     (is (= '(4 3 2 1 0)
