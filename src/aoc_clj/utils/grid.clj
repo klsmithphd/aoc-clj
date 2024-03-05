@@ -1,6 +1,7 @@
 (ns aoc-clj.utils.grid
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.vectors :as v]))
 
 (defprotocol Grid2D
   "A two-dimensional grid of values"
@@ -53,6 +54,22 @@
    each compass heading to its relative bearing"
   (zipmap headings
           (map #(zipmap (u/rotate % headings) rel-bearings) (range 8))))
+
+(def relative-heading
+  "A mapping from a given compass heading to a map that translates
+   a relative bearing to the corresponding new heading"
+  (zipmap headings
+          (map #(zipmap (u/rotate % rel-bearings) headings) (range 0 -8 -1))))
+
+(defn turn
+  [{:keys [heading] :as state} bearing]
+  (assoc state :heading (get-in relative-heading [heading bearing])))
+
+(defn forward
+  [{:keys [heading] :as state} dist]
+  (let [delta (-> (extended-cardinal-offsets heading)
+                  (v/scalar-mult dist))]
+    (update state :pos v/vec-add delta)))
 
 (defn Grid2D->ascii
   "Convert a Grid2D into an ASCII-art string representation.
@@ -188,5 +205,18 @@
                       x (range minx (inc maxx))]
                   (get m [x y] not-found))]
      (mapv vec (partition width values)))))
+
+(defn interpolated
+  "Given a start point and end point for a line segment
+   (assumed to be either horizontal or vertical), return all
+   the points along the line segment.
+   
+   The collection returned will include both the start and end points"
+  [[[x1 y1] [x2 y2]]]
+  (let [dir-y (if (<= y1 y2) +1 -1)
+        dir-x (if (<= x1 x2) +1 -1)]
+    (for [y (range y1 (+ y2 dir-y) dir-y)
+          x (range x1 (+ x2 dir-x) dir-x)]
+      [x y])))
 
 

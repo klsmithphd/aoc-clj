@@ -115,3 +115,10 @@
             [0 0 0 0 2]
             [1 0 0 0 0]]
            (grid/mapgrid->vectors sparse-sample)))))
+
+
+(deftest interpolated-test
+  (testing "Computes the collection of points between two co-linear points"
+    (is (= [[1 4] [2 4] [3 4] [4 4]] (grid/interpolated [[1 4] [4 4]])))
+    (is (= [[3 2] [3 1] [3 0] [3 -1]] (grid/interpolated [[3 2] [3 -1]])))
+    (is (= [[1 1]] (grid/interpolated [[1 1] [1 1]])))))

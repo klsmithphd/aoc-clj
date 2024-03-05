@@ -1,77 +1,65 @@
 (ns aoc-clj.2016.day01
   "Solution to https://adventofcode.com/2016/day/1"
   (:require [clojure.string :as str]
+            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.utils.vectors :as v]))
 
+;; Constants
+(def origin [0 0])
+(def start {:pos origin :heading :n})
+
+;; Input parsing
 (defn parse-cmd
   [cmd]
-  (let [dir  (subs cmd 0 1)
-        dist (read-string (subs cmd 1))]
-    {:dir dir :dist dist}))
+  (let [bearing  ({"R" :right "L" :left} (subs cmd 0 1))
+        dist     (read-string (subs cmd 1))]
+    [bearing dist]))
 
 (defn parse
   [input]
   (map parse-cmd (str/split (first input) #", ")))
 
-(defn rotate
-  [heading dir]
-  (let [rmap {:north :east :east :south :south :west :west :north}
-        lmap {:north :west :west :south :south :east :east :north}]
-    (case dir
-      "R" (rmap heading)
-      "L" (lmap heading))))
-
+;; Puzzle logic
 (defn step
-  [{:keys [pos heading]} {:keys [dir dist]}]
-  (let [new-heading (rotate heading dir)]
-    {:heading new-heading
-     :pos (case new-heading
-            :north (update pos 1 + dist)
-            :south (update pos 1 - dist)
-            :east  (update pos 0 + dist)
-            :west  (update pos 0 - dist))}))
+  "Given an instruction to turn and then move forward a certain distance,
+   determine the new state of the walker"
+  [state [bearing dist]]
+  (-> state (grid/turn bearing) (grid/forward dist)))
 
 (defn move
-  [steps]
-  (reduce step {:pos [0 0] :heading :north} steps))
+  "Given all the instructions, determine the final state of the walker"
+  [instructions]
+  (reduce step start instructions))
 
 (defn distance
-  [steps]
-  (-> steps move :pos (v/manhattan [0 0])))
+  "Compute the Manhattan distance from the starting point after following
+   the instructions"
+  [instructions]
+  (-> instructions move :pos (v/manhattan origin)))
 
-(defn all-steps
-  [{:keys [visited heading]} {:keys [dir dist]}]
-  (let [new-heading (rotate heading dir)
-        pos         (last visited)
-        steps       (range 1 (inc dist))]
-    {:heading new-heading
-     :visited (into visited
-                    (case new-heading
-                      :north (map #(update pos 1 + %) steps)
-                      :south (map #(update pos 1 - %) steps)
-                      :east  (map #(update pos 0 + %) steps)
-                      :west  (map #(update pos 0 - %) steps)))}))
-
-(defn all-visited
-  [steps]
-  (reduce all-steps {:visited [[0 0]] :heading :north} steps))
-
-(defn first-duplicate
-  [coll]
-  (loop [seen #{} xs coll]
-    (let [x (first xs)]
-      (if (seen x)
-        x
-        (recur (conj seen x) (rest xs))))))
+(defn all-points
+  "Determine all the points passed through by the walker following
+   the instructions"
+  [instructions]
+  (->> (reductions step start instructions)
+       (map :pos)
+       (partition 2 1)
+       (mapcat grid/interpolated)
+       dedupe))
 
 (defn distance-to-first-duplicate
-  [steps]
-  (-> steps all-visited :visited first-duplicate (v/manhattan [0 0])))
+  "Manhattan distance to the first location visited twice"
+  [instructions]
+  (->> instructions all-points u/first-duplicate (v/manhattan origin)))
 
+;; Puzzle solutions
 (defn part1
+  "Distance to Easter Bunny HQ given the instructions"
   [input]
   (distance input))
 
 (defn part2
+  "Distance to first location visited twice given the instructions"
   [input]
   (distance-to-first-duplicate input))
