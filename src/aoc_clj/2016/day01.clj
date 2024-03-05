@@ -16,27 +16,11 @@
   (map parse-cmd (str/split (first input) #", ")))
 
 ;; Puzzle logic
-(defn rotate
-  [state dir]
-  (let [rmap {:n :e :e :s :s :w :w :n}
-        lmap {:n :w :w :s :s :e :e :n}]
-    (case dir
-      :right (update state :heading rmap)
-      :left  (update state :heading lmap))))
-
-(defn forward
-  [{:keys [heading] :as state} dist]
-  (case heading
-    :n (update-in state [:pos 1] + dist)
-    :s (update-in state [:pos 1] - dist)
-    :e (update-in state [:pos 0] + dist)
-    :w (update-in state [:pos 0] - dist)))
-
 (defn step
   [state {:keys [dir dist]}]
   (-> state
-      (rotate dir)
-      (forward dist)))
+      (grid/turn dir)
+      (grid/forward dist)))
 
 (defn move
   [steps]
