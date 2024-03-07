@@ -1,6 +1,29 @@
 # aoc-clj
+![Workflow Status](https://github.com/klsmithphd/aoc-clj/actions/workflows/clojure.yml/badge.svg)
+
 Solutions to [Advent of Code](https://adventofcode.com) challenges 
 implemented in Clojure
+
+# About
+
+[Advent of Code](https://adventofcode.com) has been an annual gift to programmers
+since 2015. It takes place for 25 days every December. A new coding challenge
+is released every day (like an 
+[advent calendar](https://en.wikipedia.org/wiki/Advent_calendar)) and consists
+of two parts. You don't *necessarily* need to write code to solve the challenge,
+but most of the time, you'll want to.
+
+This repository contains my collection of Advent of Code solutions
+implemented in [Clojure](https://clojure.org/). Clojure is a dynamic,
+functional programming language implemented on top of the Java Virtual
+Machine (JVM) as a LISP dialect. I was first introduced to Clojure in 2016
+and it has remained my favorite programming language of all time since then.
+
+While this is not a professional project by any means, I've tried over time
+to improve the readability, performance, and testability of my solutions
+as a means of "sharpening the saw". I've implemented quite a few helper 
+namespaces (think "modules" or "packages" in other languages) that help 
+solve common patterns of problems that tend to pop up again and again.
 
 # Usage
 
