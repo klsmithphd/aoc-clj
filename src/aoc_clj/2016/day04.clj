@@ -9,11 +9,11 @@
 ;; Input parsing
 (defn parse-line
   [line]
-  (let [[l r] (str/split line #"\[")
-        name (str/split l #"-")]
-    {:encrypted-name (butlast name)
-     :sector-id (read-string (last name))
-     :checksum (subs r 0 5)}))
+  (let [[_ code checksum] (re-find #"([\w\-]*)\[(\w{5})\]" line)
+        segments (str/split code #"-")]
+    {:encrypted-name (butlast segments)
+     :sector-id (read-string (last segments))
+     :checksum checksum}))
 
 (defn parse
   [input]
@@ -33,14 +33,14 @@
 (defn real-room?
   "A room is real if the checksum is the five most common characters
    in the enrcrypted name, in order, with ties broken by alphabetization"
-  [{:keys [:encrypted-name checksum]}]
-  (let [freqs (->> (apply str encrypted-name)
-                   frequencies
-                   (sort freq-letter-compare)
-                   (map key)
-                   (take 5)
-                   (apply str))]
-    (= freqs checksum)))
+  [{:keys [encrypted-name checksum]}]
+  (let [frequent-chars (->> (str/join encrypted-name)
+                            frequencies
+                            (sort freq-letter-compare)
+                            (map key)
+                            (take 5)
+                            str/join)]
+    (= frequent-chars checksum)))
 
 (defn real-room-sector-id-sum
   "The sum of the sector ids of all the real rooms"
@@ -53,7 +53,7 @@
   "Update the room to add a decrypted name to all room names"
   [{:keys [encrypted-name sector-id] :as room}]
   (let [charmap (zipmap alphabet (u/rotate (mod sector-id 26) alphabet))
-        decode  (fn [s] (apply str (map charmap s)))]
+        decode  (fn [s] (str/join (map charmap s)))]
     (assoc room :decrypted-name (map decode encrypted-name))))
 
 (defn north-pole-objects-room
