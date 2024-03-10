@@ -23,18 +23,27 @@
     :sector-id 200
     :checksum "decoy"}])
 
+(def d04-s01
+  {:encrypted-name ["qzmt" "zixmtkozy" "ivhz"]
+   :sector-id 343})
+
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d04-s00 (d04/parse d04-s00-raw)))))
 
-(deftest real-room?
+(deftest real-room?-test
   (testing "Identifies which rooms are real (not decoys)"
     (is (= [true true true false]
            (map d04/real-room? d04-s00)))))
 
-(deftest real-room-sector-id-sum
+(deftest real-room-sector-id-sum-test
   (testing "Adds up the sector ids of all the real rooms"
     (is (= 1514 (d04/real-room-sector-id-sum d04-s00)))))
+
+(deftest decipher-test
+  (testing "Can decipher the encrypted name"
+    (is (= (assoc d04-s01 :decrypted-name ["very" "encrypted" "name"])
+           (d04/decipher d04-s01)))))
 
 (def day04-input (u/parse-puzzle-input d04/parse 2016 4))
 
