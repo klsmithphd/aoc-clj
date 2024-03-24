@@ -1,31 +1,26 @@
 (ns aoc-clj.2015.day04
   "Solution to https://adventofcode.com/2015/day/4"
-  (:import java.security.MessageDigest))
+  (:require [aoc-clj.utils.digest :as d]))
 
 ;; Input parsing
 (def parse first)
 
 ;; Puzzle logic
-(def md5-alg (MessageDigest/getInstance "MD5"))
-(defn md5-byte-prefix
-  "First 3 bytes (as signed ints) of the MD5 hash of the supplied string"
-  [^String s]
-  (vec (take 3 (.digest md5-alg (.getBytes s)))))
-
 (defn five-zero-start?
   "Whether the three bytes correspond in hex to starting with five zeroes"
-  [[a b c]]
-  (and (zero? a) (zero? b) (<= 0 c 15)))
+  [bytes]
+  (let [[a b c] (take 3 bytes)]
+    (and (zero? a) (zero? b) (<= 0 c 15))))
 
 (defn six-zero-start?
   "Whether the three bytes correspond in hex to starting with six zeroes"
   [bytes]
-  (every? zero? bytes))
+  (every? zero? (take 3 bytes)))
 
 (defn first-integer
   "The first integer that satifies the supplied `pred` given the `secret`"
   [pred secret]
-  (let [passing-hash? #(pred (md5-byte-prefix (str secret %)))]
+  (let [passing-hash? #(pred (d/md5-bytes (str secret %)))]
     (first (filter passing-hash? (range)))))
 
 ;; Puzzle solutions
