@@ -42,8 +42,7 @@
 
 (deftest decipher-test
   (testing "Can decipher the encrypted name"
-    (is (= (assoc d04-s01 :decrypted-name ["very" "encrypted" "name"])
-           (d04/decipher d04-s01)))))
+    (is (= "very encrypted name" (d04/decipher d04-s01)))))
 
 (def day04-input (u/parse-puzzle-input d04/parse 2016 4))
 

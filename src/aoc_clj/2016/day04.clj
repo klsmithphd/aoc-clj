@@ -5,6 +5,7 @@
 
 ;; Constants
 (def alphabet "abcdefghijklmnopqrstuvwxyz")
+(def target-name "northpole object storage")
 
 ;; Input parsing
 (defn parse-line
@@ -50,19 +51,22 @@
        (reduce +)))
 
 (defn decipher
-  "Update the room to add a decrypted name to all room names"
-  [{:keys [encrypted-name sector-id] :as room}]
+  "Return the decyrpted room name"
+  [{:keys [encrypted-name sector-id]}]
   (let [charmap (zipmap alphabet (u/rotate (mod sector-id 26) alphabet))
         decode  (fn [s] (str/join (map charmap s)))]
-    (assoc room :decrypted-name (map decode encrypted-name))))
+    (str/join " " (map decode encrypted-name))))
+
+(defn np-storage?
+  "Whether the deciphered room name matches the target"
+  [room]
+  (= target-name (decipher room)))
 
 (defn north-pole-objects-room
   "Find all the valid rooms, decrypt their names, and find the one
    that matches `northpole object storage`."
   [input]
-  (->> (filter real-room? input)
-       (map decipher)
-       (filter #(= ["northpole" "object" "storage"] (:decrypted-name %)))
+  (->> (filter (every-pred real-room? np-storage?) input)
        first
        :sector-id))
 
