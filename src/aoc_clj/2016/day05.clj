@@ -111,6 +111,7 @@
        first
        str/join))
 
+;; Puzzle solutions
 (defn part1
   "Given a door id (prefix), what is the password using the logic in part 1"
   [input]
