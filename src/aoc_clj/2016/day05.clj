@@ -31,47 +31,38 @@
 (def parse first)
 
 ;; Puzzle logic
-(defn hash-bytes
-  "The MD5 hash (in bytes) of the concatenation of the prefix and
-   a numerical index"
-  [prefix idx]
-  (d/md5-bytes (str prefix idx)))
+(defn md5-digest
+  "For a given prefix, returns a function that will compute the MD5 digest 
+   (in bytes) of the concatenation of that prefix and anything else"
+  [prefix]
+  (fn [idx] (d/md5-bytes (str prefix idx))))
 
 (defn five-zero-indices
   "A lazy sequence of the indices that, when appended to the string `prefix`,
    result in an MD5 hash that begins with five zeroes"
   [prefix]
-  (filter #(d04/five-zero-start? (hash-bytes prefix %)) (range)))
+  (filter (comp d04/five-zero-start? (md5-digest prefix)) (range)))
 
 (defn indices-to-try
   "A sequence of indices to try concatenating with prefix. If the values
    have already been cached, return those, else return an infinite range
    starting at zero."
   [prefix]
-  (if-let [indices (cached-indices prefix)]
-    indices
-    (range)))
+  (get cached-indices prefix (range)))
 
 (defn five-zero-hashes
   "A sequence of the MD5 hashes (in bytes form) for consecutive prefix-number
    strings that start with five zeroes."
   [prefix]
   (->> (indices-to-try prefix)
-       (map #(hash-bytes prefix %))
+       (map (md5-digest prefix))
        (filter d04/five-zero-start?)))
 
-(defn password-part1
-  "In part 1, the password is found using the sixth character of the first
-   eight MD5 hashes that start with five zeroes."
-  [prefix]
-  (->> (five-zero-hashes prefix)
-       (take 8)
-       ;; Because we're returning bytes, the sixth character is found in the 
-       ;; third byte. We're guaranteed that the upper bits are all zero
-       ;; (because of the five zeroes condition), so we just convert the bits
-       ;; to a hex string, and that's the character we want.
-       (map #(format "%x" (nth % 2)))
-       str/join))
+(defn sixth-char
+  "Returns a pair of the index and the hex value (0-f) of the sixth character 
+   (in the string representation of) the MD5 digest"
+  [idx digest]
+  [idx (format "%x" (nth digest 2))])
 
 (defn pos-char-pair
   "For a collection of bytes representing an MD5 hash, interpret the hash
@@ -83,24 +74,30 @@
     ;; The position is just the value in the 3rd byte, but for the
     ;; the seventh character, we look at the 4th byte, map to a zero-padded
     ;; hex string and then only take the first character.
-    [pos (subs (format "%02x" ch) 0 1)]))
+    [(int pos) (subs (format "%02x" ch) 0 1)]))
+
+(defn password-chars
+  "Apply the logic of part1 or part2 to emit pairs of position/character
+   pairs in the deciphered password"
+  [part hashes]
+  (case part
+    :part1 (map-indexed sixth-char hashes)
+    :part2 (map pos-char-pair hashes)))
 
 (defn set-char
-  "If the character at position `idx` in collection `s` is seen for the first
-   time, update it to `c`, else return `s` untouched."
-  [s [idx c]]
-  (let [pos (read-string (str idx))]
-    (if (= \* (get s pos))
-      (assoc s pos c)
-      s)))
+  "If the character at position `idx` in collection `password` is seen for 
+   the first time, update it to `c`, else return `password` untouched."
+  [password [idx ch]]
+  (if (= \* (get password idx))
+    (assoc password idx ch)
+    password))
 
-(defn password-part2
-  "In part 2, the password is found by interpreting the sixth and seventh
-   characters of the MD5 hashes that start with five zeros as being the 
-   password position and character value, respectively."
-  [prefix]
+(defn password
+  "Using the puzzle logic given by `part` (either `:part1` or `:part2`),
+   decipher the password for the door id (`prefix`)."
+  [part prefix]
   (->> (five-zero-hashes prefix)
-       (map pos-char-pair)
+       (password-chars part)
        ;; Ignore any position index values outside the range 0-7 for
        ;; our 8-character password
        (filter #(<= 0 (first %) 7))
@@ -111,13 +108,16 @@
        first
        str/join))
 
+(def password-part1 (partial password :part1))
+(def password-part2 (partial password :part2))
+
 ;; Puzzle solutions
 (defn part1
-  "Given a door id (prefix), what is the password using the logic in part 1"
+  "Given a door id, what is the password using the logic in part 1"
   [input]
   (password-part1 input))
 
 (defn part2
-  "Given a door id (prefix), what is the password using the logic in part 2"
+  "Given a door id, what is the password using the logic in part 2"
   [input]
   (password-part2 input))
