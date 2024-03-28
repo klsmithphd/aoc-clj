@@ -64,6 +64,6 @@
   (count (filter supports-tls? input)))
 
 (defn part2
-  "How many IPs support SLS"
+  "How many IPs support SSL"
   [input]
   (count (filter supports-ssl? input)))
