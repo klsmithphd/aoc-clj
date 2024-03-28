@@ -9,8 +9,8 @@
 (deftest first-with-five-zeros
   (testing "Finds the earliest number to result in md5 hash starting 
             with five zeros"
-    (is (= 609043  (d04/first-integer d04/five-zero-start? d04-s00)))
-    (is (= 1048970 (d04/first-integer d04/five-zero-start? d04-s01)))))
+    (is (= 609043  (d04/first-five-zero-int d04-s00)))
+    (is (= 1048970 (d04/first-five-zero-int d04-s01)))))
 
 (def day04-input (u/parse-puzzle-input d04/parse 2015 4))
 

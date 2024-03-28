@@ -1,7 +1,6 @@
 (ns aoc-clj.2016.day05
   "Solution to https://adventofcode.com/2016/day/5"
   (:require [clojure.string :as str]
-            [aoc-clj.2015.day04 :as d04]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.digest :as d]))
 
@@ -35,13 +34,13 @@
   "For a given prefix, returns a function that will compute the MD5 digest 
    (in bytes) of the concatenation of that prefix and anything else"
   [prefix]
-  (fn [idx] (d/md5-bytes (str prefix idx))))
+  (fn [idx] (d/md5-digest (str prefix idx))))
 
 (defn five-zero-indices
   "A lazy sequence of the indices that, when appended to the string `prefix`,
    result in an MD5 hash that begins with five zeroes"
   [prefix]
-  (filter (comp d04/five-zero-start? (md5-digest prefix)) (range)))
+  (filter (comp d/five-zero-start? (md5-digest prefix)) (range)))
 
 (defn indices-to-try
   "A sequence of indices to try concatenating with prefix. If the values
@@ -56,7 +55,7 @@
   [prefix]
   (->> (indices-to-try prefix)
        (map (md5-digest prefix))
-       (filter d04/five-zero-start?)))
+       (filter d/five-zero-start?)))
 
 (defn sixth-char
   "Returns a pair of the index and the hex value (0-f) of the sixth character 

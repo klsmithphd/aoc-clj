@@ -6,30 +6,22 @@
 (def parse first)
 
 ;; Puzzle logic
-(defn five-zero-start?
-  "Whether the three bytes correspond in hex to starting with five zeroes"
-  [bytes]
-  (let [[a b c] (take 3 bytes)]
-    (and (zero? a) (zero? b) (<= 0 c 15))))
-
-(defn six-zero-start?
-  "Whether the three bytes correspond in hex to starting with six zeroes"
-  [bytes]
-  (every? zero? (take 3 bytes)))
-
 (defn first-integer
   "The first integer that satifies the supplied `pred` given the `secret`"
   [pred secret]
-  (let [passing-hash? #(pred (d/md5-bytes (str secret %)))]
+  (let [passing-hash? #(pred (d/md5-digest (str secret %)))]
     (first (filter passing-hash? (range)))))
+
+(def first-five-zero-int (partial first-integer d/five-zero-start?))
+(def first-six-zero-int (partial first-integer d/six-zero-start?))
 
 ;; Puzzle solutions
 (defn part1
   "The first integer whose MD5 hash in hex starts with five zeroes"
   [input]
-  (first-integer five-zero-start? input))
+  (first-five-zero-int input))
 
 (defn part2
   "The first integer whose MD5 hash in hex starts with six zeros"
   [input]
-  (first-integer six-zero-start? input))
+  (first-six-zero-int input))
