@@ -6,6 +6,7 @@
             [aoc-clj.utils.core :as u]))
 
 (def fontmap-6x5
+  "A fontmap for a set of 6-tall by 5-wide uppercase block characters"
   {:height 6
    :width 5
    :mapping
