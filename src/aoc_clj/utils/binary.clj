@@ -7,6 +7,11 @@
 
 (defn int->bitstr
   "Converts any integer (or long or bigint) to a bit string"
-  [x]
-  (let [bi (biginteger x)]
-    (.toString bi 2)))
+  ([x]
+   (.toString (biginteger x) 2))
+  ([width x]
+   (let [s (int->bitstr x)]
+     (if (>= (count s) width)
+       s
+       (let [pad (apply str (repeat (- width (count s)) "0"))]
+         (str pad s))))))
