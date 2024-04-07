@@ -35,42 +35,55 @@
     2r100011000101010001000010000100 \Y
     2r111100001000100010001000011110 \Z}})
 
-(defn pixel-char->binary
-  [pixels]
-  (->> (apply concat pixels)
+(defn blockchar->number
+  "Converts a blockchar to its integer (possibly bigint) equivalent"
+  [blockchar]
+  (->> (apply concat blockchar)
        (concat ["2" "r"])
        str/join
        read-string))
 
-(defn pixel-string->str
-  [{:keys [height width mapping]} pixels]
-  (->> (map #(partition width %) pixels)
+(defn columnize
+  "For a 2d array (a seq of seqs), convert the data into a seq of 
+   individual 2d arrays that represent individual `columns` or chacters"
+  [height width blockstring]
+  (->> (map #(partition width %) blockstring)
        (apply interleave)
-       (partition height)
-       (map (comp mapping pixel-char->binary))
+       (partition height)))
+
+(defn blockstring->str
+  "Converts a blockstring into the normal string it represents, given
+   a fontmap"
+  [{:keys [height width mapping]} blockstring]
+  (->> (columnize height width blockstring)
+       (map (comp mapping blockchar->number))
        str/join))
 
-(defn pixels->str
+(defn printable-blockstring
+  "Converts a blockstring into a printable string representation"
   ([pixels]
-   (pixels->str {0 \  1 \#} pixels))
+   (printable-blockstring {0 \  1 \#} pixels))
   ([charmap pixels]
    (->> (map #(str/join (map charmap %)) pixels)
         (str/join "\n"))))
 
-(defn- num->bitarray
+(defn- num->bitseq
+  "Convert a number into a sequence of bits, padded with zeros to `width`
+   if necessary"
   [width num]
   (->> (bin/int->bitstr width num)
        (map {\0 0 \1 1})))
 
-(defn str->pixels
+(defn str->blockstring
+  "Convert a string `s` into a blockstring given a fontmap"
   [{:keys [height width mapping]} s]
   (let [inv-map (u/invert-map mapping)]
-    (->>
-     (map (comp #(partition width %) #(num->bitarray (* width height) %) inv-map) s)
-     (apply interleave)
-     (partition (count s))
-     (map flatten))))
+    (->> (map #(num->bitseq (* width height) (inv-map %)) s)
+         (columnize (count s) width)
+         (map flatten))))
 
-(defn str->block-str
+(defn str->printable-blockstring
+  "Convert a string `s` into a printable representation of a blockstring
+   given a fontmap"
   [fontmap s]
-  (->> s (str->pixels fontmap) pixels->str))
+  (->> s (str->blockstring fontmap) printable-blockstring))
