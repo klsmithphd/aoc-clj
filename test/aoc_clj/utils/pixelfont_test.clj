@@ -2,7 +2,6 @@
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.pixelfont :as pf]))
 
-
 (def EO-pixels-6x5
   "The characters `EO` represented as pixels in the 6-by-5 font"
   [[1 1 1 1 0 0 1 1 0 0]
