@@ -1,5 +1,6 @@
-(ns aoc-clj.utils.pixelfont
-  "Utilities for transforming block character *pixel fonts* to/from strings"
+(ns aoc-clj.utils.blockstring
+  "Utilities for transforming block character strings (represented in 2d pixel
+   arrays) to and from normal character strings"
   (:require [clojure.string :as str]
             [aoc-clj.utils.binary :as bin]
             [aoc-clj.utils.core :as u]))
