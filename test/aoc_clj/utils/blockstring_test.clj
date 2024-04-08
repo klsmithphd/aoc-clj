@@ -37,6 +37,24 @@
    "#  # #  # #    #  # # #     #   #  #  #  ##  ## ###  #   #  #    \n"
    "#  #  ##  #     ## ##  # ###    #   ##   #   #   ##  #   #  #### "))
 
+(def columns-sample
+  ["a0" "a1" "a2" "b0" "b1" "b2" "c0" "c1" "c2"
+   "a3" "a4" "a5" "b3" "b4" "b5" "c3" "c4" "c5"])
+
+(def rows-sample
+  ["a0" "a1" "a2" "a3" "a4" "a5"
+   "b0" "b1" "b2" "b3" "b4" "b5"
+   "c0" "c1" "c2" "c3" "c4" "c5"])
+
+(deftest reweave-test
+  (testing "Demonstration of data reweaving"
+    ;; each *character* is 3 items wide. That's the first 3
+    ;; We want to end up with 3 destination "rows" (one for each character)
+    (is (= rows-sample (blstr/reweave 3 3 columns-sample)))
+    ;; each *character* should end up 3 items wide. 
+    ;; We should end up with 2 destination rows (representing a 2 pixel tall character)
+    (is (= columns-sample (blstr/reweave 3 2 rows-sample)))))
+
 (deftest pixel-string->str-test
   (testing "Can convert strings of block character pixels to a string"
     (is (= "EO" (blstr/blockstring->str blstr/fontmap-6x5 EO-pixels-6x5)))))
