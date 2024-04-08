@@ -4,12 +4,12 @@
 
 (def EO-pixels-6x5
   "The characters `EO` represented as pixels in the 6-by-5 font"
-  [[1 1 1 1 0 0 1 1 0 0]
-   [1 0 0 0 0 1 0 0 1 0]
-   [1 1 1 0 0 1 0 0 1 0]
-   [1 0 0 0 0 1 0 0 1 0]
-   [1 0 0 0 0 1 0 0 1 0]
-   [1 1 1 1 0 0 1 1 0 0]])
+  [1 1 1 1 0 0 1 1 0 0
+   1 0 0 0 0 1 0 0 1 0
+   1 1 1 0 0 1 0 0 1 0
+   1 0 0 0 0 1 0 0 1 0
+   1 0 0 0 0 1 0 0 1 0
+   1 1 1 1 0 0 1 1 0 0])
 
 (def EO-str-6x5
   (str "####  ##  \n"
@@ -43,7 +43,7 @@
 
 (deftest pixels->str-test
   (testing "Converts block chacter pixels to a printable string representation"
-    (is (= EO-str-6x5 (blstr/printable-blockstring EO-pixels-6x5)))))
+    (is (= EO-str-6x5 (blstr/printable-blockstring 6 EO-pixels-6x5)))))
 
 (deftest str->pixels-test
   (testing "Converts a string into block character pixels"

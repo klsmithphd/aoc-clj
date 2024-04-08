@@ -16,29 +16,34 @@
    {:cmd :rotate, :type :column, :pos 1, :amount 1}])
 
 (def d08-s00-grid-0
-  {[0 0] 0 [1 0] 0 [2 0] 0 [3 0] 0 [4 0] 0 [5 0] 0 [6 0] 0
-   [0 1] 0 [1 1] 0 [2 1] 0 [3 1] 0 [4 1] 0 [5 1] 0 [6 1] 0
-   [0 2] 0 [1 2] 0 [2 2] 0 [3 2] 0 [4 2] 0 [5 2] 0 [6 2] 0})
+  {:dims [7 3]
+   :grid [0 0 0 0 0 0 0
+          0 0 0 0 0 0 0
+          0 0 0 0 0 0 0]})
 
 (def d08-s00-grid-1
-  {[0 0] 1 [1 0] 1 [2 0] 1 [3 0] 0 [4 0] 0 [5 0] 0 [6 0] 0
-   [0 1] 1 [1 1] 1 [2 1] 1 [3 1] 0 [4 1] 0 [5 1] 0 [6 1] 0
-   [0 2] 0 [1 2] 0 [2 2] 0 [3 2] 0 [4 2] 0 [5 2] 0 [6 2] 0})
+  {:dims [7 3]
+   :grid [1 1 1 0 0 0 0
+          1 1 1 0 0 0 0
+          0 0 0 0 0 0 0]})
 
 (def d08-s00-grid-2
-  {[0 0] 1 [1 0] 0 [2 0] 1 [3 0] 0 [4 0] 0 [5 0] 0 [6 0] 0
-   [0 1] 1 [1 1] 1 [2 1] 1 [3 1] 0 [4 1] 0 [5 1] 0 [6 1] 0
-   [0 2] 0 [1 2] 1 [2 2] 0 [3 2] 0 [4 2] 0 [5 2] 0 [6 2] 0})
+  {:dims [7 3]
+   :grid [1 0 1 0 0 0 0
+          1 1 1 0 0 0 0
+          0 1 0 0 0 0 0]})
 
 (def d08-s00-grid-3
-  {[0 0] 0 [1 0] 0 [2 0] 0 [3 0] 0 [4 0] 1 [5 0] 0 [6 0] 1
-   [0 1] 1 [1 1] 1 [2 1] 1 [3 1] 0 [4 1] 0 [5 1] 0 [6 1] 0
-   [0 2] 0 [1 2] 1 [2 2] 0 [3 2] 0 [4 2] 0 [5 2] 0 [6 2] 0})
+  {:dims [7 3]
+   :grid [0 0 0 0 1 0 1
+          1 1 1 0 0 0 0
+          0 1 0 0 0 0 0]})
 
 (def d08-s00-grid-4
-  {[0 0] 0 [1 0] 1 [2 0] 0 [3 0] 0 [4 0] 1 [5 0] 0 [6 0] 1
-   [0 1] 1 [1 1] 0 [2 1] 1 [3 1] 0 [4 1] 0 [5 1] 0 [6 1] 0
-   [0 2] 0 [1 2] 1 [2 2] 0 [3 2] 0 [4 2] 0 [5 2] 0 [6 2] 0})
+  {:dims [7 3]
+   :grid [0 1 0 0 1 0 1
+          1 0 1 0 0 0 0
+          0 1 0 0 0 0 0]})
 
 (deftest parse-test
   (testing "Correctly parses the input"
@@ -52,12 +57,12 @@
     (is (= d08-s00-grid-4 (d08/step d08-s00-grid-3 (nth d08-s00 3))))))
 
 (deftest final-state-test
-  (testing "Can apply the instructions for the sample data"
-    (is (= #{[1 0] [4 0] [6 0] [0 1] [2 1] [1 2]}
-           (->>  (d08/final-state 7 3 d08-s00)
-                 (filter #(pos? (val %)))
-                 keys
-                 set)))))
+  (testing "Achieves the correct final state after all instructions"
+    (is (= d08-s00-grid-4 (d08/final-state [7 3] d08-s00)))))
+
+(deftest lit-pixels-test
+  (testing "Counts the number of lit up pixels"
+    (is (= 6 (d08/lit-pixels [7 3] d08-s00)))))
 
 (def day08-input (u/parse-puzzle-input d08/parse 2016 8))
 

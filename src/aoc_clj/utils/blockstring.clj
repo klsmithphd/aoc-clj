@@ -40,8 +40,7 @@
 (defn blockchar->number
   "Converts a blockchar to its integer (possibly bigint) equivalent"
   [blockchar]
-  (->> (apply concat blockchar)
-       (concat ["2" "r"])
+  (->> (concat ["2" "r"] blockchar)
        str/join
        read-string))
 
@@ -49,9 +48,11 @@
   "For a 2d array (a seq of seqs), convert the data into a seq of 
    individual 2d arrays that represent individual `columns` or chacters"
   [height width blockstring]
-  (->> (map #(partition width %) blockstring)
+  (->> (partition (/ (count blockstring) height) blockstring)
+       (map #(partition width %))
        (apply interleave)
-       (partition height)))
+       (partition height)
+       (map #(apply concat %))))
 
 (defn blockstring->str
   "Converts a blockstring into the normal string it represents, given
@@ -63,10 +64,12 @@
 
 (defn printable-blockstring
   "Converts a blockstring into a printable string representation"
-  ([pixels]
-   (printable-blockstring {0 \  1 \#} pixels))
-  ([charmap pixels]
-   (->> (map #(str/join (map charmap %)) pixels)
+  ([height pixels]
+   (printable-blockstring {0 \  1 \#} height pixels))
+  ([charmap height pixels]
+   (->> (map charmap pixels)
+        (partition (/ (count pixels) height))
+        (map str/join)
         (str/join "\n"))))
 
 (defn- num->bitseq
@@ -80,12 +83,13 @@
   "Convert a string `s` into a blockstring given a fontmap"
   [{:keys [height width mapping]} s]
   (let [inv-map (u/invert-map mapping)]
-    (->> (map #(num->bitseq (* width height) (inv-map %)) s)
+    (->> (mapcat #(num->bitseq (* width height) (inv-map %)) s)
          (columnize (count s) width)
-         (map flatten))))
+         (apply concat)
+         vec)))
 
 (defn str->printable-blockstring
   "Convert a string `s` into a printable representation of a blockstring
    given a fontmap"
-  [fontmap s]
-  (->> s (str->blockstring fontmap) printable-blockstring))
+  [{:keys [height] :as fontmap} s]
+  (->> s (str->blockstring fontmap) (printable-blockstring height)))

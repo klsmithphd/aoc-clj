@@ -1,13 +1,11 @@
 - (ns aoc-clj.2016.day08
     "Solution to https://adventofcode.com/2016/day/8"
     (:require [clojure.string :as str]
-              [aoc-clj.utils.core :as u]
-              [aoc-clj.utils.grid :as grid]
-              [aoc-clj.utils.grid.mapgrid :as mg]))
+              [aoc-clj.utils.blockstring :as blstr]
+              [aoc-clj.utils.core :as u]))
 
 ;; Constants
-(def screen-width 50)
-(def screen-height 6)
+(def screen-dims [50 6])
 
 ;; Input parsing
 (defn parse-rect
@@ -36,87 +34,106 @@
   (map parse-line input))
 
 ;; Puzzle logic
-(defn grid-set
-  "Return a (w x h) grid map with all values set to `val`"
-  [width height val]
-  (into {} (for [y (range height)
-                 x (range width)]
-             [[x y] val])))
+(defn row-indices
+  [[width _] idx]
+  (range (* idx width) (* (inc idx) width)))
 
-(defn get-slice
-  "Retrieve a slice of the `grid` of `type` (`:row|:column`) at
-   index `pos` (0-indexed)"
-  [grid type pos]
-  (let [coord (case type
-                :column first
-                :row second)]
-    (into (sorted-map) (filter #(= pos (-> % key coord)) grid))))
+(defn col-indices
+  [[width height] idx]
+  (range idx (* width height) width))
 
-(defn rotate-slice
-  "Cycle the values of the slice by `amount`"
-  [slice amount]
-  (zipmap (keys slice) (u/rotate (- amount) (vals slice))))
+(defn rotate-row
+  [[width _] v pos amount]
+  (vec
+   (concat
+    (subvec v 0 (* pos width))
+    (u/rotate (- amount) (subvec v (* pos width) (* (inc pos) width)))
+    (subvec v (* (inc pos) width)))))
+
+(defn rotate-col
+  [dims v pos amount]
+  (let [idxs    (col-indices dims pos)
+        new-col (u/rotate (- amount) (map v idxs))]
+    (vec (apply assoc v (interleave idxs new-col)))))
+
+(defn init-grid
+  [[width height]]
+  {:dims [width height]
+   :grid (vec (repeat (* width height) 0))})
+
+;; (defn grid-set
+;;   "Return a (w x h) grid map with all values set to `val`"
+;;   [width height val]
+;;   (into {} (for [y (range height)
+;;                  x (range width)]
+;;              [[x y] val])))
+
+;; (defn get-slice
+;;   "Retrieve a slice of the `grid` of `type` (`:row|:column`) at
+;;    index `pos` (0-indexed)"
+;;   [grid type pos]
+;;   (let [coord (case type
+;;                 :column first
+;;                 :row second)]
+;;     (into (sorted-map) (filter #(= pos (-> % key coord)) grid))))
+
+;; (defn rotate-slice
+;;   "Cycle the values of the slice by `amount`"
+;;   [slice amount]
+;;   (zipmap (keys slice) (u/rotate (- amount) (vals slice))))
 
 (defn apply-rotate
   "Apply a `rotate` instruction to update the display grid"
-  [grid {:keys [type pos amount]}]
-  (merge grid (-> (get-slice grid type pos)
-                  (rotate-slice amount))))
+  [{:keys [dims grid]} {:keys [type pos amount]}]
+  (case type
+    :row    (rotate-row dims grid pos amount)
+    :column (rotate-col dims grid pos amount)))
 
 (defn apply-rect
   "Apply a `rect` instruction to update the display grid"
-  [grid {:keys [width height]}]
-  (merge grid (grid-set width height 1)))
+  [{:keys [dims grid]} {:keys [width height]}]
+  (let [grid-width (first dims)
+        idxs (for [y (range height)
+                   x (range width)]
+               (+ x (* y grid-width)))]
+    (vec (apply assoc grid (interleave idxs (repeat 1))))))
 
 (defn step
   "Update the `grid` following one instruction "
-  [grid {:keys [cmd] :as instruction}]
-  (case cmd
-    :rect   (apply-rect grid instruction)
-    :rotate (apply-rotate grid instruction)))
+  [state {:keys [cmd] :as instruction}]
+  (assoc state :grid
+         (case cmd
+           :rect   (apply-rect state instruction)
+           :rotate (apply-rotate state instruction))))
 
-(defn init-grid
-  "Intialize an empty grid (w x h) to all pixels off"
-  [width height]
-  (grid-set width height 0))
+;; (defn init-grid
+;;   "Intialize an empty grid (w x h) to all pixels off"
+;;   [width height]
+;;   (grid-set width height 0))
 
 (defn final-state
   "Iteratively apply the instructions to a (w x h) display grid"
-  [width height cmds]
-  (reduce step (init-grid width height) cmds))
+  [dims cmds]
+  (let [start (init-grid dims)]
+    (reduce step start cmds)))
 
 (defn lit-pixels
   "How many pixels are lit up on the (w x h) display after
    executing each of the `cmds` sequentially"
-  [width height cmds]
-  (->> (final-state width height cmds)
-       vals
-       (filter pos?)
-       count))
+  [dims cmds]
+  (->> (final-state dims cmds)
+       :grid
+       (reduce +)))
 
 ;; Puzzle solutions
 (defn part1
   "How many pixels are lit up after following the instructions"
   [input]
-  (lit-pixels screen-width screen-height input))
+  (lit-pixels screen-dims input))
 
 (defn part2
   "What string do the lit up pixels spell after following the instructions"
   [input]
-  ;; Print the grid so as to be able to read the block characters
-  (println (grid/Grid2D->ascii
-            {\  0 \# 1}
-            (mg/->MapGrid2D
-             screen-width
-             screen-height
-             (final-state screen-width screen-height input))
-            :down true))
-  (comment
-    "####  ##   ##  ###   ##  ###  #  # #   # ##   ##  "
-    "#    #  # #  # #  # #  # #  # #  # #   ##  # #  # "
-    "###  #  # #  # #  # #    #  # ####  # # #  # #  # "
-    "#    #  # #### ###  # ## ###  #  #   #  #### #  # "
-    "#    #  # #  # # #  #  # #    #  #   #  #  # #  # "
-    "####  ##  #  # #  #  ### #    #  #   #  #  #  ##  ")
-  "EOARGPHYAO")
-
+  (->> (final-state screen-dims input)
+       :grid
+       (blstr/blockstring->str blstr/fontmap-6x5)))
