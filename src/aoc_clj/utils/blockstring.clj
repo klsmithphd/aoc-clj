@@ -37,30 +37,26 @@
     2r100011000101010001000010000100 \Y
     2r111100001000100010001000011110 \Z}})
 
-(defn blockchar->number
-  "Converts a blockchar to its integer (possibly bigint) equivalent"
-  [blockchar]
-  (->> (concat ["2" "r"] blockchar)
-       str/join
-       read-string))
-
-(defn columnize
-  "For a 2d array (a seq of seqs), convert the data into a seq of 
-   individual 2d arrays that represent individual `columns` or chacters"
-  [height width blockstring]
-  (->> (partition (/ (count blockstring) height) blockstring)
-       (map #(partition width %))
+(defn reweave
+  "Reorder a vec representing 2d data"
+  [char-width chunks v]
+  (->> v
+       (partition char-width)
+       (partition chunks)
        (apply interleave)
-       (partition height)
-       (map #(apply concat %))))
+       (apply concat)))
 
 (defn blockstring->str
   "Converts a blockstring into the normal string it represents, given
    a fontmap"
   [{:keys [height width mapping]} blockstring]
-  (->> (columnize height width blockstring)
-       (map (comp mapping blockchar->number))
-       str/join))
+  (let [n-chars   (/ (count blockstring) height width)
+        char-size (* height width)]
+    (->> blockstring
+         (reweave width n-chars)
+         (partition char-size)
+         (map (comp mapping bin/bitstr->int str/join))
+         str/join)))
 
 (defn printable-blockstring
   "Converts a blockstring into a printable string representation"
@@ -82,10 +78,10 @@
 (defn str->blockstring
   "Convert a string `s` into a blockstring given a fontmap"
   [{:keys [height width mapping]} s]
-  (let [inv-map (u/invert-map mapping)]
-    (->> (mapcat #(num->bitseq (* width height) (inv-map %)) s)
-         (columnize (count s) width)
-         (apply concat)
+  (let [inv-map (u/invert-map mapping)
+        char-size (* width height)]
+    (->> (mapcat #(num->bitseq char-size (inv-map %)) s)
+         (reweave width height)
          vec)))
 
 (defn str->printable-blockstring

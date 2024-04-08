@@ -34,16 +34,19 @@
   (map parse-line input))
 
 ;; Puzzle logic
-(defn row-indices
-  [[width _] idx]
-  (range (* idx width) (* (inc idx) width)))
+;; (defn row-indices
+;;   "For 2-d data stored in a 1-d seq, return the indices for the row at idx"
+;;   [[width _] idx]
+;;   (range (* idx width) (* (inc idx) width)))
 
 (defn col-indices
+  "For 2-d data stored in a 1-d seq, return the indices for the column at idx"
   [[width height] idx]
   (range idx (* width height) width))
 
 (defn rotate-row
-  [[width _] v pos amount]
+  "Rotate the values of the row in vec `v` at position `pos` by `amount`"
+  [[width] v pos amount]
   (vec
    (concat
     (subvec v 0 (* pos width))
@@ -51,36 +54,17 @@
     (subvec v (* (inc pos) width)))))
 
 (defn rotate-col
+  "Rotate the values of the column in vec `v` at position `pos` by `amount`"
   [dims v pos amount]
   (let [idxs    (col-indices dims pos)
         new-col (u/rotate (- amount) (map v idxs))]
     (vec (apply assoc v (interleave idxs new-col)))))
 
 (defn init-grid
+  "Construct an grid initialized to zero of size given by `dims`"
   [[width height]]
   {:dims [width height]
    :grid (vec (repeat (* width height) 0))})
-
-;; (defn grid-set
-;;   "Return a (w x h) grid map with all values set to `val`"
-;;   [width height val]
-;;   (into {} (for [y (range height)
-;;                  x (range width)]
-;;              [[x y] val])))
-
-;; (defn get-slice
-;;   "Retrieve a slice of the `grid` of `type` (`:row|:column`) at
-;;    index `pos` (0-indexed)"
-;;   [grid type pos]
-;;   (let [coord (case type
-;;                 :column first
-;;                 :row second)]
-;;     (into (sorted-map) (filter #(= pos (-> % key coord)) grid))))
-
-;; (defn rotate-slice
-;;   "Cycle the values of the slice by `amount`"
-;;   [slice amount]
-;;   (zipmap (keys slice) (u/rotate (- amount) (vals slice))))
 
 (defn apply-rotate
   "Apply a `rotate` instruction to update the display grid"
@@ -91,9 +75,8 @@
 
 (defn apply-rect
   "Apply a `rect` instruction to update the display grid"
-  [{:keys [dims grid]} {:keys [width height]}]
-  (let [grid-width (first dims)
-        idxs (for [y (range height)
+  [{:keys [grid] [grid-width] :dims} {:keys [width height]}]
+  (let [idxs (for [y (range height)
                    x (range width)]
                (+ x (* y grid-width)))]
     (vec (apply assoc grid (interleave idxs (repeat 1))))))
@@ -105,11 +88,6 @@
          (case cmd
            :rect   (apply-rect state instruction)
            :rotate (apply-rotate state instruction))))
-
-;; (defn init-grid
-;;   "Intialize an empty grid (w x h) to all pixels off"
-;;   [width height]
-;;   (grid-set width height 0))
 
 (defn final-state
   "Iteratively apply the instructions to a (w x h) display grid"
