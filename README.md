@@ -30,7 +30,19 @@ solve common patterns of problems that tend to pop up again and again.
 ## Prerequisites
 
 This project uses [Leiningen](https://leiningen.org/) for project automation.
-Please install it and a suitable Java runtime before proceeding.
+Please install it and a suitable Java runtime before proceeding. This project
+is also set up to run within a devcontainer, so if you have Docker installed
+locally, you don't need to install anything on your host system.
+
+For my own testing, I have a private repository of each day's puzzle input files.
+
+With a fresh git checkout, `cd` into `inputs` and issue the following commands
+to pull down the inputs submodule:
+
+```
+git submodule init
+git submodule update
+```
 
 ## Running
 You can execute any day's implemented solutions, either with my puzzle input 
