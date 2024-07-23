@@ -31,28 +31,31 @@
 
 ;; Puzzle logic
 (defn move
+  "Return a new state map with the given `objects` removed from the `from` floor
+   and added to the `to` floor"
   [state from to objects]
   (assoc state
          :e to
-        ;;  :move (inc (get state :move))
          from (apply disj (state from) objects)
-         to (apply conj (state to) objects)))
+         to   (apply conj (state to) objects)))
 
-(defn microchips
-  [items]
-  (->> items
-       (filter #(= :m (first %)))
-       (map second)
-       set))
+(defn get-typed-items
+  [item-type]
+  (fn [items]
+    (->> items
+         (filter #(= item-type (first %)))
+         (map second)
+         set)))
 
-(defn generators
-  [items]
-  (->> items
-       (filter #(= :g (first %)))
-       (map second)
-       set))
+(def microchips (get-typed-items :m))
+(def generators (get-typed-items :g))
+
 
 (defn legal-items?
+  "A combination of items on a given floor is legal if it doesn't result in any
+   microchips getting fried, which means that any microchip, if present, must either
+   not be next to any other generators or that every microchip is paired with its
+   corresponding generator."
   [items]
   (let [chips (microchips items)
         gens  (generators items)]
@@ -60,10 +63,13 @@
         (set/subset? chips gens))))
 
 (defn legal?
+  "A state is deemed legal if, on every floor, the combination of items is legal"
   [state]
   (every? legal-items? (map (partial get state) [1 2 3 4])))
 
-(defn adjacents
+(defn legal-moves
+  "Given the current state, return a seq of the possible next states that are legal
+   (i.e. won't result in a microchip getting fried)"
   [state]
   (let [elev (get state :e)
         floor (seq (get state elev))
@@ -79,13 +85,15 @@
   Graph
   (edges
     [_ v]
-    (adjacents v))
+    (legal-moves v))
 
   (distance
     [_ _ _]
     1))
 
 (defn endstate
+  "Given the initial state, return the desired endstate with all items and the elevator
+   on the fourth floor"
   [state]
   {:e 4
    1 #{}
@@ -96,6 +104,7 @@
          (apply set/union))})
 
 (defn move-count
+  "Counts the minimum number of moves required to get all items moved up to the fourth floor"
   [input]
   (->> (g/dijkstra
         (->MoveGraph)
@@ -106,14 +115,19 @@
        dec))
 
 (defn extra-items
+  "Update the initial state to account for additional items that weren't in the puzzle input"
   [state]
   (update state 1 conj [:m "elerium"] [:g "elerium"] [:m "dilithium"] [:g "dilithium"]))
 
 ;; Puzzle solutions
 (defn part1
+  "Minium number of moves to get all items to the fourth floor"
   [input]
   (move-count input))
 
 (defn part2
+  "Minium number of moves to get all items to the fourth floor, including the extra items
+   discovered on the first floor"
   [input]
   (move-count (extra-items input)))
+

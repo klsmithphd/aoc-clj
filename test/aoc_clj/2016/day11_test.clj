@@ -37,7 +37,7 @@
 (def day11-input (u/parse-puzzle-input d11/parse 2016 11))
 
 ;; FIXME: Implementation is too slow
-;; https://github.com/Ken-2scientists/aoc-clj/issues/31
+;; https://github.com/klsmithphd/aoc-clj/issues/31
 (deftest ^:slow part1
   (testing "Reproduces the answer for day11, part1"
     (is (= 31 (d11/part1 day11-input)))))
