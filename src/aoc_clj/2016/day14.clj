@@ -11,10 +11,16 @@
   [s]
   (some? (re-find #"(.)\1{2}" s)))
 
+(defn stretched-md5-str
+  "Computed the stretched MD5 hash of the supplied string by iteratively
+   computing the hash of hashes for a total of 2017 total hashings"
+  [s]
+  (first (drop 2017 (iterate d/md5-str s))))
+
 (defn triple-char-key-candidates
-  [salt]
+  [hash-fn salt]
   (->> (range)
-       (map-indexed (fn [idx itm] [idx (d/md5-str (str salt itm))]))
+       (map-indexed (fn [idx itm] [idx (hash-fn (str salt itm))]))
        (filter #(has-triple-chars? (second %)))))
 
 (defn fivepeat-in-thousand
@@ -26,20 +32,28 @@
          (some #(re-find patt (second %))))))
 
 (defn pad-keys
-  [salt]
-  (->> (triple-char-key-candidates salt)
+  "Returns an infinite sequence of all the indices that produce valid
+   one-time pad keys for the given salt"
+  [hash-fn salt]
+  (->> (triple-char-key-candidates hash-fn salt)
        (partition 1001 1)
        (filter fivepeat-in-thousand)
-       (map first)))
+       (map ffirst)))
 
 (defn last-pad-key
-  [salt]
-  (->> (pad-keys salt)
+  "Returns the last (64th) one-time pad key for the given salt"
+  [hash-fn salt]
+  (->> (pad-keys hash-fn salt)
        (take 64)
-       last
-       first))
+       last))
 
 ;; Puzzle solutions
 (defn part1
+  "What index produces the 64th one-time pad key"
   [input]
-  (last-pad-key input))
+  (last-pad-key d/md5-str input))
+
+(defn part2
+  "What index produces the 64th one-time pad key with key stretching implemented"
+  [input]
+  (last-pad-key stretched-md5-str input))
