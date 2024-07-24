@@ -43,7 +43,6 @@
        (filter #(open? fav %))))
 
 (defrecord CubicleMazeGraph [fav]
-  "Can you add a docstring to a defrecord?"
   Graph
   (edges
     [_ v]
