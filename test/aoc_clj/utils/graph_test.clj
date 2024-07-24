@@ -97,3 +97,13 @@
             [:a :d :b :e :f]
             [:a :d :c :f]
             [:a :d :e :f]] (g/all-paths-dfs t3 :a (u/equals? :f))))))
+
+(deftest flood-fill-test
+  (testing "Returns the set of all distinct vertices in a graph reachable from a
+            starting vertex, up to an optional traversal count limit"
+    (is (= #{:a}                   (g/flood-fill t5 :a :limit 0)))
+    (is (= #{:a :b :e}             (g/flood-fill t5 :a :limit 1)))
+    (is (= #{:a :b :e :c :f}       (g/flood-fill t5 :a :limit 2)))
+    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t5 :a :limit 3)))
+    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t5 :a)))))
+

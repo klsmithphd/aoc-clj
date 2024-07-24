@@ -6,7 +6,9 @@
             [aoc-clj.utils.grid :as grid]))
 
 ;; Constants
+(def start-pos [1 1])
 (def part1-target-pos [31 39])
+(def part2-step-limit 50)
 
 ;; Input parsing
 (defn parse
@@ -56,12 +58,25 @@
   "Compute the length of the shortest path from 1,1 to the `finish` location
    for a given office designer's favorite number `fav`"
   [fav finish]
-  (->> (g/dijkstra (->CubicleMazeGraph fav) [1 1] (u/equals? finish) :limit 1000)
-       count
-       dec))
+  (let [graph (->CubicleMazeGraph fav)]
+    (->> (g/dijkstra graph start-pos (u/equals? finish) :limit 500)
+         count
+         dec)))
+
+(defn reachable-locations
+  "Returns a set of the locations reachable in up to `limit` moves
+   away from 1,1 given the office designer's favorite number `fav`"
+  [fav limit]
+  (let [graph (->CubicleMazeGraph fav)]
+    (g/flood-fill graph start-pos :limit limit)))
 
 ;; Puzzle solutions
 (defn part1
   "Fewest number of steps required to reach 31,39"
   [input]
   (shortest-path-length input part1-target-pos))
+
+(defn part2
+  "How many locations including starting pos can you reach in at most 50 steps?"
+  [input]
+  (count (reachable-locations input part2-step-limit)))

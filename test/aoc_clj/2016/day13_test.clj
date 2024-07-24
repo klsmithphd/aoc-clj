@@ -13,6 +13,6 @@
   (testing "Reproduces the answer for day13, part1"
     (is (= 90 (t/part1 day13-input)))))
 
-;; (deftest part2-test
-;;   (testing "Reproduces the answer for day13, part2"
-;;     (is (= 0 (t/part2)))))
+(deftest part2-test
+  (testing "Reproduces the answer for day13, part2"
+    (is (= 135 (t/part2 day13-input)))))

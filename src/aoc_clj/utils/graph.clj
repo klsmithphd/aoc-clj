@@ -1,5 +1,6 @@
 (ns aoc-clj.utils.graph
-  (:require [clojure.data.priority-map :refer [priority-map]]
+  (:require [clojure.set :as set]
+            [clojure.data.priority-map :refer [priority-map]]
             [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]))
 
@@ -273,3 +274,24 @@
   (->> (adjacency-list graph)
        (group-by second)
        (u/fmap reverse-graph-helper)))
+
+(defn- advance-front
+  "For a given _front_ of vertices in the `graph`, and already
+   visited vertices `visited`, return the set of newly discovered
+   vertices reachable in one edge traversal (i.e. nearest neighbors)"
+  [graph front visited]
+  (set/difference (set (mapcat #(edges graph %) front)) visited))
+
+(defn flood-fill
+  "For a given `graph`, starting at vertex `start`, return a set of
+   distinct vertices that are reachable through traversing the graph
+   edges. 
+   
+   If the optional `:limit` is provided, the traversal will only go
+   up to `limit` edge traversals from the start before terminating."
+  [graph start & {:keys [limit]}]
+  (loop [front #{start} cnt 0 visited #{start}]
+    (if (or (empty? front) (= cnt limit))
+      visited
+      (let [new-front (advance-front graph front visited)]
+        (recur new-front (inc cnt) (set/union visited new-front))))))
