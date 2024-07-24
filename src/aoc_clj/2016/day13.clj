@@ -1,44 +1,68 @@
 (ns aoc-clj.2016.day13
   "Solution to https://adventofcode.com/2016/day/13"
-  (:require [aoc-clj.utils.binary :as b]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid :refer [->MapGrid2D]]))
+  (:require [aoc-clj.utils.core :as u] 
+            [aoc-clj.utils.binary :as b]
+            [aoc-clj.utils.graph :as g :refer [Graph]]
+            [aoc-clj.utils.grid :as grid]))
 
-(def charmap
-  {\. :open
-   \# :wall})
+;; Constants
+(def part1-target-pos [31 39])
 
-(defn wall-calc
+;; Input parsing
+(defn parse
+  [input]
+  (read-string (first input)))
+
+;; Puzzle logic
+(defn valid-coord?
+  "The grid stretches from 0,0 infinitely to all positive values of x and y"
+  [[x y]]
+  (and (>= x 0) (>= y 0)))
+
+(defn wall-calc 
+  "Compute the _point value_ of a given x,y position using the office
+   designer's favorite number `fav`"
   [fav [x y]]
   (+ fav (* x x) (* 3 x) (* 2 x y) y (* y y)))
 
-(defn cell
+(defn open?
+  "Determine whether the given `pos` is open (i.e. not a wall)"
   [fav pos]
-  (let [ones (-> (wall-calc fav pos)
-                 b/int->bitstr
-                 frequencies
-                 (get \1))]
-    (if (even? ones)
-      :open
-      :wall)))
+  (->> (wall-calc fav pos)
+       b/int->bitstr
+       (filter #(= \1 %))
+       count
+       even?))
 
-(defn construct-grid
-  [fav width height]
-  (->MapGrid2D
-   width
-   height
-   (into {}
-         (for [y (range height)
-               x (range width)]
-           [[x y] (cell fav [x y])]))))
+(defn valid-neighbors
+  "Given the office designer's favorite number `fav` and a given position
+   `pos`, return a seq of the allowed neighboring moves."
+  [fav pos]
+  (->> (grid/adj-coords-2d pos)
+       (filter valid-coord?)
+       (filter #(open? fav %))))
 
-;; (defn path-distance
-;;   [fav finish]
-;;   (let [start [1 1]
-;;         grid  (construct-grid fav 10 7)
-;;         maze  (->Maze (:grid grid) #(= :open %))
-;;         graph (-> maze maze/Maze->Graph (g/pruned #{start finish}))
-;;         path  (g/dijkstra graph start (u/equals? finish))]
-;;     (println graph)
-;;     (g/path-distance graph path)))
+(defrecord CubicleMazeGraph [fav]
+  "Can you add a docstring to a defrecord?"
+  Graph
+  (edges
+    [_ v]
+    (valid-neighbors fav v))
 
-;; (path-distance 10 [7 4])
+  (distance
+    [_ _ _]
+    1))
+
+(defn shortest-path-length
+  "Compute the length of the shortest path from 1,1 to the `finish` location
+   for a given office designer's favorite number `fav`"
+  [fav finish]
+  (->> (g/dijkstra (->CubicleMazeGraph fav) [1 1] (u/equals? finish) :limit 1000)
+       count
+       dec))
+
+;; Puzzle solutions
+(defn part1
+  "Fewest number of steps required to reach 31,39"
+  [input]
+  (shortest-path-length input part1-target-pos))
