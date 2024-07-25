@@ -22,6 +22,7 @@
   (testing "Finds the index that produces the 64 one-time pad key"
     (is (= 22728 (d14/last-pad-key d14/md5 d14-s00)))))
 
+;; FIXME: Too slow https://github.com/klsmithphd/aoc-clj/issues/76
 (deftest ^:slow last-stretched-pad-key-test
   (testing "Finds the index that produces the 64 one-time pad key with key stretching"
     (is (= 22551 (d14/last-pad-key d14/smd5 d14-s00)))))
@@ -32,6 +33,7 @@
   (testing "Reproduces the answer for day13, part1"
     (is (= 15168 (d14/part1 day14-input)))))
 
+;; FIXME: Too slow https://github.com/klsmithphd/aoc-clj/issues/76
 (deftest ^:slow part2-test
   (testing "Reproduces the answer for day14, part2"
     (is (= 20864 (d14/part2 day14-input)))))
