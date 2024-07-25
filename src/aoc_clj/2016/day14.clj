@@ -7,23 +7,34 @@
 (def parse first)
 
 ;; Puzzle logic
-(defn has-triple-chars?
-  [s]
-  (some? (re-find #"(.)\1{2}" s)))
-
 (defn stretched-md5-str
   "Computed the stretched MD5 hash of the supplied string by iteratively
    computing the hash of hashes for a total of 2017 total hashings"
   [s]
   (first (drop 2017 (iterate d/md5-str s))))
 
+(def md5 d/md5-str)
+(def smd5 stretched-md5-str)
+
+(defn has-triple-chars?
+  "Returns true if the string has a sequence of a character being
+   repeated three times consecutively"
+  [s]
+  (some? (re-find #"(.)\1{2}" s)))
+
 (defn triple-char-key-candidates
+  "An infinite sequence of index, hash tuples for which the hashes
+   contain a character repeated three times consecutively"
   [hash-fn salt]
   (->> (range)
        (map-indexed (fn [idx itm] [idx (hash-fn (str salt itm))]))
        (filter #(has-triple-chars? (second %)))))
 
 (defn fivepeat-in-thousand
+  "Given a window of a current index-hash pair as well as subsequent
+   index-hash pairs, return true if there's a hash in the next
+   1000 candidates that has a sequence of five consecutive characters
+   matching the current triplet"
   [[[idx hashstr] & other-candidates]]
   (let [trip-ch (second (re-find #"(.)\1{2}" hashstr))
         patt    (re-pattern (str/join (repeat 5 trip-ch)))]
@@ -51,9 +62,9 @@
 (defn part1
   "What index produces the 64th one-time pad key"
   [input]
-  (last-pad-key d/md5-str input))
+  (last-pad-key md5 input))
 
 (defn part2
   "What index produces the 64th one-time pad key with key stretching implemented"
   [input]
-  (last-pad-key stretched-md5-str input))
+  (last-pad-key smd5 input))
