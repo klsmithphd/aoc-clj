@@ -30,7 +30,7 @@
 (def day14-input (u/parse-puzzle-input d14/parse 2016 14))
 
 (deftest part1-test
-  (testing "Reproduces the answer for day13, part1"
+  (testing "Reproduces the answer for day14, part1"
     (is (= 15168 (d14/part1 day14-input)))))
 
 ;; FIXME: Too slow https://github.com/klsmithphd/aoc-clj/issues/76
