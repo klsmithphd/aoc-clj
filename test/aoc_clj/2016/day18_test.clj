@@ -22,6 +22,7 @@
   (testing "Reproduces the answer for day18, part1"
     (is (= 1926 (d18/part1 day18-input)))))
 
+;; FIXME - Too Slow - https://github.com/klsmithphd/aoc-clj/issues/82
 (deftest ^:slow part2-test
   (testing "Reproduces the answer for day18, part2"
     (is (= 19986699 (d18/part2 day18-input)))))

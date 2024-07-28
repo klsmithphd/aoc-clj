@@ -13,6 +13,8 @@
 
 ;; Puzzle logic
 (defn tile-logic
+  "Determines whether a tile is a trap or safe based on the three tiles
+   left, center, and right of it in the previous row."
   [[l c r]]
   (cond
     (and (= l c trap) (= r safe)) trap
@@ -22,6 +24,8 @@
     :else safe))
 
 (defn next-row
+  "Determines the values (trap or safe) of the tiles in the next row
+   based on the values in the previous row"
   [s]
   (->> (str safe s safe)
        (partition 3 1)
@@ -29,16 +33,20 @@
        (apply str)))
 
 (defn safe-tile-count
+  "Counts the total number of safe tiles across `rows` rows."
   [rows start]
   (->> (iterate next-row start)
        (map #(count (filter (u/equals? safe) %)))
        (take rows)
        (reduce +)))
 
+;; Puzzle solution
 (defn part1
+  "How many safe tiles are there in 40 rows?"
   [input]
   (safe-tile-count part1-rows input))
 
 (defn part2
+  "How many safe tiles are there in 400000 rows?"
   [input]
   (safe-tile-count part2-rows input))
