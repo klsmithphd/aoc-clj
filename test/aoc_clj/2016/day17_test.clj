@@ -42,4 +42,4 @@
 
 (deftest part2-test
   (testing "Reproduces the answer for day17, part2"
-    (is (= "DDRRULRDRD" (d17/part2 day17-input)))))
+    (is (= 536 (d17/part2 day17-input)))))
