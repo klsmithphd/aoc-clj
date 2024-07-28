@@ -8,7 +8,6 @@
 (def d17-s02 "kglvqrro")
 (def d17-s03 "ulqzkmiv")
 
-
 (deftest move-options-test
   (testing "Finds the next move options for a given position"
     (is (= [{:passcode d17-s00 :pos [0 1] :path "D"}]
