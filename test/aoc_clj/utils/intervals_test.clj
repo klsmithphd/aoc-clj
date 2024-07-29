@@ -40,7 +40,7 @@
   (testing "Collapses overlapping intervals into a simpler representation"
     (is (= [[1 5]]
            (ivs/simplify [[1 3] [3 5]])))
-    (is (= [[1 3] [4 5]]
+    (is (= [[1 5]]
            (ivs/simplify [[1 3] [4 5]])))
-    (is (= [[1 5] [7 9] [10 14]]
+    (is (= [[1 5] [7 14]]
            (ivs/simplify [[1 3] [3 5] [7 9] [10 12] [11 14]])))))
