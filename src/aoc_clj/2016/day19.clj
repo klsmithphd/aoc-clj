@@ -1,5 +1,5 @@
 (ns aoc-clj.2016.day19
-  "Solution to https://adventofcode.com/2016/day/18" 
+  "Solution to https://adventofcode.com/2016/day/19" 
   (:require [clojure.math :as math]))
 
 ;; Input parsing
