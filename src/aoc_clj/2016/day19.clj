@@ -1,5 +1,6 @@
 (ns aoc-clj.2016.day19
-  "Solution to https://adventofcode.com/2016/day/18")
+  "Solution to https://adventofcode.com/2016/day/18" 
+  (:require [clojure.math :as math]))
 
 ;; Input parsing
 (defn parse
@@ -7,6 +8,12 @@
   (read-string (first input)))
 
 ;; Puzzle logic
+(defn winning-elf
+  [n-elves]
+  (let [power-of-two  (math/floor (/ (math/log n-elves) (math/log 2)))
+        nearest-power (int (math/pow 2 power-of-two))
+        rem           (- n-elves nearest-power)]
+    (+ (* 2 rem) 1)))
 
 ;; Sequence
 ;; 1 elf -- winner: 1
@@ -43,3 +50,6 @@
 
 
 ;; Puzzle solutions
+(defn part1
+  [input]
+  (winning-elf input))
