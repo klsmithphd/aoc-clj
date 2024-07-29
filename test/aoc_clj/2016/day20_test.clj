@@ -1,8 +1,7 @@
 (ns aoc-clj.2016.day20-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.2016.day20 :as d20]
-            [aoc-clj.utils.intervals :as ivals]))
+            [aoc-clj.2016.day20 :as d20]))
 
 (def d20-s00-raw
   ["5-8"
