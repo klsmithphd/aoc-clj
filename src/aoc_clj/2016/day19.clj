@@ -91,8 +91,17 @@
        (map #(part2-sim (vec (range 1 (inc %))) 0))
        (map-indexed #(vector (inc %1) %2))))
 
-(print (test-pattern))
-
+(defn part2-winning-elf
+  [n-elves]
+  (let [power-of-three (math/floor (/ (math/log n-elves) (math/log 3)))
+        nearest-power  (int (math/pow 3 power-of-three))
+        rem            (- n-elves nearest-power)]
+    (println n-elves nearest-power rem)
+    (if (zero? rem)
+      nearest-power
+      (if (<= rem nearest-power)
+        rem
+        (- (* 2 rem) nearest-power)))))
 
 
 ;; Puzzle solutions
@@ -100,3 +109,8 @@
   "Which elf gets all the presents?"
   [input]
   (part1-winning-elf input))
+
+(defn part2
+  "Which elf gets all the presents with the part2 rules?"
+  [input]
+  (part2-winning-elf input))
