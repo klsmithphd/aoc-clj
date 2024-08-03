@@ -1,5 +1,6 @@
 (ns aoc-clj.2016.day21-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day21 :as d21]))
 
 (def d21-s00-raw
@@ -19,12 +20,14 @@
    {:cmd "rotate-l" :amt 1}
    {:cmd "move" :p1 1 :p2 4}
    {:cmd "move" :p1 3 :p2 0}
-   {:cmd "rotate" :let "b"}
-   {:cmd "rotate" :let "d"}])
+   {:cmd "rotate" :lt "b"}
+   {:cmd "rotate" :lt "d"}])
+
 
 (def d21-s00-seq
   ["abcde"
    "ebcda"
+   "edcba"
    "abcde"
    "bcdea"
    "bdeac"
@@ -35,3 +38,13 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d21-s00 (d21/parse d21-s00-raw)))))
+
+(deftest do-inst-test
+  (testing "Correctly applies the instructions in sequence"
+    (is (= d21-s00-seq (reductions d21/do-inst "abcde" d21-s00)))))
+
+(def day21-input (u/parse-puzzle-input d21/parse 2016 21))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day21, part1"
+    (is (= "bgfacdeh" (d21/part1 day21-input)))))
