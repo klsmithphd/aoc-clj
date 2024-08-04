@@ -8,3 +8,8 @@
 (deftest part1-test
   (testing "Reproduces the answer for day23, part1"
     (is (= 10890 (d23/part1 day23-input)))))
+
+;; FIXME - Too Slow - https://github.com/klsmithphd/aoc-clj/issues/88
+(deftest ^:slow part2-test
+  (testing "Reproduces the answer for day23, part2"
+    (is (= 10890 (d23/part2 day23-input)))))

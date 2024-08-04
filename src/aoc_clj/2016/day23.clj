@@ -3,7 +3,8 @@
   (:require [aoc-clj.utils.assembunny :as asmb]))
 
 ;; Constants
-(def init-value 7)
+(def part1-value 7)
+(def part2-value 12)
 
 ;; Input parsing
 (def parse asmb/parse)
@@ -12,5 +13,11 @@
 (defn part1
   "What value is in register a after executing the code?"
   [input]
-  (:a (asmb/execute (assoc asmb/init-state :a init-value) input)))
+  (:a (asmb/execute (assoc asmb/init-state :a part1-value) input)))
+
+(defn part2
+  "What value is in register a after executing the code?"
+  [input]
+  (:a (asmb/execute (assoc asmb/init-state :a part2-value) input)))
+
 
