@@ -23,6 +23,10 @@
   (map parse-line input))
 
 ;; Puzzle logic
+(defn find-pos
+  [s lt-s]
+  (u/index-of (u/equals? (first lt-s)) s))
+
 (defn do-swap-positions
   [s [_ args]]
   (let [[p1 p2] (sort args)]
@@ -32,10 +36,11 @@
                       (subs s p1 (inc p1))
                       (subs s (inc p2))))))
 
+
 (defn do-swap-letters
   [s [_ [l1 l2]]]
-  (do-swap-positions s ["swap" [(u/index-of (u/equals? (first l1)) s)
-                                (u/index-of (u/equals? (first l2)) s)]]))
+  (do-swap-positions s ["swap-positions" [(find-pos s l1)
+                                          (find-pos s l2)]]))
 
 (defn do-reverse
   [s [_ args]]
@@ -67,7 +72,7 @@
 
 (defn do-rotate
   [s [_ [lt]]]
-  (let [pos (u/index-of (u/equals? (first lt)) s)]
+  (let [pos (find-pos s lt)]
     (do-rotate-r s ["rotate-right" [(+ (inc pos) (if (>= pos 4) 1 0))]])))
 
 (defn scramble
