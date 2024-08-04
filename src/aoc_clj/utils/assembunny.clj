@@ -56,16 +56,19 @@
     ["jnz" x y]))
 
 (defn tgl-cmd
-  [{:keys [inst] :as state} x]
-  (let [offset (+ inst (dref state x))
-        cmd (get-in state [:cmds offset])]
-    (if (= 3 (count cmd))
-      (assoc-in state [:cmds offset] (two-arg-tgl cmd))
-      (assoc-in state [:cmds offset] (one-arg-tgl cmd)))))
+  [{:keys [inst cmds] :as state} x]
+  (let [index (+ inst (dref state x))
+        cmd (get-in state [:cmds index])]
+    (if (< index (count cmds))
+      (if (= 3 (count cmd))
+        (assoc-in state [:cmds index] (two-arg-tgl cmd))
+        (assoc-in state [:cmds index] (one-arg-tgl cmd)))
+      state)))
 
 (defn apply-cmd
   "Apply the given instruction (cmd plus args) to update the state"
   [state [cmd x y]]
+;;   (println cmd x y (:a state) (:b state) (:c state) (:d state) (:inst state))
   (case cmd
     "inc" (-> (update state x inc) (update :inst inc))
     "dec" (-> (update state x dec) (update :inst inc))
