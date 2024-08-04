@@ -17,11 +17,11 @@
   [["swap-positions" [4 0]]
    ["swap-letters" ["d" "b"]]
    ["reverse" [0 4]]
-   ["rotate-left" [1]]
+   ["rotate-left" 1]
    ["move" [1 4]]
    ["move" [3 0]]
-   ["rotate" ["b"]]
-   ["rotate" ["d"]]])
+   ["rotate" "b"]
+   ["rotate" "d"]])
 
 
 (def d21-s00-seq
