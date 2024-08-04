@@ -18,14 +18,18 @@
 
 ;; Puzzle logic
 (defn viable-pair?
+  "Is a node pair viable?"
   [[a b]]
   (and
+   ;; Node A and B are not the same node
    (not= (:pos a) (:pos b))
+   ;; Node A is not empty (its Used is not zero)
    (pos? (:used a))
+   ;; The data on Node A (its Used) would fit on node B (its Avail)
    (<= (:used a) (:avail b))))
 
-
 (defn viable-pair-count
+  "Counts the number of viable pairs there are"
   [nodes]
   (->> (combo/permuted-combinations nodes 2)
        (filter viable-pair?)
@@ -33,5 +37,6 @@
 
 ;; Puzzle solutions
 (defn part1
+  "How many viable pairs of nodes are there?"
   [input]
   (viable-pair-count input))
