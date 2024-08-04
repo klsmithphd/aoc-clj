@@ -15,8 +15,7 @@
 (defn parse-line
   [line]
   (let [[a b c] (str/split line #" ")]
-    (if (or (str/starts-with? line "cpy")
-            (str/starts-with? line "jnz"))
+    (if (or (= a "cpy") (= a "jnz"))
       [a (parse-var b) (parse-var c)]
       [a (parse-var b)])))
 
@@ -42,7 +41,27 @@
   [state x y]
   (if (zero? (dref state x))
     (update state :inst inc)
-    (update state :inst + y)))
+    (update state :inst + (dref state y))))
+
+(defn one-arg-tgl
+  [[c x]]
+  (if (= "inc" c)
+    ["dec" x]
+    ["inc" x]))
+
+(defn two-arg-tgl
+  [[c x y]]
+  (if (= "jnz" c)
+    ["cpy" x y]
+    ["jnz" x y]))
+
+(defn tgl-cmd
+  [{:keys [inst] :as state} x]
+  (let [offset (+ inst (dref state x))
+        cmd (get-in state [:cmds offset])]
+    (if (= 3 (count cmd))
+      (assoc-in state [:cmds offset] (two-arg-tgl cmd))
+      (assoc-in state [:cmds offset] (one-arg-tgl cmd)))))
 
 (defn apply-cmd
   "Apply the given instruction (cmd plus args) to update the state"
@@ -51,6 +70,7 @@
     "inc" (-> (update state x inc) (update :inst inc))
     "dec" (-> (update state x dec) (update :inst inc))
     "cpy" (-> (cpy-cmd state x y) (update :inst inc))
+    "tgl" (-> (tgl-cmd state x) (update :inst inc))
     "jnz" (jnz-cmd state x y)))
 
 (defn execute
