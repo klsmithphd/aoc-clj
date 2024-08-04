@@ -1,6 +1,7 @@
 (ns aoc-clj.2016.day21
   "Solution to https://adventofcode.com/2016/day/21"
   (:require [clojure.string :as str]
+            [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]))
 
 ;; Constants
@@ -76,12 +77,10 @@
   (str/join (u/rotate (- amt) s)))
 
 (defn do-rotate
-  [s dir lt]
+  [s lt]
   (let [pos (find-pos s lt)
         amt (+ (inc pos) (if (>= pos 4) 1 0))]
-    (case dir
-      :r (do-rotate-r s amt)
-      :l (do-rotate-l s amt))))
+    (do-rotate-r s amt)))
 
 (defn scramble-step
   [s [cmd args]]
@@ -90,21 +89,9 @@
     "swap-letters"   (do-swap-letters s args)
     "move"           (do-move s args)
     "reverse"        (do-reverse s args)
-    "rotate"         (do-rotate s :r args)
+    "rotate"         (do-rotate s args)
     "rotate-left"    (do-rotate-l s args)
     "rotate-right"   (do-rotate-r s args)))
-
-(defn unscramble-step
-  [s [cmd args]]
-  (case cmd
-    "swap-positions" (do-swap-positions s args)
-    "swap-letters"   (do-swap-letters s args)
-    "move"           (do-move s (reverse args)) ;; Reverse args
-    "reverse"        (do-reverse s args)
-    "rotate"         (do-rotate s :l args) ;; Rotate left instead of right
-    "rotate-left"    (do-rotate-r s args) ;; Rotate right instead of left
-    "rotate-right"   (do-rotate-l s args) ;; Rotate left instead of right
-    ))
 
 (defn scramble
   [s insts]
@@ -112,9 +99,16 @@
 
 (defn unscramble
   [s insts]
-  (reduce unscramble-step s (reverse insts)))
+  (->> (combo/permutations s)
+       (map str/join)
+       (filter #(= s (scramble % insts)))
+       first))
 
 ;; Puzzle solutions
 (defn part1
   [input]
   (scramble part1-str input))
+
+(defn part2
+  [input]
+  (unscramble part2-str input))

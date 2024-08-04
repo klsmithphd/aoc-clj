@@ -42,13 +42,12 @@
   (testing "Correctly applies the instructions in sequence"
     (is (= d21-s00-seq (reductions d21/scramble-step "abcde" d21-s00)))))
 
-;; (deftest unscramble-step-test
-;;   (testing "Can unscramble a scrambled password"
-;;     (is (= (reverse d21-s00-seq)
-;;            (reductions d21/unscramble-step "decab" (reverse d21-s00))))))
-
 (def day21-input (u/parse-puzzle-input d21/parse 2016 21))
 
 (deftest part1-test
   (testing "Reproduces the answer for day21, part1"
     (is (= "bgfacdeh" (d21/part1 day21-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day21, part1"
+    (is (= "bdgheacf" (d21/part2 day21-input)))))
