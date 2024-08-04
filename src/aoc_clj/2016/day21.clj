@@ -3,6 +3,10 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]))
 
+;; Constants
+(def part1-str "abcdefgh")
+(def part2-str "fbgdceah")
+
 ;; Input parsing
 (defn parse-line
   [line]
@@ -48,18 +52,20 @@
                       (str/reverse (subs s p1 (inc p2)))
                       (subs s (inc p2))))))
 
-(defn insert
+(defn ch-insert
   [s pos char]
   (str/join (concat (subs s 0 pos)
                     char
                     (subs s pos))))
 
+(defn ch-remove
+  [s pos]
+  (str/join (concat (subs s 0 pos)
+                    (subs s (inc pos)))))
+
 (defn do-move
   [s [p1 p2]]
-  (insert (str/join (concat (subs s 0 p1)
-                            (subs s (inc p1))))
-          p2
-          (subs s p1 (inc p1))))
+  (ch-insert (ch-remove s p1) p2 (subs s p1 (inc p1))))
 
 (defn do-rotate-l
   [s amt]
@@ -70,23 +76,45 @@
   (str/join (u/rotate (- amt) s)))
 
 (defn do-rotate
-  [s lt]
-  (let [pos (find-pos s lt)]
-    (do-rotate-r s (+ (inc pos) (if (>= pos 4) 1 0)))))
+  [s dir lt]
+  (let [pos (find-pos s lt)
+        amt (+ (inc pos) (if (>= pos 4) 1 0))]
+    (case dir
+      :r (do-rotate-r s amt)
+      :l (do-rotate-l s amt))))
 
-(defn scramble
+(defn scramble-step
   [s [cmd args]]
   (case cmd
     "swap-positions" (do-swap-positions s args)
     "swap-letters"   (do-swap-letters s args)
     "move"           (do-move s args)
     "reverse"        (do-reverse s args)
-    "rotate"         (do-rotate s args)
+    "rotate"         (do-rotate s :r args)
     "rotate-left"    (do-rotate-l s args)
     "rotate-right"   (do-rotate-r s args)))
 
+(defn unscramble-step
+  [s [cmd args]]
+  (case cmd
+    "swap-positions" (do-swap-positions s args)
+    "swap-letters"   (do-swap-letters s args)
+    "move"           (do-move s (reverse args)) ;; Reverse args
+    "reverse"        (do-reverse s args)
+    "rotate"         (do-rotate s :l args) ;; Rotate left instead of right
+    "rotate-left"    (do-rotate-r s args) ;; Rotate right instead of left
+    "rotate-right"   (do-rotate-l s args) ;; Rotate left instead of right
+    ))
+
+(defn scramble
+  [s insts]
+  (reduce scramble-step s insts))
+
+(defn unscramble
+  [s insts]
+  (reduce unscramble-step s (reverse insts)))
 
 ;; Puzzle solutions
 (defn part1
   [input]
-  (reduce scramble "abcdefgh" input))
+  (scramble part1-str input))

@@ -23,7 +23,6 @@
    ["rotate" "b"]
    ["rotate" "d"]])
 
-
 (def d21-s00-seq
   ["abcde"
    "ebcda"
@@ -39,9 +38,14 @@
   (testing "Correctly parses the input"
     (is (= d21-s00 (d21/parse d21-s00-raw)))))
 
-(deftest do-inst-test
+(deftest scramble-step-test
   (testing "Correctly applies the instructions in sequence"
-    (is (= d21-s00-seq (reductions d21/scramble "abcde" d21-s00)))))
+    (is (= d21-s00-seq (reductions d21/scramble-step "abcde" d21-s00)))))
+
+;; (deftest unscramble-step-test
+;;   (testing "Can unscramble a scrambled password"
+;;     (is (= (reverse d21-s00-seq)
+;;            (reductions d21/unscramble-step "decab" (reverse d21-s00))))))
 
 (def day21-input (u/parse-puzzle-input d21/parse 2016 21))
 
