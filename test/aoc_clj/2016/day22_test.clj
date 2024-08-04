@@ -18,3 +18,9 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d22-s00 (d22/parse d22-s00-raw)))))
+
+(def day22-input (u/parse-puzzle-input d22/parse 2016 22))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day22, part1"
+    (is (= 892 (d22/part1 day22-input)))))
