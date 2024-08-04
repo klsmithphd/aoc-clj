@@ -25,7 +25,7 @@
 
 ;; Puzzle logic
 (defn do-swap-pos
-  [inst s]
+  [s inst]
   (let [[p1 p2] (sort [(:p1 inst) (:p2 inst)])]
     (str/join (concat (subs s 0 p1)
                       (subs s p2 (inc p2))
@@ -34,12 +34,12 @@
                       (subs s (inc p2))))))
 
 (defn do-swap-let
-  [{:keys [l1 l2]} s]
-  (do-swap-pos {:p1 (u/index-of (u/equals? (first l1)) s)
-                :p2 (u/index-of (u/equals? (first l2)) s)} s))
+  [s {:keys [l1 l2]}]
+  (do-swap-pos s {:p1 (u/index-of (u/equals? (first l1)) s)
+                  :p2 (u/index-of (u/equals? (first l2)) s)}))
 
 (defn do-reverse
-  [inst s]
+  [s inst]
   (let [[p1 p2] (sort [(:p1 inst) (:p2 inst)])]
     (str/join (concat (subs s 0 p1)
                       (str/reverse (subs s p1 (inc p2)))
@@ -52,38 +52,38 @@
                     (subs s pos))))
 
 (defn do-move
-  [{:keys [p1 p2]} s]
+  [s {:keys [p1 p2]}]
   (insert (str/join (concat (subs s 0 p1)
                             (subs s (inc p1))))
           p2
           (subs s p1 (inc p1))))
 
 (defn do-rotate-l
-  [{:keys [amt]} s]
+  [s {:keys [amt]}]
   (str/join (u/rotate amt s)))
 
 (defn do-rotate-r
-  [{:keys [amt]} s]
+  [s {:keys [amt]}]
   (str/join (u/rotate (- amt) s)))
 
 (defn do-rotate
-  [{:keys [lt]} s]
+  [s {:keys [lt]}]
   (let [pos (u/index-of (u/equals? (first lt)) s)]
-    (do-rotate-r {:amt (+ (inc pos) (if (>= pos 4) 1 0))} s)))
+    (do-rotate-r s {:amt (+ (inc pos) (if (>= pos 4) 1 0))})))
 
-(defn do-inst
+(defn scramble
   [s {:keys [cmd] :as inst}]
   (case cmd
-    "swap-pos" (do-swap-pos inst s)
-    "swap-let" (do-swap-let inst s)
-    "move"     (do-move inst s)
-    "reverse"  (do-reverse inst s)
-    "rotate"   (do-rotate inst s)
-    "rotate-l" (do-rotate-l inst s)
-    "rotate-r" (do-rotate-r inst s)))
+    "swap-pos" (do-swap-pos s inst)
+    "swap-let" (do-swap-let s inst)
+    "move"     (do-move s inst)
+    "reverse"  (do-reverse s inst)
+    "rotate"   (do-rotate s inst)
+    "rotate-l" (do-rotate-l s inst)
+    "rotate-r" (do-rotate-r s inst)))
 
 
 ;; Puzzle solutions
 (defn part1
   [input]
-  (reduce do-inst "abcdefgh" input))
+  (reduce scramble "abcdefgh" input))

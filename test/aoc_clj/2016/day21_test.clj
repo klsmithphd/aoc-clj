@@ -41,7 +41,7 @@
 
 (deftest do-inst-test
   (testing "Correctly applies the instructions in sequence"
-    (is (= d21-s00-seq (reductions d21/do-inst "abcde" d21-s00)))))
+    (is (= d21-s00-seq (reductions d21/scramble "abcde" d21-s00)))))
 
 (def day21-input (u/parse-puzzle-input d21/parse 2016 21))
 
