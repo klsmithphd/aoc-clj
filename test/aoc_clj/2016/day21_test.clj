@@ -14,14 +14,14 @@
    "rotate based on position of letter d"])
 
 (def d21-s00
-  [{:cmd "swap-pos" :p1 4 :p2 0}
-   {:cmd "swap-let" :l1 "d" :l2 "b"}
-   {:cmd "reverse" :p1 0 :p2 4}
-   {:cmd "rotate-l" :amt 1}
-   {:cmd "move" :p1 1 :p2 4}
-   {:cmd "move" :p1 3 :p2 0}
-   {:cmd "rotate" :lt "b"}
-   {:cmd "rotate" :lt "d"}])
+  [["swap-positions" [4 0]]
+   ["swap-letters" ["d" "b"]]
+   ["reverse" [0 4]]
+   ["rotate-left" [1]]
+   ["move" [1 4]]
+   ["move" [3 0]]
+   ["rotate" ["b"]]
+   ["rotate" ["d"]]])
 
 
 (def d21-s00-seq
