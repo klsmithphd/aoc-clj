@@ -2,10 +2,9 @@
   "Solution to https://adventofcode.com/2016/day/24"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.maze :as maze]
             [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.utils.graph :as g :refer [Graph]]
-            [aoc-clj.2016.day24 :as d24]))
+            [aoc-clj.utils.maze :as maze]))
 
 ;; Constants
 (def charmap
@@ -74,16 +73,22 @@
     (get-in gr [(:pos v1) (:pos v2)])))
 
 (defn shortest-path
-  [graph]
+  [graph part]
   (let [move-graph (->MoveGraph graph)
-        finish? #(= (count graph) (count (:visited %)))]
+        finish? (case part
+                  :part1 #(= (count graph) (count (:visited %)))
+                  :part2 #(and (= (count graph) (count (:visited %)))
+                               (= :start (:pos %))))]
     (->> (g/dijkstra move-graph start finish? :limit 100000)
          (g/path-distance move-graph))))
 
 ;; Puzzle solutions
 (defn part1
   [input]
-  (shortest-path input))
+  (shortest-path input :part1))
 
+(defn part2
+  [input]
+  (shortest-path input :part2))
 
 

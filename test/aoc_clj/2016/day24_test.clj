@@ -3,7 +3,6 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day24 :as d24]))
 
-
 (def d24-s00-raw
   ["###########"
    "#0.1.....2#"
@@ -24,11 +23,14 @@
 
 (deftest shortest-path-test
   (testing "Finds the shortest path to visit all locations of interest"
-    (is (= 14 (d24/shortest-path d24-s00)))))
-
+    (is (= 14 (d24/shortest-path d24-s00 :part1)))))
 
 (def day24-input (u/parse-puzzle-input d24/parse 2016 24))
 
 (deftest part1-test
   (testing "Reproduces the answer for day24, part1"
     (is (= 428 (d24/part1 day24-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day24, part2"
+    (is (= 680 (d24/part2 day24-input)))))
