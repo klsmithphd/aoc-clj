@@ -1,8 +1,11 @@
 (ns aoc-clj.2016.day24
   "Solution to https://adventofcode.com/2016/day/24"
-  (:require [aoc-clj.utils.maze :as maze]
+  (:require [clojure.math.combinatorics :as combo]
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.utils.maze :as maze]
             [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.graph :as g :refer [Graph edges distance]]))
+            [aoc-clj.utils.graph :as g :refer [Graph]]
+            [aoc-clj.2016.day24 :as d24]))
 
 ;; Constants
 (def charmap
@@ -18,44 +21,46 @@
    \7 :stop7})
 
 ;; Input parsing
-(defn parse
-  [input]
-  (mg/ascii->MapGrid2D charmap input :down true))
-
 (defn grid->Maze
   [{:keys [grid]}]
   (maze/->Maze grid #(not= :wall %)))
 
-(def d24-s00-raw
-  ["###########"
-   "#0.1.....2#"
-   "#.#######.#"
-   "#4.......3#"
-   "###########"])
+(defn stops
+  [{:keys [maze]}]
+  (->> maze
+       (remove #(#{:wall :space} (val %)))
+       (map (comp vec reverse))
+       (into {})))
 
+(defn find-distance
+  [maze stops [v1 v2]]
+  (let [dist (dec (count (g/dijkstra maze (stops v1) (partial = (stops v2)) :limit 10000)))]
+    [[v1 v2 dist]
+     [v2 v1 dist]]))
 
-(def thegraph
-  {:start {:stop1 2 :stop4 2}
-   :stop1 {:start 2 :stop2 6}
-   :stop2 {:stop1 6 :stop3 2}
-   :stop3 {:stop2 2 :stop4 8}
-   :stop4 {:stop3 8 :start 2}})
+(defn stop-graph
+  [maze]
+  (let [stops (stops maze)
+        pairs (combo/combinations (keys stops) 2)]
+    (->> (mapcat #(find-distance maze stops %) pairs)
+         (group-by first)
+         (u/fmap #(into {} (map (comp vec rest) %))))))
 
+(defn parse
+  [input]
+  (->> (mg/ascii->MapGrid2D charmap input :down true)
+       grid->Maze
+       stop-graph))
+
+;; Puzzle logic
 (def start {:pos :start
             :visited #{:start}})
-
-(defn finish?
-  [{:keys [visited]}]
-  (= (count visited) 5))
 
 (defn newnode
   [state pos]
   (-> state
       (update :visited conj pos)
       (assoc :pos pos)))
-
-
-
 
 (defrecord MoveGraph [gr]
   Graph
@@ -75,18 +80,10 @@
     (->> (g/dijkstra move-graph start finish? :limit 100000)
          (g/path-distance move-graph))))
 
-(shortest-path thegraph)
-
-
-
-(def foo (->MoveGraph thegraph))
-
-(newnode start :stop1)
-
-(distance foo start (second (edges foo start)))
-
-
-
+;; Puzzle solutions
+(defn part1
+  [input]
+  (shortest-path input))
 
 
 
