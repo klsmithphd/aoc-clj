@@ -19,62 +19,73 @@
    \6 :stop6
    \7 :stop7})
 
-;; Input parsing
-(defn grid->Maze
-  [{:keys [grid]}]
-  (maze/->Maze grid #(not= :wall %)))
+(def start
+  "Initial starting state in the maze"
+  {:pos :start
+   :visited #{:start}})
 
+;; Input parsing
 (defn stops
+  "Returns a mapping from the locations of interest to their coordinates
+   in the grid"
   [{:keys [maze]}]
   (->> maze
        (remove #(#{:wall :space} (val %)))
        (map (comp vec reverse))
        (into {})))
 
-(defn find-distance
+(defn pair-distances
+  "Computes the distance between any pair of points of interest.
+   Returns a seq of two vecs, with the pair order reversed in the second vec"
   [maze stops [v1 v2]]
   (let [dist (dec (count (g/dijkstra maze (stops v1) (partial = (stops v2)) :limit 10000)))]
     [[v1 v2 dist]
      [v2 v1 dist]]))
 
 (defn stop-graph
+  "Given a maze with non-space points of interest, constructs a mapping
+   that can be used as a directed graph between each point of interest
+   and adjacent points"
   [maze]
   (let [stops (stops maze)
         pairs (combo/combinations (keys stops) 2)]
-    (->> (mapcat #(find-distance maze stops %) pairs)
+    (->> (mapcat #(pair-distances maze stops %) pairs)
          (group-by first)
          (u/fmap #(into {} (map (comp vec rest) %))))))
 
 (defn parse
   [input]
-  (->> (mg/ascii->MapGrid2D charmap input :down true)
-       grid->Maze
-       stop-graph))
+  (-> (mg/ascii->MapGrid2D charmap input :down true)
+      :grid
+      (maze/->Maze #(not= :wall %))
+      stop-graph))
 
 ;; Puzzle logic
-(def start {:pos :start
-            :visited #{:start}})
-
-(defn newnode
+(defn new-state
+  "Given a possible neighbor to move to, construct a new state"
   [state pos]
   (-> state
       (update :visited conj pos)
       (assoc :pos pos)))
 
-(defrecord MoveGraph [gr]
+(defrecord MazeStateGraph [gr]
   Graph
   (edges
     [_ v]
     (let [es (keys (gr (:pos v)))]
-      (map #(newnode v %) es)))
+      (map #(new-state v %) es)))
 
   (distance
     [_ v1 v2]
     (get-in gr [(:pos v1) (:pos v2)])))
 
 (defn shortest-path
+  "Find the shortest path to navigate the maze and visit each point of 
+   interest. If part is set to `:part1`, returns the length of the shortest
+   path to visit each POI. If set to `:part2`, returns the length of the
+   shortest path to visit each POI and return to the start."
   [graph part]
-  (let [move-graph (->MoveGraph graph)
+  (let [move-graph (->MazeStateGraph graph)
         finish? (case part
                   :part1 #(= (count graph) (count (:visited %)))
                   :part2 #(and (= (count graph) (count (:visited %)))
@@ -84,11 +95,12 @@
 
 ;; Puzzle solutions
 (defn part1
+  "Length of shortest path to visit each location of interest"
   [input]
   (shortest-path input :part1))
 
 (defn part2
+  "Length of shortest path to visit each location of interest and return
+   to the start"
   [input]
   (shortest-path input :part2))
-
-
