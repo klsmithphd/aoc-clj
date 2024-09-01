@@ -10,19 +10,6 @@
    "/dev/grid/node-x0-y1     93T   72T    21T   77%"
    "/dev/grid/node-x0-y2     87T   67T    20T   77%"])
 
-(def d22-s01-raw
-  ["root@ebhq-gridcenter# df -h"
-   "Filesystem            Size  Used  Avail  Use%"
-   "/dev/grid/node-x0-y0   10T    8T     2T   80%"
-   "/dev/grid/node-x0-y1   11T    6T     5T   54%"
-   "/dev/grid/node-x0-y2   32T   28T     4T   87%"
-   "/dev/grid/node-x1-y0    9T    7T     2T   77%"
-   "/dev/grid/node-x1-y1    8T    0T     8T    0%"
-   "/dev/grid/node-x1-y2   11T    7T     4T   63%"
-   "/dev/grid/node-x2-y0   10T    6T     4T   60%"
-   "/dev/grid/node-x2-y1    9T    8T     1T   88%"
-   "/dev/grid/node-x2-y2    9T    6T     3T   66%"])
-
 (def d22-s00
   [{:pos [0 0] :size 87 :used 71 :avail 16 :usepct 81}
    {:pos [0 1] :size 93 :used 72 :avail 21 :usepct 77}
@@ -31,6 +18,28 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d22-s00 (d22/parse d22-s00-raw)))))
+
+(def d22-s01
+  (d22/parse
+   ["root@ebhq-gridcenter# df -h"
+    "Filesystem            Size  Used  Avail  Use%"
+    "/dev/grid/node-x0-y0   10T    8T     2T   80%"
+    "/dev/grid/node-x0-y1   11T    6T     5T   54%"
+    "/dev/grid/node-x0-y2   32T   28T     4T   87%"
+    "/dev/grid/node-x1-y0    9T    7T     2T   77%"
+    "/dev/grid/node-x1-y1    8T    0T     8T    0%"
+    "/dev/grid/node-x1-y2   11T    7T     4T   63%"
+    "/dev/grid/node-x2-y0   10T    6T     4T   60%"
+    "/dev/grid/node-x2-y1    9T    8T     1T   88%"
+    "/dev/grid/node-x2-y2    9T    6T     3T   66%"]))
+
+(deftest start-node-test
+  (testing "Finds the starting node (the empty cell)"
+    (is (= [1 1] (d22/start-node d22-s01)))))
+
+(deftest fewest-moves-to-goal-data-test
+  (testing "Finds the fewest moves to get the goal data moved"
+    (is (= 7 (d22/fewest-moves-to-goal-data d22-s01 20)))))
 
 (def day22-input (u/parse-puzzle-input d22/parse 2016 22))
 
