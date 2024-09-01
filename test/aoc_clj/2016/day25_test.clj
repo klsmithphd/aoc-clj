@@ -6,6 +6,7 @@
 (deftest is-square-wave?-test
   (testing "Confirms that the sequence is a square wave of 0,1,0,1,etc"
     (is (= true (d25/is-square-wave? [0 1])))
+    (is (= false (d25/is-square-wave? [1 0])))
     (is (= true (d25/is-square-wave? [0 1 0 1 0 1])))
     (is (= false (d25/is-square-wave? [0 1 0 1 1 1])))))
 
