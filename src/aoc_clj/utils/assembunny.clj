@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]))
 
 ;; Constants
-(def init-state {:a 0 :b 0 :c 0 :d 0 :inst 0})
+(def init-state {:a 0 :b 0 :c 0 :d 0 :inst 0 :out []})
 
 ;; Input parsing
 (defn parse-var
@@ -43,6 +43,12 @@
     (update state :inst inc)
     (update state :inst + (dref state y))))
 
+(defn out-cmd
+  "`out` transmits `x` (an integer or the value of a register) as the next
+   value to the clock signal"
+  [state x]
+  (update state :out conj (dref state x)))
+
 (defn one-arg-tgl
   [[c x]]
   (if (= "inc" c)
@@ -74,6 +80,7 @@
     "dec" (-> (update state x dec) (update :inst inc))
     "cpy" (-> (cpy-cmd state x y) (update :inst inc))
     "tgl" (-> (tgl-cmd state x) (update :inst inc))
+    "out" (-> (out-cmd state x) (update :inst inc))
     "jnz" (jnz-cmd state x y)))
 
 (defn execute
