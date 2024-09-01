@@ -36,6 +36,14 @@
 
 (deftest part1-test
   (testing "Reproduces the answer for day22, part1"
+    ;; In the input data, the grid is 37 x 25 = 925 cells
+    ;; There's one empty cell that things can move to.
+    ;; There are 32 immovable cells that are too big to move.
+    ;; 925 - 1 - 32 = 892.
+    ;;
+    ;; The key obversations are that there's only one empty cell at any
+    ;; given time into which data can move and there are some cells that
+    ;; act as barriers.
     (is (= 892 (d22/part1 day22-input)))))
 
 (deftest part2-test
