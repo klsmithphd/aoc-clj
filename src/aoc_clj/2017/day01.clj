@@ -24,7 +24,19 @@
        (map match-value)
        (reduce +)))
 
+(defn sum-of-halfway-around-matching-digits
+  [digits]
+  (let [half (/ (count digits) 2)]
+    (->> (map vector (take half digits) (drop half digits))
+         (map match-value)
+         (reduce +)
+         (* 2))))
+
 ;; Puzzle solutions
 (defn part1
   [input]
   (sum-of-matching-digits input))
+
+(defn part2
+  [input]
+  (sum-of-halfway-around-matching-digits input))
