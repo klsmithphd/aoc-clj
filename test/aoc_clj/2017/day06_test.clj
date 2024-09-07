@@ -28,11 +28,11 @@
 
 (deftest cycles-to-repeat-test
   (testing "Computes the number of cycles till a repeat value seen"
-    (is (= 5 (first (d06/cycles-to-repeat d06-s00))))))
+    (is (= 5 (d06/cycles-to-repeat d06-s00)))))
 
 (deftest loop-size-test
   (testing "Computes the size of the loop for repeated values"
-    (is (= 4 (second (d06/cycles-to-repeat d06-s00))))))
+    (is (= 4 (d06/loop-size d06-s00)))))
 
 (def day06-input (u/parse-puzzle-input d06/parse 2017 6))
 

@@ -20,27 +20,50 @@
     [idx max-val]))
 
 (defn reallocate
-  [nums]
-  (let [len (count nums)
-        [idx mx] (largest-value nums)
+  "Reallocate the memory blocks from the largest blank one at a time 
+   sequentially to the next blocks (looping around if necessary).
+   Returns a new vec of the number of blocks in each memory bank"
+  [banks]
+  (let [len (count banks)
+        [idx mx] (largest-value banks)
         distro (->> (concat (repeat (inc idx) 0)
                             (repeat mx 1))
                     (partition len len (repeat 0)))]
-    (apply mapv + (concat [(assoc nums idx 0)] distro))))
+    (apply mapv + (concat [(assoc banks idx 0)] distro))))
+
+(defn first-duplicate-stats
+  "Given a (potentially infinite) sequence that is known to have
+   a recurring loop within it, find the number of values required to
+   reach the first duplicated value and the size of the recurrence loop"
+  [s]
+  (let [first-dupe (u/first-duplicate s)
+        first-time (u/index-of (u/equals? first-dupe) s)
+        second-time (u/index-of (u/equals? first-dupe) (drop (inc first-time) s))]
+    [(+ 1 first-time second-time) (+ 1 second-time)]))
+
+(defn- loop-stats
+  "Computes the loop data for the reallocation process"
+  [nums]
+  (first-duplicate-stats (iterate reallocate nums)))
 
 (defn cycles-to-repeat
+  "Number of cycles until a repeat value is seen"
   [nums]
-  (let [infinite (iterate reallocate nums)
-        first-dupe (u/first-duplicate infinite)
-        first-time (u/index-of (u/equals? first-dupe) infinite)
-        second-time (u/index-of (u/equals? first-dupe) (drop (inc first-time) infinite))]
-    [(+ 1 first-time second-time) (+ 1 second-time)]))
+  (first (loop-stats nums)))
+
+(defn loop-size
+  "Size of the loop of repeating values"
+  [nums]
+  (second (loop-stats nums)))
 
 ;; Puzzle solutions
 (defn part1
+  "How many redistribution cycles must be completed before a configuration
+   that has been seen before is reproduced?"
   [input]
-  (first (cycles-to-repeat input)))
+  (cycles-to-repeat input))
 
 (defn part2
+  "How many cycles are in the infinite loop?"
   [input]
-  (second (cycles-to-repeat input)))
+  (loop-size input))
