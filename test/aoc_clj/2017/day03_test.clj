@@ -29,3 +29,7 @@
 (deftest part1-test
   (testing "Reproduces the answer for day03, part1"
     (is (= 552 (d03/part1 day03-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day03, part2"
+    (is (= 330785 (d03/part2 day03-input)))))
