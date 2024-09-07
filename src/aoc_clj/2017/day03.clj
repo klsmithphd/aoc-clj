@@ -1,5 +1,5 @@
 (ns aoc-clj.2017.day03
-  "Solution to https://adventofcode.com/2017/day/2"
+  "Solution to https://adventofcode.com/2017/day/3"
   (:require [clojure.math :as math]
             [aoc-clj.utils.vectors :as v]
             [aoc-clj.utils.grid :as grid]))
