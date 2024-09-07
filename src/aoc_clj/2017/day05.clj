@@ -8,6 +8,8 @@
 
 ;; Puzzle logic
 (defn step
+  "Iterate forward one step, jumping the position of the cursor
+   based on the current offset value and updating the jump value"
   [part {:keys [jumps idx] :as state}]
   (let [offset (get jumps idx)]
     (-> state
@@ -21,22 +23,26 @@
                               inc))))))
 
 (defn not-escaped?
+  "Checks whether the cursor position (idx) is still within the bounds of 
+   the jump instructions"
   [{:keys [jumps idx]}]
   (<= 0 idx (dec (count jumps))))
 
 (defn steps-to-escape
+  "Counts the number of steps it takes for the jump instructions to escape"
   [part jumps]
   (->> (iterate #(step part %) {:jumps jumps :idx 0 :steps 0})
        (drop-while not-escaped?)
        first
        :steps))
 
-
 ;; Puzzle solutions
 (defn part1
+  "How many steps to reach the exit given part1 logic?"
   [input]
   (steps-to-escape :part1 input))
 
 (defn part2
+  "How many steps to reach the exit given part2 logic?"
   [input]
   (steps-to-escape :part2 input))

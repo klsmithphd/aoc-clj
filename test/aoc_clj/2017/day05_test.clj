@@ -17,6 +17,19 @@
   (testing "Correctly parses the input"
     (is (= d05-s00 (d05/parse d05-s00-raw)))))
 
+(deftest step-test
+  (testing "Steps the state forward one iteration"
+    (is (= {:jumps [1 3 0 1 -3] :idx 0 :steps 1}
+           (d05/step :part1 {:jumps d05-s00 :idx 0 :steps 0})))
+    (is (= {:jumps [2 3 0 1 -3] :idx 1 :steps 2}
+           (d05/step :part1 {:jumps [1 3 0 1 -3] :idx 0 :steps 1})))
+    (is (= {:jumps [2 4 0 1 -3] :idx 4 :steps 3}
+           (d05/step :part1 {:jumps [2 3 0 1 -3] :idx 1 :steps 2})))
+    (is (= {:jumps [2 4 0 1 -2] :idx 1 :steps 4}
+           (d05/step :part1 {:jumps [2 4 0 1 -3] :idx 4 :steps 3})))
+    (is (= {:jumps [2 5 0 1 -2] :idx 5 :steps 5}
+           (d05/step :part1 {:jumps [2 4 0 1 -2] :idx 1 :steps 4})))))
+
 (deftest steps-to-escape-test
   (testing "Counts the number of steps it takes to escape"
     (is (= 5 (d05/steps-to-escape :part1 d05-s00)))
