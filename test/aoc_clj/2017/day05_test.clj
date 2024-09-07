@@ -19,10 +19,15 @@
 
 (deftest steps-to-escape-test
   (testing "Counts the number of steps it takes to escape"
-    (is (= 5 (d05/steps-to-escape d05-s00)))))
+    (is (= 5 (d05/steps-to-escape :part1 d05-s00)))
+    (is (= 10 (d05/steps-to-escape :part2 d05-s00)))))
 
 (def day05-input (u/parse-puzzle-input d05/parse 2017 5))
 
 (deftest part1-test
   (testing "Reproduces the answer for day05, part1"
     (is (= 339351 (d05/part1 day05-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day05, part2"
+    (is (= 24315397 (d05/part2 day05-input)))))
