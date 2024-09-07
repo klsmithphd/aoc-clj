@@ -18,7 +18,7 @@
        (apply max)
        (= 1)))
 
-(defn not-anagrams
+(defn not-anagrams?
   "Checks that two strings a and b are not anagrams of one another"
   [[a b]]
   (not= (frequencies a) (frequencies b)))
@@ -28,7 +28,7 @@
    of one another"
   [passphrase]
   (->> (combo/combinations passphrase 2)
-       (every? not-anagrams)))
+       (every? not-anagrams?)))
 
 (defn valid-passphrase-count
   "Counts how many passphrases satisfy the validity condition"
