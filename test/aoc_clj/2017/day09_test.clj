@@ -14,22 +14,22 @@
 
 (deftest cleaned-test
   (testing "Strips the garbage from the character stream"
-    (is (= [] (d09/cleaned "<>")))
-    (is (= [] (d09/cleaned "<random characters>")))
-    (is (= [] (d09/cleaned "<<<<>")))
-    (is (= [] (d09/cleaned "<{!>}>")))
-    (is (= [] (d09/cleaned "<!!>")))
-    (is (= [] (d09/cleaned "<!!!>>")))
-    (is (= [] (d09/cleaned "<{o\"i!a,<{i<a>")))
+    (is (= "" (d09/cleaned "<>")))
+    (is (= "" (d09/cleaned "<random characters>")))
+    (is (= "" (d09/cleaned "<<<<>")))
+    (is (= "" (d09/cleaned "<{!>}>")))
+    (is (= "" (d09/cleaned "<!!>")))
+    (is (= "" (d09/cleaned "<!!!>>")))
+    (is (= "" (d09/cleaned "<{o\"i!a,<{i<a>")))
 
-    (is (= "{}"           (apply str (d09/cleaned d09-s00))))
-    (is (= "{{{}}}"       (apply str (d09/cleaned d09-s01))))
-    (is (= "{{}{}}"       (apply str (d09/cleaned d09-s02))))
-    (is (= "{{{}{}{{}}}}" (apply str (d09/cleaned d09-s03))))
-    (is (= "{}"           (apply str (d09/cleaned d09-s04))))
-    (is (= "{}"           (apply str (d09/cleaned d09-s05))))
-    (is (= "{{}{}{}{}}"   (apply str (d09/cleaned d09-s06))))
-    (is (= "{{}}"         (apply str (d09/cleaned d09-s07))))))
+    (is (= "{}"           (d09/cleaned d09-s00)))
+    (is (= "{{{}}}"       (d09/cleaned d09-s01)))
+    (is (= "{{}{}}"       (d09/cleaned d09-s02)))
+    (is (= "{{{}{}{{}}}}" (d09/cleaned d09-s03)))
+    (is (= "{}"           (d09/cleaned d09-s04)))
+    (is (= "{}"           (d09/cleaned d09-s05)))
+    (is (= "{{}{}{}{}}"   (d09/cleaned d09-s06)))
+    (is (= "{{}}"         (d09/cleaned d09-s07)))))
 
 (deftest scores-test
   (testing "Computes the depth scores correctly"
