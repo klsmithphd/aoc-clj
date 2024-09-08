@@ -36,3 +36,13 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d07-s00 (d07/parse d07-s00-raw)))))
+
+(deftest root-node-test
+  (testing "Finds the root node"
+    (is (= "tknk" (d07/root-node d07-s00)))))
+
+(def day07-input (u/parse-puzzle-input d07/parse 2017 7))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day07, part1"
+    (is (= "rqwgj" (d07/part1 day07-input)))))
