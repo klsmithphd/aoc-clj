@@ -1,4 +1,7 @@
-(ns aoc-clj.2017.day07-test)
+(ns aoc-clj.2017.day07-test
+  (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.2017.day07 :as d07]))
 
 (def d07-s00-raw
   ["pbga (66)"
@@ -29,3 +32,7 @@
    "ugml" {:weight 68 :children ["gyxo" "ebii" "jptl"]}
    "gyxo" {:weight 61 :children []}
    "cntj" {:weight 57 :children []}})
+
+(deftest parse-test
+  (testing "Correctly parses the input"
+    (is (= d07-s00 (d07/parse d07-s00-raw)))))
