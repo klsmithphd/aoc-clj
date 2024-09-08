@@ -35,7 +35,7 @@
 
 (deftest largest-value-test
   (testing "After executing instructions, returns largest register value"
-    (is (= 1 (d08/largest-reg-value d08-s00)))))
+    (is (= 1 (d08/largest-value d08-s00)))))
 
 (deftest largest-value-ever-test
   (testing "Returns largest register at any point during processing instructions"
