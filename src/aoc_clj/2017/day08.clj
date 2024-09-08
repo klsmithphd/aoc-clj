@@ -2,14 +2,6 @@
   "Solution to https://adventofcode.com/2017/day/8")
 
 ;; Input parsing
-(def ineq-map
-  {"<" <
-   ">" >
-   "<=" <=
-   ">=" >=
-   "==" =
-   "!=" not=})
-
 (defn nil+
   "Same as `+`, but if the first arg is nil, treats it as 0"
   [a b]
@@ -27,6 +19,14 @@
 (def op-map
   {"inc" nil+
    "dec" nil-})
+
+(def ineq-map
+  {"<" <
+   ">" >
+   "<=" <=
+   ">=" >=
+   "==" =
+   "!=" not=})
 
 (def pattern #"(\w+) (\w+) (-?\d+) if (\w+) (\S+) (-?\d+)")
 
