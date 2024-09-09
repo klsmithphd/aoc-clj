@@ -3,6 +3,9 @@
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.math :as math]))
 
+;; Constants
+(def append-seq [17 31 73 47 23])
+
 ;; Input parsing
 (def parse u/firstv)
 
