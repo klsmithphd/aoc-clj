@@ -9,3 +9,25 @@
 (defn parse
   [input]
   (into {} (map parse-line input)))
+
+;; Puzzle logic
+(defn caught?
+  "Determines whether you'll be caught by the given scanner, presuming
+   you move to the right one layer at a time starting at t=0"
+  [[layer size]]
+  (let [freq (* 2 (dec size))]
+    (zero? (mod layer freq))))
+
+(defn severity
+  "Severity is the sum of the products of the layer depth and the range size
+   of the scanners that catch you when you start at t=0"
+  [scanners]
+  (->> (filter caught? scanners)
+       (map #(apply * %))
+       (reduce +)))
+
+;; Puzzle solutions
+(defn part1
+  "What's the severity of your whol trip?"
+  [input]
+  (severity input))
