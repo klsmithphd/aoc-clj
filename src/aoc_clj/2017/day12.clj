@@ -12,15 +12,36 @@
   (into {} (map parse-line input)))
 
 ;; Puzzle logic
-(defn group-size
-  "Given a graph and the id of an element, determine how many other
-   nodes are reachable."
+(defn group
+  "Given a graph and the id of a node, return the set of all other
+   reachable nodes"
   [graph id]
   (loop [group #{id} front (graph id)]
     (if-not (seq front)
-      (count group)
+      group
       (recur (into group front)
              (remove group (mapcat graph front))))))
+
+(defn group-size
+  "Given a graph and the id of a node, return the count of all other 
+   reachable nodes"
+  [graph id]
+  (count (group graph id)))
+
+(defn all-groups
+  "Returns all the groups (mutually reachable nodes) within the graph"
+  [graph]
+  (loop [groups #{} yet-ungrouped (keys graph)]
+    (if-not (seq yet-ungrouped)
+      groups
+      (let [new-group (group graph (first yet-ungrouped))]
+        (recur (conj groups new-group)
+               (remove new-group yet-ungrouped))))))
+
+(defn all-groups-count
+  "Counts the number of groups (mutually reachable nodes) within the graph"
+  [graph]
+  (count (all-groups graph)))
 
 ;; Puzzle solutions
 (defn part1
@@ -28,3 +49,7 @@
   [input]
   (group-size input 0))
 
+(defn part2
+  "How many groups are there in total?"
+  [input]
+  (all-groups-count input))
