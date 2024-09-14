@@ -30,8 +30,22 @@
        (map abs)
        (apply max)))
 
+(defn max-hex-distance
+  "Finds the maximum distance away from the origin ever reached
+   in the sequence of moves"
+  [moves]
+  (->> (map cube-coords moves)
+       (reductions v/vec-add)
+       (map #(apply max (map abs %)))
+       (apply max)))
+
 ;; Puzzle solutions
 (defn part1
   "How many steps away is the child process?"
   [input]
   (hex-distance input))
+
+(defn part2
+  "How many steps away is the furthest he ever got?"
+  [input]
+  (max-hex-distance input))
