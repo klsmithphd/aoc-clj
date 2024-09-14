@@ -21,14 +21,23 @@
 
 (deftest caught?-test
   (testing "Finds the scanners that will catch you"
-    (is (= [[0 3] [6 4]] (filter d13/caught? d13-s00)))))
+    (is (= [[0 3] [6 4]] (filter #(d13/caught? 0 %) d13-s00)))
+    (is (= [] (filter #(d13/caught? 10 %) d13-s00)))))
 
 (deftest severity-test
   (testing "Computes the severity of being caught"
     (is (= 24 (d13/severity d13-s00)))))
+
+(deftest smallest-safe-delay-test
+  (testing "Finds the earliest delay that lets you get through the scanners"
+    (is (= 10 (d13/smallest-safe-delay d13-s00)))))
 
 (def day13-input (u/parse-puzzle-input d13/parse 2017 13))
 
 (deftest part1-test
   (testing "Reproduces the answer for day13, part1"
     (is (= 1840 (d13/part1 day13-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day13, part2"
+    (is (= 3850260 (d13/part2 day13-input)))))
