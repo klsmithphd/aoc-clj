@@ -14,6 +14,12 @@
     (is (= 9223372036854775808N
            (b/bitstr->int "1000000000000000000000000000000000000000000000000000000000000000")))))
 
+(deftest hexstr->int-test
+  (testing "Demonstration of hexstr->int: converts a hex string into an integer"
+    (is (= 255 (b/hexstr->int "ff")))
+    (is (= 170 (b/hexstr->int "aa")))
+    (is (= 15  (b/hexstr->int "0f")))))
+
 (deftest int->bitstr-test
   (testing "Demonstration of int->bitstr: converts any int type into a string of bits"
     (is (= "11011" (b/int->bitstr 27)))
@@ -22,4 +28,8 @@
     (is (= "111111111111111111111111111111111111111111111111111111111111111"
            (b/int->bitstr 9223372036854775807)))
     (is (= "1000000000000000000000000000000000000000000000000000000000000000"
-           (b/int->bitstr 9223372036854775808N)))))
+           (b/int->bitstr 9223372036854775808N)))
+
+    ;; With width specification
+    (is (= "0001"     (b/int->bitstr 4 1)))
+    (is (= "00011011" (b/int->bitstr 8 27)))))
