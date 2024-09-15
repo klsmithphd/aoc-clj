@@ -9,6 +9,8 @@
   (testing "Computes the number of used squares in the grid"
     (is (= 8108 (d14/used-squares d14-s00)))))
 
+;; FIXME: https://github.com/klsmithphd/aoc-clj/issues/106
+;; Speed up all the slow implementations here.
 (deftest ^:slow region-count-test
   (testing "Counts the number of interconnected regions in the grid"
     (is (= 1242 (d14/region-count d14-s00)))))
