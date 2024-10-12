@@ -24,10 +24,14 @@
 
 (deftest dance-test
   (testing "Performs all the dance steps and returns the final state"
-    (is (= "baedc" (d16/dance ["a" "b" "c" "d" "e"] d16-s00)))))
+    (is (= "baedc" (apply str (d16/dance ["a" "b" "c" "d" "e"] d16-s00))))))
 
 (def day16-input (u/parse-puzzle-input d16/parse 2017 16))
 
 (deftest part1-test
   (testing "Reproduces the answer for day15, part1"
     (is (= "olgejankfhbmpidc" (d16/part1 day16-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day15, part2"
+    (is (= "gfabehpdojkcimnl" (d16/part2 day16-input)))))

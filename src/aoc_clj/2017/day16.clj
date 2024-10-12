@@ -5,6 +5,7 @@
 
 ;; Constants
 (def programs ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"])
+(def repeat-count 1000000000)
 
 ;; Input parsing
 (defn parse-inst
@@ -34,9 +35,35 @@
 
 (defn dance
   [init-state moves]
-  (apply str (reduce move init-state moves)))
+  (reduce move init-state moves))
+
+(defn- indexer
+  [acc [idx x]]
+  (if-let [old-idx (acc x)]
+    (reduced [old-idx idx])
+    (assoc acc x idx)))
+
+(defn first-duplicates
+  [coll]
+  (let [indices (reduce indexer {} (map-indexed vector coll))]
+    (if (map? indices)
+      nil
+      indices)))
+
+(defn dance-at-large-n
+  [init-state moves n]
+  (let [[_ finish] (first-duplicates (iterate #(dance % moves) init-state))
+        shift (mod n finish)]
+    (->> (iterate #(dance % moves) init-state)
+         (drop shift)
+         first)))
 
 ;; Puzzle solutions
 (defn part1
   [input]
-  (dance programs input))
+  (apply str (dance programs input)))
+
+(defn part2
+  [input]
+  (apply str (dance-at-large-n programs input repeat-count)))
+
