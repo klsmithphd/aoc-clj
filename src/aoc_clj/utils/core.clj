@@ -138,6 +138,31 @@
         x
         (recur (conj seen x) (rest xs))))))
 
+(defn- dupe-indexer
+  "Given an index-value pair, add the value as a key and the index as a value
+   to the map in `acc`. If the new value has already been seen in the map
+   before, break the reduction early and return the positions of the
+   first and second occurrences of the value."
+  [acc [idx x]]
+  (if-let [old-idx (acc x)]
+    (reduced [old-idx idx])
+    (assoc acc x idx)))
+
+(defn first-duplicates
+  "Given a (potentially infinite) sequence, return the positions of the first
+   duplicated element. The return value will be a vec of the index position
+   of the first and second occurrences of this repeated element.
+   
+   If the sequence is finite and there are no repeated elements, returns `nil`.
+
+   If the sequence is infinite and there are no repeated elements, will never
+   return and will likely exceed memory limits."
+  [coll]
+  (let [indices (reduce dupe-indexer {} (map-indexed vector coll))]
+    (if (map? indices)
+      nil
+      indices)))
+
 (defn rev-range
   "A shorthand for a reverse range, i.e. one that counts down.
    Logically equivalent to `(reverse (range end))` or
