@@ -24,7 +24,15 @@
 
 (deftest dance-test
   (testing "Performs all the dance steps and returns the final state"
-    (is (= "baedc" (apply str (d16/dance ["a" "b" "c" "d" "e"] d16-s00))))))
+    (is (= "baedc" (apply str (d16/dance d16-s00 ["a" "b" "c" "d" "e"]))))))
+
+(deftest dance-at-large-n-test
+  (testing "Determines the state of the programs after n dance rounds"
+    (is (= "baedc" (apply str (d16/n-dances d16-s00 ["a" "b" "c" "d" "e"] 1))))
+    (is (= "ceadb" (apply str (d16/n-dances d16-s00 ["a" "b" "c" "d" "e"] 2))))
+    (is (= "ecbda" (apply str (d16/n-dances d16-s00 ["a" "b" "c" "d" "e"] 3))))
+    (is (= "abcde" (apply str (d16/n-dances d16-s00 ["a" "b" "c" "d" "e"] 4))))
+    (is (= "abcde" (apply str (d16/n-dances d16-s00 ["a" "b" "c" "d" "e"] 100))))))
 
 (def day16-input (u/parse-puzzle-input d16/parse 2017 16))
 

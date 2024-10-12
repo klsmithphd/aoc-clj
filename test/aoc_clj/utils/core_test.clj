@@ -83,6 +83,12 @@
     (is (= 2 (u/first-duplicate [1 2 3 4 5 2 3 4 5])))
     (is (= nil (u/first-duplicate (range 10))))))
 
+(deftest first-duplicates-test
+  (testing "Demonstration of first-duplicates: finds the positions of the first
+            and second instances of a duplicated element in a collection"
+    (is (= [1 5] (u/first-duplicates [1 2 3 4 5 2 3 4 5])))
+    (is (= nil (u/first-duplicates (range 10))))))
+
 (deftest rev-range-test
   (testing "Demonstration of rev-range: returns a countdown range"
     (is (= '(4 3 2 1 0)
