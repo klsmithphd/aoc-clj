@@ -31,30 +31,16 @@
                     (partition len len (repeat 0)))]
     (apply mapv + (concat [(assoc banks idx 0)] distro))))
 
-(defn first-duplicate-stats
-  "Given a (potentially infinite) sequence that is known to have
-   a recurring loop within it, find the number of values required to
-   reach the first duplicated value and the size of the recurrence loop"
-  [s]
-  (let [first-dupe (u/first-duplicate s)
-        first-time (u/index-of (u/equals? first-dupe) s)
-        second-time (u/index-of (u/equals? first-dupe) (drop (inc first-time) s))]
-    [(+ 1 first-time second-time) (+ 1 second-time)]))
-
-(defn- loop-stats
-  "Computes the loop data for the reallocation process"
-  [nums]
-  (first-duplicate-stats (iterate reallocate nums)))
-
 (defn cycles-to-repeat
   "Number of cycles until a repeat value is seen"
   [nums]
-  (first (loop-stats nums)))
+  (second (u/first-duplicates (iterate reallocate nums))))
 
 (defn loop-size
   "Size of the loop of repeating values"
   [nums]
-  (second (loop-stats nums)))
+  (let [[frst scnd] (u/first-duplicates (iterate reallocate nums))]
+    (- scnd frst)))
 
 ;; Puzzle solutions
 (defn part1
