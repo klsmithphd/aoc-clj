@@ -217,3 +217,11 @@
    clojure.lang.PersistentQueue/EMPTY)
   ([coll]
    (into clojure.lang.PersistentQueue/EMPTY coll)))
+
+(defn vec-insert
+  "Given a vector `v`, insert `elem` at the index `idx`. 
+   `idx` should be a value between [0, (count v)] inclusive"
+  [v idx elem]
+  (vec (concat (subvec v 0 idx)
+               [elem]
+               (subvec v idx))))

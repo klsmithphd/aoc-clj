@@ -143,3 +143,11 @@
     (is (= [0 1 2 3 4 0] (u/ring (range 5))))
     (is (= [1 1]         (u/ring [1])))
     (is (= []            (u/ring [])))))
+
+(deftest vec-insert-test
+  (testing "Demonstration of vec-insert: given a vector, insert a new
+            element at a given index position"
+    (is (= [:a 0 1] (u/vec-insert [0 1] 0 :a)))
+    (is (= [0 :a 1] (u/vec-insert [0 1] 1 :a)))
+    (is (= [0 1 :a] (u/vec-insert [0 1] 2 :a)))
+    (is (thrown? IndexOutOfBoundsException (u/vec-insert [0 1] 3 :a)))))
