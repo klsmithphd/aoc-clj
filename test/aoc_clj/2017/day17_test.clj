@@ -15,9 +15,9 @@
     (is (= [[0 2 4 3 1] 2 5] (d17/spin-step 3 [[0 2 3 1] 2 4])))
     (is (= [[0 5 2 4 3 1] 1 6] (d17/spin-step 3 [[0 2 4 3 1] 2 5])))))
 
-(deftest val-after-target
+(deftest val-after-2017-test
   (testing "Finds the value one past the 2017 target value"
-    (is (= 638 (d17/val-after-target d17/part1-limit d17/part1-limit 3)))))
+    (is (= 638 (d17/val-after-2017 3)))))
 
 (deftest val-after-zero-test
   (testing "Finds the value in the position to the right of zero after x steps"

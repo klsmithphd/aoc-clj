@@ -29,15 +29,15 @@
        (drop limit)
        first))
 
-(defn val-after-target
-  [target limit size]
-  (let [final (first (final-state limit size))
-        idx (u/index-of (u/equals? target) final)]
-    (get final (mod (inc idx) (inc limit)))))
+(defn val-after-2017
+  [size]
+  (let [final (first (final-state part1-limit size))
+        idx (u/index-of (u/equals? part1-limit) final)]
+    (get final (mod (inc idx) (inc part1-limit)))))
 
 (defn next-pos
-  [size [pos len]]
-  [(inc (mod (+ pos size) (inc len))) (inc len)])
+  [size [pos num]]
+  [(inc (mod (+ pos size) (inc num))) (inc num)])
 
 (defn val-after-zero
   [limit size]
@@ -50,9 +50,11 @@
 
 ;; Puzzle solutions
 (defn part1
+  "What is the value after 2017 in your completed circular buffer?"
   [input]
-  (val-after-target part1-limit part1-limit input))
+  (val-after-2017 input))
 
 (defn part2
+  "What is the value after 0 the moment 50000000 is inserted?"
   [input]
   (val-after-zero part2-limit input))
