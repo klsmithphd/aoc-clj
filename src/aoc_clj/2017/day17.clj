@@ -35,8 +35,24 @@
         idx (u/index-of (u/equals? target) final)]
     (get final (mod (inc idx) (inc limit)))))
 
+(defn next-pos
+  [size [pos len]]
+  [(inc (mod (+ pos size) (inc len))) (inc len)])
+
+(defn val-after-zero
+  [limit size]
+  (let [next-pos-step (partial next-pos size)]
+    (->> (iterate next-pos-step [0 0])
+         (filter #(= 1 (first %)))
+         (take-while #(<= (second %) limit))
+         last
+         second)))
 
 ;; Puzzle solutions
 (defn part1
   [input]
   (val-after-target part1-limit part1-limit input))
+
+(defn part2
+  [input]
+  (val-after-zero part2-limit input))
