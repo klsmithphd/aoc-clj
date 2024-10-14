@@ -59,14 +59,6 @@
       (assoc-in [:regs x] (* (arg-val state x) (arg-val state y)))
       (update :pos inc)))
 
-(defn rcv-cmd
-  "`rcv X` **recovers** the frequency of the last sound played, but only when 
-   the value of X is not zero. (If it is zero, the command does nothing.)"
-  [state [x]]
-  (if (zero? (arg-val state x))
-    (update state :pos inc)
-    (assoc state :pos -1)))
-
 (defn set-cmd
   "`set X Y` **sets** register X to the value of Y."
   [state [x y]]
@@ -74,11 +66,27 @@
       (assoc-in [:regs x] (arg-val state y))
       (update :pos inc)))
 
-(defn snd-cmd
+(defn part1-rcv-cmd
+  "`rcv X` **recovers** the frequency of the last sound played, but only when 
+   the value of X is not zero. (If it is zero, the command does nothing.)"
+  [state [x]]
+  (if (zero? (arg-val state x))
+    (update state :pos inc)
+    (assoc state :pos -1)))
+
+(defn part1-snd-cmd
   "`snd X` **plays a sound** with a frequency equal to the value of X."
   [state [x]]
   (-> state
       (assoc :snd (arg-val state x))
+      (update :pos inc)))
+
+(defn part2-snd-cmd
+  "`snd X` **sends** the value of X to the other program. These values
+   wait in a queue until that program is ready to receive them."
+  [{:keys [id] :as state} [x]]
+  (-> state
+      (update-in [(bit-xor 1 id) :queue] (arg-val state x))
       (update :pos inc)))
 
 (def cmd-map
@@ -86,11 +94,11 @@
    "jgz" jgz-cmd
    "mod" mod-cmd
    "mul" mul-cmd
-   "rcv" rcv-cmd
+   "rcv" part1-rcv-cmd
    "set" set-cmd
-   "snd" snd-cmd})
+   "snd" part1-snd-cmd})
 
-(defn step
+(defn part1-step
   "Evolve the state by one step based on the instruction indicated by `pos`"
   [{:keys [insts pos snd] :as state}]
   (if (< -1 pos (count insts))
@@ -98,11 +106,11 @@
       ((cmd-map cmd) state args))
     snd))
 
-(defn execute
+(defn part1-execute
   "Execute the assembly programs instructions until it returns a recover value"
   [insts]
   (->> {:insts insts :regs {} :pos 0}
-       (iterate step)
+       (iterate part1-step)
        (drop-while map?)
        first))
 
@@ -111,4 +119,23 @@
   "What is the value of the recovered frequency the first time a `rcv` 
    instruction is executed with a non-zero value?"
   [input]
-  (execute input))
+  (part1-execute input))
+
+
+;; Let's think about Part 2 now
+;; We have one common set of instructions, but now we've got two
+;; programs executing them independently and sending each other
+;; messages over a queue.
+;; The register values and positions are unique to each program now.
+;;
+;; Here's a possible structure for the state
+(comment
+  {:insts []
+   :0 {:pos 0
+       :regs {"p" 0}
+       :queue []
+       :snd-count 0}
+   :1 {:pos 0
+       :regs {"p" 1}
+       :queue []
+       :snd-count 0}})

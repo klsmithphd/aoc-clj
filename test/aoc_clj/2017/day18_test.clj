@@ -27,6 +27,15 @@
    ["set" ["a" 1]]
    ["jgz" ["a" -2]]])
 
+(def d18-s01
+  [["snd" [1]]
+   ["snd" [2]]
+   ["snd" ["p"]]
+   ["rcv" ["a"]]
+   ["rcv" ["b"]]
+   ["rcv" ["c"]]
+   ["rcv" ["d"]]])
+
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d18-s00 (d18/parse d18-s00-raw)))))
@@ -69,51 +78,51 @@
     (is (= {:regs {"a" 10 "b" 10} :pos 1}
            (d18/set-cmd {:regs {"b" 10} :pos 0} ["a" "b"])))))
 
-(deftest snd-cmd-test
-  (testing "`snd X Y` plays a sound with frequency equal to X"
-    (is (= {:regs {"a" 5} :pos 1 :snd 5}
-           (d18/snd-cmd {:regs {"a" 5} :pos 0} ["a"])))))
-
-(deftest rcv-cmd-test
+(deftest part1-rcv-cmd-test
   (testing "`rcv X` recovers the frequency of last sound played, but
             only when X is not zero"
     (is (= {:regs {"a" 0} :pos 1}
-           (d18/rcv-cmd {:regs {"a" 0} :pos 0} ["a"])))
+           (d18/part1-rcv-cmd {:regs {"a" 0} :pos 0} ["a"])))
     (is (= {:regs {"a" 1} :pos -1 :snd 5}
-           (d18/rcv-cmd {:regs {"a" 1} :pos 0 :snd 5} ["a"])))))
+           (d18/part1-rcv-cmd {:regs {"a" 1} :pos 0 :snd 5} ["a"])))))
 
-(deftest step-test
+(deftest part1-snd-cmd-test
+  (testing "`snd X Y` plays a sound with frequency equal to X"
+    (is (= {:regs {"a" 5} :pos 1 :snd 5}
+           (d18/part1-snd-cmd {:regs {"a" 5} :pos 0} ["a"])))))
+
+(deftest part1-step-test
   (testing "Advances the state by one step from the instructions"
     (is (= {:insts d18-s00 :pos 1 :regs {"a" 1}}
-           (d18/step {:insts d18-s00 :pos 0})))
+           (d18/part1-step {:insts d18-s00 :pos 0})))
     (is (= {:insts d18-s00 :pos 2 :regs {"a" 3}}
-           (d18/step {:insts d18-s00 :pos 1 :regs {"a" 1}})))
+           (d18/part1-step {:insts d18-s00 :pos 1 :regs {"a" 1}})))
     (is (= {:insts d18-s00 :pos 3 :regs {"a" 9}}
-           (d18/step {:insts d18-s00 :pos 2 :regs {"a" 3}})))
+           (d18/part1-step {:insts d18-s00 :pos 2 :regs {"a" 3}})))
     (is (= {:insts d18-s00 :pos 4 :regs {"a" 4}}
-           (d18/step {:insts d18-s00 :pos 3 :regs {"a" 9}})))
+           (d18/part1-step {:insts d18-s00 :pos 3 :regs {"a" 9}})))
     (is (= {:insts d18-s00 :pos 5 :regs {"a" 4} :snd 4}
-           (d18/step {:insts d18-s00 :pos 4 :regs {"a" 4}})))
+           (d18/part1-step {:insts d18-s00 :pos 4 :regs {"a" 4}})))
     (is (= {:insts d18-s00 :pos 6 :regs {"a" 0} :snd 4}
-           (d18/step {:insts d18-s00 :pos 5 :regs {"a" 4} :snd 4})))
+           (d18/part1-step {:insts d18-s00 :pos 5 :regs {"a" 4} :snd 4})))
     (is (= {:insts d18-s00 :pos 7 :regs {"a" 0} :snd 4}
-           (d18/step {:insts d18-s00 :pos 6 :regs {"a" 0} :snd 4})))
+           (d18/part1-step {:insts d18-s00 :pos 6 :regs {"a" 0} :snd 4})))
     (is (= {:insts d18-s00 :pos 8 :regs {"a" 0} :snd 4}
-           (d18/step {:insts d18-s00 :pos 7 :regs {"a" 0} :snd 4})))
+           (d18/part1-step {:insts d18-s00 :pos 7 :regs {"a" 0} :snd 4})))
     (is (= {:insts d18-s00 :pos 9 :regs {"a" 1} :snd 4}
-           (d18/step {:insts d18-s00 :pos 8 :regs {"a" 0} :snd 4})))
+           (d18/part1-step {:insts d18-s00 :pos 8 :regs {"a" 0} :snd 4})))
     (is (= {:insts d18-s00 :pos 7 :regs {"a" 1} :snd 4}
-           (d18/step {:insts d18-s00 :pos 9 :regs {"a" 1} :snd 4})))
+           (d18/part1-step {:insts d18-s00 :pos 9 :regs {"a" 1} :snd 4})))
     (is (= {:insts d18-s00 :pos 6 :regs {"a" 1} :snd 4}
-           (d18/step {:insts d18-s00 :pos 7 :regs {"a" 1} :snd 4})))
+           (d18/part1-step {:insts d18-s00 :pos 7 :regs {"a" 1} :snd 4})))
     (is (= {:insts d18-s00 :pos -1 :regs {"a" 1} :snd 4}
-           (d18/step {:insts d18-s00 :pos 6 :regs {"a" 1} :snd 4})))
+           (d18/part1-step {:insts d18-s00 :pos 6 :regs {"a" 1} :snd 4})))
     (is (= 4
-           (d18/step {:insts d18-s00 :pos -1 :regs {"a" 1} :snd 4})))))
+           (d18/part1-step {:insts d18-s00 :pos -1 :regs {"a" 1} :snd 4})))))
 
-(deftest execute-test
+(deftest part1-execute-test
   (testing "Runs the instructions and returns the value recovered"
-    (is (= 4 (d18/execute d18-s00)))))
+    (is (= 4 (d18/part1-execute d18-s00)))))
 
 (def day18-input (u/parse-puzzle-input d18/parse 2017 18))
 
