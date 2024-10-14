@@ -23,71 +23,64 @@
   "Parse the argument. If it's a literal (number), return the number,
    else return the value stored in the register or zero if the register
    is unset"
-  [{:keys [regs]} x]
+  [state x]
   (if (number? x)
     x
-    (get regs x 0)))
+    (get state x 0)))
 
 (defn add-cmd
   "`add X Y` **increases** register X by the value of Y"
-  [state [x y]]
-  (-> state
-      (assoc-in [:regs x] (+ (arg-val state x) (arg-val state y)))
-      (update :pos inc)))
+  [{:keys [pos] :as state} [x y]]
+  {x (+ (arg-val state x) (arg-val state y))
+   :pos (inc pos)})
 
 (defn jgz-cmd
   "`jgz X Y` **jumps** with an offset of the value of Y, but only if 
    the value of X is greater than zero."
-  [state [x y]]
+  [{:keys [pos] :as state} [x y]]
   (if (> (arg-val state x) 0)
-    (update state :pos + y)
-    (update state :pos inc)))
+    {:pos (+ pos y)}
+    {:pos (inc pos)}))
 
 (defn mod-cmd
   "`mod X Y` sets register X to the **remainder** of dividing the value 
    contained in register X by the value of Y"
-  [state [x y]]
-  (-> state
-      (assoc-in [:regs x] (mod (arg-val state x) (arg-val state y)))
-      (update :pos inc)))
+  [{:keys [pos] :as state} [x y]]
+  {x (mod (arg-val state x) (arg-val state y))
+   :pos (inc pos)})
 
 (defn mul-cmd
   "`mul X Y` sets register X to the result of **multiplying** the value 
    contained in register X by the value of Y."
-  [state [x y]]
-  (-> state
-      (assoc-in [:regs x] (* (arg-val state x) (arg-val state y)))
-      (update :pos inc)))
+  [{:keys [pos] :as state} [x y]]
+  {x (* (arg-val state x) (arg-val state y))
+   :pos (inc pos)})
 
 (defn set-cmd
   "`set X Y` **sets** register X to the value of Y."
-  [state [x y]]
-  (-> state
-      (assoc-in [:regs x] (arg-val state y))
-      (update :pos inc)))
+  [{:keys [pos] :as state} [x y]]
+  {x (arg-val state y) :pos (inc pos)})
 
 (defn part1-rcv-cmd
   "`rcv X` **recovers** the frequency of the last sound played, but only when 
    the value of X is not zero. (If it is zero, the command does nothing.)"
-  [state [x]]
+  [{:keys [pos] :as state} [x]]
   (if (zero? (arg-val state x))
-    (update state :pos inc)
-    (assoc state :pos -1)))
+    {:pos (inc pos)}
+    {:pos -1}))
 
 (defn part1-snd-cmd
   "`snd X` **plays a sound** with a frequency equal to the value of X."
-  [state [x]]
-  (-> state
-      (assoc :snd (arg-val state x))
-      (update :pos inc)))
+  [{:keys [pos] :as state} [x]]
+  {:snd (arg-val state x) :pos (inc pos)})
 
-(defn part2-snd-cmd
-  "`snd X` **sends** the value of X to the other program. These values
-   wait in a queue until that program is ready to receive them."
-  [{:keys [id] :as state} [x]]
-  (-> state
-      (update-in [(bit-xor 1 id) :queue] (arg-val state x))
-      (update :pos inc)))
+;; (defn part2-snd-cmd
+;;   "`snd X` **sends** the value of X to the other program. These values
+;;    wait in a queue until that program is ready to receive them."
+;;   [{:keys [id] :as state} [x]]
+;;   (-> state
+;;       (update-in [(bit-xor 1 id) :queue] (arg-val state x))
+;;       (update :pos inc)))
 
 (def cmd-map
   {"add" add-cmd
@@ -103,13 +96,13 @@
   [{:keys [insts pos snd] :as state}]
   (if (< -1 pos (count insts))
     (let [[cmd args] (insts pos)]
-      ((cmd-map cmd) state args))
+      (merge state ((cmd-map cmd) state args)))
     snd))
 
 (defn part1-execute
   "Execute the assembly programs instructions until it returns a recover value"
   [insts]
-  (->> {:insts insts :regs {} :pos 0}
+  (->> {:insts insts :pos 0}
        (iterate part1-step)
        (drop-while map?)
        first))
@@ -131,11 +124,11 @@
 ;; Here's a possible structure for the state
 (comment
   {:insts []
-   :0 {:pos 0
-       :regs {"p" 0}
-       :queue []
-       :snd-count 0}
-   :1 {:pos 0
-       :regs {"p" 1}
-       :queue []
-       :snd-count 0}})
+   0 {:pos 0
+      :queue []
+      :snd-count 0
+      "p" 0}
+   1 {:pos 0
+      :queue []
+      :snd-count 0
+      "p" 1}})
