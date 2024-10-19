@@ -78,51 +78,51 @@
     (is (= {"a" 10 :pos 1}
            (d18/set-cmd {"b" 10 :pos 0} ["a" "b"])))))
 
-(deftest part1-rcv-cmd-test
+(deftest rcv-cmd-p1-test
   (testing "`rcv X` recovers the frequency of last sound played, but
             only when X is not zero"
     (is (= {:pos 1}
-           (d18/part1-rcv-cmd {"a" 0 :pos 0} ["a"])))
+           (d18/rcv-cmd-p1 {"a" 0 :pos 0} ["a"])))
     (is (= {:pos -1}
-           (d18/part1-rcv-cmd {"a" 1 :pos 0 :snd 5} ["a"])))))
+           (d18/rcv-cmd-p1 {"a" 1 :pos 0 :snd 5} ["a"])))))
 
-(deftest part1-snd-cmd-test
+(deftest snd-cmd-p1-test
   (testing "`snd X Y` plays a sound with frequency equal to X"
     (is (= {:pos 1 :snd 5}
-           (d18/part1-snd-cmd {"a" 5 :pos 0} ["a"])))))
+           (d18/snd-cmd-p1 {"a" 5 :pos 0} ["a"])))))
 
-(deftest part1-step-test
+(deftest step-p1-test
   (testing "Advances the state by one step from the instructions"
     (is (= {:insts d18-s00 :pos 1 "a" 1}
-           (d18/part1-step {:insts d18-s00 :pos 0})))
+           (d18/step-p1 {:insts d18-s00 :pos 0})))
     (is (= {:insts d18-s00 :pos 2 "a" 3}
-           (d18/part1-step {:insts d18-s00 :pos 1 "a" 1})))
+           (d18/step-p1 {:insts d18-s00 :pos 1 "a" 1})))
     (is (= {:insts d18-s00 :pos 3 "a" 9}
-           (d18/part1-step {:insts d18-s00 :pos 2 "a" 3})))
+           (d18/step-p1 {:insts d18-s00 :pos 2 "a" 3})))
     (is (= {:insts d18-s00 :pos 4 "a" 4}
-           (d18/part1-step {:insts d18-s00 :pos 3 "a" 9})))
+           (d18/step-p1 {:insts d18-s00 :pos 3 "a" 9})))
     (is (= {:insts d18-s00 :pos 5 "a" 4 :snd 4}
-           (d18/part1-step {:insts d18-s00 :pos 4 "a" 4})))
+           (d18/step-p1 {:insts d18-s00 :pos 4 "a" 4})))
     (is (= {:insts d18-s00 :pos 6 "a" 0 :snd 4}
-           (d18/part1-step {:insts d18-s00 :pos 5 "a" 4 :snd 4})))
+           (d18/step-p1 {:insts d18-s00 :pos 5 "a" 4 :snd 4})))
     (is (= {:insts d18-s00 :pos 7 "a" 0 :snd 4}
-           (d18/part1-step {:insts d18-s00 :pos 6 "a" 0 :snd 4})))
+           (d18/step-p1 {:insts d18-s00 :pos 6 "a" 0 :snd 4})))
     (is (= {:insts d18-s00 :pos 8 "a" 0 :snd 4}
-           (d18/part1-step {:insts d18-s00 :pos 7 "a" 0 :snd 4})))
+           (d18/step-p1 {:insts d18-s00 :pos 7 "a" 0 :snd 4})))
     (is (= {:insts d18-s00 :pos 9 "a" 1 :snd 4}
-           (d18/part1-step {:insts d18-s00 :pos 8 "a" 0 :snd 4})))
+           (d18/step-p1 {:insts d18-s00 :pos 8 "a" 0 :snd 4})))
     (is (= {:insts d18-s00 :pos 7 "a" 1 :snd 4}
-           (d18/part1-step {:insts d18-s00 :pos 9 "a" 1 :snd 4})))
+           (d18/step-p1 {:insts d18-s00 :pos 9 "a" 1 :snd 4})))
     (is (= {:insts d18-s00 :pos 6 "a" 1 :snd 4}
-           (d18/part1-step {:insts d18-s00 :pos 7 "a" 1 :snd 4})))
+           (d18/step-p1 {:insts d18-s00 :pos 7 "a" 1 :snd 4})))
     (is (= {:insts d18-s00 :pos -1 "a" 1 :snd 4}
-           (d18/part1-step {:insts d18-s00 :pos 6 "a" 1 :snd 4})))
+           (d18/step-p1 {:insts d18-s00 :pos 6 "a" 1 :snd 4})))
     (is (= 4
-           (d18/part1-step {:insts d18-s00 :pos -1 "a" 1 :snd 4})))))
+           (d18/step-p1 {:insts d18-s00 :pos -1 "a" 1 :snd 4})))))
 
-(deftest part1-execute-test
+(deftest execute-p1-test
   (testing "Runs the instructions and returns the value recovered"
-    (is (= 4 (d18/part1-execute d18-s00)))))
+    (is (= 4 (d18/execute-p1 d18-s00)))))
 
 (def day18-input (u/parse-puzzle-input d18/parse 2017 18))
 

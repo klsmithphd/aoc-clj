@@ -29,50 +29,59 @@
     (get state x 0)))
 
 (defn add-cmd
-  "`add X Y` **increases** register X by the value of Y"
+  "Returns the state change for an `add` instruction, which updates
+   the first argument's register value by adding the second argument's value."
   [{:keys [pos] :as state} [x y]]
   {x (+ (arg-val state x) (arg-val state y))
    :pos (inc pos)})
 
 (defn jgz-cmd
-  "`jgz X Y` **jumps** with an offset of the value of Y, but only if 
-   the value of X is greater than zero."
+  "Returns the state change for an `jgz` instruction, which jumps
+   in instruction position by the offset of the second argument only
+   if the value in the first argument's register is greater than zero."
   [{:keys [pos] :as state} [x y]]
   (if (> (arg-val state x) 0)
     {:pos (+ pos y)}
     {:pos (inc pos)}))
 
 (defn mod-cmd
-  "`mod X Y` sets register X to the **remainder** of dividing the value 
-   contained in register X by the value of Y"
+  "Returns the state change for a `mod` instruction, which updates
+   the first argument's register value by modding it with the second
+   argument's value"
   [{:keys [pos] :as state} [x y]]
   {x (mod (arg-val state x) (arg-val state y))
    :pos (inc pos)})
 
 (defn mul-cmd
-  "`mul X Y` sets register X to the result of **multiplying** the value 
-   contained in register X by the value of Y."
+  "Returns the state change for a `mul` instruction, which updates
+   the first argument's register value by multiplying it by the second
+   argument's value"
   [{:keys [pos] :as state} [x y]]
   {x (* (arg-val state x) (arg-val state y))
    :pos (inc pos)})
 
 (defn set-cmd
-  "`set X Y` **sets** register X to the value of Y."
+  "Returns the state change for a `set` instruction, which sets the
+   first argument's register value to the second argument's value"
   [{:keys [pos] :as state} [x y]]
   {x (arg-val state y) :pos (inc pos)})
 
-(defn part1-rcv-cmd
-  "`rcv X` **recovers** the frequency of the last sound played, but only when 
-   the value of X is not zero. (If it is zero, the command does nothing.)"
+(defn snd-cmd-p1
+  "Returns the state change for a `snd` instruction using the interpretation
+   in part 1. It sets the `:snd` key to the value of the argument's register,
+   indicating that frequency has been played as a sound"
+  [{:keys [pos] :as state} [x]]
+  {:snd (arg-val state x) :pos (inc pos)})
+
+(defn rcv-cmd-p1
+  "Returns the state change for a `rcv` instruction using the interpretation
+   in part 1. If the value of the argument's register is zero, it does nothing,
+   but if non-zero, it sets the instruction position out of bounds to
+   stop the program from running."
   [{:keys [pos] :as state} [x]]
   (if (zero? (arg-val state x))
     {:pos (inc pos)}
     {:pos -1}))
-
-(defn part1-snd-cmd
-  "`snd X` **plays a sound** with a frequency equal to the value of X."
-  [{:keys [pos] :as state} [x]]
-  {:snd (arg-val state x) :pos (inc pos)})
 
 ;; (defn part2-snd-cmd
 ;;   "`snd X` **sends** the value of X to the other program. These values
@@ -82,28 +91,28 @@
 ;;       (update-in [(bit-xor 1 id) :queue] (arg-val state x))
 ;;       (update :pos inc)))
 
-(def cmd-map
+(def cmd-map-p1
   {"add" add-cmd
    "jgz" jgz-cmd
    "mod" mod-cmd
    "mul" mul-cmd
-   "rcv" part1-rcv-cmd
+   "rcv" rcv-cmd-p1
    "set" set-cmd
-   "snd" part1-snd-cmd})
+   "snd" snd-cmd-p1})
 
-(defn part1-step
+(defn step-p1
   "Evolve the state by one step based on the instruction indicated by `pos`"
   [{:keys [insts pos snd] :as state}]
   (if (< -1 pos (count insts))
     (let [[cmd args] (insts pos)]
-      (merge state ((cmd-map cmd) state args)))
+      (merge state ((cmd-map-p1 cmd) state args)))
     snd))
 
-(defn part1-execute
+(defn execute-p1
   "Execute the assembly programs instructions until it returns a recover value"
   [insts]
   (->> {:insts insts :pos 0}
-       (iterate part1-step)
+       (iterate step-p1)
        (drop-while map?)
        first))
 
@@ -112,7 +121,7 @@
   "What is the value of the recovered frequency the first time a `rcv` 
    instruction is executed with a non-zero value?"
   [input]
-  (part1-execute input))
+  (execute-p1 input))
 
 
 ;; Let's think about Part 2 now
