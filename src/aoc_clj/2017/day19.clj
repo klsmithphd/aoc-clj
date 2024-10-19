@@ -18,28 +18,23 @@
   [input]
   (vg/ascii->VecGrid2D charmap input :down true))
 
-(def d19-s00-raw
-  ["     |          "
-   "     |  +--+    "
-   "     A  |  C    "
-   " F---|----E|--+ "
-   "     |  |  |  D "
-   "     +B-+  +--+ "])
-
-(def d19-s00 (parse d19-s00-raw))
-
 ;; Puzzle logic
 (defn start
+  "Returns the starting position, the first vertical pipe at the top of
+   the diagram"
   [grid]
   [(u/index-of (u/equals? :vert) (first (:v grid))) 0])
 
 (def perpendicular
+  "For a given heading, returns the perpendicular directions"
   {:n #{:e :w}
    :s #{:e :w}
    :e #{:n :s}
    :w #{:n :s}})
 
 (defn allowed-turn
+  "When at a corner, returns true if a neighboring cell is valid as
+   the next pos/heading to go in"
   [heading nbr-val]
   (or (string? nbr-val)
       (case heading
@@ -49,6 +44,8 @@
         :w (= :vert nbr-val))))
 
 (defn next-cell
+  "Returns the position and heading of the next step along the path
+   or nil if there's no valid next cell"
   [grid {:keys [pos heading]}]
   (let [val (value grid pos)
         nxt-pos (if (= :corner val)
@@ -64,6 +61,7 @@
       (select-keys nxt-pos [:pos :heading]))))
 
 (defn path
+  "Returns a seq of all the positions along the path through the network"
   [grid]
   (->> {:pos (start grid) :heading :n}
        (iterate #(next-cell grid %))
@@ -71,6 +69,7 @@
        (map :pos)))
 
 (defn letters-along-path
+  "Returns the letters as they're observed along the path"
   [grid]
   (->> (path grid)
        (map #(value grid %))
@@ -78,15 +77,19 @@
        (apply str)))
 
 (defn step-count
+  "Returns the total number of steps to get through the network"
   [grid]
   (->> (path grid)
        count))
 
 ;; Puzzle solutions
 (defn part1
+  "What letters will it see (in the order it would see them) 
+   if it follows the path? "
   [input]
   (letters-along-path input))
 
 (defn part2
+  "How many steps does the packet need to go?"
   [input]
   (step-count input))
