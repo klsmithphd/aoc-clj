@@ -42,7 +42,7 @@
    if the value in the first argument's register is greater than zero."
   [state [x y]]
   (if (> (arg-val state x) 0)
-    (update state :pos + y)
+    (update state :pos + (arg-val state y))
     (update state :pos inc)))
 
 (defn mod-cmd
@@ -166,25 +166,6 @@
        first
        :snd))
 
-(defn execute-p2
-  [insts]
-  (->> {:insts insts}))
-
-;; Puzzle solutions
-(defn part1
-  "What is the value of the recovered frequency the first time a `rcv` 
-   instruction is executed with a non-zero value?"
-  [input]
-  (execute-p1 input))
-
-
-;; Let's think about Part 2 now
-;; We have one common set of instructions, but now we've got two
-;; programs executing them independently and sending each other
-;; messages over a queue.
-;; The register values and positions are unique to each program now.
-;;
-;; Here's a possible structure for the state
 (def p2-init-progs
   {0 {:pos 0
       :snd-cnt 0
@@ -196,6 +177,45 @@
       :queue []
       :waiting false
       "p" 1}})
+
+(defn running-p2?
+  [{:keys [insts progs]}]
+  (and (not-every? #(:waiting %) (vals progs))
+       (< -1 (get-in progs [0 :pos]) (count insts))
+       (< -1 (get-in progs [1 :pos]) (count insts))))
+
+(defn execute-p2
+  [insts]
+  (->> {:insts insts :progs p2-init-progs}
+       (iterate step-p2)
+       (drop-while running-p2?)
+       first))
+
+(defn prog-1-snd-cnt
+  [insts]
+  (-> (execute-p2 insts)
+      (get-in [:progs 1 :snd-cnt])))
+
+;; Puzzle solutions
+(defn part1
+  "What is the value of the recovered frequency the first time a `rcv` 
+   instruction is executed with a non-zero value?"
+  [input]
+  (execute-p1 input))
+
+(defn part2
+  [input]
+  (prog-1-snd-cnt input))
+
+
+;; Let's think about Part 2 now
+;; We have one common set of instructions, but now we've got two
+;; programs executing them independently and sending each other
+;; messages over a queue.
+;; The register values and positions are unique to each program now.
+;;
+;; Here's a possible structure for the state
+
 
 (comment
   {:insts []

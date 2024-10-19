@@ -252,8 +252,25 @@
   (testing "Runs the instructions and returns the value recovered"
     (is (= 4 (d18/execute-p1 d18-s00)))))
 
+(deftest execute-p2-test
+  (testing "Runs the instructions until deadlock"
+    (is (= {:insts d18-s01
+            :progs {0 {:pos 6 :snd-cnt 3 :queue [] :waiting true
+                       "a" 1 "b" 2 "c" 1 "p" 0}
+                    1 {:pos 6 :snd-cnt 3 :queue [] :waiting true
+                       "a" 1 "b" 2 "c" 0 "p" 1}}}
+           (d18/execute-p2 d18-s01)))))
+
+(deftest prog-1-snd-cnt-test
+  (testing "Counts how many times program 1 sent a value"
+    (is (= 3 (d18/prog-1-snd-cnt d18-s01)))))
+
 (def day18-input (u/parse-puzzle-input d18/parse 2017 18))
 
 (deftest part1-test
   (testing "Reproduces the answer for day18, part1"
     (is (= 9423 (d18/part1 day18-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day18, part2"
+    (is (= 7620 (d18/part2 day18-input)))))
