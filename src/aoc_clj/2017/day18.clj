@@ -163,8 +163,7 @@
   (->> {:insts insts :pos 0}
        (iterate step-p1)
        (drop-while running-p1?)
-       first
-       :snd))
+       first))
 
 (def p2-init-progs
   {0 {:pos 0
@@ -191,6 +190,11 @@
        (drop-while running-p2?)
        first))
 
+(defn recovered-frequency
+  [insts]
+  (-> (execute-p1 insts)
+      :snd))
+
 (defn prog-1-snd-cnt
   [insts]
   (-> (execute-p2 insts)
@@ -201,31 +205,8 @@
   "What is the value of the recovered frequency the first time a `rcv` 
    instruction is executed with a non-zero value?"
   [input]
-  (execute-p1 input))
+  (recovered-frequency input))
 
 (defn part2
   [input]
   (prog-1-snd-cnt input))
-
-
-;; Let's think about Part 2 now
-;; We have one common set of instructions, but now we've got two
-;; programs executing them independently and sending each other
-;; messages over a queue.
-;; The register values and positions are unique to each program now.
-;;
-;; Here's a possible structure for the state
-
-
-(comment
-  {:insts []
-   :progs {0 {:pos 0
-              :queue []
-              :snd-count 0
-              :waiting false
-              "p" 0}
-           1 {:pos 0
-              :queue []
-              :snd-count 0
-              :waiting false
-              "p" 1}}})

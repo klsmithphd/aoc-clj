@@ -118,139 +118,57 @@
     (is (= {:insts d18-s00 :pos -1 "a" 1 :snd 4}
            (d18/step-p1 {:insts d18-s00 :pos 6 "a" 1 :snd 4})))))
 
+(deftest execute-p1-test
+  (testing "Runs the instructions and returns the value recovered"
+    (is (= {:insts d18-s00 :pos -1 "a" 1 :snd 4}
+           (d18/execute-p1 d18-s00)))))
+
 (deftest step-p2-test
   (testing "Advances the state by one step using part2 logic"
     (is (= {:insts d18-s01
-            :progs {0 {:pos 1
-                       :snd-cnt 1
-                       :queue []
-                       :waiting false
-                       "p" 0}
-                    1 {:pos 0
-                       :snd-cnt 0
-                       :queue [1]
-                       :waiting false
-                       "p" 1}}}
+            :progs {0 {:pos 1 :snd-cnt 1 :queue [] :waiting false "p" 0}
+                    1 {:pos 0 :snd-cnt 0 :queue [1] :waiting false "p" 1}}}
            (d18/step-p2 {:insts d18-s01 :progs d18/p2-init-progs})))
 
     (is (= {:insts d18-s01
-            :progs {0 {:pos 2
-                       :snd-cnt 2
-                       :queue []
-                       :waiting false
-                       "p" 0}
-                    1 {:pos 0
-                       :snd-cnt 0
-                       :queue [1 2]
-                       :waiting false
-                       "p" 1}}}
-           (d18/step-p2 {:insts d18-s01
-                         :progs {0 {:pos 1
-                                    :snd-cnt 1
-                                    :queue []
-                                    :waiting false
-                                    "p" 0}
-                                 1 {:pos 0
-                                    :snd-cnt 0
-                                    :queue [1]
-                                    :waiting false
-                                    "p" 1}}})))
-    (is (= {:insts d18-s01
-            :progs {0 {:pos 3
-                       :snd-cnt 3
-                       :queue []
-                       :waiting false
-                       "p" 0}
-                    1 {:pos 0
-                       :snd-cnt 0
-                       :queue [1 2 0]
-                       :waiting false
-                       "p" 1}}}
-           (d18/step-p2 {:insts d18-s01
-                         :progs {0 {:pos 2
-                                    :snd-cnt 2
-                                    :queue []
-                                    :waiting false
-                                    "p" 0}
-                                 1 {:pos 0
-                                    :snd-cnt 0
-                                    :queue [1 2]
-                                    :waiting false
-                                    "p" 1}}})))
+            :progs {0 {:pos 2 :snd-cnt 2 :queue [] :waiting false "p" 0}
+                    1 {:pos 0 :snd-cnt 0 :queue [1 2] :waiting false "p" 1}}}
+           (d18/step-p2
+            {:insts d18-s01
+             :progs {0 {:pos 1 :snd-cnt 1 :queue [] :waiting false "p" 0}
+                     1 {:pos 0 :snd-cnt 0 :queue [1] :waiting false "p" 1}}})))
 
     (is (= {:insts d18-s01
-            :progs {0 {:pos 3
-                       :snd-cnt 3
-                       :queue []
-                       :waiting true
-                       "p" 0}
-                    1 {:pos 0
-                       :snd-cnt 0
-                       :queue [1 2 0]
-                       :waiting false
-                       "p" 1}}}
-           (d18/step-p2 {:insts d18-s01
-                         :progs {0 {:pos 3
-                                    :snd-cnt 3
-                                    :queue []
-                                    :waiting false
-                                    "p" 0}
-                                 1 {:pos 0
-                                    :snd-cnt 0
-                                    :queue [1 2 0]
-                                    :waiting false
-                                    "p" 1}}})))
+            :progs {0 {:pos 3 :snd-cnt 3 :queue [] :waiting false "p" 0}
+                    1 {:pos 0 :snd-cnt 0 :queue [1 2 0] :waiting false "p" 1}}}
+           (d18/step-p2
+            {:insts d18-s01
+             :progs {0 {:pos 2 :snd-cnt 2 :queue [] :waiting false "p" 0}
+                     1 {:pos 0 :snd-cnt 0 :queue [1 2] :waiting false "p" 1}}})))
 
     (is (= {:insts d18-s01
-            :progs {0 {:pos 3
-                       :snd-cnt 3
-                       :queue [1]
-                       :waiting false
-                       "p" 0}
-                    1 {:pos 1
-                       :snd-cnt 1
-                       :queue [1 2 0]
-                       :waiting false
-                       "p" 1}}}
-           (d18/step-p2 {:insts d18-s01
-                         :progs {0 {:pos 3
-                                    :snd-cnt 3
-                                    :queue []
-                                    :waiting true
-                                    "p" 0}
-                                 1 {:pos 0
-                                    :snd-cnt 0
-                                    :queue [1 2 0]
-                                    :waiting false
-                                    "p" 1}}})))
+            :progs {0 {:pos 3 :snd-cnt 3 :queue [] :waiting true "p" 0}
+                    1 {:pos 0 :snd-cnt 0 :queue [1 2 0] :waiting false "p" 1}}}
+           (d18/step-p2
+            {:insts d18-s01
+             :progs {0 {:pos 3 :snd-cnt 3 :queue [] :waiting false "p" 0}
+                     1 {:pos 0 :snd-cnt 0 :queue [1 2 0] :waiting false "p" 1}}})))
 
     (is (= {:insts d18-s01
-            :progs {0 {:pos 4
-                       :snd-cnt 3
-                       :queue []
-                       :waiting false
-                       "p" 0
-                       "a" 1}
-                    1 {:pos 1
-                       :snd-cnt 1
-                       :queue [1 2 0]
-                       :waiting false
-                       "p" 1}}}
-           (d18/step-p2 {:insts d18-s01
-                         :progs {0 {:pos 3
-                                    :snd-cnt 3
-                                    :queue [1]
-                                    :waiting false
-                                    "p" 0}
-                                 1 {:pos 1
-                                    :snd-cnt 1
-                                    :queue [1 2 0]
-                                    :waiting false
-                                    "p" 1}}})))))
+            :progs {0 {:pos 3 :snd-cnt 3 :queue [1] :waiting false "p" 0}
+                    1 {:pos 1 :snd-cnt 1 :queue [1 2 0] :waiting false "p" 1}}}
+           (d18/step-p2
+            {:insts d18-s01
+             :progs {0 {:pos 3 :snd-cnt 3 :queue [] :waiting true "p" 0}
+                     1 {:pos 0 :snd-cnt 0 :queue [1 2 0] :waiting false "p" 1}}})))
 
-(deftest execute-p1-test
-  (testing "Runs the instructions and returns the value recovered"
-    (is (= 4 (d18/execute-p1 d18-s00)))))
+    (is (= {:insts d18-s01
+            :progs {0 {:pos 4 :snd-cnt 3 :queue [] :waiting false "p" 0 "a" 1}
+                    1 {:pos 1 :snd-cnt 1 :queue [1 2 0] :waiting false "p" 1}}}
+           (d18/step-p2
+            {:insts d18-s01
+             :progs {0 {:pos 3 :snd-cnt 3 :queue [1] :waiting false "p" 0}
+                     1 {:pos 1 :snd-cnt 1 :queue [1 2 0] :waiting false "p" 1}}})))))
 
 (deftest execute-p2-test
   (testing "Runs the instructions until deadlock"
@@ -260,6 +178,10 @@
                     1 {:pos 6 :snd-cnt 3 :queue [] :waiting true
                        "a" 1 "b" 2 "c" 0 "p" 1}}}
            (d18/execute-p2 d18-s01)))))
+
+(deftest recovered-frequency-test
+  (testing "Recovers the frequency played"
+    (is (= 4 (d18/recovered-frequency d18-s00)))))
 
 (deftest prog-1-snd-cnt-test
   (testing "Counts how many times program 1 sent a value"
