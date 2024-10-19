@@ -123,20 +123,15 @@
    "set" set-cmd})
 
 (def cmd-map-p1
-  (merge common-cmds
-         {"rcv" rcv-cmd-p1
-          "snd" snd-cmd-p1}))
+  (merge common-cmds {"rcv" rcv-cmd-p1 "snd" snd-cmd-p1}))
 
 (def cmd-map-p2
-  (merge common-cmds
-         {"rcv" rcv-cmd-p2
-          "snd" snd-cmd-p2}))
+  (merge common-cmds {"rcv" rcv-cmd-p2 "snd" snd-cmd-p2}))
 
 (defn in-bounds?
-  [{:keys [insts pos]}]
-  (< -1 pos (count insts)))
+  [inst-count {:keys [pos]}]
+  (< -1 pos inst-count))
 
-(def running-p1? in-bounds?)
 
 (defn step-p1
   "Evolve the state by one step based on the instruction indicated by `pos`"
@@ -157,13 +152,23 @@
       (cmd-fn prog state args)
       (update-in state [:progs prog] merge (cmd-fn (get-in state [:progs prog]) args)))))
 
-(defn execute-p1
-  "Execute the assembly programs instructions until it returns a recover value"
-  [insts]
-  (->> {:insts insts :pos 0}
-       (iterate step-p1)
-       (drop-while running-p1?)
-       first))
+(defn running-p2?
+  [{:keys [insts progs]}]
+  (and
+   (every? #(in-bounds? (count insts) %) (vals progs))
+   (not-every? #(:waiting %) (vals progs))))
+
+
+
+(defn step
+  [cmd-map {:keys [insts progs] :as state}]
+  (let [prog       (if (get-in progs [0 :waiting]) 1 0)
+        prog-state (progs prog)
+        [cmd args] (insts (:pos prog-state))
+        cmd-fn     (cmd-map cmd)]
+    (if (= "snd" cmd)
+      (cmd-fn prog state args)
+      (update-in state [:progs prog] merge (cmd-fn prog-state args)))))
 
 (def p2-init-progs
   {0 {:pos 0
@@ -177,18 +182,47 @@
       :waiting false
       "p" 1}})
 
-(defn running-p2?
-  [{:keys [insts progs]}]
-  (and (not-every? #(:waiting %) (vals progs))
-       (< -1 (get-in progs [0 :pos]) (count insts))
-       (< -1 (get-in progs [1 :pos]) (count insts))))
-
-(defn execute-p2
+(defn execute-p1
+  "Execute the assembly programs instructions until it returns a recover value"
   [insts]
-  (->> {:insts insts :progs p2-init-progs}
-       (iterate step-p2)
-       (drop-while running-p2?)
+  (->> {:insts insts :pos 0}
+       (iterate step-p1)
+       (drop-while #(in-bounds? (count insts) %))
        first))
+
+;; (defn execute-p2
+;;   [insts]
+;;   (->> {:insts insts :progs p2-init-progs}
+;;        (iterate step-p2)
+;;        (drop-while running-p2?)
+;;        first))
+
+(defn init-state
+  [part insts]
+  (case part
+    :p1 {:insts insts :progs {0 {:pos 0}}}
+    :p2 {:insts insts
+         :progs {0 {:pos 0 :waiting false :queue [] :snd-cnt 0 "p" 0}
+                 1 {:pos 0 :waiting false :queue [] :snd-cnt 0 "p" 1}}}))
+
+(defn running?
+  [{:keys [insts progs]}]
+  (and
+   (every? #(in-bounds? (count insts) %) (vals progs))
+   (not-every? #(:waiting %) (vals progs))))
+
+(defn execute
+  [part insts]
+  (let [cmd-map (case part
+                  :p1 cmd-map-p1
+                  :p2 cmd-map-p2)
+        stepper (partial step cmd-map)]
+    (->> (init-state part insts)
+         (iterate stepper)
+         (drop-while running?)
+         first)))
+
+(def execute-p2 (partial execute :p2))
 
 (defn recovered-frequency
   [insts]
