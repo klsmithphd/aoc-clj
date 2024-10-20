@@ -1,6 +1,7 @@
 (ns aoc-clj.2017.day21
   "Solution to https://adventofcode.com/2017/day/21"
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [clojure.math :as math]))
 
 ;; Constants
 (def start
@@ -30,37 +31,52 @@
 
 ;; Puzzle logic
 (defn size
+  "Returns either 2 or 3 depending upon the size of a rule's key"
   [rule]
-  (if (= 4 (count rule)) 2 3))
-
+  (int (math/sqrt (count rule))))
 
 (defn flip-h
-  [match]
-  (let [size (size match)]
-    (->> match
+  "Returns a rule pattern flipped horizontally."
+  [rule]
+  (let [size (size rule)]
+    (->> rule
          (partition size)
          (map reverse)
-         (apply concat))))
+         (apply concat)
+         vec)))
 
 (defn flip-v
-  [match]
-  (let [size (size match)]
-    (->> match
+  "Returns a rule pattern flipped vertically."
+  [rule]
+  (let [size (size rule)]
+    (->> rule
          (partition size)
          reverse
-         (apply concat))))
+         (apply concat)
+         vec)))
 
 (defn rotate
-  [match])
-
+  "Returns a rule pattern rotated one quarter turn (counter-clockwise)"
+  [rule]
+  (let [size (size rule)]
+    (case size
+      2 (mapv rule [1 3 0 2])
+      3 (mapv rule [2 5 8 1 4 7 0 3 6]))))
 
 (defn equivalent-matches
-  [[match pattern]]
+  "Returns a new map of all the equivalent rule patterns"
+  [[rule replacement]]
   (zipmap
-   [match
-    (flip-h match)
-    (flip-v match)
-    (rotate match)
-    (rotate (rotate match))
-    (rotate (rotate (rotate match)))]
-   (repeat pattern)))
+   [rule
+    (flip-h rule)
+    (flip-v rule)
+    (rotate rule)
+    (rotate (rotate rule))
+    (rotate (rotate (rotate rule)))]
+   (repeat replacement)))
+
+(defn full-rulebook
+  "Returns an expanded rulebook with all of the unrepresented keys
+   expressed"
+  [rules]
+  (into {} (map equivalent-matches rules)))
