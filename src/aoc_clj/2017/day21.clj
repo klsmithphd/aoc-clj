@@ -80,3 +80,37 @@
    expressed"
   [rules]
   (into {} (map equivalent-matches rules)))
+
+(defn resquare
+  [subsquare-size square-count chunks]
+  (->> (take-nth square-count chunks)
+       (partition subsquare-size)
+       (map #(vec (apply concat %)))))
+
+(defn subsquares
+  [pixels]
+  (let [size (size pixels)
+        subsquare-size (if (zero? (mod size 2)) 2 3)
+        square-count (quot size subsquare-size)
+        chunks (partition subsquare-size pixels)]
+    (->> (range square-count)
+         (map #(drop % chunks))
+         (map #(resquare subsquare-size square-count %))
+         (apply interleave))))
+
+(defn de-interleave
+  [size sq-size chunks]
+  (->> (range size)
+       (map #(drop % chunks))
+       (map #(resquare sq-size size %))
+       flatten))
+
+(defn recombine
+  [squares]
+  (let [subsquare-size (size (first squares))
+        size (size squares)
+        chunks (->> squares
+                    (apply concat)
+                    (partition (* size subsquare-size subsquare-size))
+                    (map #(partition subsquare-size %)))]
+    (flatten (map #(de-interleave subsquare-size size %) chunks))))
