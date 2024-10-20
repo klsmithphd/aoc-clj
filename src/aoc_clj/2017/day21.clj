@@ -23,7 +23,7 @@
   (let [[l r] (-> line
                   (str/replace "/" "")
                   (str/split #" => "))]
-    [(map charmap l) (map charmap r)]))
+    [(mapv charmap l) (mapv charmap r)]))
 
 (defn parse
   [input]
