@@ -114,3 +114,25 @@
                     (partition (* size subsquare-size subsquare-size))
                     (map #(partition subsquare-size %)))]
     (flatten (map #(de-interleave subsquare-size size %) chunks))))
+
+(defn step
+  [rules pixels]
+  (->> pixels
+       subsquares
+       (map rules)
+       recombine))
+
+(defn pixels-on-at-n
+  [rules n]
+  (let [rulebook (full-rulebook rules)]
+    (->> start
+         (iterate #(step rulebook %))
+         (drop n)
+         first
+         (filter pos?)
+         count)))
+
+;; Puzzle solutions
+(defn part1
+  [input]
+  (pixels-on-at-n input 5))

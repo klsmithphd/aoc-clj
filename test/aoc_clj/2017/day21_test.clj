@@ -1,5 +1,6 @@
 (ns aoc-clj.2017.day21-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2017.day21 :as d21]))
 
 (def d21-s00-raw
@@ -111,3 +112,31 @@
     (is (= (range 16) (d21/recombine (d21/subsquares (range 16)))))
     (is (= (range 36) (d21/recombine (d21/subsquares (range 36)))))
     (is (= (range 81) (d21/recombine (d21/subsquares (range 81)))))))
+
+(deftest step-test
+  (testing "Iteratively applies the replacement rules one step at a time"
+    (is (= [1 0 0 1
+            0 0 0 0
+            0 0 0 0
+            1 0 0 1]
+           (d21/step (d21/full-rulebook d21-s00) d21/start)))
+    (is (= [1 1 0 1 1 0
+            1 0 0 1 0 0
+            0 0 0 0 0 0
+            1 1 0 1 1 0
+            1 0 0 1 0 0
+            0 0 0 0 0 0]
+           (d21/step (d21/full-rulebook d21-s00)
+                     (d21/step (d21/full-rulebook d21-s00) d21/start))))))
+
+(deftest pixels-on-at-n-test
+  (testing "How many pixels are on after n steps?"
+    (is (= 5 (d21/pixels-on-at-n d21-s00 0)))
+    (is (= 4 (d21/pixels-on-at-n d21-s00 1)))
+    (is (= 12 (d21/pixels-on-at-n d21-s00 2)))))
+
+(def day21-input (u/parse-puzzle-input d21/parse 2017 21))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day21, part1"
+    (is (= 364 (d21/part1 day21-input)))))
