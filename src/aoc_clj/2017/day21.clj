@@ -5,9 +5,11 @@
 ;; Constants
 (def start
   "Initial pattern   
+   ```
    .#.
    ..#
-   ###"
+   ###
+   ```"
   [0 1 0
    0 0 1
    1 1 1])
@@ -25,3 +27,40 @@
 (defn parse
   [input]
   (into {} (map parse-line input)))
+
+;; Puzzle logic
+(defn size
+  [rule]
+  (if (= 4 (count rule)) 2 3))
+
+
+(defn flip-h
+  [match]
+  (let [size (size match)]
+    (->> match
+         (partition size)
+         (map reverse)
+         (apply concat))))
+
+(defn flip-v
+  [match]
+  (let [size (size match)]
+    (->> match
+         (partition size)
+         reverse
+         (apply concat))))
+
+(defn rotate
+  [match])
+
+
+(defn equivalent-matches
+  [[match pattern]]
+  (zipmap
+   [match
+    (flip-h match)
+    (flip-v match)
+    (rotate match)
+    (rotate (rotate match))
+    (rotate (rotate (rotate match)))]
+   (repeat pattern)))
