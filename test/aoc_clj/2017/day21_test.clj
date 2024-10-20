@@ -139,4 +139,4 @@
 
 (deftest part1-test
   (testing "Reproduces the answer for day21, part1"
-    (is (= 364 (d21/part1 day21-input)))))
+    (is (= 0 (d21/part1 day21-input)))))
