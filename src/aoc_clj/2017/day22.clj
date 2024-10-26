@@ -29,7 +29,7 @@
     (grid/turn state :right)
     (grid/turn state :left)))
 
-(defn infect-or-clean
+(defn cell-update
   "Return a new state with the cell toggled from infected or cleaned"
   [{:keys [infected pos] :as state}]
   (if (infected pos)
@@ -43,7 +43,7 @@
   [state]
   (-> state
       turn
-      infect-or-clean
+      cell-update
       (grid/forward 1)))
 
 (defn init-state
