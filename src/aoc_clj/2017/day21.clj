@@ -68,11 +68,13 @@
   [[rule replacement]]
   (zipmap
    [rule
-    (flip-h rule)
-    (flip-v rule)
     (rotate rule)
     (rotate (rotate rule))
-    (rotate (rotate (rotate rule)))]
+    (rotate (rotate (rotate rule)))
+    (flip-v rule)
+    (rotate (flip-v rule))
+    (rotate (rotate (flip-v rule)))
+    (rotate (rotate (rotate (flip-v rule))))]
    (repeat replacement)))
 
 (defn full-rulebook
