@@ -83,13 +83,14 @@
   [rules]
   (into {} (map equivalent-matches rules)))
 
-(defn resquare
+(defn- resquare
   [subsquare-size square-count chunks]
   (->> (take-nth square-count chunks)
        (partition subsquare-size)
        (map #(vec (apply concat %)))))
 
 (defn subsquares
+  "Given a square vec of pixels, return a collection of subsquares."
   [pixels]
   (let [size (size pixels)
         subsquare-size (if (zero? (mod size 2)) 2 3)
@@ -100,7 +101,7 @@
          (map #(resquare subsquare-size square-count %))
          (apply interleave))))
 
-(defn de-interleave
+(defn- de-interleave
   [size sq-size chunks]
   (->> (range size)
        (map #(drop % chunks))
@@ -108,6 +109,8 @@
        flatten))
 
 (defn recombine
+  "Given a collection of subsquares, put the elements back into
+   order and return a single square set of pixels."
   [squares]
   (let [subsquare-size (size (first squares))
         size (size squares)
@@ -118,6 +121,10 @@
     (flatten (map #(de-interleave subsquare-size size %) chunks))))
 
 (defn step
+  "Give the rulebook and current pixels, generate the next iteration
+   of pixels, by first cutting the pixels into subsquares,
+   updating each subsquare given the replacement rules, and then
+   recombining into a unified set of pixels."
   [rules pixels]
   (->> pixels
        subsquares
@@ -125,6 +132,8 @@
        recombine))
 
 (defn pixels-on-at-n
+  "Given a set of rules and the number of iterations to run, return
+   the number of pixels that are `on` after that number of iterations."
   [rules n]
   (let [rulebook (full-rulebook rules)]
     (->> start
@@ -136,5 +145,11 @@
 
 ;; Puzzle solutions
 (defn part1
+  "How many pixels stay on after 5 iterations?"
   [input]
   (pixels-on-at-n input 5))
+
+(defn part2
+  "How many pixels stay on after 18 iterations?"
+  [input]
+  (pixels-on-at-n input 18))

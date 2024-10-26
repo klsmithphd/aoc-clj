@@ -142,3 +142,8 @@
 (deftest part1-test
   (testing "Reproduces the answer for day21, part1"
     (is (= 120 (d21/part1 day21-input)))))
+
+;; FIXME: https://github.com/klsmithphd/aoc-clj/issues/114
+(deftest ^:slow part2-test
+  (testing "Reproduces the answer for day21, part2"
+    (is (= 2204099 (d21/part2 day21-input)))))
