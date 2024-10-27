@@ -59,10 +59,10 @@
 
 (def day24-input (u/parse-puzzle-input d24/parse 2017 24))
 
-(deftest part1-test
+(deftest ^:slow part1-test
   (testing "Reproduces the answer for day24, part1"
     (is (= 1868 (d24/part1 day24-input)))))
 
-(deftest part2-test
+(deftest ^:slow part2-test
   (testing "Reproduces the answer for day24, part1"
     (is (= 1841 (d24/part2 day24-input)))))
