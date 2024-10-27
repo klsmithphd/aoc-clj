@@ -80,7 +80,32 @@
   (->> (execute insts)
        :mul-count))
 
+(defn non-prime?
+  [num]
+  (->> (range 2 (inc (quot num 2)))
+       (some #(zero? (mod num %)))
+       boolean))
+
+(defn non-primes-in-range
+  [insts]
+  (let [sub-prog     (subvec insts 0 8)
+        state        (->> (assoc (init-state sub-prog) "a" 1)
+                          (iterate step)
+                          (drop-while running?)
+                          first)
+        b            (get state "b")
+        c            (get state "c")
+        [_ [_ skip]] (nth insts 30)]
+    (println [b (inc c) skip])
+    (->> (range b (inc c) (- skip))
+         (filter non-prime?)
+         count)))
+
 ;; Puzzle solutions
 (defn part1
   [input]
   (mul-count input))
+
+(defn part2
+  [input]
+  (non-primes-in-range input))
