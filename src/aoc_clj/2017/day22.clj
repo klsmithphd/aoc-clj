@@ -3,41 +3,50 @@
   (:require [aoc-clj.utils.grid :as grid]))
 
 ;; Constants
-(def part1-burst-count 10000)
-(def part2-burst-count 10000000)
+(def burst-count-p1 10000)
+(def burst-count-p2 10000000)
+
+(def cell-status-map
+  {0 :clean
+   1 :weakened
+   2 :infected
+   3 :flagged})
+
+(def pre-infected-status
+  "Mapping for part1/part2 for the status of a node that is going
+   to become infected"
+  {:part1 :clean :part2 :weakened})
+
+(def status-change-val
+  "Mapping for how much to increment a cell's value in part1/part2.
+   
+   In part 1, cells toggle between 0 and 2 (clean and infected)
+   In part 2, cells evolve from 0->1->2->3->0"
+  {:part1 2 :part2 1})
 
 ;; Input parsing
 (defn parse
   [input]
-  (let [size (count input)
-        dim  (quot size 2)]
-    (->>
-     (zipmap (for [y (reverse (range (- dim) (inc dim)))
-                   x (range (- dim) (inc dim))]
-               [x y])
-             (apply concat input))
-     (filter #(= \# (val %)))
-     keys
-     set)))
+  (let [size     (count input)
+        dim      (quot size 2)
+        coords   (for [y (reverse (range (- dim) (inc dim)))
+                       x (range (- dim) (inc dim))]
+                   [x y])
+        infected (->> (zipmap coords (apply concat input))
+                      (filter #(= \# (val %)))
+                      keys)]
+    {:cells (zipmap infected (repeat 2))
+     :infect-cnt 0 :pos [0 0] :heading :n}))
 
 ;; Puzzle logic
-(defn turn
-  "Return a new state with the virus turned based the infected state of
-   the cell it's currently on"
-  [{:keys [infected pos] :as state}]
-  (if (infected pos)
-    (grid/turn state :right)
-    (grid/turn state :left)))
-
 (defn status
+  "Returns the status of the grid node currently occupied"
   [{:keys [cells pos]}]
-  (case (get cells pos 0)
-    0 :clean
-    1 :weakened
-    2 :infected
-    3 :flagged))
+  (cell-status-map (get cells pos 0)))
 
-(defn turn-p2
+(defn turn
+  "Returns the updated state with the virus turned according to the
+   status of the grid node it's currently at."
   [state]
   (case (status state)
     :clean    (grid/turn state :left)
@@ -45,80 +54,53 @@
     :infected (grid/turn state :right)
     :flagged  (grid/turn state :backward)))
 
-(defn cell-update
-  "Return a new state with the cell toggled from infected or cleaned"
-  [{:keys [infected pos] :as state}]
-  (if (infected pos)
-    (update state :infected disj pos)
-    (-> state
-        (update :infected conj pos)
-        (update :infect-cnt inc))))
-
 (defn inc-infected-cnt
-  [state]
-  (if (= :weakened (status state))
+  "Returns the updated state, incrementing the infected count if
+   a node became newly infected this step."
+  [state part]
+  (if (= (pre-infected-status part) (status state))
     (update state :infect-cnt inc)
     state))
 
-(defn cell-update-p2
-  [{:keys [pos] :as state}]
-  (-> state
-      inc-infected-cnt
-      (update-in [:cells pos] #(if (nil? %) 1 (mod (inc %) 4)))))
+(defn cell-update
+  "Returns the updated state, with the currently occupied node's status evolved"
+  [{:keys [pos] :as state} part]
+  (let [delta (status-change-val part)]
+    (-> state
+        (inc-infected-cnt part)
+        (update-in [:cells pos] #(if (nil? %) delta (mod (+ % delta) 4))))))
 
 (defn step
-  "Return a new state for a single interation"
-  [state]
+  "Returns the new state after the virus takes one move."
+  [part state]
   (-> state
       turn
-      cell-update
+      (cell-update part)
       (grid/forward 1)))
 
-(defn step-p2
-  [state]
-  (-> state
-      turn-p2
-      cell-update-p2
-      (grid/forward 1)))
-
-(defn init-state-p1
-  "Create an initial state map based on what cells are initially infected"
-  [infected]
-  {:infected infected :infect-cnt 0 :pos [0 0] :heading :n})
-
-(defn init-state-p2
-  [infected]
-  {:cells (zipmap infected (repeat 2))
-   :infect-cnt 0 :pos [0 0] :heading :n})
+(def step-p1 (partial step :part1))
+(def step-p2 (partial step :part2))
+(def step-fn {:part1 step-p1 :part2 step-p2})
 
 (defn infections-caused-at-n
   "Returns the number of times an infection was caused after n bursts"
-  [infections n]
-  (->> (init-state-p1 infections)
-       (iterate step)
-       (drop n)
-       first
-       :infect-cnt))
-
-(defn infections-caused-at-n-p2
-  "Returns the number of times an infection was caused after n bursts"
-  [infections n]
-  (->> (init-state-p2 infections)
-       (iterate step-p2)
-       (drop n)
-       first
-       :infect-cnt))
-
+  [part init-state n]
+  (let [stepper (step-fn part)]
+    (->> init-state
+         (iterate stepper)
+         (drop n)
+         first
+         :infect-cnt)))
 
 ;; Puzzle solutions
 (defn part1
   "After 10000 bursts of activity, how many bursts cause a node to
    become infected?"
   [input]
-  (infections-caused-at-n input part1-burst-count))
+  (infections-caused-at-n :part1 input burst-count-p1))
 
 (defn part2
   "After 10000000 bursts of activity, how many bursts cause a node to 
    become infected?"
   [input]
-  (infections-caused-at-n-p2 input part2-burst-count))
+  (infections-caused-at-n :part2 input burst-count-p2))
