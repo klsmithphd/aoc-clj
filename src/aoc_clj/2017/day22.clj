@@ -29,6 +29,22 @@
     (grid/turn state :right)
     (grid/turn state :left)))
 
+(defn status
+  [{:keys [cells pos]}]
+  (case (get cells pos 0)
+    0 :clean
+    1 :weakened
+    2 :infected
+    3 :flagged))
+
+(defn turn-p2
+  [state]
+  (case (status state)
+    :clean    (grid/turn state :left)
+    :weakened state
+    :infected (grid/turn state :right)
+    :flagged  (grid/turn state :backward)))
+
 (defn cell-update
   "Return a new state with the cell toggled from infected or cleaned"
   [{:keys [infected pos] :as state}]
@@ -38,6 +54,18 @@
         (update :infected conj pos)
         (update :infect-cnt inc))))
 
+(defn inc-infected-cnt
+  [state]
+  (if (= :weakened (status state))
+    (update state :infect-cnt inc)
+    state))
+
+(defn cell-update-p2
+  [{:keys [pos] :as state}]
+  (-> state
+      inc-infected-cnt
+      (update-in [:cells pos] #(if (nil? %) 1 (mod (inc %) 4)))))
+
 (defn step
   "Return a new state for a single interation"
   [state]
@@ -46,19 +74,41 @@
       cell-update
       (grid/forward 1)))
 
-(defn init-state
+(defn step-p2
+  [state]
+  (-> state
+      turn-p2
+      cell-update-p2
+      (grid/forward 1)))
+
+(defn init-state-p1
   "Create an initial state map based on what cells are initially infected"
   [infected]
   {:infected infected :infect-cnt 0 :pos [0 0] :heading :n})
 
+(defn init-state-p2
+  [infected]
+  {:cells (zipmap infected (repeat 2))
+   :infect-cnt 0 :pos [0 0] :heading :n})
+
 (defn infections-caused-at-n
   "Returns the number of times an infection was caused after n bursts"
   [infections n]
-  (->> (init-state infections)
+  (->> (init-state-p1 infections)
        (iterate step)
        (drop n)
        first
        :infect-cnt))
+
+(defn infections-caused-at-n-p2
+  "Returns the number of times an infection was caused after n bursts"
+  [infections n]
+  (->> (init-state-p2 infections)
+       (iterate step-p2)
+       (drop n)
+       first
+       :infect-cnt))
+
 
 ;; Puzzle solutions
 (defn part1
@@ -66,3 +116,9 @@
    become infected?"
   [input]
   (infections-caused-at-n input part1-burst-count))
+
+(defn part2
+  "After 10000000 bursts of activity, how many bursts cause a node to 
+   become infected?"
+  [input]
+  (infections-caused-at-n-p2 input part2-burst-count))
