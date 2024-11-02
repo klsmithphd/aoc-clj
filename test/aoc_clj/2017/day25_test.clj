@@ -79,3 +79,9 @@
 (deftest checksum-test
   (testing "Computes sum of all the ones after prescribed steps"
     (is (= 3 (d25/checksum d25-s00)))))
+
+(def day25-input (u/parse-puzzle-input d25/parse 2017 25))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day25, part1"
+    (is (= 3732 (d25/part1 day25-input)))))

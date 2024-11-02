@@ -6,6 +6,7 @@
 
 ;; Constants
 (def init-state
+  "The initial state of the Turing machine."
   {:tape {} :slot 0})
 
 ;; Input Parsing
@@ -37,6 +38,7 @@
 
 ;; Puzzle logic
 (defn step
+  "Evolves the state forward by one step"
   [logic {:keys [tape state slot]}]
   (let [current-val (get tape slot 0)
         {:keys [write move nxt-state]} (get-in logic [state current-val])]
@@ -48,6 +50,8 @@
              :left  (dec slot))}))
 
 (defn execute
+  "Executes the Turing machine logic and returns the state
+   after the prescribed number of steps"
   [{:keys [start steps] :as logic}]
   (->> (assoc init-state :state start)
        (iterate #(step logic %))
@@ -55,6 +59,13 @@
        first))
 
 (defn checksum
+  "Returns the number of times 1 appears on the tape"
   [logic]
   (let [{:keys [tape]} (execute logic)]
     (reduce + (vals tape))))
+
+;; Puzzle solutions
+(defn part1
+  "What is the diagnostic checksum it produces once it's working again?"
+  [input]
+  (checksum input))
