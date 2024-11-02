@@ -4,7 +4,16 @@
    [aoc-clj.utils.core :as u]
    [clojure.string :as str]))
 
+;; Constants
+(def init-state
+  {:tape {} :slot 0})
+
 ;; Input Parsing
+(defn parse-header
+  [[line1 line2]]
+  {:start (subs line1 15 16)
+   :steps (read-string (re-find #"\d+" line2))})
+
 (defn last-word
   [line]
   (let [last-chars (last (str/split line #" "))
@@ -16,13 +25,36 @@
   (let [[a b c d e f g h i] (map last-word chunk)]
     [a {(read-string b) {:write (read-string c)
                          :move (keyword d)
-                         :state e}
+                         :nxt-state e}
         (read-string f) {:write (read-string g)
                          :move (keyword h)
-                         :state i}}]))
+                         :nxt-state i}}]))
 
 (defn parse
   [input]
-  (->> (u/split-at-blankline input)
-       (map parse-chunk)
-       (into {})))
+  (let [[header & body] (u/split-at-blankline input)]
+    (into (parse-header header) (map parse-chunk body))))
+
+;; Puzzle logic
+(defn step
+  [logic {:keys [tape state slot]}]
+  (let [current-val (get tape slot 0)
+        {:keys [write move nxt-state]} (get-in logic [state current-val])]
+    ;; (println tape state slot write move nxt-state)
+    {:tape (assoc tape slot write)
+     :state nxt-state
+     :slot (case move
+             :right (inc slot)
+             :left  (dec slot))}))
+
+(defn execute
+  [{:keys [start steps] :as logic}]
+  (->> (assoc init-state :state start)
+       (iterate #(step logic %))
+       (drop steps)
+       first))
+
+(defn checksum
+  [logic]
+  (let [{:keys [tape]} (execute logic)]
+    (reduce + (vals tape))))
