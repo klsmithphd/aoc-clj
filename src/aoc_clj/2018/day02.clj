@@ -1,21 +1,27 @@
 (ns aoc-clj.2018.day02
   "Solution to https://adventofcode.com/2018/day/2"
-  (:require [clojure.string :as str]))
+  (:require [clojure.math.combinatorics :as combo]
+            [clojure.string :as str]))
 
+;; Input parsing
 (def parse identity)
 
+;; Puzzle logic
 (defn repeat-count
+  "Returns 1 if the `repeat-num` is found in the `coll`, else 0"
   [repeat-num coll]
   (if (some #(= repeat-num %) coll) 1 0))
 
 (defn repeat-counter
+  "Returns 1 if the box-id has at least one letter that repeats `repeat-num`
+   times, else 0"
   [repeat-num box-id]
   (->> box-id
        frequencies
        (map second)
        (repeat-count repeat-num)))
 
-(defn compute-checksum
+(defn checksum
   "Computes the 'checksum' which is defined as the product
    between the number of box-ids that contain any pair of matching
    characters and the number of box-ids that contain a triple of matching
@@ -26,34 +32,39 @@
     (* doubles triples)))
 
 (defn char-cmp
+  "Returns zero if the characters are the same, else 1"
   [c1 c2]
   (if (= c1 c2) 0 1))
 
 (defn edit-distance
-  [str1 str2]
+  "Returns the sum of the number of character differences"
+  [[str1 str2]]
   (reduce + (map char-cmp str1 str2)))
 
 (defn chars-in-common
-  [str1 str2]
+  "Returns the characters in common between two strings"
+  [[str1 str2]]
   (->> (map list str1 str2)
-       (filter #(= (first %) (second %)))
+       (filter #(apply = %))
        (map first)
        str/join))
 
-(defn find-closest-boxids
-  "Given a list of box-ids, find the pair that is only one off in edit distance"
+(defn closest-boxids-common-chars
+  "Given a list of box-ids, find the pair that is only one off in edit distance
+   and return the characters they have in common"
   [box-ids]
-  (let [box-id-count (count box-ids)
-        distances (mapcat #(map (partial edit-distance %) box-ids) box-ids)
-        closest (ffirst (filter #(= 1 (second %)) (map-indexed #(list %1 %2) distances)))
-        index1 (mod closest box-id-count)
-        index2 (quot closest box-id-count)]
-    (chars-in-common (nth box-ids index1) (nth box-ids index2))))
+  (->> (combo/combinations box-ids 2)
+       (filter #(= 1 (edit-distance %)))
+       first
+       chars-in-common))
 
+;; Puzzle solutions
 (defn part1
+  "What is the checksum for your list of box IDs?"
   [input]
-  (compute-checksum input))
+  (checksum input))
 
 (defn part2
+  "What letters are common between the two correct box IDs?s"
   [input]
-  (find-closest-boxids input))
+  (closest-boxids-common-chars input))
