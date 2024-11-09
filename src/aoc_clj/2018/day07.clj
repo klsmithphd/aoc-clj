@@ -3,6 +3,11 @@
   (:require [clojure.set :as set]
             [aoc-clj.utils.core :as u]))
 
+;; Constants
+(def ascii-A 65)
+(def n-workers 5)
+(def step-duration 60)
+
 ;; Input parsing
 (defn parse-line
   [line]
@@ -19,18 +24,24 @@
     (into deps to-add)))
 
 ;; Puzzle logic
-(defn next-node
+(defn ready
   [graph]
   (->> (filter #(empty? (val %)) graph)
-       (map key)
-       sort
-       first))
+       (map key)))
+
+(defn next-nodes
+  [graph]
+  (sort (ready graph)))
+
+(defn finish-step
+  [graph step]
+  (->> (dissoc graph step)
+       (u/fmap #(disj % step))))
 
 (defn assembly-step
   [{:keys [graph steps]}]
-  (let [step (next-node graph)]
-    {:graph (->> (dissoc graph step)
-                 (u/fmap #(disj % step)))
+  (let [step (first (next-nodes graph))]
+    {:graph (finish-step graph step)
      :steps (conj steps step)}))
 
 (defn assembly
@@ -42,7 +53,42 @@
        :steps
        (apply str)))
 
+(defn step-time
+  [base step]
+  (+ 1 base (- (int (first step)) ascii-A)))
+
+(defn parallel-assembly-step
+  [base n-workers {:keys [graph WIP time]}]
+  (let [can-assign       (- n-workers (count WIP))
+        _ (println can-assign)
+        available        (->> (next-nodes graph)
+                              (remove (set (keys WIP)))
+                              (take can-assign))
+        _ (println available)
+        times            (map #(step-time base %) available)
+        _ (println times)
+        new-WIP          (into WIP (zipmap available times))
+        _ (println new-WIP)
+        [step jump-time] (first (sort-by val new-WIP))
+        _ (println step jump-time)]
+    {:graph (finish-step graph step)
+     :WIP   (->> (dissoc new-WIP step)
+                 (u/fmap #(- % jump-time)))
+     :time  (+ time jump-time)}))
+
+(defn parallel-assembly
+  [base n-workers graph]
+  (->> {:graph graph :WIP {} :time 0}
+       (iterate #(parallel-assembly-step base n-workers %))
+       (drop-while (comp seq :graph))
+       first
+       :time))
+
 ;; Puzzle solutions
 (defn part1
   [input]
   (assembly input))
+
+(defn part2
+  [input]
+  (parallel-assembly step-duration n-workers input))
