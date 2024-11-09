@@ -26,9 +26,6 @@
   {10 [[5 25] [30 55] [24 29]]
    99 [[40 50] [36 46] [45 55]]})
 
-(->> (u/fmap (comp #(apply max-key val %) frequencies d04/guard-sleep-minutes) d04-s00)
-     (filter #(seq (val %))))
-
 (deftest parse-test
   (testing "Can identify the guard-id, and sleep windows"
     (is (= d04-s00 (d04/parse d04-s00-raw)))))
