@@ -3,6 +3,7 @@
   (:require [clojure.set :as set]
             [aoc-clj.utils.core :as u]))
 
+;; Input parsing
 (defn parse-line
   [line]
   (reverse (map second (re-seq #"tep ([A-Z])" line))))
@@ -16,3 +17,32 @@
         to-add    (->> (set/difference upstream (set (keys deps)))
                        (map #(vector % #{})))]
     (into deps to-add)))
+
+;; Puzzle logic
+(defn next-node
+  [graph]
+  (->> (filter #(empty? (val %)) graph)
+       (map key)
+       sort
+       first))
+
+(defn assembly-step
+  [{:keys [graph steps]}]
+  (let [step (next-node graph)]
+    {:graph (->> (dissoc graph step)
+                 (u/fmap #(disj % step)))
+     :steps (conj steps step)}))
+
+(defn assembly
+  [graph]
+  (->> {:graph graph :steps []}
+       (iterate assembly-step)
+       (drop-while (comp seq :graph))
+       first
+       :steps
+       (apply str)))
+
+;; Puzzle solutions
+(defn part1
+  [input]
+  (assembly input))
