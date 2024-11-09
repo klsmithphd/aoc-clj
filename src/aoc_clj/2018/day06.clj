@@ -4,6 +4,9 @@
    [aoc-clj.utils.grid :as grid]
    [aoc-clj.utils.vectors :as vec]))
 
+;; Constants
+(def distance-limit 10000)
+
 ;; Input parsing
 (defn parse-line
   [line]
@@ -60,6 +63,31 @@
           (recur (remove in-area (set (mapcat grid/adj-coords-2d keepers)))
                  (into in-area keepers)))))))
 
+(defn distance-sum
+  "Computes the sum of the Manhattan distance between `pos` and all
+   the other `coords`"
+  [coords pos]
+  (reduce + (map #(vec/manhattan pos %) coords)))
+
+(defn possible-points
+  "Returns a seq of all the possible points in the space bounded by
+   `coords`"
+  [coords]
+  (let [[[min-x max-x] [min-y max-y]] (bounds coords)]
+    (for [y (range min-y (inc max-y))
+          x (range min-x (inc max-x))]
+      [x y])))
+
+(defn region
+  "The region size is defined to be the number of points whose
+   total Manhattan distance from all the other `coords` is less than
+   `limit`"
+  [coords limit]
+  (->> (possible-points coords)
+       (map #(distance-sum coords %))
+       (filter #(< % limit))
+       count))
+
 (defn largest-area
   "Computes the largest area around any coordinate."
   [coords]
@@ -72,3 +100,9 @@
   "What is the size of the largest area that isn't infinite?"
   [input]
   (largest-area input))
+
+(defn part2
+  "What is the size of the region containing all locations which have a total
+   distance to all given coordinates of less than 10000?"
+  [input]
+  (region input distance-limit))

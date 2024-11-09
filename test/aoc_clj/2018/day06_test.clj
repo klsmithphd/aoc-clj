@@ -42,8 +42,17 @@
   (testing "Finds the largest area around any coordinate"
     (is (= 17 (d06/largest-area d06-s00)))))
 
+(deftest region-test
+  (testing "Size of the region where all points are less far away from the
+            coords than a specified limit"
+    (is (= 16 (d06/region d06-s00 32)))))
+
 (def day06-input (u/parse-puzzle-input d06/parse 2018 6))
 
 (deftest ^:slow part1-test
   (testing "Reproduces the answer for day06, part1"
     (is (= 4290 (d06/part1 day06-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day06, part2"
+    (is (= 37318 (d06/part2 day06-input)))))
