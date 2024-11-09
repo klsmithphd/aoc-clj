@@ -24,71 +24,72 @@
     (into deps to-add)))
 
 ;; Puzzle logic
-(defn ready
+(defn next-nodes
+  "Returns the next setp of steps that are ready to be worked on,
+   in alphabetical order if more than one step is ready"
   [graph]
   (->> (filter #(empty? (val %)) graph)
-       (map key)))
-
-(defn next-nodes
-  [graph]
-  (sort (ready graph)))
+       (map key)
+       sort))
 
 (defn finish-step
+  "Updates the dependency graph to reflect finishing a step. 
+   This returns a new dependency graph with the specified step removed
+   as a key and among the value sets"
   [graph step]
   (->> (dissoc graph step)
        (u/fmap #(disj % step))))
 
-(defn assembly-step
-  [{:keys [graph steps]}]
-  (let [step (first (next-nodes graph))]
-    {:graph (finish-step graph step)
-     :steps (conj steps step)}))
-
-(defn assembly
-  [graph]
-  (->> {:graph graph :steps []}
-       (iterate assembly-step)
-       (drop-while (comp seq :graph))
-       first
-       :steps
-       (apply str)))
-
 (defn step-time
+  "Computes the amount of time it will take to complete a step,
+   accounting for a default base step duration"
   [base step]
   (+ 1 base (- (int (first step)) ascii-A)))
 
 (defn parallel-assembly-step
-  [base n-workers {:keys [graph WIP time]}]
+  "Given the current state, jump forward to the next time a step
+   can either be started or completed"
+  [base n-workers {:keys [graph WIP time steps]}]
   (let [can-assign       (- n-workers (count WIP))
-        _ (println can-assign)
         available        (->> (next-nodes graph)
                               (remove (set (keys WIP)))
                               (take can-assign))
-        _ (println available)
         times            (map #(step-time base %) available)
-        _ (println times)
         new-WIP          (into WIP (zipmap available times))
-        _ (println new-WIP)
-        [step jump-time] (first (sort-by val new-WIP))
-        _ (println step jump-time)]
+        [step jump-time] (first (sort-by val new-WIP))]
     {:graph (finish-step graph step)
      :WIP   (->> (dissoc new-WIP step)
                  (u/fmap #(- % jump-time)))
-     :time  (+ time jump-time)}))
+     :time  (+ time jump-time)
+     :steps (conj steps step)}))
 
 (defn parallel-assembly
+  "Return the final state after all assembly steps have been completed"
   [base n-workers graph]
-  (->> {:graph graph :WIP {} :time 0}
+  (->> {:graph graph :WIP {} :time 0 :steps []}
        (iterate #(parallel-assembly-step base n-workers %))
        (drop-while (comp seq :graph))
-       first
-       :time))
+       first))
+
+(defn assembly-time
+  "Compute the time it takes to complete the assembly"
+  [base n-workers graph]
+  (:time (parallel-assembly base n-workers graph)))
+
+(defn assembly-steps
+  "Return a string representing the assembly steps in the order in
+   which they were completed"
+  [base n-workers graph]
+  (apply str (:steps (parallel-assembly base n-workers graph))))
 
 ;; Puzzle solutions
 (defn part1
+  "In what order should the steps in your instructions be completed?"
   [input]
-  (assembly input))
+  (assembly-steps 0 1 input))
 
 (defn part2
+  "With 5 workers and the 60+ second step durations described above, 
+   how long will it take to complete all of the steps?"
   [input]
-  (parallel-assembly step-duration n-workers input))
+  (assembly-time step-duration n-workers input))

@@ -33,44 +33,6 @@
                                       "E" #{"B" "D" "F"}
                                       "F" #{}})))))
 
-(deftest assembly-step-test
-  (testing "Iterates through the assembly one step"
-    (is (= {:graph {"A" #{}
-                    "B" #{"A"}
-                    "D" #{"A"}
-                    "E" #{"B" "D" "F"}
-                    "F" #{}}
-            :steps ["C"]}
-           (d07/assembly-step {:graph d07-s00 :steps []})))
-
-    (is (= {:graph {"B" #{}
-                    "D" #{}
-                    "E" #{"B" "D" "F"}
-                    "F" #{}}
-            :steps ["C" "A"]}
-           (d07/assembly-step
-            {:graph  {"A" #{}
-                      "B" #{"A"}
-                      "D" #{"A"}
-                      "E" #{"B" "D" "F"}
-                      "F" #{}}
-             :steps ["C"]})))
-
-    (is (= {:graph {"D" #{}
-                    "E" #{"D" "F"}
-                    "F" #{}}
-            :steps ["C" "A" "B"]}
-           (d07/assembly-step
-            {:graph  {"B" #{}
-                      "D" #{}
-                      "E" #{"B" "D" "F"}
-                      "F" #{}}
-             :steps ["C" "A"]})))))
-
-(deftest assembly-test
-  (testing "Returns the assembly steps as a string"
-    (is (= "CABDFE" (d07/assembly d07-s00)))))
-
 (deftest step-test-time
   (testing "Amount of time it takes to complete a step"
     (is (= 61 (d07/step-time 60 "A")))
@@ -79,13 +41,62 @@
     (is (= 26 (d07/step-time 0 "Z")))))
 
 (deftest parallel-assembly-step-test
-  (testing "Updates the state with multiple workers"
+  (testing "Updates the state with one or more workers"
+    ;; Single worker
+    (is (= {:graph {"A" #{}
+                    "B" #{"A"}
+                    "D" #{"A"}
+                    "E" #{"B" "D" "F"}
+                    "F" #{}}
+            :steps ["C"]
+            :WIP {}
+            :time 3}
+           (d07/parallel-assembly-step
+            0 1
+            {:graph d07-s00 :steps [] :WIP {} :time 0})))
+
+    (is (= {:graph {"B" #{}
+                    "D" #{}
+                    "E" #{"B" "D" "F"}
+                    "F" #{}}
+            :steps ["C" "A"]
+            :WIP {}
+            :time 4}
+           (d07/parallel-assembly-step
+            0 1
+            {:graph {"A" #{}
+                     "B" #{"A"}
+                     "D" #{"A"}
+                     "E" #{"B" "D" "F"}
+                     "F" #{}}
+             :steps ["C"]
+             :WIP {}
+             :time 3})))
+
+    (is (= {:graph {"D" #{}
+                    "E" #{"D" "F"}
+                    "F" #{}}
+            :steps ["C" "A" "B"]
+            :WIP {}
+            :time 6}
+           (d07/parallel-assembly-step
+            0 1
+            {:graph {"B" #{}
+                     "D" #{}
+                     "E" #{"B" "D" "F"}
+                     "F" #{}}
+             :steps ["C" "A"]
+             :WIP {}
+             :time 4})))
+
+    ;; Two workers
     (is (= {:time 3
             :graph {"A" #{}
                     "B" #{"A"}
                     "D" #{"A"}
                     "E" #{"B" "D" "F"}
                     "F" #{}}
+            :steps ["C"]
             :WIP {}}
            (d07/parallel-assembly-step
             0 2
@@ -99,6 +110,7 @@
                     "D" #{}
                     "E" #{"B" "D" "F"}
                     "F" #{}}
+            :steps ["C" "A"]
             :WIP {"F" 5}}
            (d07/parallel-assembly-step
             0 2
@@ -108,12 +120,14 @@
                      "D" #{"A"}
                      "E" #{"B" "D" "F"}
                      "F" #{}}
+             :steps ["C"]
              :WIP {}})))
 
     (is (= {:time 6
             :graph {"D" #{}
                     "E" #{"D" "F"}
                     "F" #{}}
+            :steps ["C" "A" "B"]
             :WIP {"F" 3}}
            (d07/parallel-assembly-step
             0 2
@@ -122,11 +136,13 @@
                      "D" #{}
                      "E" #{"B" "D" "F"}
                      "F" #{}}
+             :steps ["C" "A"]
              :WIP {"F" 5}})))
 
     (is (= {:time 9
             :graph {"D" #{}
                     "E" #{"D"}}
+            :steps ["C" "A" "B" "F"]
             :WIP {"D" 1}}
            (d07/parallel-assembly-step
             0 2
@@ -134,30 +150,41 @@
              :graph {"D" #{}
                      "E" #{"D" "F"}
                      "F" #{}}
+             :steps ["C" "A" "B"]
              :WIP {"F" 3}})))
 
     (is (= {:time 10
             :graph {"E" #{}}
+            :steps ["C" "A" "B" "F" "D"]
             :WIP {}}
            (d07/parallel-assembly-step
             0 2
             {:time 9
              :graph {"D" #{}
                      "E" #{"D"}}
+             :steps ["C" "A" "B" "F"]
              :WIP {"D" 1}})))
 
     (is (= {:time 15
             :graph {}
+            :steps ["C" "A" "B" "F" "D" "E"]
             :WIP {}}
            (d07/parallel-assembly-step
             0 2
             {:time 10
              :graph {"E" #{}}
+             :steps ["C" "A" "B" "F" "D"]
              :WIP {}})))))
 
-(deftest parallel-assembly-test
-  (testing "Determines when the sleigh will be assembled in parallel"
-    (is (= 15 (d07/parallel-assembly 0 2 d07-s00)))))
+(deftest assembly-steps-test
+  (testing "Returns the assembly steps as a string"
+    (is (= "CABDFE" (d07/assembly-steps 0 1 d07-s00)))
+    (is (= "CABFDE" (d07/assembly-steps 0 2 d07-s00)))))
+
+(deftest assembly-time-test
+  (testing "Determines when the sleigh will be assembled"
+    (is (= 21 (d07/assembly-time 0 1 d07-s00)))
+    (is (= 15 (d07/assembly-time 0 2 d07-s00)))))
 
 (def day07-input (u/parse-puzzle-input d07/parse 2018 7))
 
