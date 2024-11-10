@@ -1,5 +1,7 @@
 (ns aoc-clj.2018.day10-test
-  (:require [clojure.test :refer [deftest testing is]]
+  (:require [clojure.string :as str]
+            [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2018.day10 :as d10]))
 
 (def d10-s00-raw
@@ -51,3 +53,46 @@
    [[14 7]  [-2 0]]
    [[-3 6]  [2 -1]]])
 
+(deftest condensed-time-test
+  (testing "Finds the time when the lights are most condensed"
+    (is (= 3 (d10/condensed-time d10-s01)))))
+
+(def d10-s01-soln
+  (str/join
+   "\n"
+   ["#   #  ###"
+    "#   #   # "
+    "#   #   # "
+    "#####   # "
+    "#   #   # "
+    "#   #   # "
+    "#   #   # "
+    "#   #  ###"]))
+
+(deftest light-message-test
+  (testing "Constructs the string representation of the message"
+    (is (= d10-s01-soln (d10/light-message d10-s01)))))
+
+(def day10-input (u/parse-puzzle-input d10/parse 2018 10))
+
+(def day10-part1-soln
+  (str/join
+   "\n"
+   [" ####   #####   #    #  #    #  ######  ######  #####   ######"
+    "#    #  #    #  #    #  #   #   #            #  #    #       #"
+    "#       #    #   #  #   #  #    #            #  #    #       #"
+    "#       #    #   #  #   # #     #           #   #    #      # "
+    "#       #####     ##    ##      #####      #    #####      #  "
+    "#       #  #      ##    ##      #         #     #         #   "
+    "#       #   #    #  #   # #     #        #      #        #    "
+    "#       #   #    #  #   #  #    #       #       #       #     "
+    "#    #  #    #  #    #  #   #   #       #       #       #     "
+    " ####   #    #  #    #  #    #  ######  ######  #       ######"]))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day10, part1"
+    (is (= day10-part1-soln (d10/part1 day10-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day10, part2"
+    (is (= 10081 (d10/part2 day10-input)))))
