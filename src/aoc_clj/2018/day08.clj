@@ -14,7 +14,7 @@
     (+ 2 (count metadata))
     (+ 2 (count metadata) (reduce + (map node-size children)))))
 
-(defn add-node
+(defn parse-node
   "Process the next element of data to add a node to the tree, 
    recursively"
   [[n-children n-metadata & remaining]]
@@ -24,7 +24,7 @@
       (if (= n-children (count children))
         {:children children
          :metadata (take n-metadata (drop shift remaining))}
-        (let [next-child (add-node (drop shift remaining))
+        (let [next-child (parse-node (drop shift remaining))
               size (node-size next-child)]
           (recur (conj children next-child)
                  (+ shift size)))))))
@@ -38,8 +38,26 @@
     (+ (reduce + metadata)
        (reduce + (map metadata-sum children)))))
 
+(defn node-value
+  "Computes the value of a node in the tree. If the node has no children,
+   the value is the sum of the metadata values. If the node has children,
+   the metadata values are interpreted as 1-based indices into the
+   list of children, and the node value is the the sum of those indexed
+   children's node values."
+  [{:keys [children metadata]}]
+  (if (empty? children)
+    (reduce + metadata)
+    (->> (map #(get children (dec %) {:children [] :metadata []}) metadata)
+         (map node-value)
+         (reduce +))))
+
 ;; Puzzle solutions
 (defn part1
   "What is the sum of all metadata entries?"
   [input]
-  (metadata-sum (add-node input)))
+  (metadata-sum (parse-node input)))
+
+(defn part2
+  "What is the value of the root node?"
+  [input]
+  (node-value (parse-node input)))
