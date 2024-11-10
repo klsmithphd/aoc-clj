@@ -225,3 +225,9 @@
   (vec (concat (subvec v 0 idx)
                [elem]
                (subvec v idx))))
+
+(defn vec-remove
+  "Returns a vector based on `v` with the single element at `index` removed"
+  [v index]
+  (let [[l r] (split-at index v)]
+    (vec (concat l (rest r)))))
