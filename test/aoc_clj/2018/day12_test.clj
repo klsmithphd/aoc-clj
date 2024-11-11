@@ -72,3 +72,7 @@
 (deftest part1-test
   (testing "Reproduces the answer for day12, part1"
     (is (= 3725 (d12/part1 day12-input)))))
+
+(deftest ^:slow part2-test
+  (testing "Reproduces the answer for day12, part2"
+    (is (= 0 (d12/part2 day12-input)))))
