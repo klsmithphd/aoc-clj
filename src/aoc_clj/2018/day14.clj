@@ -1,7 +1,63 @@
 (ns aoc-clj.2018.day14
-  "Solution to https://adventofcode.com/2018/day/14")
+  "Solution to https://adventofcode.com/2018/day/14"
+  (:require [clojure.string :as str]))
+
+;; Constants
+(def init-state {:e1 0 :e2 1 :scores [3 7]})
 
 ;; Input parsing
-(defn parse
+(def parse (comp read-string first))
+
+;; Puzzle logic
+(defn step
+  "Evolve the recipe state forward by one iteration"
+  [{:keys [e1 e2 scores]}]
+  (let [e1-score   (get scores e1)
+        e2-score   (get scores e2)
+        new-score  (+ e1-score e2-score)
+        new-e1     (quot new-score 10)
+        new-e2     (mod new-score 10)
+        new-scores (if (pos? new-e1)
+                     (conj scores new-e1 new-e2)
+                     (conj scores new-e2))
+        score-cnt  (count new-scores)]
+    {:e1 (mod (+ e1 e1-score 1) score-cnt)
+     :e2 (mod (+ e2 e2-score 1) score-cnt)
+     :scores new-scores}))
+
+(defn ten-recipes-after-n
+  "What are the ten recipe scores after generating `n` recipes?"
+  [n]
+  (->> init-state
+       (iterate step)
+       (drop-while #(< (count (:scores %)) (+ n 10)))
+       first
+       :scores
+       (drop n)
+       (take 10)
+       (apply str)))
+
+(defn recipes-until-score
+  "How many recipes before the next recipes match the provided scores"
+  [score]
+  (let [c (count score)]
+    (->> init-state
+         (iterate step)
+         (map (comp str/join :scores))
+         (drop-while #(not (str/includes? % score)))
+         first
+         count
+         (+ (- c)))))
+
+;; Puzzle solutions
+(defn part1
+  "What are the scores of the ten recipes immediately after the number of
+   recipes in your puzzle input?"
   [input]
-  (map (comp read-string str) (first input)))
+  (ten-recipes-after-n input))
+
+(defn part2
+  "How many recipes appear on the scoreboard to the left of the score sequence
+   in your puzzle input?"
+  [input]
+  (recipes-until-score (str input)))
