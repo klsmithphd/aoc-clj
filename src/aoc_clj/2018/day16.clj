@@ -9,8 +9,11 @@
 
 (defn parse
   [input]
-  (->> (u/split-at-blankline input)
-       (map parse-stanza)))
+  (let [[samples _ [program]] (->> (u/split-at-blankline input)
+                                   (map parse-stanza)
+                                   (partition-by (comp empty? first)))]
+    {:samples samples
+     :program program}))
 
 ;; Puzzle logic
 (defn dref
@@ -52,8 +55,20 @@
    :eqrr (partial comparison-op :register :register  =)})
 
 (defn compatible-opcodes
-  [opcodes [before [_ & args] after]]
+  [[before [_ & args] after]]
   (->> opcodes
        (filter #(= after ((val %) before args)))
        keys
        set))
+
+(defn three-or-more-opcode-count
+  [samples]
+  (->> samples
+       (map compatible-opcodes)
+       (filter #(>= (count %) 3))
+       count))
+
+;; Puzzle solutions
+(defn part1
+  [{:keys [samples]}]
+  (three-or-more-opcode-count samples))
