@@ -1,6 +1,7 @@
 (ns aoc-clj.2018.day16
   "Solution to https://adventofcode.com/2018/day/16"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.utils.core :as u]
+            [clojure.set :as set]))
 
 ;; Input parsing
 (defn parse-stanza
@@ -68,7 +69,42 @@
        (filter #(>= (count %) 3))
        count))
 
+(defn opcode-map
+  [[_ [opcode & _] _ :as sample]]
+  {opcode (compatible-opcodes sample)})
+
+(defn possible-mapping
+  [samples]
+  (->> samples
+       (map opcode-map)
+       (apply merge-with set/intersection)))
+
+(defn mapping-solve
+  [samples]
+  (loop [mapping (possible-mapping samples) solved {}]
+    (if (= 16 (count solved))
+      solved
+      (let [done (->> mapping
+                      (filter #(= 1 (count (val %))))
+                      (u/fmap first))
+            left-to-map (u/without-keys mapping (keys done))]
+        (recur (u/fmap #(set/difference % (set (vals done))) left-to-map)
+               (merge solved done))))))
+
+(defn op-step
+  [mapping regs [opcode & args]]
+  ((opcodes (mapping opcode)) regs args))
+
+(defn execute
+  [{:keys [samples program]}]
+  (let [opcode-mapping (mapping-solve samples)]
+    (reduce (partial op-step opcode-mapping) [0 0 0 0] program)))
+
 ;; Puzzle solutions
 (defn part1
   [{:keys [samples]}]
   (three-or-more-opcode-count samples))
+
+(defn part2
+  [input]
+  (first (execute input)))
