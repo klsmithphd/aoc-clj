@@ -18,3 +18,8 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d16-s00 (d16/parse d16-s00-raw)))))
+
+(deftest compatible-opcodes-test
+  (testing "Determines which opcodes could match the sample"
+    (is (= #{:addi :mulr :seti}
+           (d16/compatible-opcodes d16/opcodes (nth d16-s00 0))))))
