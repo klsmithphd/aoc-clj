@@ -25,3 +25,22 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d17-s00 (d17/parse d17-s00-raw)))))
+
+(deftest clay-line-test
+  (testing "Expands the coordinates into all clay cells for a given line"
+    (is (= [[495 2] [495 3] [495 4] [495 5] [495 6] [495 7]]
+           (d17/clay-line (nth d17-s00 0))))
+    (is (= [[495 7] [496 7] [497 7] [498 7] [499 7] [500 7] [501 7]]
+           (d17/clay-line (nth d17-s00 1))))))
+
+(deftest all-clay-test
+  (testing "Expands all the clay veins into the set of clay cells"
+    (is (= #{[495 2] [495 3] [495 4] [495 5] [495 6] [495 7]
+             [496 7] [497 7] [498 7] [499 7] [500 7] [501 7]
+             [501 3] [501 4] [501 5] [501 6]
+             [498 2] [498 3] [498 4]
+             [506 1] [506 2]
+             [498 10] [498 11] [498 12] [498 13]
+             [504 10] [504 11] [504 12] [504 13]
+             [499 13] [500 13] [501 13] [502 13] [503 13]}
+           (d17/all-clay d17-s00)))))

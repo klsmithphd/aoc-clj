@@ -13,3 +13,17 @@
 (defn parse
   [input]
   (map parse-line input))
+
+;; Puzzle logic
+(defn clay-line
+  [[dir fixed start end]]
+  (for [changing (range start (inc end))]
+    (case dir
+      :v [fixed changing]
+      :h [changing fixed])))
+
+(defn all-clay
+  [veins]
+  (->> veins
+       (mapcat clay-line)
+       set))
