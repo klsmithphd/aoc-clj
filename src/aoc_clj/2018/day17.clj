@@ -50,18 +50,31 @@
    (fn [clay]
      (apply max (keys clay)))))
 
+
+
+(defn between?
+  [x [x1 x2]]
+  (< x1 x x2))
+
 ;; The defining characteristic of whether water *can* settle at a given
 ;; position is that there's a clay cell to the left and a clay cell to
 ;; the right on the current line, with every value on the next line
 ;; down already occupied.
 
-(defn water-can-settle
-  [])
+;; (defn reachable
+;;   [clay-map occupied [x y :as pos]]
+;;   (let [left  (rest (iterate #(vec/vec-add [-1 0] %) pos))
+;;         right (rest (iterate #(vec/vec-add [1 0] %) pos))])
+;;   (->> (partition 2 1 (clay-map y))
+;;        (filter #(between? x %))
+;;        (filter occupied #(map ))))
+
+(partition 2 1 [506])
 
 (defn add-water
   [occupied]
-  (let [y (->> spring
-               (iterate #(vec/vec-add [0 1] %))
-               (drop-while (complement occupied))
-               first)]
-    y))
+  (let [[x y] (->> spring
+                   (iterate #(vec/vec-add [0 1] %))
+                   (drop-while (complement occupied))
+                   first)]
+    [x (dec y)]))
