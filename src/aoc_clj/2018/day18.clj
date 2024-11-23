@@ -66,6 +66,8 @@
        first))
 
 (defn state-at-large-t
+  "Returns the updated state of the scan at a very large time `t`, 
+   presuming that there must be some kind of cycle of repeated states."
   [scan t]
   (let [[offset repeat] (->> scan
                              (iterate step)
