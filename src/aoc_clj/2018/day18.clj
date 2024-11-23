@@ -1,10 +1,12 @@
 (ns aoc-clj.2018.day18
   "Solution to https://adventofcode.com/2018/day/18"
   (:require [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.utils.grid.vecgrid :as vg]
+            [aoc-clj.utils.core :as u]))
 
 ;; Constants
 (def part1-time 10)
+(def part2-time 1000000000)
 
 ;; Input parsing
 (def charmap
@@ -63,6 +65,15 @@
        (drop t)
        first))
 
+(defn state-at-large-t
+  [scan t]
+  (let [[offset repeat] (->> scan
+                             (iterate step)
+                             u/first-duplicates)
+        cycle-size      (- repeat offset)
+        extra           (mod (- t offset) cycle-size)]
+    (state-at-t scan (+ offset extra))))
+
 (defn resource-value
   "The resource value is the number of tree acres times the number of 
    lumberyard acres"
@@ -79,4 +90,11 @@
    after 10 minutes?"
   [input]
   (->> (state-at-t input part1-time)
+       resource-value))
+
+(defn part2
+  "What will the total resource value of the lumber collection area be 
+   after 1000000000 minutes?"
+  [input]
+  (->> (state-at-large-t input part2-time)
        resource-value))
