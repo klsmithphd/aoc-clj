@@ -25,6 +25,14 @@
    [[1 1 2] 1]
    [[1 3 1] 1]])
 
+(def d23-s01
+  [[[10 12 12] 2]
+   [[12 14 12] 2]
+   [[16 12 12] 4]
+   [[14 14 14] 6]
+   [[50 50 50] 200]
+   [[10 10 10] 5]])
+
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d23-s00 (d23/parse d23-s00-raw)))))
