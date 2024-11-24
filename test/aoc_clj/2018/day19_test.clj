@@ -46,10 +46,14 @@
 
 (deftest execute-test
   (testing "Executes the program until it halts"
-    (is (= [7 5 6 0 0 9] (d19/execute d19-s00 d19/init-regs)))))
+    (is (= [7 5 6 0 0 9] (d19/execute d19/init-regs d19-s00)))))
 
 (def day19-input (u/parse-puzzle-input d19/parse 2018 19))
 
 (deftest part1-test
   (testing "Reproduces the answer for day19, part1"
     (is (= 1764 (d19/part1 day19-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day19, part2"
+    (is (= 0 (d19/part2 day19-input)))))
