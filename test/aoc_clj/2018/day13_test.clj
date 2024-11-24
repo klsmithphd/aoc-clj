@@ -67,3 +67,75 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d13-s00 (d13/parse d13-s00-raw)))))
+
+(deftest carts-test
+  (testing "Finds the carts in the map"
+    (is (= #{{:pos [9 3] :heading :n :int-cnt 0}
+             {:pos [2 0] :heading :e :int-cnt 0}}
+           (set (d13/carts d13-s00))))))
+
+(deftest tick-test
+  (testing "Updates the cart state by one tick"
+    (is (= [{:pos [3 0] :heading :e :int-cnt 0}
+            {:pos [9 4] :heading :e :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [2 0] :heading :e :int-cnt 0}
+                      {:pos [9 3] :heading :n :int-cnt 0}])))
+
+    (is (= [{:pos [4 0] :heading :n :int-cnt 0}
+            {:pos [10 4] :heading :e :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [3 0] :heading :e :int-cnt 0}
+                      {:pos [9 4] :heading :e :int-cnt 1}])))
+
+    (is (= [{:pos [4 1] :heading :n :int-cnt 0}
+            {:pos [11 4] :heading :e :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [4 0] :heading :n :int-cnt 0}
+                      {:pos [10 4] :heading :e :int-cnt 1}])))
+
+    (is (= [{:pos [4 2] :heading :e :int-cnt 1}
+            {:pos [12 4] :heading :s :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [4 1] :heading :n :int-cnt 0}
+                      {:pos [11 4] :heading :e :int-cnt 1}])))
+
+    (is (= [{:pos [5 2] :heading :e :int-cnt 1}
+            {:pos [12 3] :heading :s :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [4 2] :heading :e :int-cnt 1}
+                      {:pos [12 4] :heading :s :int-cnt 1}])))
+
+    (is (= [{:pos [6 2] :heading :e :int-cnt 1}
+            {:pos [12 2] :heading :s :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [5 2] :heading :e :int-cnt 1}
+                      {:pos [12 3] :heading :s :int-cnt 1}])))
+
+    (is (= [{:pos [7 2] :heading :e :int-cnt 2}
+            {:pos [12 1] :heading :w :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [6 2] :heading :e :int-cnt 1}
+                      {:pos [12 2] :heading :s :int-cnt 1}])))
+
+    (is (= [{:pos [8 2] :heading :e :int-cnt 2}
+            {:pos [11 1] :heading :w :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [7 2] :heading :e :int-cnt 2}
+                      {:pos [12 1] :heading :w :int-cnt 1}])))
+
+    (is (= [{:pos [9 4] :heading :w :int-cnt 3}
+            {:pos [8 1] :heading :w :int-cnt 1}]
+           (d13/tick d13-s00
+                     [{:pos [9 3] :heading :n :int-cnt 2}
+                      {:pos [9 1] :heading :w :int-cnt 1}])))))
+
+(deftest first-crash-test
+  (testing "Finds the location of the first crash"
+    (is (= "7,3" (d13/first-crash d13-s00)))))
+
+(def day13-input (u/parse-puzzle-input d13/parse 2018 13))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day13, part1"
+    (is (= "112,69" (d13/part1 day13-input)))))
