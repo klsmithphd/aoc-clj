@@ -28,9 +28,9 @@
     (compare x1 x2)
     (compare y1 y2)))
 
-;; (defn reading-order
-;;   [units]
-;;   (sort-by :pos reading-compare units))
+(defn reading-order
+  [units]
+  (sort-by #(:pos (val %)) reading-compare units))
 
 (defn parse
   [input]
@@ -56,14 +56,23 @@
    enemies"
   [{:keys [units]} [pos {:keys [type]}]]
   (->> (grid/adj-coords-2d pos)
-       (filter #(= (enemy type) (:type (units %))))
-       not-empty))
-
+       (filter #(= (enemy type) (:type (units %))))))
 
 ;; To be implemented
 (defn attack
-  [board unit enemies]
-  board)
+  [board unit]
+  (if-let [target (->> (in-range-enemies board unit)
+                       (sort-by #(:hp (val %)) <)
+                       (partition-by #(:hp (val %)))
+                       first
+                       reading-order
+                       first)]
+    (let [{:keys [pos hp]} target
+          new-hp (- hp attack-power)]
+      (if (<= new-hp 0)
+        (update board :units dissoc pos)
+        (assoc-in board [:units pos :hp] new-hp)))
+    board))
 
 ;; To be implemented
 (defn move
@@ -74,7 +83,8 @@
   "Return the updated state of the game board based on allowing the
    selected unit to take its turn"
   [board unit]
-  (let [enemies (in-range-enemies board unit)]
-    (if (empty? enemies)
-      (move board unit)
-      (attack board unit enemies))))
+  (let [in-range  (in-range-enemies board unit)
+        new-board (if (empty? in-range)
+                    (move board unit)
+                    board)]
+    (attack new-board unit)))
