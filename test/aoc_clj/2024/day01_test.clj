@@ -27,8 +27,16 @@
   (testing "Computes the total distance between the two lists"
     (is (= 11 (d01/total-distance d01-s00)))))
 
+(deftest similarity-score-test
+  (testing "Computes the similarity score for the lists"
+    (is (= 31 (d01/similarity-score d01-s00)))))
+
 (def day01-input (u/parse-puzzle-input d01/parse 2024 1))
 
 (deftest part1-test
   (testing "Reproduces the answer for day01, part1"
     (is (= 1222801 (d01/part1 day01-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day01, part2"
+    (is (= 22545250 (d01/part2 day01-input)))))

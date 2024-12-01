@@ -21,7 +21,18 @@
   [lists]
   (reduce + (list-diffs lists)))
 
+(defn similarity-score
+  [[l1 l2]]
+  (let [freqs (frequencies l2)]
+    (->> l1
+         (map #(* % (get freqs % 0)))
+         (reduce +))))
+
 ;; Puzzle solutions
 (defn part1
   [input]
   (total-distance input))
+
+(defn part2
+  [input]
+  (similarity-score input))
