@@ -1,6 +1,7 @@
 (ns aoc-clj.2018.day19
   "Solution to https://adventofcode.com/2018/day/19"
-  (:require [aoc-clj.2018.day16 :as d16]))
+  (:require [clojure.math :as math]
+            [aoc-clj.2018.day16 :as d16]))
 
 ;; Constants
 (def init-regs [0 0 0 0 0 0])
@@ -46,18 +47,60 @@
          (drop-while running?)
          first)))
 
-(defn reg0-after-execution
-  "Returns the value in register 0 after the program terminates"
+;; (defn reg0-after-execution
+;;   "Returns the value in register 0 after the program terminates"
+;;   [regs program]
+;;   (first (execute regs program)))
+
+(defn run-till-initialize
+  "Executes the program until it has completed its initialization steps
+   and is ready to begin computation on line 1.
+   
+   I determined by walking through my opcode instructions that the
+   program jumps to initialization logic, dependent upon the value in
+   register 0 before setting the instruction pointer to line 1."
+  [regs {:keys [ip] :as program}]
+  (let [stepper  (partial step program)
+        running? #(not= 1 (get % ip 0))]
+    (->> regs
+         (iterate stepper)
+         (drop-while running?)
+         first)))
+
+(defn factors
+  "Returns a set of all the integer factors of a given integer"
+  [num]
+  (->> (range 1 (math/sqrt num))
+       (filter #(zero? (mod num %)))
+       (map #(vector % (quot num %)))
+       flatten
+       set))
+
+(defn sum-of-factors
+  "Given the initial registers, runs the program through its initialization
+   steps, then takes whatever value is in register 4, and then returns
+   the sum of the factors of that number.
+   
+   I determined by reading through the opcode instructions that this
+   is what the program is attempting to do very inefficiently O(N^2): It
+   iterates registers 3 and 5 through the range 1..N and then adds one of
+   register 3's value to reg 0 if their product equals what's in register 4.
+   
+   I can't guarantee all programs are structured the same way."
   [regs program]
-  (first (execute regs program)))
+  (->> (run-till-initialize regs program)
+       (drop 4)
+       first ;; In my program, the relevant value is in register 4
+       factors
+       (reduce +)))
 
 ;; Puzzle solution
 (defn part1
   "What value is left in register 0 when the background process halts?"
   [input]
-  (reg0-after-execution init-regs input))
+  (sum-of-factors init-regs input))
 
 (defn part2
   "What value is left in register 0 when this new background process halts?"
   [input]
-  (reg0-after-execution (assoc init-regs 0 1) input))
+  (sum-of-factors (assoc init-regs 0 1) input))

@@ -48,6 +48,10 @@
   (testing "Executes the program until it halts"
     (is (= [7 5 6 0 0 9] (d19/execute d19/init-regs d19-s00)))))
 
+(deftest factorize-test
+  (testing "Returns a set of all the factors of an integer"
+    (is (= #{1 2 5 10 97 194 485 970} (d19/factors 970)))))
+
 (def day19-input (u/parse-puzzle-input d19/parse 2018 19))
 
 (deftest part1-test
@@ -56,4 +60,4 @@
 
 (deftest part2-test
   (testing "Reproduces the answer for day19, part2"
-    (is (= 0 (d19/part2 day19-input)))))
+    (is (= 18992484 (d19/part2 day19-input)))))
