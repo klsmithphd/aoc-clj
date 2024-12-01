@@ -1,8 +1,7 @@
 (ns aoc-clj.2018.day21
   "Solution to https://adventofcode.com/2018/day/21"
   (:require [aoc-clj.2018.day19 :as d19]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.binary :as binary]))
+            [aoc-clj.utils.core :as u]))
 
 ;; Constants
 (def init-regs d19/init-regs)
@@ -10,9 +9,64 @@
 ;; Input parsing
 (def parse d19/parse)
 
-(def day21-input (u/parse-puzzle-input parse 2018 21))
-;; [0 1 2 3 4 5]
-;; [a b c d e f]
+;; Puzzle logic
+(defn only-halt-points
+  "Executes the program and returns the value of the 5th register
+   whenever the program could be halted."
+  [regs {:keys [ip] :as program}]
+  (let [stepper  (partial d19/step program)
+        running? #(not= 28 (get % ip 0))]
+    (->> regs
+         (iterate stepper)
+         (remove running?)
+         (map #(get % 5)))))
+
+(defn lowest-integer-to-halt
+  [program]
+  (first (only-halt-points init-regs program)))
+
+(defn equiv-program
+  "A program equivalent to *my* opcode program, which returns the next value
+   that can be assigned to the 0th register to cause the program to 
+   terminate, based on the previous value of 5th register `f`.
+   
+   See the notes at the bottom of this source file for the derivation"
+  [reg5]
+  (loop [c (bit-or reg5 65536) f 7571367]
+    (if (zero? c)
+      f
+      (recur (quot c 256)
+             (->> (bit-and c 255)
+                  (+ f)
+                  (bit-and 16777215)
+                  (* 65899)
+                  (bit-and 16777215))))))
+
+(defn max-run-value
+  "Using the equivalent program, find the penultimate value of the 5th
+   register that can halt the program before the program enters into
+   a recurrence loop."
+  []
+  (let [[_ scd] (u/first-duplicates (iterate equiv-program 0))]
+    (->> (iterate equiv-program 0)
+         (drop (dec scd))
+         first)))
+
+;; Puzzle solutions
+(defn part1
+  "What is the lowest non-negative integer value for register 0 that causes the
+   program to halt after executing the fewest instructions?"
+  [input]
+  (lowest-integer-to-halt input))
+
+(defn part2
+  "What is the lowest non-negative integer value for register 0 that causes
+   the program to halt after executing the most instructions?"
+  [_]
+  (max-run-value))
+
+;; Notes
+
 ;;       72 -> 0000 0000 0000 0000 0100 1000
 ;;      123 -> 0000 0000 0000 0000 0111 1011
 ;;      255 -> 0000 0000 0000 0000 1111 1111
@@ -21,6 +75,11 @@
 ;;  7571367 -> 0111 0011 1000 0111 1010 0111
 ;; 16777215 -> 1111 1111 1111 1111 1111 1111
 
+;; I'm using the convention that the registers are named a,b,c,d,e,f:
+;; [0 1 2 3 4 5]
+;; [a b c d e f]
+
+;; Here's how to translate the program:
 ;;      "#ip 1"               ;; instruction pointer is register 1 "b"
 ;; 00   "seti 123 0 5"        ;; f = 123
 ;; 01   "bani 5 456 5"        ;; f &= 456
@@ -58,27 +117,18 @@
 ;; 29   "addr 4 1 1"          ;; b += e       ;; if f == a, end program
 ;; 30   "seti 5 5 1"          ;; b = 5        ;; jump to 6
 
-(defn run-till-able-to-exit
-  "Executes the program until it has reached a point where it's possible
-   to exit if register 0 is set to the value of register 5.
-   
-   I determined by walking through my opcode instructions that the
-   program jumps to initialization logic, dependent upon the value in
-   register 0 before setting the instruction pointer to line 1."
-  [regs {:keys [ip] :as program}]
-  (let [stepper  (partial d19/step program)
-        running? #(not= 28 (get % ip 0))]
-    (->> regs
-         (iterate stepper)
-         (drop-while running?)
-         first)))
-
-(defn lowest-integer-to-halt
-  [program]
-  (-> (run-till-able-to-exit init-regs program)
-      (get 5)))
-
-;; Puzzle solutions
-(defn part1
-  [input]
-  (lowest-integer-to-halt input))
+;; Here's a C-ish equivalent:
+;; while (f != 72) {
+;;   f = 123
+;;   f &= 456
+;; }
+;; f = 0
+;; while (a != f) {   
+;;   c = f ^ 65536  ;; 65536 = 2^16
+;; 
+;;   f = 7571367
+;;   while (c >= 256) {
+;;     f = (1677215 & (65899 * (1677215 & (f + (c & 255)))))
+;;     c = c // 256
+;;   }
+;; }
