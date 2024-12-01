@@ -11,3 +11,17 @@
   (let [pairs (map parse-line input)]
     [(map first pairs)
      (map second pairs)]))
+
+;; Puzzle logic
+(defn list-diffs
+  [[l1 l2]]
+  (map (comp abs -) (sort l1) (sort l2)))
+
+(defn total-distance
+  [lists]
+  (reduce + (list-diffs lists)))
+
+;; Puzzle solutions
+(defn part1
+  [input]
+  (total-distance input))

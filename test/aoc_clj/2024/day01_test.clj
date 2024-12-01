@@ -1,5 +1,6 @@
 (ns aoc-clj.2024.day01-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2024.day01 :as d01]))
 
 (def d01-s00-raw
@@ -17,3 +18,17 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d01-s00 (d01/parse d01-s00-raw)))))
+
+(deftest list-diffs-test
+  (testing "Computes the individual differences between two sorted lists"
+    (is (= [2 1 0 1 2 5] (d01/list-diffs d01-s00)))))
+
+(deftest total-distance-test
+  (testing "Computes the total distance between the two lists"
+    (is (= 11 (d01/total-distance d01-s00)))))
+
+(def day01-input (u/parse-puzzle-input d01/parse 2024 1))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day01, part1"
+    (is (= 1222801 (d01/part1 day01-input)))))
