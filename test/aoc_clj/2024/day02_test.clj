@@ -47,8 +47,21 @@
   (testing "Counts the number of safe combinations"
     (is (= 2 (d02/safe-count d02-s00)))))
 
+(deftest safe-without-a-level-test
+  (testing "Considers a sequence safe with removing at most one level"
+    (is (= [true false false true true true]
+           (map d02/safe-without-a-level d02-s00)))))
+
+(deftest weaker-safe-count-test
+  (testing "Counts the number of combos that pass the weaker safe check"
+    (is (= 4 (d02/weaker-safe-count d02-s00)))))
+
 (def day02-input (u/parse-puzzle-input d02/parse 2024 2))
 
 (deftest part1-test
   (testing "Reproduces the answer for day02, part1"
     (is (= 549 (d02/part1 day02-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day02, part2"
+    (is (= 589 (d02/part2 day02-input)))))
