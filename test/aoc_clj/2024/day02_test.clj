@@ -1,5 +1,6 @@
 (ns aoc-clj.2024.day02-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2024.day02 :as d02]))
 
 (def d02-s00-raw
@@ -21,3 +22,33 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d02-s00 (d02/parse d02-s00-raw)))))
+
+(deftest all-increasing?-test
+  (testing "Checks that the values all increase"
+    (is (= [false true false false false true]
+           (map d02/all-increasing? d02-s00)))))
+
+(deftest all-drecreasing?-test
+  (testing "Checks that the values all decrease"
+    (is (= [true false true false false false]
+           (map d02/all-decreasing? d02-s00)))))
+
+(deftest safe-diff-size?-test
+  (testing "Checks that all values change by at least 1 and at most 3"
+    (is (= [true false false true false true]
+           (map d02/safe-diff-size? d02-s00)))))
+
+(deftest safe?-test
+  (testing "Finds the sequences that are deemed safe"
+    (is (= [true false false false false true]
+           (map d02/safe? d02-s00)))))
+
+(deftest safe-count-test
+  (testing "Counts the number of safe combinations"
+    (is (= 2 (d02/safe-count d02-s00)))))
+
+(def day02-input (u/parse-puzzle-input d02/parse 2024 2))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day02, part1"
+    (is (= 549 (d02/part1 day02-input)))))
