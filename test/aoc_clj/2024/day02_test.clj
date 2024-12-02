@@ -23,21 +23,6 @@
   (testing "Correctly parses the input"
     (is (= d02-s00 (d02/parse d02-s00-raw)))))
 
-(deftest all-increasing?-test
-  (testing "Checks that the values all increase"
-    (is (= [false true false false false true]
-           (map d02/all-increasing? d02-s00)))))
-
-(deftest all-drecreasing?-test
-  (testing "Checks that the values all decrease"
-    (is (= [true false true false false false]
-           (map d02/all-decreasing? d02-s00)))))
-
-(deftest safe-diff-size?-test
-  (testing "Checks that all values change by at least 1 and at most 3"
-    (is (= [true false false true false true]
-           (map d02/safe-diff-size? d02-s00)))))
-
 (deftest safe?-test
   (testing "Finds the sequences that are deemed safe"
     (is (= [true false false false false true]

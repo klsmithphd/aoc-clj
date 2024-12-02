@@ -11,55 +11,44 @@
   (map parse-line input))
 
 ;; Puzzle logic
-(defn all-increasing?
-  [nums]
-  (apply < nums))
-
-(defn all-decreasing?
-  [nums]
-  (apply > nums))
-
-(defn safe-diff-size?
-  [nums]
-  (->> (partition 2 1 nums)
-       (map #(apply (comp abs -) %))
-       (every? #(<= 1 % 3))))
-
-(defn safe?
-  [nums]
-  (and (or (all-decreasing? nums)
-           (all-increasing? nums))
-       (safe-diff-size? nums)))
-
 (defn step-size
+  "Computes the deltas between consecutive elements in nums"
   [nums]
   (->> (partition 2 1 nums)
        (map (fn [[a b]] (- b a)))))
 
-(defn safe-pos-step-count
+(defn all-safe-pos-steps?
+  "Returns true if all the steps are positive between 1 and 3 inclusive"
   [steps]
-  (count (filter #(<= 1 % 3) steps)))
+  (every? #(<= 1 % 3) steps))
 
-(defn safe-neg-step-count
+(defn all-safe-neg-steps?
+  "Returns true if all the steps are negative between -3 and -1 inclusive"
   [steps]
-  (count (filter #(<= -3 % -1) steps)))
+  (every? #(<= -3 % -1) steps))
 
-(defn safe-check-count
+(defn safe?
+  "Returns true if all the steps are either positve or negative in the
+   and are between 1 and 3 in absolute size"
   [nums]
   (let [steps (step-size nums)]
-    (max (safe-pos-step-count steps)
-         (safe-neg-step-count steps))))
+    (or (all-safe-neg-steps? steps)
+        (all-safe-pos-steps? steps))))
 
 (defn safe-count
+  "Returns the count of all safe combinations"
   [all-nums]
   (count (filter safe? all-nums)))
 
 (defn without-index
+  "Returns a new coll with the item at index `n` removed"
   [n coll]
   (let [[l r] (split-at n coll)]
     (concat l (rest r))))
 
 (defn safe-without-a-level
+  "Returns true if the collection would be deemed safe if
+   just a single element were removed"
   [nums]
   (->> (range (count nums))
        (map #(without-index % nums))
@@ -67,14 +56,17 @@
        boolean))
 
 (defn weaker-safe-count
+  "Counts all the number combinations that pass the weaker safety check"
   [all-nums]
   (count (filter safe-without-a-level all-nums)))
 
 ;; Puzzle solutions
 (defn part1
+  "How many reports are safe?"
   [input]
   (safe-count input))
 
 (defn part2
+  "How many reports are now safe?"
   [input]
   (weaker-safe-count input))
