@@ -25,6 +25,8 @@
   (re-seq part2-pattern s))
 
 (defn enablement-groups
+  "Partitions a list of instructions including `do()` and `don't()
+   into groups of mul(X,Y) instructions following the do/don'ts"
   [insts]
   (let [[fst & rem] (partition-by #(= "d" (subs % 0 1)) insts)
         groups (->> (partition 2 rem)
@@ -32,6 +34,7 @@
     (into [fst] groups)))
 
 (defn enabled-insts
+  "Returns a seq of only the enabled real mul instructions"
   [s]
   (->> s
        all-insts
@@ -47,6 +50,8 @@
   (map read-string (re-seq #"\d+" s)))
 
 (defn sum-of-products
+  "Given a set of enabled real mul instructions, computes the sum of
+   the products"
   [insts]
   (->> insts
        (map mul-args)
@@ -55,9 +60,12 @@
 
 ;; Puzzle solutions
 (defn part1
+  "What do you get if you add up all of the results of the multiplications?"
   [input]
   (sum-of-products (real-mul-insts input)))
 
 (defn part2
+  "What do you get if you add up all of the results of just the 
+   enabled multiplications?"
   [input]
   (sum-of-products (enabled-insts input)))
