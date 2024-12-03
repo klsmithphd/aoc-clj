@@ -2,7 +2,9 @@
   "Solution to https://adventofcode.com/2024/day/3")
 
 ;; Input parsing
-(def parse first)
+(defn parse
+  [input]
+  (apply str input))
 
 ;; Puzzle logic
 (defn real-mul-insts
