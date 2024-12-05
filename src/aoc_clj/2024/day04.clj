@@ -42,13 +42,14 @@
 (def a-es (partial char-positions \A))
 
 (defn search-coords
-  "For a given X pos, returns the collection of coordinates to search
-   for X M A S"
+  "For a given starting position `pos`, return a collection of coordinate seqs
+   that follow a given `search-pattern`"
   [search-pattern pos]
   (map (fn [ds]
          (map #(v/vec-add pos %) ds)) search-pattern))
 
 (defn matches?
+  "Returns true if the values of `coords` in `grid` match `pattern`"
   [pattern grid coords]
   (= pattern (map #(value grid %) coords)))
 
@@ -56,6 +57,12 @@
 (def is-x-mas? (partial matches? [\M \A \S \M \A \S]))
 
 (defn pattern-coords
+  "Given:
+    a collection of starting points `start-pts`, 
+    a collection of `deltas` that represent a search pattern of adjacent coordinates
+    a predication `matcher` that assesses whether the coordinate match the desired pattern,
+    and the `input` grid,
+   Returns a set of coordinate sequences that match the pattern."
   [start-pts deltas matcher input]
   (->> (start-pts input)
        (mapcat #(search-coords deltas %))
