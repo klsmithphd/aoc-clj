@@ -15,11 +15,15 @@
    [[0 0] [-1 1] [-2 2] [-3 3]]
    [[0 0] [-1 -1] [-2 -2] [-3 -3]]])
 
+(def x-mas-down-right [[-1 1] [0 0] [1 -1]])
+(def x-mas-up-right   [[-1 -1] [0 0] [1 1]])
+(def x-mas-down-left  [[1 1] [0 0] [-1 -1]])
+(def x-mas-up-left    [[1 -1] [0 0] [-1 1]])
 (def x-mas-deltas
-  [[[-1 -1] [0 0] [1 1] [-1 1] [0 0] [1 -1]]
-   [[-1 -1] [0 0] [1 1] [1 -1] [0 0] [-1 1]]
-   [[1 1] [0 0] [-1 -1] [-1 1] [0 0] [1 -1]]
-   [[1 1] [0 0] [-1 -1] [1 -1] [0 0] [-1 1]]])
+  [(concat x-mas-up-right x-mas-down-right)
+   (concat x-mas-up-right x-mas-up-left)
+   (concat x-mas-down-left x-mas-down-right)
+   (concat x-mas-down-left x-mas-up-left)])
 
 ;; Input parsing
 (defn parse
@@ -28,20 +32,14 @@
 
 ;; Puzzle logic
 (defn char-positions
-  [{:keys [grid]} ch]
+  [ch {:keys [grid]}]
   (->> grid
        (filter #(= ch (val %)))
        keys
        set))
 
-(defn x-es
-  "Finds the set of coordination location of all the X'es"
-  [grid]
-  (char-positions grid \X))
-
-(defn a-es
-  [grid]
-  (char-positions grid \A))
+(def x-es (partial char-positions \X))
+(def a-es (partial char-positions \A))
 
 (defn search-coords
   "For a given X pos, returns the collection of coordinates to search
@@ -50,39 +48,30 @@
   (map (fn [ds]
          (map #(v/vec-add pos %) ds)) search-pattern))
 
-(defn is-xmas?
-  [grid coords]
-  (= [\X \M \A \S]
-     (map #(value grid %) coords)))
+(defn matches?
+  [pattern grid coords]
+  (= pattern (map #(value grid %) coords)))
 
-(defn is-x-mas?
-  [grid coords]
-  (= [\M \A \S \M \A \S]
-     (map #(value grid %) coords)))
+(def is-xmas? (partial matches? [\X \M \A \S]))
+(def is-x-mas? (partial matches? [\M \A \S \M \A \S]))
 
-(defn xmas-coords
-  [input]
-  (->> (x-es input)
-       (mapcat #(search-coords xmas-deltas %))
-       (filter #(is-xmas? input %))))
-
-(defn x-mas-coords
-  [input]
-  (->> (a-es input)
-       (mapcat #(search-coords x-mas-deltas %))
-       (filter #(is-x-mas? input %))
+(defn pattern-coords
+  [start-pts deltas matcher input]
+  (->> (start-pts input)
+       (mapcat #(search-coords deltas %))
+       (filter #(matcher input %))
        set))
 
-
-(defn xmas-coords-count
-  [input]
-  (count (xmas-coords input)))
+(def xmas-coords (partial pattern-coords x-es xmas-deltas is-xmas?))
+(def x-mas-coords (partial pattern-coords a-es x-mas-deltas is-x-mas?))
 
 ;; Puzzle solutions
 (defn part1
+  "How many times does XMAS appear?"
   [input]
-  (xmas-coords-count input))
+  (count (xmas-coords input)))
 
 (defn part2
+  "How many times does an X-MAS appear?"
   [input]
   (count (x-mas-coords input)))

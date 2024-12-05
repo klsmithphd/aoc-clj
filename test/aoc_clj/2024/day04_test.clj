@@ -59,7 +59,7 @@
              [[0 4] [1 4] [2 4] [3 4]]
              [[5 0] [6 0] [7 0] [8 0]]
              [[4 0] [5 1] [6 2] [7 3]]}
-           (set (d04/xmas-coords d04-s00))))))
+           (d04/xmas-coords d04-s00)))))
 
 (def day04-input (u/parse-puzzle-input d04/parse 2024 4))
 
