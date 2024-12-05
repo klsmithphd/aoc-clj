@@ -6,14 +6,15 @@
 
 ;; Constants
 (def xmas-deltas
-  [[[0 0] [1 0] [2 0] [3 0]]
-   [[0 0] [0 1] [0 2] [0 3]]
-   [[0 0] [0 -1] [0 -2] [0 -3]]
-   [[0 0] [-1 0] [-2 0] [-3 0]]
-   [[0 0] [1 1] [2 2] [3 3]]
-   [[0 0] [1 -1] [2 -2] [3 -3]]
-   [[0 0] [-1 1] [-2 2] [-3 3]]
-   [[0 0] [-1 -1] [-2 -2] [-3 -3]]])
+  [[[0 0] [1 0] [2 0] [3 0]]       ;; right
+   [[0 0] [0 1] [0 2] [0 3]]       ;; up
+   [[0 0] [0 -1] [0 -2] [0 -3]]    ;; down
+   [[0 0] [-1 0] [-2 0] [-3 0]]    ;; left
+   [[0 0] [1 1] [2 2] [3 3]]       ;; up-right
+   [[0 0] [1 -1] [2 -2] [3 -3]]    ;; down-right
+   [[0 0] [-1 1] [-2 2] [-3 3]]    ;; up-left
+   [[0 0] [-1 -1] [-2 -2] [-3 -3]] ;; down-left
+   ])
 
 (def x-mas-down-right [[-1 1] [0 0] [1 -1]])
 (def x-mas-up-right   [[-1 -1] [0 0] [1 1]])
@@ -32,6 +33,8 @@
 
 ;; Puzzle logic
 (defn char-positions
+  "Returns the set of coordinate positions in the grid that match
+   the provided character value"
   [ch {:keys [grid]}]
   (->> grid
        (filter #(= ch (val %)))
