@@ -17,9 +17,37 @@
        (group-by first)
        (u/fmap #(set (map second %)))))
 
-;; Input parsing
 (defn parse
   [input]
   (let [[ordering updates] (u/split-at-blankline input)]
     {:ordering (parse-ordering ordering)
      :updates  (parse-updates updates)}))
+
+;; Puzzle logic
+(defn update-in-order?
+  [ordering [el & others]]
+  (every? (complement (get ordering el #{})) others))
+
+(defn chunks
+  [coll]
+  (take-while some? (iterate next coll)))
+
+(defn in-order?
+  [ordering upd]
+  (every? #(update-in-order? ordering %) (chunks (reverse upd))))
+
+(defn middle-page
+  [coll]
+  (let [n (count coll)]
+    (nth coll (quot n 2))))
+
+(defn ordered-update-middle-pages
+  [{:keys [ordering updates]}]
+  (->> updates
+       (filter #(in-order? ordering %))
+       (map middle-page)))
+
+;; Puzzle solutions
+(defn part1
+  [input]
+  (reduce + (ordered-update-middle-pages input)))
