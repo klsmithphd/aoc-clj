@@ -66,6 +66,32 @@
     (is (= false (d05/in-order? (:ordering d05-s00)
                                 (nth (:updates d05-s00) 5))))))
 
+(deftest ordered-updates-test
+  (testing "Returns the page updates that are in order"
+    (is (= [[75 47 61 53 29]
+            [97 61 53 29 13]
+            [75 29 13]]
+           (d05/ordered-updates d05-s00)))))
+
+(deftest unordered-updates-test
+  (testing "Returns the page updates that are out of order"
+    (is (= [[75 97 47 61 53]
+            [61 13 29]
+            [97 13 75 29 47]]
+           (d05/unordered-updates d05-s00)))))
+
+(deftest reordered-update-test
+  (testing "Puts an out-of-order update in the correct order"
+    (is (= [97 75 47 61 53] (d05/reordered-update
+                             (:ordering d05-s00)
+                             (nth (:updates d05-s00) 3))))
+    (is (= [61 29 13]       (d05/reordered-update
+                             (:ordering d05-s00)
+                             (nth (:updates d05-s00) 4))))
+    (is (= [97 75 47 29 13] (d05/reordered-update
+                             (:ordering d05-s00)
+                             (nth (:updates d05-s00) 5))))))
+
 (deftest ordered-update-middle-pages-test
   (testing "Returns the middle pages of all the updates that are in page order"
     (is (= [61 53 29] (d05/ordered-update-middle-pages d05-s00)))))

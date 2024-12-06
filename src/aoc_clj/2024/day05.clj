@@ -41,10 +41,28 @@
   (let [n (count coll)]
     (nth coll (quot n 2))))
 
-(defn ordered-update-middle-pages
+(defn ordered-updates
   [{:keys [ordering updates]}]
-  (->> updates
-       (filter #(in-order? ordering %))
+  (filter #(in-order? ordering %) updates))
+
+(defn unordered-updates
+  [{:keys [ordering updates]}]
+  (remove #(in-order? ordering %) updates))
+
+(defn reordered-update
+  [ordering [fst & others]]
+  (loop [nxt fst ordered [] rst others]
+    (if (empty? others)
+      ordered
+      (let [afters (remove (get ordering nxt #{}) rst)]
+        (case (count afters)
+          0 (recur (first others) (conj ordered nxt) (rest rst))
+          1 (recur (first afters) () ())
+          (recur () () ()))))))
+
+(defn ordered-update-middle-pages
+  [page-data]
+  (->> (ordered-updates page-data)
        (map middle-page)))
 
 ;; Puzzle solutions
