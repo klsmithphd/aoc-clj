@@ -36,6 +36,8 @@
   (testing "Reproduces the answer for day06, part1"
     (is (= 4656 (d06/part1 day06-input)))))
 
+;; FIXME: https://github.com/klsmithphd/aoc-clj/issues/137
+;; Speed this up with a different approach
 (deftest ^:slow part2-test
   (testing "Reproduces the answer for day06, part2"
     (is (= 1575 (d06/part2 day06-input)))))
