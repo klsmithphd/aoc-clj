@@ -82,6 +82,9 @@
 
 (deftest reordered-update-test
   (testing "Puts an out-of-order update in the correct order"
+    (is (= [75 47 61 53 29] (d05/reordered-update
+                             (:ordering d05-s00)
+                             (nth (:updates d05-s00) 0))))
     (is (= [97 75 47 61 53] (d05/reordered-update
                              (:ordering d05-s00)
                              (nth (:updates d05-s00) 3))))
@@ -96,8 +99,16 @@
   (testing "Returns the middle pages of all the updates that are in page order"
     (is (= [61 53 29] (d05/ordered-update-middle-pages d05-s00)))))
 
+(deftest reordered-update-middle-pages-test
+  (testing "Returns the middle pages of all the undordered updates after reordering"
+    (is (= [47 29 47] (d05/reordered-update-middle-pages d05-s00)))))
+
 (def day05-input (u/parse-puzzle-input d05/parse 2024 5))
 
 (deftest part1-test
   (testing "Reproduces the answer for day05, part1"
     (is (= 5275 (d05/part1 day05-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day05, part2"
+    (is (= 6191 (d05/part2 day05-input)))))

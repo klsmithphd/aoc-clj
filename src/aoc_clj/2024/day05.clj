@@ -50,22 +50,34 @@
   (remove #(in-order? ordering %) updates))
 
 (defn reordered-update
-  [ordering [fst & others]]
-  (loop [nxt fst ordered [] rst others]
-    (if (empty? others)
-      ordered
-      (let [afters (remove (get ordering nxt #{}) rst)]
-        (case (count afters)
-          0 (recur (first others) (conj ordered nxt) (rest rst))
-          1 (recur (first afters) () ())
-          (recur () () ()))))))
+  [ordering coll]
+  (loop [ordered [] [nxt & rst] coll]
+    (if (empty? rst)
+      (conj ordered nxt)
+      (let [need-to-be-before
+            (filter #((get ordering % #{}) nxt) rst)]
+        (if (empty? need-to-be-before)
+          (recur (conj ordered nxt) rst)
+          (recur ordered (concat need-to-be-before
+                                 [nxt]
+                                 (remove (set need-to-be-before) rst))))))))
 
 (defn ordered-update-middle-pages
   [page-data]
   (->> (ordered-updates page-data)
        (map middle-page)))
 
+(defn reordered-update-middle-pages
+  [{:keys [ordering] :as page-data}]
+  (->> (unordered-updates page-data)
+       (map #(reordered-update ordering %))
+       (map middle-page)))
+
 ;; Puzzle solutions
 (defn part1
   [input]
   (reduce + (ordered-update-middle-pages input)))
+
+(defn part2
+  [input]
+  (reduce + (reordered-update-middle-pages input)))
