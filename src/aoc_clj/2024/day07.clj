@@ -65,3 +65,9 @@
    What is their total calibration result?"
   [input]
   (possibly-true-test-sums :part1 input))
+
+(defn part2
+  "Using your new knowledge of elephant hiding spots, determine which 
+   equations could possibly be true. What is their total calibration result?"
+  [input]
+  (possibly-true-test-sums :part2 input))

@@ -29,11 +29,19 @@
   (testing "Correctly parses the input"
     (is (= d07-s00 (d07/parse d07-s00-raw)))))
 
-(deftest possible-values-test
+(deftest possible-values-p1-test
   (testing "Determines the possible values that could result from inserting +
             and * operators"
     (is (= [190 29]              (d07/possible-values-p1 (next (nth d07-s00 0)))))
     (is (= [87480 3267 3267 148] (d07/possible-values-p1 (next (nth d07-s00 1)))))))
+
+(deftest possible-values-p2-test
+  (testing "Determines the possible values that could result from inserting +,
+            *, and || operators"
+    (is (= [90 21 156]
+           (d07/possible-values-p2 (next (nth d07-s00 3)))))
+    (is (= [1904 150 13614 350 39 2514 2492 192 17814]
+           (d07/possible-values-p2 (next (nth d07-s00 6)))))))
 
 (deftest possibly-true-eqns-test
   (testing "Filters to just the equations that could possibly be true with
@@ -41,15 +49,28 @@
     (is (= [[190 10 19]
             [3267 81 40 27]
             [292 11 6 16 20]]
-           (d07/possibly-true-eqns :part1 d07-s00)))))
+           (d07/possibly-true-eqns :part1 d07-s00)))
+
+    (is (= [[190 10 19]
+            [3267 81 40 27]
+            [156 15 6]
+            [7290 6 8 6 15]
+            [192 17 8 14]
+            [292 11 6 16 20]]
+           (d07/possibly-true-eqns :part2 d07-s00)))))
 
 (deftest possibly-true-test-sums-test
   (testing "Computes the sum of the test values from eqns that could possibly
             be true"
-    (is (= 3749 (d07/possibly-true-test-sums :part1 d07-s00)))))
+    (is (= 3749  (d07/possibly-true-test-sums :part1 d07-s00)))
+    (is (= 11387 (d07/possibly-true-test-sums :part2 d07-s00)))))
 
 (def day07-input (u/parse-puzzle-input d07/parse 2024 7))
 
 (deftest part1-test
   (testing "Reproduces the answer for day07, part1"
     (is (= 1289579105366 (d07/part1 day07-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day07, part2"
+    (is (= 92148721834692 (d07/part2 day07-input)))))
