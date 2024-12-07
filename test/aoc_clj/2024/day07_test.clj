@@ -32,8 +32,8 @@
 (deftest possible-values-test
   (testing "Determines the possible values that could result from inserting +
             and * operators"
-    (is (= [190 29]              (d07/possible-values (next (nth d07-s00 0)))))
-    (is (= [87480 3267 3267 148] (d07/possible-values (next (nth d07-s00 1)))))))
+    (is (= [190 29]              (d07/possible-values-p1 (next (nth d07-s00 0)))))
+    (is (= [87480 3267 3267 148] (d07/possible-values-p1 (next (nth d07-s00 1)))))))
 
 (deftest possibly-true-eqns-test
   (testing "Filters to just the equations that could possibly be true with
@@ -41,12 +41,12 @@
     (is (= [[190 10 19]
             [3267 81 40 27]
             [292 11 6 16 20]]
-           (d07/possibly-true-eqns d07-s00)))))
+           (d07/possibly-true-eqns :part1 d07-s00)))))
 
 (deftest possibly-true-test-sums-test
   (testing "Computes the sum of the test values from eqns that could possibly
             be true"
-    (is (= 3749 (d07/possibly-true-test-sums d07-s00)))))
+    (is (= 3749 (d07/possibly-true-test-sums :part1 d07-s00)))))
 
 (def day07-input (u/parse-puzzle-input d07/parse 2024 7))
 
