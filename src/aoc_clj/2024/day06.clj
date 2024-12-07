@@ -20,14 +20,15 @@
   [grid guard]
   (let [nxt (grid/forward guard 1)]
     (if (= :wall (value grid (:pos nxt)))
-      (next-move grid (grid/turn guard :right))
+      (grid/turn guard :right)
       nxt)))
 
 (defn guard-path
   [grid]
   (->> (guard-start grid)
        (iterate #(next-move grid %))
-       (take-while #(grid/in-grid? grid (:pos %)))))
+       (take-while #(grid/in-grid? grid (:pos %)))
+       (map :pos)))
 
 ;; Puzzle solutions
 (defn part1

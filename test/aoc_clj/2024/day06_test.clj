@@ -20,5 +20,4 @@
 
 (deftest part1-test
   (testing "Reproduces the answer for day06, part1"
-    ;; Too high
-    (is (= 5141 (d06/part1 day06-input)))))
+    (is (= 4656 (d06/part1 day06-input)))))
