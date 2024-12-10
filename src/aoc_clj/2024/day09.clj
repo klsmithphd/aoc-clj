@@ -49,6 +49,45 @@
   (->> (map-indexed * coll)
        (reduce +)))
 
+(defn part2-block
+  [idx [size gap]]
+  {:pos  idx
+   :data (vec (repeat size idx))
+   :size (+ size gap)
+   :space gap})
+
+(defn part2-blocks
+  [coll]
+  (->> (partition 2 2 [0] coll)
+       (map-indexed part2-block)
+       vec))
+
+;; This needs to be updated to move just the original
+;; block, not any subsequent bits that end up there.
+;;
+;; See the puzzle example and what happens to "2"
+(defn try-move
+  [blocks idx]
+  (let [{:keys [data]} (nth blocks idx)]
+    (if-let [{:keys [pos]} (->> (take (dec idx) blocks)
+                                (filter #(>= (:space %) (count data)))
+                                first)]
+      (-> blocks
+          (update-in [pos :data] concat data)
+          (update-in [pos :space] - (count data))
+          (assoc-in  [idx :data] [])
+          (update-in [idx :space] + (count data)))
+      blocks)))
+
+(defn part2-compacted
+  [blocks]
+  (let [len (count blocks)]
+    (loop [blks blocks idx (dec len)]
+      (if (= 1 idx)
+        blks
+        (recur (try-move blks idx) (dec idx))))))
+
+
 ;; Puzzle solutions
 (defn part1
   [input]
