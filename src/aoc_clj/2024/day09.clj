@@ -49,18 +49,34 @@
   (->> (map-indexed * coll)
        (reduce +)))
 
+;; (defn part2-block
+;;   [idx [size gap]]
+;;   {:pos  idx
+;;    :data (vec (repeat size idx))
+;;    :size (+ size gap)
+;;    :space gap})
+
 (defn part2-block
-  [idx [size gap]]
-  {:pos  idx
-   :data (vec (repeat size idx))
-   :size (+ size gap)
-   :space gap})
+  [idx v type]
+  {:pos idx
+   :data (case type
+           :file (vec (repeat v (quot idx 2)))
+           :free [])
+   :size v
+   :space (case type
+            :file 0
+            :free v)})
 
 (defn part2-blocks
   [coll]
-  (->> (partition 2 2 [0] coll)
-       (map-indexed part2-block)
-       vec))
+  (->> (map part2-block (range) coll (cycle [:file :free]))
+       (vec)))
+
+;; (defn part2-blocks
+;;   [coll]
+;;   (->> (partition 2 2 [0] coll)
+;;        (map-indexed part2-block)
+;;        vec))
 
 ;; This needs to be updated to move just the original
 ;; block, not any subsequent bits that end up there.
@@ -73,7 +89,7 @@
                                 (filter #(>= (:space %) (count data)))
                                 first)]
       (-> blocks
-          (update-in [pos :data] concat data)
+          (update-in [pos :data] into data)
           (update-in [pos :space] - (count data))
           (assoc-in  [idx :data] [])
           (update-in [idx :space] + (count data)))
@@ -87,8 +103,21 @@
         blks
         (recur (try-move blks idx) (dec idx))))))
 
+(defn block-rep
+  [{:keys [data space]}]
+  (if (zero? space)
+    data
+    (into data (repeat space 0))))
+
+(defn part2-rep
+  [blocks]
+  (mapcat block-rep blocks))
 
 ;; Puzzle solutions
 (defn part1
   [input]
   (checksum (compacted (blocks input))))
+
+(defn part2
+  [input]
+  (checksum (part2-rep (part2-compacted (part2-blocks input)))))

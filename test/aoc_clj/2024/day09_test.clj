@@ -70,3 +70,8 @@
 (deftest part1-test
   (testing "Reproduces the answer for day09, part1"
     (is (= 6259790630969 (d09/part1 day09-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day09, part2"
+    ;; Too high
+    (is (= 6289564621904 (d09/part2 day09-input)))))
