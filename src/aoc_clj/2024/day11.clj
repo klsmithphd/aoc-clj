@@ -3,6 +3,10 @@
   (:require [clojure.string :as str]
             [clojure.math :as math]))
 
+;; Constants
+(def part1-blinks 25)
+(def part2-blinks 75)
+
 ;; Input parsing
 (defn parse
   [input]
@@ -34,4 +38,8 @@
 ;; Puzzle solutions
 (defn part1
   [input]
-  (stones-after-n-blinks 25 input))
+  (stones-after-n-blinks part1-blinks input))
+
+(defn part2
+  [input]
+  (stones-after-n-blinks part2-blinks input))
