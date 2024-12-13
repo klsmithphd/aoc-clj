@@ -33,7 +33,12 @@
 (deftest buttons-test
   (testing "Returns the button presses to win the prize"
     (is (= [80 40] (d13/buttons (nth d13-s00 0))))
-    (is (= [38 86] (d13/buttons (nth d13-s00 2))))))
+    (is (= [38 86] (d13/buttons (nth d13-s00 2))))
+
+    (is (= [118679050709 103199174542]
+           (d13/buttons (d13/part2-update (nth d13-s00 1)))))
+    (is (= [102851800151 107526881786]
+           (d13/buttons (d13/part2-update (nth d13-s00 3)))))))
 
 (deftest winners-test
   (testing "Returns the button presses for any winning claw games"
@@ -50,3 +55,7 @@
 (deftest part1-test
   (testing "Reproduces the answer for day13, part1"
     (is (= 29877 (d13/part1 day13-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day13, part2"
+    (is (= 99423413811305 (d13/part2 day13-input)))))
