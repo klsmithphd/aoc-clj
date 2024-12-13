@@ -1,5 +1,6 @@
 (ns aoc-clj.2024.day13-test
   (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2024.day13 :as d13]))
 
 (def d13-s00-raw
@@ -28,3 +29,24 @@
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d13-s00 (d13/parse d13-s00-raw)))))
+
+(deftest buttons-test
+  (testing "Returns the button presses to win the prize"
+    (is (= [80 40] (d13/buttons (nth d13-s00 0))))
+    (is (= [38 86] (d13/buttons (nth d13-s00 2))))))
+
+(deftest winners-test
+  (testing "Returns the button presses for any winning claw games"
+    (is (= [[80 40]
+            [38 86]]
+           (d13/winners d13-s00)))))
+
+(deftest fewest-tokens-test
+  (testing "Across all winning games, the total number of tokens"
+    (is (= 480 (d13/fewest-tokens d13-s00)))))
+
+(def day13-input (u/parse-puzzle-input d13/parse 2024 13))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day13, part1"
+    (is (= 29877 (d13/part1 day13-input)))))
