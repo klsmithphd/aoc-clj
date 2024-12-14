@@ -2,81 +2,66 @@
   "Solution to https://adventofcode.com/2024/day/9")
 
 ;; Input parsing
-(defn parse
-  [input]
-  (mapv (comp read-string str) (first input)))
-
-;; Puzzle logic
-(defn data-block
-  [coll]
-  (map-indexed vector coll))
-
-(defn blocks
-  [coll]
-  {:blocks (into {} (data-block (take-nth 2 coll)))
-   :gaps   (take-nth 2 (rest coll))})
-
 (defn block
-  [id blocks]
-  (repeat (blocks id) id))
-
-(defn end-blocks
-  [blocks]
-  (let [max-id (apply max (keys blocks))]
-    (mapcat #(block % blocks) (range max-id -1 -1))))
-
-(defn fills
-  [gaps coll]
-  (loop [gps gaps xs coll return []]
-    (if (nil? gps)
-      return
-      (let [size (first gps)]
-        (recur
-         (next gps)
-         (drop size xs)
-         (conj return (take size xs)))))))
-
-(defn compacted
-  [{:keys [blocks gaps]}]
-  (let [size (reduce + (vals blocks))]
-    (->> (interleave (map #(block % blocks) (range))
-                     (fills gaps (end-blocks blocks)))
-         flatten
-         (take size))))
-
-(defn checksum
-  [coll]
-  (->> (map-indexed * coll)
-       (reduce +)))
-
-;; (defn part2-block
-;;   [idx [size gap]]
-;;   {:pos  idx
-;;    :data (vec (repeat size idx))
-;;    :size (+ size gap)
-;;    :space gap})
-
-(defn part2-block
   [idx v type]
   {:pos idx
    :data (case type
            :file (vec (repeat v (quot idx 2)))
            :free [])
-   :size v
    :space (case type
             :file 0
             :free v)})
 
-(defn part2-blocks
+(defn blocks
   [coll]
-  (->> (map part2-block (range) coll (cycle [:file :free]))
-       (vec)))
+  (->> (map block (range) coll (cycle [:file :free]))
+       vec))
 
-;; (defn part2-blocks
-;;   [coll]
-;;   (->> (partition 2 2 [0] coll)
-;;        (map-indexed part2-block)
-;;        vec))
+(defn parse
+  [input]
+  (->> (first input)
+       (map (comp read-string str))
+       blocks))
+
+;; Puzzle logic
+(defn end-data
+  "Returns a lazy collection of the data elements taken from the end
+   and iterating forward"
+  [blocks]
+  (mapcat :data (reverse blocks)))
+
+(defn parition-by-sizes
+  "Partitions the data elements from `coll` into chunks sized by the elements
+   of `sizes`"
+  [sizes coll]
+  (loop [szs sizes xs coll return []]
+    (if (nil? szs)
+      return
+      (let [size (first szs)]
+        (recur
+         (next szs)
+         (drop size xs)
+         (conj return (take size xs)))))))
+
+(defn single-datum-compacted
+  "Returns the data elements in order after compacting the data by moving
+   each individual element from the end into the earliest available gap"
+  [blocks]
+  (let [size      (reduce + (map #(count (:data %)) blocks))
+        data-blks (take-nth 2 blocks)
+        gap-blks  (take-nth 2 (rest blocks))]
+    (->> (interleave (map :data data-blks)
+                     (parition-by-sizes (map :space gap-blks) (end-data blocks)))
+         flatten
+         (take size))))
+
+(defn checksum
+  "Computes the checksum, which is the sum of each element's position
+   by the value of the data held at that position"
+  [coll]
+  (->> (map-indexed * coll)
+       (reduce +)))
+
 
 ;; This needs to be updated to move just the original
 ;; block, not any subsequent bits that end up there.
@@ -115,9 +100,11 @@
 
 ;; Puzzle solutions
 (defn part1
+  "Compact the amphipod's hard drive using the process he requested.
+   What is the resulting filesystem checksum?"
   [input]
-  (checksum (compacted (blocks input))))
+  (checksum (single-datum-compacted input)))
 
 (defn part2
   [input]
-  (checksum (part2-rep (part2-compacted (part2-blocks input)))))
+  (checksum (part2-rep (part2-compacted input))))
