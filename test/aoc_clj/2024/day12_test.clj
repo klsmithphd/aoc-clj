@@ -1,5 +1,6 @@
 (ns aoc-clj.2024.day12-test
   (:require [clojure.test :refer [deftest testing is]]
+            [clojure.set :as set]
             [aoc-clj.utils.core :as u]
             [aoc-clj.2024.day12 :as d12]))
 
@@ -83,8 +84,8 @@
     (is (= 772  (d12/total-price d12-s01)))
     (is (= 1930 (d12/total-price d12-s02)))))
 
-;; (def day12-input (u/parse-puzzle-input d12/parse 2024 12))
+(def day12-input (u/parse-puzzle-input d12/parse 2024 12))
 
-;; (deftest part1-test
-;;   (testing "Reproduces the answer for day12, part1"
-;;     (is (= 186996 (d12/part1 day12-input)))))
+(deftest part1-test
+  (testing "Reproduces the answer for day12, part1"
+    (is (= 1396298 (d12/part1 day12-input)))))

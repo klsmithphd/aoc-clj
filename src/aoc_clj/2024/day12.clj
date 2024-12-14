@@ -16,11 +16,14 @@
    of all the contiguously connected cells"
   [cells cell]
   (loop [regn #{cell}
-         front (adjacent cells cell)]
+         front (adjacent cells cell)
+         counter 0]
     (if-not (seq front)
       regn
-      (recur (into regn front)
-             (remove regn (mapcat #(adjacent cells %) front))))))
+      (let [new-region (into regn front)]
+        (recur new-region
+               (set (remove new-region (mapcat #(adjacent cells %) front)))
+               (inc counter))))))
 
 (defn regions
   "Returns all the regions (mutually connected cells)"
