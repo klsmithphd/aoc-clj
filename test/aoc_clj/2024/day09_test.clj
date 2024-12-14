@@ -50,17 +50,46 @@
     (is (= [[1 2 3] [4 5 6] [] [7]]
            (d09/parition-by-sizes [3 3 0 1] [1 2 3 4 5 6 7 8 9 10 11])))))
 
-(deftest single-datum-compacted-test
-  (testing "Compacts the blocks"
+(deftest block-compacted-test
+  (testing "Compacts the disk by moving individual blocks"
     (is (= [0 2 2 1 1 1 2 2 2]
-           (d09/single-datum-compacted  d09-s01)))
+           (d09/block-compacted d09-s01)))
 
     (is (= [0 0 9 9 8 1 1 1 8 8 8 2 7 7 7 3 3 3 6 4 4 6 5 5 5 5 6 6]
-           (d09/single-datum-compacted d09-s00)))))
+           (d09/block-compacted d09-s00)))))
+
+(deftest try-move-test
+  (testing "Attempts to move a block earlier if it will fit"
+    (is (= [{:pos 0  :data [0 0]     :space 0}
+            {:pos 1  :data [9 9]     :space 1}
+            {:pos 2  :data [1 1 1]   :space 0}
+            {:pos 3  :data []        :space 3}
+            {:pos 4  :data [2]       :space 0}
+            {:pos 5  :data []        :space 3}
+            {:pos 6  :data [3 3 3]   :space 0}
+            {:pos 7  :data []        :space 1}
+            {:pos 8  :data [4 4]     :space 0}
+            {:pos 9  :data []        :space 1}
+            {:pos 10 :data [5 5 5 5] :space 0}
+            {:pos 11 :data []        :space 1}
+            {:pos 12 :data [6 6 6 6] :space 0}
+            {:pos 13 :data []        :space 1}
+            {:pos 14 :data [7 7 7]   :space 0}
+            {:pos 15 :data []        :space 1}
+            {:pos 16 :data [8 8 8 8] :space 0}
+            {:pos 17 :data []        :space 0}
+            {:pos 18 :data []        :space 2}]
+           (d09/try-move d09-s00 (last d09-s00))))))
+
+(deftest file-compacted-test
+  (testing "Compacts the disk by moving entire files earlier"
+    (is (= [0 0 9 9 2 1 1 1 7 7 7 0 4 4 0 3 3 3 0 0 0 0 5 5 5 5 0 6 6 6 6 0 0 0 0 0 8 8 8 8 0 0]
+           (d09/file-compacted d09-s00)))))
 
 (deftest checksum-test
   (testing "Computes the checksum for the compacted blocks"
-    (is (= 1928 (d09/checksum (d09/single-datum-compacted d09-s00))))))
+    (is (= 1928 (d09/checksum (d09/block-compacted d09-s00))))
+    (is (= 2858 (d09/checksum (d09/file-compacted d09-s00))))))
 
 (def day09-input (u/parse-puzzle-input d09/parse 2024 9))
 
@@ -70,5 +99,4 @@
 
 (deftest part2-test
   (testing "Reproduces the answer for day09, part2"
-    ;; Too high
-    (is (= 6289564621904 (d09/part2 day09-input)))))
+    (is (= 6289564433984 (d09/part2 day09-input)))))

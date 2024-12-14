@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/9")
 
 ;; Input parsing
-(defn block
+(defn file
   [idx v type]
   {:pos idx
    :data (case type
@@ -12,23 +12,23 @@
             :file 0
             :free v)})
 
-(defn blocks
+(defn files
   [coll]
-  (->> (map block (range) coll (cycle [:file :free]))
+  (->> (map file (range) coll (cycle [:file :free]))
        vec))
 
 (defn parse
   [input]
   (->> (first input)
        (map (comp read-string str))
-       blocks))
+       files))
 
 ;; Puzzle logic
 (defn end-data
   "Returns a lazy collection of the data elements taken from the end
    and iterating forward"
-  [blocks]
-  (mapcat :data (reverse blocks)))
+  [files]
+  (mapcat :data (reverse files)))
 
 (defn parition-by-sizes
   "Partitions the data elements from `coll` into chunks sized by the elements
@@ -43,15 +43,15 @@
          (drop size xs)
          (conj return (take size xs)))))))
 
-(defn single-datum-compacted
-  "Returns the data elements in order after compacting the data by moving
-   each individual element from the end into the earliest available gap"
-  [blocks]
-  (let [size      (reduce + (map #(count (:data %)) blocks))
-        data-blks (take-nth 2 blocks)
-        gap-blks  (take-nth 2 (rest blocks))]
+(defn block-compacted
+  "Returns the disk layout by moving individual blocks from the end to the
+   earliest available gap"
+  [files]
+  (let [size      (reduce + (map #(count (:data %)) files))
+        data-blks (take-nth 2 files)
+        gap-blks  (take-nth 2 (rest files))]
     (->> (interleave (map :data data-blks)
-                     (parition-by-sizes (map :space gap-blks) (end-data blocks)))
+                     (parition-by-sizes (map :space gap-blks) (end-data files)))
          flatten
          (take size))))
 
@@ -62,49 +62,49 @@
   (->> (map-indexed * coll)
        (reduce +)))
 
-
-;; This needs to be updated to move just the original
-;; block, not any subsequent bits that end up there.
-;;
-;; See the puzzle example and what happens to "2"
 (defn try-move
-  [blocks idx]
-  (let [{:keys [data]} (nth blocks idx)]
-    (if-let [{:keys [pos]} (->> (take (dec idx) blocks)
-                                (filter #(>= (:space %) (count data)))
-                                first)]
-      (-> blocks
-          (update-in [pos :data] into data)
-          (update-in [pos :space] - (count data))
-          (assoc-in  [idx :data] [])
-          (update-in [idx :space] + (count data)))
-      blocks)))
+  "Returns the disk layout after attempting to move the provided file
+   to the earliest large enough open space. If the file can't fit,
+   the disk layout is returned unchanged"
+  [files {:keys [pos data]}]
+  (let [size (count data)]
+    (if-let [open (->> (take pos files)
+                       (filter #(>= (:space %) size))
+                       first
+                       :pos)]
+      (-> files
+          (update-in [open :data] into data)
+          (update-in [open :space] - size)
+          (assoc-in  [pos :data] [])
+          (assoc-in  [pos :space] size))
+      files)))
 
-(defn part2-compacted
-  [blocks]
-  (let [len (count blocks)]
-    (loop [blks blocks idx (dec len)]
-      (if (= 1 idx)
-        blks
-        (recur (try-move blks idx) (dec idx))))))
-
-(defn block-rep
+(defn file->blocks
+  "Converts a file into its individual blocks, with 0s added for empty data"
   [{:keys [data space]}]
   (if (zero? space)
     data
     (into data (repeat space 0))))
 
-(defn part2-rep
-  [blocks]
-  (mapcat block-rep blocks))
+(defn file-compacted
+  "Returns the disk layout by moving entire files from the end of the disk
+   to any sufficiently large enough open space earlier on the disk."
+  [files]
+  (->> (reverse files)
+       (take-nth 2)
+       (butlast)
+       (reduce try-move files)
+       (mapcat file->blocks)))
 
 ;; Puzzle solutions
 (defn part1
   "Compact the amphipod's hard drive using the process he requested.
    What is the resulting filesystem checksum?"
   [input]
-  (checksum (single-datum-compacted input)))
+  (checksum (block-compacted input)))
 
 (defn part2
+  "Start over, now compacting the amphipod's hard drive using this new
+   method instead. What is the resulting filesystem checksum?"
   [input]
-  (checksum (part2-rep (part2-compacted input))))
+  (checksum (file-compacted input)))
