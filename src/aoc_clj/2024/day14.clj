@@ -1,9 +1,7 @@
 (ns aoc-clj.2024.day14
   "Solution to https://adventofcode.com/2024/day/14"
-  (:require [clojure.core.async :as a :refer [go <! timeout]]
-            [clojure.set :as set]
+  (:require [clojure.set :as set]
             [clojure.string :as str]
-            [lanterna.screen :as scr]
             [aoc-clj.utils.vectors :as v]
             [aoc-clj.utils.core :as u]))
 
