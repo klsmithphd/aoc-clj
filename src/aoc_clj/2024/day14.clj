@@ -102,7 +102,18 @@
 
 (defn min-4-variance-times
   "Finds the earliest 4 times when the variance of the robots' positions
-   are at a minimum"
+   are at a minimum
+   
+   The significance of these values is that they indicate when the robots
+   are starting to coallesce in each direction. In my data, the first
+   value corresponds to when they start to coallesce in the x direction,
+   the second when the coallesce in the y direction, then x again, then y,
+   and so on.
+   
+   We can figure out when the easter egg will occur by finding the point
+   where the sequence of coallescences in each direction intersect.
+   
+   See min-easter-egg-time below"
   [w h robots]
   (->> (range 200)
        (sort-by #(variance (robots-at-t w h % robots)))
@@ -115,7 +126,9 @@
   [w h robots]
   (let [[t1 t2 t3 t4] (min-4-variance-times w h robots)]
     (apply min (clojure.set/intersection
+                ;; Coallescences in one direction
                 (set (range t1 100000 (- t3 t1)))
+                ;; Coallescences in the other direction
                 (set (range t2 100000 (- t4 t2)))))))
 
 ;; Puzzle solutions
