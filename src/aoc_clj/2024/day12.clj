@@ -55,7 +55,7 @@
 (defn cell-edges
   "Counts how many perimeter edges a given cell has"
   [cells cell]
-  (count (set/difference (set (grid/adj-coords-2d cell)) cells)))
+  (set/difference (set (grid/adj-coords-2d cell)) cells))
 
 (defn perimeter
   "Computes the perimeter of a plot (including both inner and outer
@@ -63,7 +63,13 @@
   [cells]
   (->> cells
        (map #(cell-edges cells %))
+       (map count)
        (reduce +)))
+
+(defn sides
+  "Computes the number of sides a given connected region has"
+  [cells]
+  (count cells))
 
 (defn region-price
   "Returns the price, which is the product of the area and the perimeter"
