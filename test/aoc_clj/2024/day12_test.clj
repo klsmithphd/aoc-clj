@@ -1,6 +1,5 @@
 (ns aoc-clj.2024.day12-test
   (:require [clojure.test :refer [deftest testing is]]
-            [clojure.set :as set]
             [aoc-clj.utils.core :as u]
             [aoc-clj.2024.day12 :as d12]))
 
