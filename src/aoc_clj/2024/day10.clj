@@ -39,24 +39,43 @@
   [grid pos]
   (= 9 (grid/value grid pos)))
 
+(defn paths
+  [grid trailhead]
+  (graph/all-paths-dfs (->GridGraph grid) trailhead (partial finish? grid)))
+
 (defn score
   "A trailhead's score is the number of unique summits that can be reached
    via a hiking trail "
   [grid trailhead]
-  (->> (graph/all-paths-dfs (->GridGraph grid) trailhead (partial finish? grid))
+  (->> (paths grid trailhead)
        (map last)
        set
        count))
 
-(defn trailhead-score-sum
+(defn rating
+  "A trailhead's rating is the number of distinct hiking trails that begin
+  at that trailhead"
+  [grid trailhead]
+  (->> (paths grid trailhead)
+       count))
+
+(defn score-sum
   "Returns the sum of the scores from all the trailheads contained in the grid"
-  [grid]
-  (->> (trailheads grid)
-       (map #(score grid %))
-       (reduce +)))
+  [part grid]
+  (let [score-fn (case part
+                   :part1 score
+                   :part2 rating)]
+    (->> (trailheads grid)
+         (map #(score-fn grid %))
+         (reduce +))))
 
 ;; Puzzle solutions
 (defn part1
   "What is the sum of the scores of all trailheads on your topographic map?"
   [input]
-  (trailhead-score-sum input))
+  (score-sum :part1 input))
+
+(defn part2
+  "What is the sum of the ratings of all trailheads?"
+  [input]
+  (score-sum :part2 input))

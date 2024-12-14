@@ -51,6 +51,25 @@
     "01329801"
     "10456732"]))
 
+(def d10-s05
+  (d10/parse
+   [".....0."
+    "..4321."
+    "..5..2."
+    "..6543."
+    "..7..4."
+    "..8765."
+    "..9...."]))
+
+(def d10-s06
+  (d10/parse
+   ["012345"
+    "123456"
+    "234567"
+    "345678"
+    "4.6789"
+    "56789."]))
+
 (deftest trailheads-test
   (testing "Returns the location of any of the trailheads"
     (is (= #{[0 0]} (d10/trailheads d10-s00)))
@@ -61,19 +80,30 @@
            (d10/trailheads d10-s04)))))
 
 (deftest score-test
-  (testing "Returns the number of hiking paths from a given trailhead"
+  (testing "Returns the number of distinct summits reachable from a given trailhead"
     (is (= 1 (d10/score d10-s00 [0 0])))
     (is (= 2 (d10/score d10-s01 [3 0])))
     (is (= 4 (d10/score d10-s02 [3 0])))
     (is (= 1 (d10/score d10-s03 [1 0])))
     (is (= 2 (d10/score d10-s03 [5 6])))))
 
+(deftest rating-test
+  (testing "Returns the number of distinct hiking trails from a given trailhead"
+    (is (= 3   (d10/rating d10-s05 [5 0])))
+    (is (= 13  (d10/rating d10-s02 [3 0])))
+    (is (= 227 (d10/rating d10-s06 [0 0])))))
+
 (deftest trailhead-score-sum-test
   (testing "Returns the sum of the scores of all the trailheads"
-    (is (= 36 (d10/trailhead-score-sum d10-s04)))))
+    (is (= 36 (d10/score-sum :part1 d10-s04)))
+    (is (= 81 (d10/score-sum :part2 d10-s04)))))
 
 (def day10-input (u/parse-puzzle-input d10/parse 2024 10))
 
 (deftest part1-test
   (testing "Reproduces the answer for day10, part1"
     (is (= 468 (d10/part1 day10-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day10, part2"
+    (is (= 966 (d10/part2 day10-input)))))
