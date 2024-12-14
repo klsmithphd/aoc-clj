@@ -1,6 +1,10 @@
 (ns aoc-clj.2024.day14
   "Solution to https://adventofcode.com/2024/day/14"
-  (:require [aoc-clj.utils.vectors :as v]
+  (:require [clojure.core.async :as a :refer [go <! timeout]]
+            [clojure.set :as set]
+            [clojure.string :as str]
+            [lanterna.screen :as scr]
+            [aoc-clj.utils.vectors :as v]
             [aoc-clj.utils.core :as u]))
 
 ;; Constants
@@ -66,8 +70,67 @@
        vals
        (reduce *)))
 
+(defn robots->strs
+  [w h position-set]
+  (->> (for [y (range h) x (range w)]
+         (if (position-set [x y]) \# \ ))
+       (partition w)
+       (map str/join)
+       (str/join "\n")))
+
+(defn vec-mean
+  "Computes the mean of a collection of vectors"
+  [vs]
+  (let [n (count vs)]
+    (-> (reduce v/vec-add vs)
+        (v/scalar-mult (float (/ 1 n))))))
+
+(defn vec-mult
+  "Hadamard (element-by-element) multiplication"
+  [a b]
+  (vec (map * a b)))
+
+(defn variance
+  "Computes the variance of all the robots' positions"
+  [positions]
+  (let [n       (count positions)
+        mn-diff (v/scalar-mult (vec-mean positions) -1)
+        vars    (->> (map #(v/vec-add % mn-diff) positions)
+                     (map #(vec-mult % %))
+                     (reduce v/vec-add))]
+    (reduce + (v/scalar-mult vars (float (/ 1 n))))))
+
+(defn min-4-variance-times
+  "Finds the earliest 4 times when the variance of the robots' positions
+   are at a minimum"
+  [w h robots]
+  (->> (range 200)
+       (sort-by #(variance (robots-at-t w h % robots)))
+       (take 4)
+       sort))
+
+(defn min-easter-egg-time
+  "Finds the earliest time when the robots will form the easter egg
+   image of a picture of a Christmas tree"
+  [w h robots]
+  (let [[t1 t2 t3 t4] (min-4-variance-times w h robots)]
+    (apply min (clojure.set/intersection
+                (set (range t1 100000 (- t3 t1)))
+                (set (range t2 100000 (- t4 t2)))))))
+
 ;; Puzzle solutions
 (defn part1
   "What will the safety factor be after exactly 100 seconds have elapsed?"
   [input]
   (safety-factor grid-width grid-height part1-time input))
+
+(defn part2
+  "What is the fewest number of seconds that must elapse for the robots to
+   display the Easter egg?"
+  [input]
+  (let [t (min-easter-egg-time grid-width grid-height input)]
+    (println (robots->strs
+              grid-width
+              grid-height
+              (set (robots-at-t grid-width grid-height t input))))
+    t))
