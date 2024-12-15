@@ -1,24 +1,24 @@
-(ns aoc-clj.2016.day14-test
+(ns ^:eftest/synchronized aoc-clj.2016.day14-test
   (:require [clojure.test :refer [deftest is testing]]
             [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day14 :as d14]))
 
 (def d14-s00 "abc")
 
-(deftest triple-char-key-candidates-test
+(deftest ^:eftest/synchronized triple-char-key-candidates-test
   (testing "Reproduces the first few indices that result in hashes
             containing a triple-char sequence"
     (is (= [18 39 45 64 77 79 88 91 92]
            (map first (take 9 (d14/triple-char-key-candidates d14/md5 d14-s00)))))
-    
+
     (is (= [5 10]
-           (map first (take 2 (d14/triple-char-key-candidates d14/smd5 d14-s00))))) ))
+           (map first (take 2 (d14/triple-char-key-candidates d14/smd5 d14-s00)))))))
 
 (deftest first-few-keys
   (testing "Finds the indices of the first few keys with the sample salt"
     (is (= [39 92] (take 2 (d14/pad-keys d14/md5 d14-s00))))))
 
-(deftest last-pad-key-test
+(deftest ^:eftest/synchronized last-pad-key-test
   (testing "Finds the index that produces the 64 one-time pad key"
     (is (= 22728 (d14/last-pad-key d14/md5 d14-s00)))))
 

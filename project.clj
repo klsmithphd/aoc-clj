@@ -12,6 +12,7 @@
                  [manifold "0.2.4"]
                  [net.mikera/core.matrix "0.63.0"]
                  [net.mikera/vectorz-clj "0.48.0"]]
+  :plugins      [[lein-eftest/lein-eftest "0.6.0"]]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

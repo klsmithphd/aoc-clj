@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.digest-test
+(ns ^:eftest/synchronized aoc-clj.utils.digest-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.digest :as d]))
 

@@ -1,4 +1,4 @@
-(ns aoc-clj.2016.day17-test
+(ns ^:eftest/synchronized aoc-clj.2016.day17-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
             [aoc-clj.2016.day17 :as d17]))
@@ -28,7 +28,7 @@
     (is (= "DDUDRLRRUDRD" (d17/shortest-path d17-s02)))
     (is (= "DRURDRUDDLLDLUURRDULRLDUUDDDRR" (d17/shortest-path d17-s03)))))
 
-(deftest longest-path-length-test
+(deftest ^:eftest/synchronized longest-path-length-test
   (testing "Finds the length of the longest path to the vault"
     (is (= 370 (d17/longest-path-length d17-s01)))
     (is (= 492 (d17/longest-path-length d17-s02)))
@@ -40,6 +40,6 @@
   (testing "Reproduces the answer for day17, part1"
     (is (= "DDRRULRDRD" (d17/part1 day17-input)))))
 
-(deftest part2-test
+(deftest ^:eftest/synchronized part2-test
   (testing "Reproduces the answer for day17, part2"
     (is (= 536 (d17/part2 day17-input)))))
