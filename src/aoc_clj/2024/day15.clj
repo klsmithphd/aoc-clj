@@ -88,3 +88,24 @@
   [{:keys [grid moves]}]
   (let [start (robot-pos grid)]
     (reduce move {:grid grid :robot-pos start} moves)))
+
+(defn box-gps
+  "Returns the GPS coordinate of a box, which is 100 times its distance
+   from the top edge of the map plus its distance from the left edge"
+  [height [x y]]
+  (+ x (* (- height y 1) 100)))
+
+(defn box-gps-sum
+  "Returns the sum of the GPS coordinates of all the boxes"
+  [{:keys [grid]}]
+  (let [height (grid/height grid)]
+    (->> (box-positions grid)
+         (map #(box-gps height %))
+         (reduce +))))
+
+;; Puzzle solutions
+(defn part1
+  "After the robot is finished moving, what is the sum of all boxes'
+   GPS coordinates?"
+  [input]
+  (-> input all-moves box-gps-sum))

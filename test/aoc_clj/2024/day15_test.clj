@@ -1,6 +1,7 @@
 (ns aoc-clj.2024.day15-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.utils.core :as u]
             [aoc-clj.2024.day15 :as d15]))
 
 (def d15-s00-raw
@@ -168,3 +169,14 @@
 
     (is (= {:grid (:grid d15-s01-finish) :robot-pos [3 5]}
            (d15/all-moves d15-s01)))))
+
+(deftest box-gps-sum
+  (testing "Computes the sum of the GPS coordinates of all the boxes"
+    (is (= 2028  (d15/box-gps-sum (d15/all-moves d15-s00))))
+    (is (= 10092 (d15/box-gps-sum (d15/all-moves d15-s01))))))
+
+(def day15-input (u/parse-puzzle-input d15/parse 2024 15))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day15, part1"
+    (is (= 1478649 (d15/part1 day15-input)))))
