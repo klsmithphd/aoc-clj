@@ -28,12 +28,20 @@
      [0 1] :wall [1 1] :space [2 1] :space [3 1] :space [4 1] :space [5 1] :space [6 1] :space [7 1] :wall
      [0 0] :wall [1 0] :wall [2 0] :wall [3 0] :wall [4 0] :wall [5 0] :wall [6 0] :wall [7 0] :wall})
    :moves
-   [:west :north :north :east :east :east :south :south :west :south :east
-    :east :south :west :west]})
+   [:w :n :n :e :e :e :s :s :w :s :e :e :s :w :w]})
 
-(deftest parse-test
-  (testing "Correctly parses the input"
-    (is (= d15-s00 (d15/parse d15-s00-raw)))))
+(def d15-s00-finish
+  (d15/parse
+   ["########"
+    "#....OO#"
+    "##.....#"
+    "#.....O#"
+    "#.#O@..#"
+    "#...O..#"
+    "#...O..#"
+    "########"
+    ""
+    ""]))
 
 (def d15-s01
   (d15/parse
@@ -58,3 +66,105 @@
     "<><^^>^^^<><vvvvv^v<v<<>^v<v>v<<^><<><<><<<^^<<<^<<>><<><^^^>^^<>^>v<>"
     "^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>"
     "v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"]))
+
+(def d15-s01-finish
+  (d15/parse
+   ["##########"
+    "#.O.O.OOO#"
+    "#........#"
+    "#OO......#"
+    "#OO@.....#"
+    "#O#.....O#"
+    "#O.....OO#"
+    "#O.....OO#"
+    "#OO....OO#"
+    "##########"
+    ""
+    ""]))
+
+(deftest parse-test
+  (testing "Correctly parses the input"
+    (is (= d15-s00 (d15/parse d15-s00-raw)))))
+
+(deftest move-test
+  (testing "Performs a move attempt by the robot and updates the state"
+    ;; Can't move due to wall in the way
+    (is (= {:grid (:grid d15-s00) :robot-pos [2 5]}
+           (d15/move {:grid (:grid d15-s00) :robot-pos [2 5]} :w)))
+
+    ;; Robot moves up one
+    (is (= {:grid (-> (:grid d15-s00)
+                      (assoc-in [:grid [2 5]] :space)
+                      (assoc-in [:grid [2 6]] :robot))
+            :robot-pos [2 6]}
+           (d15/move {:grid (:grid d15-s00) :robot-pos [2 5]} :n)))
+
+    ;; Robot moves right one
+    (is (= {:grid (-> (:grid d15-s00)
+                      (assoc-in [:grid [2 5]] :space)
+                      (assoc-in [:grid [3 6]] :robot)
+                      (assoc-in [:grid [4 6]] :box))
+            :robot-pos [3 6]}
+           (d15/move
+            {:grid (-> (:grid d15-s00)
+                       (assoc-in [:grid [2 5]] :space)
+                       (assoc-in [:grid [2 6]] :robot))
+             :robot-pos [2 6]}
+            :e)))
+
+    ;; Robot moves right one
+    (is (= {:grid (-> (:grid d15-s00)
+                      (assoc-in [:grid [2 5]] :space)
+                      (assoc-in [:grid [3 6]] :space)
+                      (assoc-in [:grid [4 6]] :robot)
+                      (assoc-in [:grid [6 6]] :box))
+            :robot-pos [4 6]}
+           (d15/move
+            {:grid (-> (:grid d15-s00)
+                       (assoc-in [:grid [2 5]] :space)
+                       (assoc-in [:grid [3 6]] :robot)
+                       (assoc-in [:grid [4 6]] :box))
+             :robot-pos [3 6]}
+            :e)))
+
+    ;; Robot can't move further right
+    (is (= {:grid (-> (:grid d15-s00)
+                      (assoc-in [:grid [2 5]] :space)
+                      (assoc-in [:grid [3 6]] :space)
+                      (assoc-in [:grid [4 6]] :robot)
+                      (assoc-in [:grid [6 6]] :box))
+            :robot-pos [4 6]}
+           (d15/move
+            {:grid (-> (:grid d15-s00)
+                       (assoc-in [:grid [2 5]] :space)
+                       (assoc-in [:grid [3 6]] :space)
+                       (assoc-in [:grid [4 6]] :robot)
+                       (assoc-in [:grid [6 6]] :box))
+             :robot-pos [4 6]}
+            :e)))
+
+    ;; Robot moves line of boxes down one
+    (is (= {:grid (-> (:grid d15-s00)
+                      (assoc-in [:grid [2 5]] :space)
+                      (assoc-in [:grid [3 6]] :space)
+                      (assoc-in [:grid [4 6]] :space)
+                      (assoc-in [:grid [4 5]] :robot)
+                      (assoc-in [:grid [6 6]] :box)
+                      (assoc-in [:grid [4 1]] :box))
+            :robot-pos [4 5]}
+           (d15/move
+            {:grid (-> (:grid d15-s00)
+                       (assoc-in [:grid [2 5]] :space)
+                       (assoc-in [:grid [3 6]] :space)
+                       (assoc-in [:grid [4 6]] :robot)
+                       (assoc-in [:grid [6 6]] :box))
+             :robot-pos [4 6]}
+            :s)))))
+
+(deftest all-moves-test
+  (testing "Performs all the moves correctly and returns the end state"
+    (is (= {:grid (:grid d15-s00-finish) :robot-pos [4 3]}
+           (d15/all-moves d15-s00)))
+
+    (is (= {:grid (:grid d15-s01-finish) :robot-pos [3 5]}
+           (d15/all-moves d15-s01)))))
