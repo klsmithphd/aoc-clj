@@ -1,5 +1,7 @@
 (ns aoc-clj.2024.day16-test
-  (:require [aoc-clj.2024.day16 :as d16]))
+  (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.utils.core :as u]
+            [aoc-clj.2024.day16 :as d16]))
 
 (def d16-s00
   (d16/parse
@@ -36,5 +38,17 @@
     "#.#.#.#####.###.#"
     "#.#.#.........#.#"
     "#.#.#.#########.#"
-    "#S#.............#"]))
-"#################"
+    "#S#.............#"
+    "#################"]))
+
+(deftest path-score-test
+  (testing "Computes the score for the shortest path to end"
+    (is (= 7036 (d16/path-score d16-s00)))
+    (is (= 11048 (d16/path-score d16-s01)))))
+
+(def day16-input (u/parse-puzzle-input d16/parse 2024 16))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day16, part1"
+    ;; Answer is too low
+    (is (= 42166 (d16/part1 day16-input)))))
