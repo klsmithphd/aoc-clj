@@ -83,6 +83,18 @@
     ""
     ""]))
 
+(def d15-s02
+  (d15/parse
+   ["#######"
+    "#...#.#"
+    "#.....#"
+    "#..OO@#"
+    "#..O..#"
+    "#.....#"
+    "#######"
+    ""
+    "<vv<<^^<<^^"]))
+
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d15-s00 (d15/parse d15-s00-raw)))))
