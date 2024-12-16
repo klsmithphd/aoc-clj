@@ -51,7 +51,7 @@
         start   {:pos (start-node grid) :heading :e}
         end     (end-node grid)
         finish? #(= end (:pos %))]
-    (graph/dijkstra graph start finish? :limit 10000)))
+    (graph/dijkstra graph start finish? :limit 100000)))
 
 (defn score
   [[s1 s2]]
