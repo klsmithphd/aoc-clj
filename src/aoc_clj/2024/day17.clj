@@ -12,3 +12,14 @@
   (let [[reg-str prog-str] (u/split-at-blankline input)]
     {:regs (mapcat get-nums reg-str)
      :prog (vec (get-nums (first prog-str)))}))
+
+;; Puzzle logic
+(defn read-operand
+  [regs operand]
+  (if (<= operand 3)
+    operand
+    (get regs (- operand 4))))
+
+(defn adv
+  [regs operand]
+  ())
