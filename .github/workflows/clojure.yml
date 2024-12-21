@@ -16,11 +16,12 @@ jobs:
       with:
         submodules: true
         token: ${{ secrets.AOC_INPUTS_TOKEN }}
-        
+
     - name: Build and run Dev Container tasks
       uses: devcontainers/ci@v0.3
-      runCmd: |
-        # Install dependencies
-        lein deps
-        # Run tests
-        lein tests
+      with: 
+        runCmd: |
+          # Install dependencies
+          lein deps
+          # Run tests
+          lein tests
