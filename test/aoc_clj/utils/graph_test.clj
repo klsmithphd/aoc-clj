@@ -30,6 +30,17 @@
                      :d {:j 6}
                      :j {:a 3 :b 2 :c 4 :d 6}}))
 
+(def t5 (->MapGraph {:a {:b 1.5 :e 2}
+                     :b {:c 2}
+                     :c {:d 3}
+                     :d {:g 4}
+                     :e {:f 3}
+                     :f {:g 2}}))
+
+(def t6 (->MapGraph {:a {:b 1 :c 1}
+                     :b {:d 1}
+                     :c {:d 1}}))
+
 (deftest without-vertex-test
   (testing "Can return a new graph with a vertex (and its corresponding edges) removed"
     (is (= (->MapGraph {:b {:c 2}, :c {:b 2, :d 3}, :d {:c 3, :e 1}, :e {:d 1}})
@@ -64,18 +75,23 @@
     (is (= [[:g :f :b]]
            (g/all-paths t2 :g)))))
 
-(def t5 (->MapGraph {:a {:b 1.5 :e 2}
-                     :b {:c 2}
-                     :c {:d 3}
-                     :d {:g 4}
-                     :e {:f 3}
-                     :f {:g 2}}))
 (def h5 {:a 6.5 :b 4 :c 2 :d 4 :e 4.5 :f 2 :g 0})
 
-(deftest dijkstra-test
+(deftest shortest-path-test
   (testing "Can find the shortest path between two vertices"
-    (is (= [:a :d :c :f] (g/shortest-path t3 :a #(= :f %))))
+    (is (= [:a :d :c :f] (g/shortest-path t3 :a (u/equals? :f))))
     (is (= [:a :e :f :g] (g/shortest-path t5 :a (u/equals? :g) h5)))))
+
+(deftest shortest-paths-test
+  (testing "Finds all the shortest paths between two vertices"
+    (is (= [[:a :c :d]
+            [:a :b :d]]
+           (g/shortest-paths t6 :a (u/equals? :d))))))
+
+(def foo {:b #{:a}, :e #{:a}, :c #{:b}, :d #{:c}, :f #{:e}, :g #{:f}})
+(keys (foo :b))
+
+
 
 (deftest all-paths-dfs-test
   (testing "Finds all of the paths from start to finish using a depth-first
@@ -102,4 +118,3 @@
     (is (= #{:a :b :e :c :f}       (g/flood-fill t5 :a :limit 2)))
     (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t5 :a :limit 3)))
     (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t5 :a)))))
-
