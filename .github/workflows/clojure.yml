@@ -8,15 +8,19 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout (GitHub)
+      uses: actions/checkout@v4
       with:
         submodules: true
         token: ${{ secrets.AOC_INPUTS_TOKEN }}
-    - name: Install dependencies
-      run: lein deps
-    - name: Run tests
-      run: lein test
+        
+    - name: Build and run Dev Container tasks
+      uses: devcontainers/ci@v0.3
+      runCmd: |
+        # Install dependencies
+        lein deps
+        # Run tests
+        lein tests
