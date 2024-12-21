@@ -24,4 +24,4 @@ jobs:
           # Install dependencies
           lein deps
           # Run tests
-          lein tests
+          lein test
