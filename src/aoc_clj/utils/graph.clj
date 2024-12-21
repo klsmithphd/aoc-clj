@@ -86,11 +86,6 @@
   [g v]
   (> (degree g v) 2))
 
-(defn path-distance
-  "Computes the distance along a path (an ordered collection of vertices)"
-  [g path]
-  (reduce + (map #(apply (partial distance g) %) (partition 2 1 path))))
-
 ;; (defn entries-in-set
 ;;   [s m]
 ;;   (filter (fn [[k _]] (s k)) m))
@@ -132,19 +127,21 @@
     (map #(single-path-2 g % v stop-at) neighbors)))
 
 (defn path-retrace
+  "Traverses the path in reverse from the finish vertex using the
+   `prev-steps` map that indicates the preceding vertex."
   [prev-steps finish]
   (reverse (take-while some? (iterate prev-steps finish))))
 
-(defn dijkstra-update
-  [graph vertex {:keys [dist prev queue] :as state} neighbor]
-  (let [alt (+ (dist vertex) (distance graph vertex neighbor))]
-    (if (or (nil? (dist neighbor)) (< alt (dist neighbor)))
-      {:dist  (assoc dist neighbor alt)
-       :queue (assoc queue neighbor alt)
-       :prev  (assoc prev neighbor vertex)}
-      state)))
+(defn path-distance
+  "Computes the distance along a path (an ordered collection of vertices)"
+  [g path]
+  (->> (partition 2 1 path)
+       (map (fn [[v1 v2]] (distance g v1 v2)))
+       (reduce +)))
 
 (defn a-star-update
+  "Helper function for the A* algorithm that updates our knowledge of the
+   shortest paths discovered thus far given a new neighbor to consider."
   [graph vertex h {:keys [dist prev queue] :as state} neighbor]
   (let [alt (+ (dist vertex) (distance graph vertex neighbor))]
     (if (or (nil? (dist neighbor)) (< alt (dist neighbor)))
@@ -167,25 +164,29 @@
    to the finish vertex."
   ([graph start finish?]
    (shortest-path graph start finish? (constantly 0)))
-  ([graph start finish? h]
-   (let [init-state {:dist {start 0} :prev {} :queue (priority-map start (h start))}]
-     (loop [vertex start state init-state]
-       (if (or (finish? vertex) (empty? (:queue state)))
-         (if (finish? vertex)
-           (path-retrace (:prev state) vertex)
-           ["No path was found"])
-         (let [neighbors (edges graph vertex)
-               new-state (-> (reduce #(a-star-update graph vertex h %1 %2) state neighbors)
-                             (update :queue dissoc vertex))]
-           (recur
-            (ffirst (:queue new-state))
-            new-state)))))))
 
-(def a-star shortest-path)
+  ([graph start finish? h]
+   (loop [vertex start
+          state {:dist  {start 0}
+                 :prev  {}
+                 :queue (priority-map start (h start))}]
+     (cond
+       (finish? vertex)        (path-retrace (:prev state) vertex)
+       (empty? (:queue state)) []
+       :else
+       (let [neighbors (edges graph vertex)
+             new-state (-> (reduce #(a-star-update graph vertex h %1 %2) state neighbors)
+                           (update :queue dissoc vertex))]
+         (recur
+          (ffirst (:queue new-state))
+          new-state))))))
 
 (defn shortest-distance
-  [graph start finish?]
-  (path-distance graph (shortest-path graph start finish?)))
+  ([graph start finish?]
+   (path-distance graph (shortest-path graph start finish?)))
+
+  ([graph start finish? h]
+   (path-distance graph (shortest-path graph start finish? h))))
 
 (defn pruned
   "Prunes the single branches from a graph, excluding any vertices in the exclude-set"
