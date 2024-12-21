@@ -101,7 +101,7 @@
 
 (defn path-needs
   [graph node1 node2]
-  (let [path (g/dijkstra graph node1 (u/equals? node2))]
+  (let [path (g/shortest-path graph node1 (u/equals? node2))]
     (set (map str/lower-case (filter (partial door-or-key? graph) (butlast path))))))
 
 (defn subgraph-needs

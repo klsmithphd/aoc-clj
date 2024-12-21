@@ -66,7 +66,7 @@
 
 (deftest dijkstra-test
   (testing "Can find the shortest path between two vertices"
-    (is (= [:a :d :c :f] (g/dijkstra t3 :a #(= :f %))))))
+    (is (= [:a :d :c :f] (g/shortest-path t3 :a #(= :f %))))))
 
 
 (def t5 (->MapGraph {:a {:b 1.5 :e 2}

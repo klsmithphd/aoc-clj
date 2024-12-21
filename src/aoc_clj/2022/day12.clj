@@ -43,7 +43,7 @@
 
 (defn shortest-path-length
   [g s e]
-  (-> (graph/dijkstra g s (u/equals? e)) count dec))
+  (-> (graph/shortest-path g s (u/equals? e)) count dec))
 
 (defn shortest-path-from-start
   "Find the fewest number of steps from the start to the finish given the map"
