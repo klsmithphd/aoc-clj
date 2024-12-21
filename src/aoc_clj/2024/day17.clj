@@ -121,9 +121,74 @@
        (drop-while running?)
        first))
 
+(defn a-value-that-copies
+  "Returns the value that, when set to the A register, causes the program
+   to return a copy of itself"
+  [{:keys [prog] :as input}]
+  (->> (range)
+       (filter #(= prog (:out (execute (assoc-in input [:regs :a] %)))))
+       first))
+
 ;; Puzzle solutions
 (defn part1
   "Once it halts, what do you get if you use commas to join the values it
    output into a single string?"
   [input]
   (str/join "," (:out (execute input))))
+
+(defn part2
+  "What is the lowest positive initial value for register A that causes
+   the program to output a copy of itself?"
+  [input]
+  (a-value-that-copies input))
+
+;; When I look at my personal puzzle input, the program is:
+;; 2,4 1,7 7,5 1,7 4,6 0,3 5,5 3,0
+;; That corresponds to:
+;; bst 4   b = a mod 8 
+;; bxl 7   b = b ^ 7
+;; cdv 5   c = a // b  
+;; bxl 7   b = b ^ 7
+;; bxc     b = b ^ c
+;; adv 3   a = a // 2^3
+;; out 5   output b
+;; jnz 0   jump to 0 if a != 0
+;;
+;; The net impact of this program is to look at 3-bit chunks of a, and
+;; do the following:
+;; Take the lowest three bits of a and assign it to b. b = 0..7
+;; Set c = a right-shifted by (7-b) bits
+;; Set b = b ^ c
+;; Output b
+;; Right-shift a by 3 bits.
+;;
+;; Deterministically finding the lowest integer a that results in outputing
+;; the program code can be thought of as finding the sequence of 3-bit ints
+;; that are compatible with emitting the program ints.
+;;
+;; For instance, to end up with 2 as the first digit,
+;; [o n m | l k j | i h g | f e d]
+;; [o n m | l k j | i h g | 0 1 0]
+;; Result needs to equal 2
+;; The options are:
+;; b = 0, 1, 2, 3, 4, 5, 6, 7
+;; c = 2, 3, 0, 1, 6, 7, 4, 5
+;; c has to be 7-b bits shifted down
+;; So, shifting 7, 6, 5, 4, 3, 2, 1, or 0 bits shifted.
+;; 0 bits shifted is just [f e d], i.e. [0 1 0] = 2, not 5, so that doesn't work
+;; 1 bits shifted is [g e d] = [g 0 1], which can't equal 4. Out.
+;; 2 bits shifted is [h g e] = [h g 0], which can't equal 7. Out.
+;; 3 bits shifted is [i h g], which works if it equals [1 1 0].
+;; 4 bits shifted is [j i h], which works if [j i h] equals [1 1 0], and g can be 0 or 1.
+;; 5 bits shifted is [k j i], [k j i] = [1 1 0], and g, h = 0 or 1
+;; 6 bits shifted is [l k j], [l k j] = [1 1 0], and g, h, i = 0 or 1
+;; 7 bits shifted is [m l k], [m l k] = [1 1 0], and g, h, i, j = 0 or 1.
+;; So, the possible options are:
+;;
+;; [* * * | * * * | 1 1 0 | 1 0 0] = [* | * | 6 | 4]
+;; [* * * | * * 0 | 0 1 * | 0 1 1] = [* | 0,2,4,6 | 2,3 | 3]
+;; [* * * | * 0 0 | 0 * * | 0 1 0] = [* | 0,4 | 0,1,2,3 | 2]
+;; [* * * | 0 1 1 | * * * | 0 0 1] = [* | 3 | * | 1]
+;; [* * 0 | 1 0 * | * * * | 0 0 0] = [0,2,4,6 | 4,5 | * | 0]
+;;
+;; The program is 16 ints long, so we need at minimum 3*19 bits (3*3 for padding)

@@ -34,6 +34,10 @@
   {:regs {:a 0 :b 2024 :c 43690}
    :prog [4 0]})
 
+(def d17-s06
+  {:regs {:a 2024 :b 0 :c 0}
+   :prog [0 3 5 4 3 0]})
+
 (deftest parse-test
   (testing "Correctly parses the input"
     (is (= d17-s00 (d17/parse d17-s00-raw)))))
@@ -72,8 +76,17 @@
                (assoc :ip 2))
            (d17/execute d17-s05)))))
 
+(deftest a-value-that-copies-test
+  (testing "Finds the A register value that causes the program to copy itself
+            into the output"
+    (is (= 117440 (d17/a-value-that-copies d17-s06)))))
+
 (def day17-input (u/parse-puzzle-input d17/parse 2024 17))
 
 (deftest part1-test
   (testing "Reproduces the answer for day17, part1"
     (is (= "1,4,6,1,6,4,3,0,3" (d17/part1 day17-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day17, part2"
+    (is (= 117440 (d17/part2 day17-input)))))
