@@ -13,7 +13,7 @@
    4 [3]})
 
 ;; Input parsing
-(defn get-generators 
+(defn get-generators
   [s]
   (map (comp #(vector :g %) second) (re-seq #"(\w+) generator" s)))
 
@@ -100,19 +100,16 @@
    2 #{}
    3 #{}
    4 (->> (select-keys state [1 2 3 4])
-         vals
-         (apply set/union))})
+          vals
+          (apply set/union))})
 
 (defn move-count
   "Counts the minimum number of moves required to get all items moved up to the fourth floor"
   [input]
-  (->> (g/dijkstra
-        (->MoveGraph)
-        input
-        (u/equals? (endstate input))
-        :limit 10000000)
-       count
-       dec))
+  (let [finish? (u/equals? (endstate input))]
+    (->> (g/shortest-path (->MoveGraph) input finish?)
+         count
+         dec)))
 
 (defn extra-items
   "Update the initial state to account for additional items that weren't in the puzzle input"

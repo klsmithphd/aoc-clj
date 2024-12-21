@@ -64,11 +64,6 @@
     (is (= [[:g :f :b]]
            (g/all-paths t2 :g)))))
 
-(deftest dijkstra-test
-  (testing "Can find the shortest path between two vertices"
-    (is (= [:a :d :c :f] (g/dijkstra t3 :a #(= :f %))))))
-
-
 (def t5 (->MapGraph {:a {:b 1.5 :e 2}
                      :b {:c 2}
                      :c {:d 3}
@@ -76,10 +71,11 @@
                      :e {:f 3}
                      :f {:g 2}}))
 (def h5 {:a 6.5 :b 4 :c 2 :d 4 :e 4.5 :f 2 :g 0})
-(deftest a-star-test
-  (testing "Can find the shortest path between two vertices using A* alg"
-    (is (= [:a :e :f :g] (g/a-star t5 :a (u/equals? :g) h5)))))
 
+(deftest dijkstra-test
+  (testing "Can find the shortest path between two vertices"
+    (is (= [:a :d :c :f] (g/shortest-path t3 :a #(= :f %))))
+    (is (= [:a :e :f :g] (g/shortest-path t5 :a (u/equals? :g) h5)))))
 
 (deftest all-paths-dfs-test
   (testing "Finds all of the paths from start to finish using a depth-first
