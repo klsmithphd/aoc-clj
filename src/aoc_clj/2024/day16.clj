@@ -36,15 +36,8 @@
   (mg/ascii->MapGrid2D charmap input))
 
 ;; Puzzle logic
-(defn find-node
-  "Returns the grid coordinate position of a node of a given type"
-  [type grid]
-  (->> (grid/pos-seq grid)
-       (filter #(= type (grid/value grid %)))
-       first))
-
-(def start-node (partial find-node :start))
-(def end-node   (partial find-node :end))
+(def start-node (comp first (partial grid/find-nodes :start)))
+(def end-node   (comp first (partial grid/find-nodes :end)))
 
 (defn shortest-path-score
   "Returns a path with the shortest distance between the start
