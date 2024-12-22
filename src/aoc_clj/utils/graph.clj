@@ -46,6 +46,20 @@
                                                             (distance g v v2))))]
       (without-vertex (reduce newedge-fn g all-pairs) v))))
 
+(defrecord SubMapGraph [graph subg]
+  Graph
+  (vertices
+    [_]
+    (keys subg))
+
+  (edges
+    [_ v]
+    (subg v))
+
+  (distance
+    [_ v1 v2]
+    (get-in graph [v1 v2])))
+
 (defrecord LabeledMapGraph [graph]
   Graph
   (vertices
@@ -138,55 +152,6 @@
   (->> (partition 2 1 path)
        (map (fn [[v1 v2]] (distance g v1 v2)))
        (reduce +)))
-
-(defn a-star-update
-  "Helper function for the A* algorithm that updates our knowledge of the
-   shortest paths discovered thus far given a new neighbor to consider."
-  [graph vertex h {:keys [dist prev queue] :as state} neighbor]
-  (let [alt (+ (dist vertex) (distance graph vertex neighbor))]
-    (if (or (nil? (dist neighbor)) (< alt (dist neighbor)))
-      {:dist  (assoc dist neighbor alt)
-       :queue (assoc queue neighbor (+ alt (h neighbor)))
-       :prev  (assoc prev neighbor vertex)}
-      state)))
-
-(defn shortest-path
-  "Executes the A* algorithm to find the shortest path in `graph`, 
-   starting at `start`. The predicate `finish?` should return true when
-   the destination vertex has been reached or false otherwise.
-
-   The heuristic function `h` should be a function of each vertex and should
-   estimate the cost of reaching the target destination.
-
-   If not provided a heuristic function `h`, this implementation is
-   equivalent to Dijkstra's algorithm. Effectively, `h` is treated as always
-   returning 0, indicating it has no knowledge of the estimated distance
-   to the finish vertex."
-  ([graph start finish?]
-   (shortest-path graph start finish? (constantly 0)))
-
-  ([graph start finish? h]
-   (loop [vertex start
-          state {:dist  {start 0}
-                 :prev  {}
-                 :queue (priority-map start (h start))}]
-     (cond
-       (finish? vertex)        (path-retrace (:prev state) vertex)
-       (empty? (:queue state)) []
-       :else
-       (let [neighbors (edges graph vertex)
-             new-state (-> (reduce #(a-star-update graph vertex h %1 %2) state neighbors)
-                           (update :queue dissoc vertex))]
-         (recur
-          (ffirst (:queue new-state))
-          new-state))))))
-
-(defn shortest-distance
-  ([graph start finish?]
-   (path-distance graph (shortest-path graph start finish?)))
-
-  ([graph start finish? h]
-   (path-distance graph (shortest-path graph start finish? h))))
 
 (defn pruned
   "Prunes the single branches from a graph, excluding any vertices in the exclude-set"
@@ -282,3 +247,123 @@
       visited
       (let [new-front (advance-front graph front visited)]
         (recur new-front (inc cnt) (set/union visited new-front))))))
+
+
+(defn- nil-setconj
+  "A nil-aware conj for sets. If the set `m` is nil, creates a new set
+   containing `val`. Otherwise, `conj`'s `val` onto the existing set."
+  [m val]
+  (if (nil? m)
+    #{val}
+    (conj m val)))
+
+(defn a-star-allpath-update
+  "Helper function for the A* algorithm that updates our knowledge of the
+   shortest paths discovered thus far given a new neighbor to consider."
+  [all-paths? graph vertex h state neighbor]
+  (let [{:keys [dist prev queue]} state
+        ;; Alternative distance being considered for this vertex-neighbor hop
+        alt (+ (dist vertex) (distance graph vertex neighbor))
+        ;; Previously known distance to neighbor (or Infinity if not known)
+        d   (get dist neighbor ##Inf)]
+    (if all-paths?
+      (if (<= alt d)
+        {:dist  (assoc dist neighbor alt)
+         :queue (assoc queue neighbor (+ alt (h neighbor)))
+         :prev  (if (< alt d)
+                ;; If the new alt is strictly better, it becomes the only
+                ;; known value in the prev map
+                  (assoc prev neighbor #{vertex})
+                ;; If the new alt is equivalent, then add it to the known
+                ;; prev set
+                  (update prev neighbor nil-setconj vertex))}
+        state)
+
+      (if (< alt d)
+        {:dist  (assoc dist neighbor alt)
+         :queue (assoc queue neighbor (+ alt (h neighbor)))
+         :prev  (assoc prev neighbor vertex)}
+        state))))
+
+(def a-star-update
+  "Helper function for the A* algorithm that updates our knowledge of the
+   shortest paths discovered thus far given a new neighbor to consider."
+  (partial a-star-allpath-update false))
+
+(defn all-shortest-paths
+  "Executes the A* algorithm to find the collection of all shortest paths 
+   in `graph`, starting at `start`. The predicate `finish?` should return true
+   when the destination vertex has been reached or false otherwise.
+
+   The heuristic function `h` should be a function of each vertex and should
+   estimate the cost of reaching the target destination.
+
+   If not provided a heuristic function `h`, this implementation is
+   equivalent to Dijkstra's algorithm. Effectively, `h` is treated as always
+   returning 0, indicating it has no knowledge of the estimated distance
+   to the finish vertex.
+   
+   If the first argument, `all-paths?` is set to true, then all possible
+   shortest paths from start to finish will be sought out and returned.
+   If false, only a single shortest path will be returned."
+  ([all-paths? graph start finish?]
+   (all-shortest-paths all-paths? graph start finish? (constantly 0)))
+
+  ([all-paths? graph start finish? h]
+   (loop [vertex start
+          state {:dist  {start 0}
+                 :prev  {}
+                 :queue (priority-map start (h start))}]
+     (cond
+       ;; If we've arrived at the finish state, we can return known paths
+       (finish? vertex)
+       (if all-paths?
+         (let [subg (->SubMapGraph graph (:prev state))]
+           (->> (all-paths-dfs subg vertex (u/equals? start))
+                (map reverse)))
+         (path-retrace (:prev state) vertex))
+
+       ;; If we haven't arrived at the finish state, but have no more nodes
+       ;; left to try, there isn't a shortest path from start to finish,
+       ;; so return an empty list
+       (empty? (:queue state))
+       (if all-paths?
+         [[]]
+         [])
+
+       ;; Otherwise, continue expanding our search of the graph with
+       ;; the collection of neighbors from our current vertex
+       :else
+       (let [neighbors (edges graph vertex)
+             updater   #(a-star-allpath-update all-paths? graph vertex h %1 %2)
+             new-state (-> (reduce updater state neighbors)
+                           (update :queue dissoc vertex))
+             next-vertex (ffirst (:queue new-state))]
+         (recur next-vertex new-state))))))
+
+(def shortest-path
+  "Executes the A* algorithm to find **a** shortest path in `graph`, 
+   starting at `start`. The predicate `finish?` should return true when
+   the destination vertex has been reached or false otherwise.
+
+   The heuristic function `h` should be a function of each vertex and should
+   estimate the cost of reaching the target destination.
+
+   If not provided a heuristic function `h`, this implementation is
+   equivalent to Dijkstra's algorithm. Effectively, `h` is treated as always
+   returning 0, indicating it has no knowledge of the estimated distance
+   to the finish vertex."
+  (partial all-shortest-paths false))
+
+(defn shortest-distance
+  "Returns the total distance of the path through the `graph`
+   starting at `start` and terminating when the `finish?` condition
+   returns true on any vertex.
+   
+   An optional `h` heuristic function of any vertex should estimate
+   that vertex's distance to the finish."
+  ([graph start finish?]
+   (path-distance graph (shortest-path graph start finish?)))
+
+  ([graph start finish? h]
+   (path-distance graph (shortest-path graph start finish? h))))
