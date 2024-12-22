@@ -78,20 +78,15 @@
 (def h5 {:a 6.5 :b 4 :c 2 :d 4 :e 4.5 :f 2 :g 0})
 
 (deftest shortest-path-test
-  (testing "Can find the shortest path between two vertices"
+  (testing "Finds a shortest path between two vertices"
     (is (= [:a :d :c :f] (g/shortest-path t3 :a (u/equals? :f))))
     (is (= [:a :e :f :g] (g/shortest-path t5 :a (u/equals? :g) h5)))))
 
-(deftest shortest-paths-test
+(deftest all-shortest-paths-test
   (testing "Finds all the shortest paths between two vertices"
-    (is (= [[:a :c :d]
-            [:a :b :d]]
-           (g/shortest-paths t6 :a (u/equals? :d))))))
-
-(def foo {:b #{:a}, :e #{:a}, :c #{:b}, :d #{:c}, :f #{:e}, :g #{:f}})
-(keys (foo :b))
-
-
+    (is (= #{[:a :b :d]
+             [:a :c :d]}
+           (set (g/all-shortest-paths true t6 :a (u/equals? :d)))))))
 
 (deftest all-paths-dfs-test
   (testing "Finds all of the paths from start to finish using a depth-first
