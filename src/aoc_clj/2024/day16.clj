@@ -37,6 +37,7 @@
 
 ;; Puzzle logic
 (defn find-node
+  "Returns the grid coordinate position of a node of a given type"
   [type grid]
   (->> (grid/pos-seq grid)
        (filter #(= type (grid/value grid %)))
@@ -45,28 +46,37 @@
 (def start-node (partial find-node :start))
 (def end-node   (partial find-node :end))
 
-(defn shortest-path
+(defn shortest-path-score
+  "Returns a path with the shortest distance between the start
+   and end points of the maze."
   [grid]
   (let [graph   (->MoveGraph grid)
         start   {:pos (start-node grid) :heading :e}
         end     (end-node grid)
         finish? #(= end (:pos %))]
-    (graph/dijkstra graph start finish? :limit 100000)))
+    (->> (graph/shortest-path graph start finish?)
+         (graph/path-distance graph))))
 
-(defn score
-  [[s1 s2]]
-  (if (= (:pos s1) (:pos s2))
-    1000
-    1))
-
-(defn path-score
+(defn all-shortest-path-tile-count
+  "Counts the number of tiles that appear in any possible
+   shortest path from start to finish."
   [grid]
-  (->> (shortest-path grid)
-       (partition 2 1)
-       (map score)
-       (reduce +)))
+  (let [graph   (->MoveGraph grid)
+        start   {:pos (start-node grid) :heading :e}
+        end     (end-node grid)
+        finish? #(= end (:pos %))]
+    (->> (graph/all-shortest-paths true graph start finish?)
+         (mapcat #(map :pos %))
+         set
+         count)))
 
 ;; Puzzle solutions
 (defn part1
+  "What is the lowest score a Reindeer could possibly get?"
   [input]
-  (path-score input))
+  (shortest-path-score input))
+
+(defn part2
+  "How many tiles are part of at least one of the best paths through the maze?"
+  [input]
+  (all-shortest-path-tile-count input))
