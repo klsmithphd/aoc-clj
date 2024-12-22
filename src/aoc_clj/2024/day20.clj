@@ -1,10 +1,12 @@
 (ns aoc-clj.2024.day20
   "Solution to https://adventofcode.com/2024/day/20"
   (:require [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]))
+            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
 (def part1-savings 100)
+(def p2-limit 20)
 
 ;; Input parsing
 (def charmap
@@ -42,38 +44,47 @@
        (map-indexed #(vector %2 %1))
        (into {})))
 
-(defn cheat-shifts
+(defn p1-range
+  "Returns a collection of the possible cheat points to jump to from
+   the current position in part1, where we only have 2 picoseconds to cheat"
   [[x y]]
   [[(+ x 2) y]
    [(- x 2) y]
    [x (+ y 2)]
    [x (- y 2)]])
 
+(defn p2-range
+  "Returns a collection of the possible cheat points to jump to from the
+   current position in part2, where we can move to any non-wall location
+   that we can reach in 20 picoseconds or less."
+  [pos]
+  (for [y (range (- p2-limit) (inc p2-limit))
+        x (range (- (abs y) p2-limit) (- (inc p2-limit) (abs y)))]
+    (v/vec-add pos [x y])))
+
 (defn cheat-savings
   "Computes the possible cheat savings options for a given node along the
    full path"
-  [fullpath [node idx]]
-  (->> (cheat-shifts node)
-       (map #(- (get fullpath % -1) (+ idx 2)))
+  [cheat-range-fn fullpath [node idx]]
+  (->> (cheat-range-fn node)
+       (map #(- (get fullpath % -1) (+ idx (v/manhattan node %))))
        (filter pos?)))
 
-(defn cheat-freqs
-  "Computes a histogram map of how many cheats result in what savings"
-  [grid]
-  (let [fullpath (full-path grid)]
-    (->> (mapcat #(cheat-savings fullpath %) fullpath)
-         frequencies)))
-
 (defn cheats-more-than
-  "Computes the number of cheats that are more than a given number of picoseconds"
-  [n grid]
+  "Returns the cheats that are more than a given number of picoseconds"
+  [range-fn n grid]
   (let [fullpath (full-path grid)]
-    (->> (mapcat #(cheat-savings fullpath %) fullpath)
-         (filter #(>= % n))
-         count)))
+    (->> (mapcat #(cheat-savings range-fn fullpath %) fullpath)
+         (filter #(>= % n)))))
 
 ;; Puzzle solutions
 (defn part1
   "How many cheats would save you at least 100 picoseconds?"
   [input]
-  (cheats-more-than part1-savings input))
+  (count (cheats-more-than p1-range part1-savings input)))
+
+(defn part2
+  "Find the best cheats using the updated cheating rules.
+   How many cheats would save you at least 100 picoseconds?"
+  [input]
+  (count (cheats-more-than p2-range part1-savings input)))
