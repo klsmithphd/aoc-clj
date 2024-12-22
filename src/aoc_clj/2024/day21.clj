@@ -64,10 +64,10 @@
   "For the given `keypad` graph, and a `path` of buttons to move through,
    returns the directional instructions required."
   [keypad path]
-  (->> (partition 2 1 path)
-       (map #(get-in keypad %))
-       (filter some?)
-       (apply str)))
+  (let [moves (->> (partition 2 1 path)
+                   (map #(get-in keypad %))
+                   (filter some?))]
+    (apply str (concat moves [\A]))))
 
 (defn button-paths
   "For a given `keypad`, the `graph` representation of indivudal moves,
@@ -87,177 +87,58 @@
     (->> (map #(vector % (button-paths keypad graph %)) pairs)
          (into {}))))
 
-;; (def robot-moves
-;;   {\A {\A "A"
-;;        \0 "<A"
-;;        \1 "^<<A"
-;;        \2 "^<A"
-;;        \3 "^A"
-;;        \4 "^^<<A"
-;;        \5 "^^<A"
-;;        \6 "^^A"
-;;        \7 "^^^<<A"
-;;        \8 "^^^<A"
-;;        \9 "^^^A"}
-;;    \0 {\A ">A"
-;;        \0 "A"
-;;        \1 "^<A"
-;;        \2 "^A"
-;;        \3 "^>A"
-;;        \4 "^^<A"
-;;        \5 "^^A"
-;;        \6 "^^>A"
-;;        \7 "^^^<A"
-;;        \8 "^^^A"
-;;        \9 "^^^>A"}
-;;    \1 {\A ">>vA"
-;;        \0 ">vA"
-;;        \1 "A"
-;;        \2 ">A"
-;;        \3 ">>A"
-;;        \4 "^A"
-;;        \5 "^>A"
-;;        \6 "^>>A"
-;;        \7 "^^A"
-;;        \8 "^^>A"
-;;        \9 "^^>>A"}
-;;    \2 {\A ">vA"
-;;        \0 "vA"
-;;        \1 "<A"
-;;        \2 "A"
-;;        \3 ">A"
-;;        \4 "^<A"
-;;        \5 "^A"
-;;        \6 "^>A"
-;;        \7 "^^<A"
-;;        \8 "^^A"
-;;        \9 "^^>A"}
-;;    \3 {\A "vA"
-;;        \0 "v<A"
-;;        \1 "<<A"
-;;        \2 "<A"
-;;        \3 "A"
-;;        \4 "^<<A"
-;;        \5 "^<A"
-;;        \6 "^A"
-;;        \7 "^^<<A"
-;;        \8 "^^<A"
-;;        \9 "^^A"}
-;;    \4 {\A ">>vvA"
-;;        \0 ">vvA"
-;;        \1 "vA"
-;;        \2 ">vA"
-;;        \3 ">>vA"
-;;        \4 "A"
-;;        \5 ">A"
-;;        \6 ">>A"
-;;        \7 "^A"
-;;        \8 "^>A"
-;;        \9 "^>>A"}
-;;    \5 {\A ">vvA"
-;;        \0 "vvA"
-;;        \1 "v<A"
-;;        \2 "vA"
-;;        \3 "v>A"
-;;        \4 "<A"
-;;        \5 "A"
-;;        \6 ">A"
-;;        \7 "^<A"
-;;        \8 "^A"
-;;        \9 "^>A"}
-;;    \6 {\A "vvA"
-;;        \0 "vv<A"
-;;        \1 "v<<A"
-;;        \2 "v<A"
-;;        \3 "vA"
-;;        \4 "<<A"
-;;        \5 "<A"
-;;        \6 "A"
-;;        \7 "^<<A"
-;;        \8 "^<A"
-;;        \9 "^A"}
-;;    \7 {\A ">>vvvA"
-;;        \0 ">vvvA"
-;;        \1 "vvA"
-;;        \2 ">vvA"
-;;        \3 ">>vvA"
-;;        \4 "vA"
-;;        \5 ">vA"
-;;        \6 ">>vA"
-;;        \7 "A"
-;;        \8 ">A"
-;;        \9 ">>A"}
-;;    \8 {\A ">vvvA"
-;;        \0 "vvvA"
-;;        \1 "vvA<"
-;;        \2 "vvA"
-;;        \3 "vv>A"
-;;        \4 "vA<"
-;;        \5 "vA"
-;;        \6 "v>A"
-;;        \7 "A<"
-;;        \8 "A"
-;;        \9 ">A"}
-;;    \9 {\A "vvvA"
-;;        \0 "vvv<A"
-;;        \1 "vv<<A"
-;;        \2 "vv<A"
-;;        \3 "vvA"
-;;        \4 "v<<A"
-;;        \5 "v<A"
-;;        \6 "vA"
-;;        \7 "<<A"
-;;        \8 "<A"
-;;        \9 "A"}})
+(defn all-alternatives
+  [moves]
+  (loop [options (first moves) rst (next moves)]
+    (if (nil? rst)
+      options
+      (recur (mapcat #(map (fn [x] (str % x)) (first rst)) options)
+             (next rst)))))
 
-;; (def remote-control-moves
-;;   {\A {\A "A"
-;;        \^ "<A"
-;;        \> "vA"
-;;        \v "v<A"
-;;        \< "<v<A"}
-;;    \< {\A ">>^A"
-;;        \^ ">^A"
-;;        \> ">>A"
-;;        \v ">A"
-;;        \< "A"}
-;;    \> {\A "^A"
-;;        \^ "^<A"
-;;        \> "A"
-;;        \v "<A"
-;;        \< "<<A"}
-;;    \v {\A ">^A"
-;;        \^ "^A"
-;;        \> ">A"
-;;        \v "A"
-;;        \< "<A"}
-;;    \^ {\A ">A"
-;;        \^ "A"
-;;        \> ">vA"
-;;        \v "vA"
-;;        \< "v<A"}})
+(defn directions
+  [move-map coll]
+  (->> (concat [\A] coll)
+       (partition 2 1)
+       (map move-map)
+       all-alternatives))
 
-;; (defn move
-;;   [move-map {:keys [moves pos]} dest]
-;;   {:moves (into moves (get-in move-map [pos dest]))
-;;    :pos   dest})
+(def robot-dirs  (partial directions (keypad-paths numeric-keypad)))
+(def remote-dirs (partial directions (keypad-paths directional-keypad)))
 
-;; (defn directions
-;;   [move-map coll]
-;;   (->> (reduce (partial move move-map) {:moves [] :pos \A} coll)
-;;        :moves
-;;        (apply str)))
+(defn cull
+  [coll]
+  (let [min-size (apply min (map count coll))]
+    (remove #(> (count %) min-size) coll)))
 
-;; (def robot-dirs  (partial directions robot-moves))
-;; (def remote-dirs (partial directions remote-control-moves))
+(defn all-presses
+  [code]
+  (->> code
+       robot-dirs
+       cull
+       (mapcat remote-dirs)
+       cull
+       (mapcat remote-dirs)
+       (apply min-key count)))
 
-;; (defn all-presses
-;;   [code]
-;;   (->> code
-;;        robot-dirs
-;;        remote-dirs
-;;        remote-dirs))
+(defn seq-length
+  [code]
+  (count (all-presses code)))
 
-;; (defn seq-length
-;;   [code]
-;;   (count (all-presses code)))
+(defn numeric-part
+  [code]
+  (Integer/parseInt (subs code 0 3)))
+
+(defn complexity
+  [code]
+  (* (seq-length code) (numeric-part code)))
+
+(defn complexity-sum
+  [codes]
+  (->> codes
+       (map complexity)
+       (reduce +)))
+
+;; Puzzle solutions
+(defn part1
+  [input]
+  (complexity-sum input))
