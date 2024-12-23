@@ -4,8 +4,6 @@
             [aoc-clj.utils.core :as u]))
 
 ;; Input parsing
-
-
 (defn parse-towels
   [towels]
   (->> (str/split (first towels) #", ")
@@ -19,85 +17,51 @@
      :patterns patterns}))
 
 ;; Puzzle logic
-;; We want to return the earliest possible "No" answer if the pattern 
-;; cannot be created.
-
-;; (defn possible-helper?
-;;   [towels pattern]
-;;   (println pattern)
-;;   (if (empty? pattern)
-;;     true
-;;     (if-let [matches (->> (towels (subs pattern 0 1))
-;;                           (filter #(str/starts-with? pattern %)))]
-;;       (some true? (->> matches
-;;                        (map #(subs pattern (count %)))
-;;                        (map #(possible-helper? towels %))))
-;;       false)))
-
-;; (defn possible-helper?
-;;   [towels pattern]
-;;   (println pattern (str/blank? pattern))
-;;   (if (str/blank? pattern)
-;;     true
-;;     (lazy-seq
-;;      (some true? (->> (towels (subs pattern 0 1))
-;;                       (filter #(str/starts-with? pattern %))
-;;                       (map #(possible-helper? towels (subs pattern (count %)))))))))
-
-(defn possible?
-  [towels pattern]
-  (if (str/blank? pattern)
-    true
-    (loop [matches (->> (towels (subs pattern 0 1))
-                        (filter #(str/starts-with? pattern %)))]
-      ;; (println "First match:" (first matches))
-      (if (and (empty? matches) (not-empty pattern))
-        false
-        (if (possible? towels (subs pattern (count (first matches))))
-          true
-          (recur (rest matches)))))))
+(defn- dp-update-helper
+  "Returns a function that can be used in a `reduce` to update the number of
+   arrangements at a given position for any possibly matching towels
+   at the current position"
+  [substr i len]
+  (fn
+    [dp towel]
+    (if (str/starts-with? substr towel)
+      (let [end-pos (+ i (count towel))]
+        (if (<= end-pos len)
+          ;; Increase the count of arrangements at this position by
+          ;; the number of known arrangements at the end position
+          (update dp i + (dp end-pos))
+          dp))
+      dp)))
 
 (defn towel-arrangements
-  "Returns a collection of all the possible ways that the pattern can be
-   created using the available towels"
-  [towels pattern]
-  (letfn
-   [(helper [pattern]
-      (if (str/blank? pattern)
-        [[]]
-        (for [towel (towels (subs pattern 0 1))
-              :when (str/starts-with? pattern towel)
-              rest-pattern (helper (subs pattern (count towel)))]
-          (cons towel rest-pattern))))]
-    (helper pattern)))
-
-(defn towel-arrangements-dp
   "Returns the number of possible ways that the pattern can be created using
-   the available towels"
+   the available towels.
+   
+   Uses dynamic programming to build up the number of arrangements from
+   the end of the string to the beginning"
   [towels pattern]
   (let [len (count pattern)]
-    (loop [i (dec len) dp {len 1}]
+    (loop [i  (dec len) ;; Start at the end of the pattern and work backwards
+           dp (conj (vec (repeat len 0)) 1)] ;; The blank pattern has one arrangement
       (if (neg? i)
         ;; Return count of arrangements for full string
         (dp 0)
         (let [substr          (subs pattern i)
-              possible-towels (towels (subs pattern i (inc i)))
-              option-counts   (fn
-                                [dp towel]
-                                (if (str/starts-with? substr towel)
-                                  (let [next-pos (+ i (count towel))]
-                                    (if (<= next-pos len)
-                                      (assoc dp i
-                                             (+ (get dp i 0) (get dp next-pos 0)))
-                                      dp))
-                                  dp))]
-          (recur (dec i) (reduce option-counts dp possible-towels)))))))
+              possible-towels (towels (subs substr 0 1))
+              count-updater   (dp-update-helper substr i len)]
+          (recur (dec i) (reduce count-updater dp possible-towels)))))))
+
+(defn possible?
+  "Returns true if it's possible to create the pattern using the available
+   towels"
+  [towels pattern]
+  (pos? (towel-arrangements towels pattern)))
 
 (defn arrangement-count
-  "Returns the number of ways that the pattern can be created using the available towels"
+  "Returns the number of ways that the pattern can be created using the
+   available towels"
   [towels pattern]
-  (println pattern)
-  (towel-arrangements-dp towels pattern))
+  (towel-arrangements towels pattern))
 
 (defn possible-count
   "Returns the number of patterns that can be created from the available towels"
@@ -107,9 +71,9 @@
        count))
 
 (defn arrangement-total
+  "Returns the total number of all possible towel arrangements"
   [{:keys [towels patterns]}]
   (->> patterns
-       (filter #(possible? towels %))
        (map #(arrangement-count towels %))
        (reduce +)))
 
