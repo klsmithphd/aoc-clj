@@ -5,6 +5,9 @@
             [aoc-clj.utils.core :as u]))
 
 ;; Constants
+(def part1-layers 2)
+(def part2-layers 25)
+
 (def numeric-keypad
   {\A {\0 \<
        \3 \^}
@@ -110,35 +113,49 @@
   (let [min-size (apply min (map count coll))]
     (remove #(> (count %) min-size) coll)))
 
+(defn remote-layer
+  [input]
+  (->> (mapcat remote-dirs input)
+       cull))
+
+(defn remote-layers
+  [layers input]
+  (->> input
+       (iterate remote-layer)
+       (drop layers)
+       first))
+
 (defn all-presses
-  [code]
+  [layers code]
   (->> code
        robot-dirs
        cull
-       (mapcat remote-dirs)
-       cull
-       (mapcat remote-dirs)
+       (remote-layers layers)
        (apply min-key count)))
 
 (defn seq-length
-  [code]
-  (count (all-presses code)))
+  [layers code]
+  (count (all-presses layers code)))
 
 (defn numeric-part
   [code]
   (Integer/parseInt (subs code 0 3)))
 
 (defn complexity
-  [code]
-  (* (seq-length code) (numeric-part code)))
+  [layers code]
+  (* (seq-length layers code) (numeric-part code)))
 
 (defn complexity-sum
-  [codes]
+  [layers codes]
   (->> codes
-       (map complexity)
+       (map #(complexity layers %))
        (reduce +)))
 
 ;; Puzzle solutions
 (defn part1
   [input]
-  (complexity-sum input))
+  (complexity-sum part1-layers input))
+
+(defn part2
+  [input]
+  (complexity-sum part2-layers input))

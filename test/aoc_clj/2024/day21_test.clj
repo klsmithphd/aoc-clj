@@ -51,8 +51,6 @@
              "<A^A^^>AvvvA"}
            (set (d21/robot-dirs "029A"))))))
 
-(count (d21/all-presses "029A"))
-
 ;; (deftest remote-dirs-test
 ;;   (testing "Converts the robot move codes into remote directions"
 ;;     (is (= "v<<A>>^A<A>AvA<^AA>A<vAAA>^A"
@@ -68,14 +66,14 @@
 
 (deftest seq-length
   (testing "Computes the shortest move sequence"
-    (is (= [68 60 68 64 64] (map d21/seq-length d21-s00)))))
+    (is (= [68 60 68 64 64] (map #(d21/seq-length 2 %) d21-s00)))))
 
 (deftest complexity-sum
   (testing "Computes the sum of the complexity of the codes"
-    (is (= 126384 (d21/complexity-sum d21-s00)))))
+    (is (= 126384 (d21/complexity-sum 2 d21-s00)))))
 
 (def day21-input (u/parse-puzzle-input d21/parse 2024 21))
 
-(deftest part1-test
+(deftest ^:slow part1-test
   (testing "Reproduces the answer for day21, part1"
-    (is (= 94284 (d21/part1 day21-input)))))
+    (is (= 94284 (d21/part2 day21-input)))))
