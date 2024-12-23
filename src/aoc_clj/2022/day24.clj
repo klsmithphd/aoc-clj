@@ -104,11 +104,7 @@
    destination, using the heuristic of the manhattan distance from
    any grid position to the destination"
   [graph start dest]
-  (graph/a-star
-   graph
-   start
-   (destination? dest)
-   (heuristic dest)))
+  (graph/shortest-path graph start (destination? dest) (heuristic dest)))
 
 (defn path-to-exit
   "Find the path from the start to the cell immediately before the exit,

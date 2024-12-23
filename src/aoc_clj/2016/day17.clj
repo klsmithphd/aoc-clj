@@ -62,7 +62,7 @@
   [passcode]
   (let [init   (init-state passcode)
         final? #(= [3 3] (:pos %))]
-    (->> (g/dijkstra (->VaultGraph) init final? :limit 100000)
+    (->> (g/shortest-path (->VaultGraph) init final?)
          last
          :path)))
 

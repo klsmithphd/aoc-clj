@@ -139,7 +139,7 @@
         start (get-in state [:ends "AA"])
         end   (u/equals? (get-in state [:ends "ZZ"]))
         graph (:graph state)]
-    (g/path-distance graph (g/dijkstra graph start end))))
+    (g/path-distance graph (g/shortest-path graph start end))))
 
 (defrecord RecursiveMaze [lookup3d]
   Graph
@@ -199,7 +199,7 @@
         start (conj (get-in state [:ends "AA"]) 0)
         end   (u/equals? (conj (get-in state [:ends "ZZ"]) 0))
         rmaze (recursive-maze state)]
-    (g/path-distance rmaze (g/dijkstra rmaze start end :limit 100000))))
+    (g/path-distance rmaze (g/shortest-path rmaze start end))))
 
 (defn part1
   [input]
