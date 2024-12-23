@@ -48,17 +48,36 @@
   (testing "Counts the number of possible towel patterns that can be made"
     (is (= 6 (d19/possible-count d19-s00)))))
 
+(deftest towel-arrangements-test
+  (testing "Returns the possible towel arrangements"
+    (is (= [["br" "wr" "r"]
+            ["b" "r" "wr" "r"]]
+           (d19/towel-arrangements (:towels d19-s00) (nth (:patterns d19-s00) 0))))
+
+    (is (= [["gb" "br"]
+            ["gb" "b" "r"]
+            ["g" "b" "br"]
+            ["g" "b" "b" "r"]]
+           (d19/towel-arrangements (:towels d19-s00) (nth (:patterns d19-s00) 2))))
+
+    (is (= []
+           (d19/towel-arrangements (:towels d19-s00) (nth (:patterns d19-s00) 4))))))
+
+(deftest arrangement-count-test
+  (testing "Returns the number of possible towel arrangements"
+    (is (= [2 1 4 6 0 1 2 0]
+           (map #(d19/arrangement-count (:towels d19-s00) %) (:patterns d19-s00))))))
+
+(deftest arrangement-total-test
+  (testing "Returns the total number of possible towel arrangements"
+    (is (= 16 (d19/arrangement-total d19-s00)))))
+
 (def day19-input (u/parse-puzzle-input d19/parse 2024 19))
-;; (:towels day19-input)
-;; (count (:patterns day19-input))
-
-;; (get-in day19-input [:towels "u"])
-;; (first (:patterns day19-input))
-
-
-;; (d19/possible? (:towels day19-input) (nth (:patterns day19-input) 0))
-
 
 (deftest part1-test
   (testing "Reproduces the answer for day19, part1"
     (is (= 342 (d19/part1 day19-input)))))
+
+(deftest ^:slow part2-test
+  (testing "Reproduces the answer for day19, part2"
+    (is (= 891192814474630 (d19/part2 day19-input)))))

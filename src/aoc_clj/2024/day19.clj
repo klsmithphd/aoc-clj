@@ -34,10 +34,19 @@
 ;;                        (map #(possible-helper? towels %))))
 ;;       false)))
 
+;; (defn possible-helper?
+;;   [towels pattern]
+;;   (println pattern (str/blank? pattern))
+;;   (if (str/blank? pattern)
+;;     true
+;;     (lazy-seq
+;;      (some true? (->> (towels (subs pattern 0 1))
+;;                       (filter #(str/starts-with? pattern %))
+;;                       (map #(possible-helper? towels (subs pattern (count %)))))))))
+
 (defn possible?
   [towels pattern]
-  ;; (println "Pattern: " pattern)
-  (if (empty? pattern)
+  (if (str/blank? pattern)
     true
     (loop [matches (->> (towels (subs pattern 0 1))
                         (filter #(str/starts-with? pattern %)))]
@@ -48,40 +57,70 @@
           true
           (recur (rest matches)))))))
 
-;; (defn possible?
-;;   [towels pattern]
-;;   (boolean (not-empty (possible-helper? towels pattern))))
+(defn towel-arrangements
+  "Returns a collection of all the possible ways that the pattern can be
+   created using the available towels"
+  [towels pattern]
+  (letfn
+   [(helper [pattern]
+      (if (str/blank? pattern)
+        [[]]
+        (for [towel (towels (subs pattern 0 1))
+              :when (str/starts-with? pattern towel)
+              rest-pattern (helper (subs pattern (count towel)))]
+          (cons towel rest-pattern))))]
+    (helper pattern)))
+
+(defn towel-arrangements-dp
+  "Returns the number of possible ways that the pattern can be created using
+   the available towels"
+  [towels pattern]
+  (let [len (count pattern)]
+    (loop [i (dec len) dp {len 1}]
+      (if (neg? i)
+        ;; Return count of arrangements for full string
+        (dp 0)
+        (let [substr          (subs pattern i)
+              possible-towels (towels (subs pattern i (inc i)))
+              option-counts   (fn
+                                [dp towel]
+                                (if (str/starts-with? substr towel)
+                                  (let [next-pos (+ i (count towel))]
+                                    (if (<= next-pos len)
+                                      (assoc dp i
+                                             (+ (get dp i 0) (get dp next-pos 0)))
+                                      dp))
+                                  dp))]
+          (recur (dec i) (reduce option-counts dp possible-towels)))))))
+
+(defn arrangement-count
+  "Returns the number of ways that the pattern can be created using the available towels"
+  [towels pattern]
+  (println pattern)
+  (towel-arrangements-dp towels pattern))
 
 (defn possible-count
+  "Returns the number of patterns that can be created from the available towels"
   [{:keys [towels patterns]}]
   (->> patterns
        (filter #(possible? towels %))
        count))
 
+(defn arrangement-total
+  [{:keys [towels patterns]}]
+  (->> patterns
+       (filter #(possible? towels %))
+       (map #(arrangement-count towels %))
+       (reduce +)))
+
 ;; Puzzle solutions
 (defn part1
+  "How many designs are possible?"
   [input]
   (possible-count input))
 
-
-;; brwrr
-;; br wr r ;; Done
-
-;; bggr
-;; b g g r
-
-;; gbbr
-;; gb br
-
-;; rrbgbr
-;; r rb gb r
-
-;; r -> ["" b]
-;; w -> r
-;; b -> ["" r {w [u]}]
-;; g -> ["" b]
-
-
-;; gur, uub, wgwu, rggu, urguur
-
-;; (str/starts-with?)
+(defn part2
+  "What do you get if you add up the number of different ways you could
+   make each design?"
+  [input]
+  (arrangement-total input))
