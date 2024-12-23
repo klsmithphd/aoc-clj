@@ -49,7 +49,7 @@
   (let [graph   (->MoveGraph size (set (take limit bytes)))
         start   [0 0]
         finish? #(= [(dec size) (dec size)] %)]
-    (dec (count (graph/dijkstra graph start finish?)))))
+    (dec (count (graph/shortest-path graph start finish?)))))
 
 (defn first-blocking-byte
   "Returns the first byte to fall that completely blocks the path

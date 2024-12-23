@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day13
   "Solution to https://adventofcode.com/2016/day/13"
-  (:require [aoc-clj.utils.core :as u] 
+  (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.binary :as b]
             [aoc-clj.utils.graph :as g :refer [Graph]]
             [aoc-clj.utils.grid :as grid]))
@@ -21,7 +21,7 @@
   [[x y]]
   (and (>= x 0) (>= y 0)))
 
-(defn wall-calc 
+(defn wall-calc
   "Compute the _point value_ of a given x,y position using the office
    designer's favorite number `fav`"
   [fav [x y]]
@@ -59,7 +59,7 @@
    for a given office designer's favorite number `fav`"
   [fav finish]
   (let [graph (->CubicleMazeGraph fav)]
-    (->> (g/dijkstra graph start-pos (u/equals? finish) :limit 500)
+    (->> (g/shortest-path graph start-pos (u/equals? finish))
          count
          dec)))
 

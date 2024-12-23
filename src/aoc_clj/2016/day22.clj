@@ -83,7 +83,7 @@
         max-x (max-x-pos nodes)
         finish? (partial = [max-x 0])
         graph (->MoveGraph (moveable-nodes nodes unmoveable-size))]
-    (->> (g/dijkstra graph start finish? :limit 10000)
+    (->> (g/shortest-path graph start finish?)
          count
          dec)))
 
