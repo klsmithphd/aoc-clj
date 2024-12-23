@@ -16,7 +16,10 @@
    "bbrgwb"])
 
 (def d19-s00
-  {:towels ["r" "wr" "b" "g" "bwu" "rb" "gb" "br"]
+  {:towels   {"b" ["bwu" "br" "b"]
+              "g" ["gb" "g"]
+              "r" ["rb" "r"]
+              "w" ["wr"]}
    :patterns ["brwrr"
               "bggr"
               "gbbr"
@@ -46,7 +49,16 @@
     (is (= 6 (d19/possible-count d19-s00)))))
 
 (def day19-input (u/parse-puzzle-input d19/parse 2024 19))
+;; (:towels day19-input)
+;; (count (:patterns day19-input))
 
-(deftest ^:slow part1-test
+;; (get-in day19-input [:towels "u"])
+;; (first (:patterns day19-input))
+
+
+;; (d19/possible? (:towels day19-input) (nth (:patterns day19-input) 0))
+
+
+(deftest part1-test
   (testing "Reproduces the answer for day19, part1"
-    (is (= 340 (d19/part1 day19-input)))))
+    (is (= 342 (d19/part1 day19-input)))))
