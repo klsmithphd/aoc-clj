@@ -48,21 +48,6 @@
   (testing "Counts the number of possible towel patterns that can be made"
     (is (= 6 (d19/possible-count d19-s00)))))
 
-(deftest towel-arrangements-test
-  (testing "Returns the possible towel arrangements"
-    (is (= [["br" "wr" "r"]
-            ["b" "r" "wr" "r"]]
-           (d19/towel-arrangements (:towels d19-s00) (nth (:patterns d19-s00) 0))))
-
-    (is (= [["gb" "br"]
-            ["gb" "b" "r"]
-            ["g" "b" "br"]
-            ["g" "b" "b" "r"]]
-           (d19/towel-arrangements (:towels d19-s00) (nth (:patterns d19-s00) 2))))
-
-    (is (= []
-           (d19/towel-arrangements (:towels d19-s00) (nth (:patterns d19-s00) 4))))))
-
 (deftest arrangement-count-test
   (testing "Returns the number of possible towel arrangements"
     (is (= [2 1 4 6 0 1 2 0]
