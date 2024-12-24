@@ -22,9 +22,10 @@
            "y00" 0
            "y01" 1
            "y02" 0}
-   :gates [[#{"x00" "y00"} [:and "z00"]]
-           [#{"x01" "y01"} [:xor "z01"]]
-           [#{"x02" "y02"} [:or  "z02"]]]})
+
+   :gates [["x00" "y00" :and "z00"]
+           ["x01" "y01" :xor "z01"]
+           ["x02" "y02" :or  "z02"]]})
 
 (def d24-s01
   (d24/parse
@@ -94,7 +95,7 @@
             "y01" 1
             "y02" 0
             "z00" 0}
-           (:wires (d24/apply-gate d24-s00 [#{"x00" "y00"} [:and "z00"]]))))))
+           (:wires (d24/apply-gate d24-s00 ["x00" "y00" :and "z00"]))))))
 
 (deftest step-test
   (testing "Updates the state with all currently ready gates"
