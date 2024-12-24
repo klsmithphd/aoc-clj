@@ -55,10 +55,7 @@
   "Updates the state of the circuit with the result of a ready gate"
   [{:keys [wires] :as state} [wireset [op out]]]
   (let [[w1 w2] (seq wireset)]
-    (-> state
-        (assoc-in [:wires out] ((gate-map op) (wires w1) (wires w2)))
-        ;; (update :gates dissoc wireset)
-        )))
+    (assoc-in state [:wires out] ((gate-map op) (wires w1) (wires w2)))))
 
 (defn step
   "Updates the state of the circuit with all ready gates"
@@ -82,3 +79,50 @@
   "What decimal number does it output on the wires starting with z?"
   [input]
   (circuit-output input))
+
+;; x00: 1
+;; x01: 1
+;; x02: 0
+;; x03: 1
+
+;; y00: 1
+;; y01: 0
+;; y02: 1
+;; y03: 1
+
+;; z00: 0
+;; z01: 0
+;; z02: 0
+;; z03: 1
+;; z04: 1
+
+;; carry-over bit is AND
+;; sum bit is XOR
+
+(defn bitwise-addition
+  [a b]
+  [(bit-and a b) (bit-xor a b)])
+
+(bitwise-addition 1 1)
+
+;; 44 OR gates
+;; 89 = 44*2 + 1 XOR gates
+;; 89 = 44*2 + 1 AND gates
+
+;; A full adder can be constructed five gates: 1 OR, 2 XOR, 2 AND
+;; The first XOR takes the "sum" bit of inputs A and B
+;; The output of that XOR and the carry-in bit is XOR'd to the sum bit
+;; 
+;; AND the intermediate sum and the carry-in bit
+;; AND the original two values A and B
+;; OR these two to get the carry-over bit
+
+;; So the gist here is to wire up the full network that
+;; would be necessary to correctly perform addition.
+;;
+;; There are a bunch of intermediate nodes in that graph, to
+;; which we can give names.
+;;
+;; The puzzle input gives different names to the intermediate
+;; outputs, but we can try to figure out where they don't match
+
