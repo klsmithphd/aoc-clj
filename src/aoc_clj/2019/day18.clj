@@ -101,7 +101,7 @@
 
 (defn path-needs
   [graph node1 node2]
-  (let [path (g/dijkstra graph node1 (u/equals? node2))]
+  (let [path (g/shortest-path graph node1 (u/equals? node2))]
     (set (map str/lower-case (filter (partial door-or-key? graph) (butlast path))))))
 
 (defn subgraph-needs
@@ -167,7 +167,7 @@
       (if (= max-keys (inc (count (first vertex))))
         (g/path-retrace (:prev state) vertex)
         (let [neighbors (filter (complement visited) (edges graph vertex))
-              new-state (reduce (partial g/dijkstra-update graph vertex) state neighbors)]
+              new-state (reduce #(g/a-star-update graph vertex (constantly 0) %1 %2) state neighbors)]
           (recur (conj visited vertex)
                  (ffirst (g/entries-not-in-set visited (state :dist)))
                  new-state))))))

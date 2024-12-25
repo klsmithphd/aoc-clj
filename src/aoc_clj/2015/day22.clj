@@ -198,7 +198,7 @@
                 :boss   boss
                 :effects {}}]
      (->>
-      (g/dijkstra (->GameGraph hard?) start player-wins? :limit 5000)
+      (g/shortest-path (->GameGraph hard?) start player-wins?)
       (map :last-spell)
       (drop 1)))))
 

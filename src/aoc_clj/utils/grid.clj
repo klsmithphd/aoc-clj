@@ -71,6 +71,12 @@
                   (v/scalar-mult dist))]
     (update state :pos v/vec-add delta)))
 
+(defn find-nodes
+  "Returns the grid coordinate positions of all the nodes with the given value"
+  [v grid]
+  (->> (pos-seq grid)
+       (filter #(= v (value grid %)))))
+
 (defn Grid2D->ascii
   "Convert a Grid2D into an ASCII-art string representation.
    

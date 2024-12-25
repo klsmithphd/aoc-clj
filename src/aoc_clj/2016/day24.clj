@@ -38,7 +38,7 @@
   "Computes the distance between any pair of points of interest.
    Returns a seq of two vecs, with the pair order reversed in the second vec"
   [maze stops [v1 v2]]
-  (let [dist (dec (count (g/dijkstra maze (stops v1) (partial = (stops v2)) :limit 10000)))]
+  (let [dist (dec (count (g/shortest-path maze (stops v1) (partial = (stops v2)))))]
     [[v1 v2 dist]
      [v2 v1 dist]]))
 
@@ -90,7 +90,7 @@
                   :part1 #(= (count graph) (count (:visited %)))
                   :part2 #(and (= (count graph) (count (:visited %)))
                                (= :start (:pos %))))]
-    (->> (g/dijkstra move-graph start finish? :limit 100000)
+    (->> (g/shortest-path move-graph start finish?)
          (g/path-distance move-graph))))
 
 ;; Puzzle solutions
