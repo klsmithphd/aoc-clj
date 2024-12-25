@@ -93,28 +93,28 @@
 ;; Not quite on the right track here, but something like this:
 (defn adjacent-order
   [cells]
-  (loop [visited #{} remaining cells ordered []]
-    (if (empty? remaining)
+  (loop [ordered [] queue cells]
+    (if (empty? queue)
       ordered
-      (let [cell   (first remaining)
+      (let [cell   (first queue)
             neighs (->> (grid/adj-coords-2d cell)
-                        (filter cells)
-                        (remove visited))]
-        (recur (conj visited cell)
-               (disj remaining cell)
-               (concat ordered [cell] neighs))))))
+                        (filter (set cells))
+                        (remove (set ordered)))
+            new-order (conj ordered cell)]
+        (recur new-order
+               (if (empty? neighs)
+                 (remove (set new-order) cells)
+                 neighs))))))
 
 (defn sides
   "Counts the number of distinct sides a given contigous region of cells has"
   [cells]
-  (->> (perimeter-data cells)
-       ;; For this next function to work, the perimeter-data needs to
-       ;; be ordered such that neighboring (adjacent) cells are seen together
-       ;; without skipping any intervening cells
-       ;; Need my `adjacent-order` function above to work.
-       (reduce side-aggregator {:visited {} :sides 0})
-       :sides))
-
+  (let [perim-data (perimeter-data cells)
+        order      (adjacent-order (keys perim-data))]
+    (->> order
+         (map #(vector % (perim-data %)))
+         (reduce side-aggregator {:visited {} :sides 0})
+         :sides)))
 
 ;; (defn count-sides
 ;;   "Counts the number of sides a given contiguous region has"

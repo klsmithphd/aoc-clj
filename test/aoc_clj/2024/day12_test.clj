@@ -68,12 +68,14 @@
 
 (deftest sides-test
   (testing "Computes the number of sides a given plot has"
-    ;; (is (= 4 (d12/sides (first (get d12-s00 \A)))))
-    ;; (is (= 4 (d12/sides (first (get d12-s00 \B)))))
-    ;; (is (= 8 (d12/sides (first (get d12-s00 \C)))))
-    ;; (is (= 4 (d12/sides (first (get d12-s00 \D)))))
-    ;; (is (= 4 (d12/sides (first (get d12-s00 \E)))))
-    ))
+    (is (= 4 (d12/sides (first (get d12-s00 \A)))))
+    (is (= 4 (d12/sides (first (get d12-s00 \B)))))
+    (is (= 8 (d12/sides (first (get d12-s00 \C)))))
+    (is (= 4 (d12/sides (first (get d12-s00 \D)))))
+    (is (= 4 (d12/sides (first (get d12-s00 \E)))))
+
+    (is (= 4 (d12/sides (first (get d12-s01 \X)))))
+    (is (= 20 (d12/sides (first (get d12-s01 \O)))))))
 
 (deftest region-price-test
   (testing "Computes the price of a given plot"
