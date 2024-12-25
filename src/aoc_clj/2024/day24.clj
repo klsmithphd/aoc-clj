@@ -122,6 +122,56 @@
 ;; cNN-1 sNN :and identifies aNN
 ;; aNN bNN should identify cNN or zNN+1
 
+(defn max-z-bit
+  "Returns the number of the last z wire in the circuit"
+  [{:keys [gates]}]
+  (let [last-z (->> gates (map last) sort last)]
+    (Integer/parseInt (subs last-z 1))))
+
+(defn gate-input-map
+  [[w1 w2 op w3]]
+  [[#{w1 w2} op] w3])
+
+
+(defn match?
+  [conditions gate]
+  ((map #(%1 %2) conditions gate)))
+
+
+
+(defn s-condition
+  [i]
+  [#{(var-name "x" i) (var-name "y" i)} :xor])
+
+(defn b-condition
+  [i]
+  [#{(var-name "x" i) (var-name "y" i)} :and])
+
+(defn wrong-wires
+  [{:keys [gates]}]
+  (filter #(and (#{:and :or} (nth % 2))
+                (str/starts-with? (nth % 3) "z")) gates))
+
+(defn wire-slots
+  [condition {:keys [gates] :as state}]
+  (let [last-z (max-z-bit state)
+        in-map (->> gates
+                    (map gate-input-map)
+                    (into {}))]
+    (->> (range 1 last-z)
+         (map #(get in-map (condition %))))))
+
+(defn wrong-zs
+  [{:keys [gates]}]
+  (->> (map #(drop 2 %) gates)
+       (filter #(str/starts-with? (second %) "z"))
+       (remove #(= :xor (first %)))))
+
+(defn wrong-thingies
+  [{:keys [gates]}]
+  (->> (mapcat #(take 2 %) gates)
+       frequencies))
+
 ;; Puzzle solutions
 (defn part1
   "What decimal number does it output on the wires starting with z?"

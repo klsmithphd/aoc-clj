@@ -120,8 +120,59 @@
     (is (= 4    (d24/circuit-output d24-s00)))
     (is (= 2024 (d24/circuit-output d24-s01)))))
 
+(deftest correct-gates-test
+  (testing "Returns a circuit config that can add two bitwise numbers up to N bits"
+    (is (= [["x00" "y00" :xor "z00"]
+            ["x00" "y00" :and "c00"]
+            ["x01" "y01" :xor "s01"]
+            ["s01" "c00" :xor "z01"]
+            ["s01" "c00" :and "a01"]
+            ["x01" "y01" :and "b01"]
+            ["a01" "b01" :or "z02"]]
+           (d24/correct-gates 1)))
+
+    (is (= 0
+           (d24/circuit-output {:wires {"x00" 0 "y00" 0 "x01" 0 "y01" 0}
+                                :gates (d24/correct-gates 1)})))
+
+    (is (= 1
+           (d24/circuit-output {:wires {"x00" 1 "y00" 0 "x01" 0 "y01" 0}
+                                :gates (d24/correct-gates 1)})))
+
+    (is (= 2
+           (d24/circuit-output {:wires {"x00" 1 "y00" 1 "x01" 0 "y01" 0}
+                                :gates (d24/correct-gates 1)})))
+
+    (is (= 3
+           (d24/circuit-output {:wires {"x00" 0 "y00" 1 "x01" 1 "y01" 0}
+                                :gates (d24/correct-gates 1)})))
+
+    (is (= 4
+           (d24/circuit-output {:wires {"x00" 0 "y00" 0 "x01" 1 "y01" 1}
+                                :gates (d24/correct-gates 1)})))
+
+    (is (= 6
+           (d24/circuit-output {:wires {"x00" 1 "y00" 1 "x01" 1 "y01" 1}
+                                :gates (d24/correct-gates 1)})))))
+
+(deftest max-z-bit-test
+  (testing "Returns the maximum z-bit wire number"
+    (is (= 2  (d24/max-z-bit d24-s00)))
+    (is (= 12 (d24/max-z-bit d24-s01)))))
+
 (def day24-input (u/parse-puzzle-input d24/parse 2024 24))
 
 (deftest part1-test
   (testing "Reproduces the answer for day24, part1"
     (is (= 46463754151024 (d24/part1 day24-input)))))
+
+
+(d24/wrong-wires day24-input)
+
+(d24/wrong-zs day24-input)
+
+(filter #(> (second %) 1) (d24/wrong-thingies day24-input))
+
+
+(clojure.pprint/pprint
+ (d24/wire-slots d24/b-condition day24-input))
