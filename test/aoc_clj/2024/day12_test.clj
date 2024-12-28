@@ -44,6 +44,23 @@
     "MIIISIJEEE"
     "MMMISSJEEE"]))
 
+(def d12-s03
+  (d12/parse
+   ["EEEEE"
+    "EXXXX"
+    "EEEEE"
+    "EXXXX"
+    "EEEEE"]))
+
+(def d12-s04
+  (d12/parse
+   ["AAAAAA"
+    "AAABBA"
+    "AAABBA"
+    "ABBAAA"
+    "ABBAAA"
+    "AAAAAA"]))
+
 (deftest parse-test
   (testing "Returns the plot sets for a given field"
     (is (= d12-s00 (d12/parse d12-s00-raw)))
@@ -75,27 +92,52 @@
     (is (= 4 (d12/sides (first (get d12-s00 \E)))))
 
     (is (= 4 (d12/sides (first (get d12-s01 \X)))))
-    (is (= 20 (d12/sides (first (get d12-s01 \O)))))))
+    (is (= 20 (d12/sides (first (get d12-s01 \O)))))
+
+    (is (= 12 (d12/sides (first (get d12-s03 \E)))))
+    (is (=  4 (d12/sides (first (get d12-s03 \X)))))))
+
+;; (d12/adjacent-order (keys (d12/perimeter-data (first (get d12-s01 \X)))))
+;; (d12/adjacent-order (keys (d12/perimeter-data (first (get d12-s01 \O)))))
 
 (deftest region-price-test
   (testing "Computes the price of a given plot"
-    (is (= 40 (d12/region-price (first (get d12-s00 \A)))))
-    (is (= 32 (d12/region-price (first (get d12-s00 \B)))))
-    (is (= 40 (d12/region-price (first (get d12-s00 \C)))))
-    (is (= 4  (d12/region-price (first (get d12-s00 \D)))))
-    (is (= 24 (d12/region-price (first (get d12-s00 \E)))))
+    (is (= 40 (d12/region-price :part1 (first (get d12-s00 \A)))))
+    (is (= 32 (d12/region-price :part1 (first (get d12-s00 \B)))))
+    (is (= 40 (d12/region-price :part1 (first (get d12-s00 \C)))))
+    (is (= 4  (d12/region-price :part1 (first (get d12-s00 \D)))))
+    (is (= 24 (d12/region-price :part1 (first (get d12-s00 \E)))))
 
-    (is (= 756 (d12/region-price (first (get d12-s01 \O)))))
-    (is (= 4   (d12/region-price (first (get d12-s01 \X)))))))
+    (is (= 756 (d12/region-price :part1 (first (get d12-s01 \O)))))
+    (is (= 4   (d12/region-price :part1 (first (get d12-s01 \X)))))
+
+    (is (= 16 (d12/region-price :part2 (first (get d12-s00 \A)))))
+    (is (= 16 (d12/region-price :part2 (first (get d12-s00 \B)))))
+    (is (= 32 (d12/region-price :part2 (first (get d12-s00 \C)))))
+    (is (= 4  (d12/region-price :part2 (first (get d12-s00 \D)))))
+    (is (= 12 (d12/region-price :part2 (first (get d12-s00 \E)))))
+
+    (is (= 420 (d12/region-price :part2 (first (get d12-s01 \O)))))
+    (is (= 4   (d12/region-price :part2 (first (get d12-s01 \X)))))))
 
 (deftest total-price-test
   (testing "Computes the total price for the entire field"
-    (is (= 140  (d12/total-price d12-s00)))
-    (is (= 772  (d12/total-price d12-s01)))
-    (is (= 1930 (d12/total-price d12-s02)))))
+    (is (= 140  (d12/total-price :part1 d12-s00)))
+    (is (= 772  (d12/total-price :part1 d12-s01)))
+    (is (= 1930 (d12/total-price :part1 d12-s02)))
+
+    (is (= 80  (d12/total-price :part2 d12-s00)))
+    (is (= 436  (d12/total-price :part2 d12-s01)))
+    (is (= 1206 (d12/total-price :part2 d12-s02)))
+    (is (= 236 (d12/total-price :part2 d12-s03)))
+    (is (= 368 (d12/total-price :part2 d12-s04)))))
 
 (def day12-input (u/parse-puzzle-input d12/parse 2024 12))
 
 (deftest part1-test
   (testing "Reproduces the answer for day12, part1"
     (is (= 1396298 (d12/part1 day12-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day12, part2"
+    (is (= 853588 (d12/part2 day12-input)))))

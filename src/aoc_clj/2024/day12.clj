@@ -55,7 +55,8 @@
 
 (defn cell-edges
   "For any cell on the perimeter of the cell plot, returns a map of that
-   cells positions to the absolute bearing directions of the non-plot cells"
+   cells positions to the absolute bearing directions of its edges between it
+   and non-plot cells"
   [cells cell]
   [cell (->> grid/cardinal-offsets
              (remove #(cells (v/vec-add cell (val %))))
@@ -63,15 +64,16 @@
              set)])
 
 (defn perimeter-data
-  "Returns a collection of maps of positions-to-bearings for all the cells
-   that comprise the perimeter of a plot."
+  "Returns a collection of maps of coordinates to edge directions for all
+   the cells that comprise the perimeter of a plot."
   [cells]
   (->> cells
        (map #(cell-edges cells %))
+       (remove (comp empty? second))
        (into {})))
 
 (defn perimeter
-  "Computes the perimeter of a plot (including both inner and outer
+  "Computes the perimeter distance of a plot (including both inner and outer
    perimeters)"
   [cells]
   (->> (perimeter-data cells)
@@ -79,98 +81,65 @@
        (map count)
        (reduce +)))
 
+(defn y-desc-then-x-asc-compare
+  "Comparator to sort y values in a descending order then x values in an
+   ascending order for x,y coordinate pairs"
+  [[xa ya] [xb yb]]
+  (let [yc (compare yb ya)]
+    (if (zero? yc)
+      (compare xa xb)
+      yc)))
+
 (defn side-aggregator
   "Helper function that counts up the number of unique sides for a given
    perimeter cell and its non-region neighbor directions"
-  [{:keys [visited] :as agg} [pos dirs]]
-  (let [neighbor-dirs  (->> (keep visited (grid/adj-coords-2d pos))
-                            (apply set/union))
-        new-sides      (count (set/difference dirs neighbor-dirs))]
+  [{:keys [visited] :as agg} [pos edge-dirs]]
+  ;; For a given cell, we look at the direction of its edges, and 
+  ;; discount any directional edges that match a previously visited
+  ;; nearest neighbor's edges. (This allows us to treat adjacent cell's
+  ;; edges as part of the same side.)
+  (let [neigh-edge-dirs  (->> (keep visited (grid/adj-coords-2d pos))
+                              (apply set/union))
+        new-sides        (count (set/difference edge-dirs neigh-edge-dirs))]
     (-> agg
-        (assoc-in [:visited pos] dirs)
+        (assoc-in [:visited pos] edge-dirs)
         (update :sides + new-sides))))
-
-;; Not quite on the right track here, but something like this:
-(defn adjacent-order
-  [cells]
-  (loop [ordered [] queue cells]
-    (if (empty? queue)
-      ordered
-      (let [cell   (first queue)
-            neighs (->> (grid/adj-coords-2d cell)
-                        (filter (set cells))
-                        (remove (set ordered)))
-            new-order (conj ordered cell)]
-        (recur new-order
-               (if (empty? neighs)
-                 (remove (set new-order) cells)
-                 neighs))))))
 
 (defn sides
   "Counts the number of distinct sides a given contigous region of cells has"
   [cells]
-  (let [perim-data (perimeter-data cells)
-        order      (adjacent-order (keys perim-data))]
-    (->> order
-         (map #(vector % (perim-data %)))
+  (let [perim-data (perimeter-data cells)]
+    ;; Examine the cells in reading order (i.e. top left down to bottom right)
+    (->> (sort-by key y-desc-then-x-asc-compare perim-data)
          (reduce side-aggregator {:visited {} :sides 0})
          :sides)))
 
-;; (defn count-sides
-;;   "Counts the number of sides a given contiguous region has"
-;;   [cells]
-;;   (let [perimeter (perimeter-cells cells)
-;;         visited (atom #{})
-;;         sides (atom 0)]
-;;     (doseq [cell perimeter]
-;;       (when-not (contains? @visited cell)
-;;         (swap! sides inc)
-;;         (loop [current cell]
-;;           (swap! visited conj current)
-;;           (let [neighbors (filter #(and (contains? perimeter %)
-;;                                         (not (contains? @visited %)))
-;;                                   (grid/adj-coords-2d current))]
-;;             (when (seq neighbors)
-;;               (recur (first neighbors)))))))
-;;     @sides))
-
-;; (defn sides
-;;   "Counts the number of sides a given contiguous region has"
-;;   [cells]
-;;   (loop [remaining (perimeter-cells cells)
-;;          visited #{}
-;;          side-count 0]
-;;     (if (empty? remaining)
-;;       side-count
-;;       (let [cell      (first remaining)
-;;             neighbors (grid/adj-coords-2d cell)
-;;             remaining (disj remaining cell)]
-;;         (if (contains? visited cell)
-;;           (recur remaining visited side-count)
-;;           (recur remaining
-;;                  (conj visited cell)
-;;                  (inc side-count)))))))
-
-
 (defn region-price
   "Returns the price, which is the product of the area and the perimeter"
-  [cells]
-  (* (perimeter cells) (area cells)))
+  [part cells]
+  (* (area cells) (case part
+                    :part1 (perimeter cells)
+                    :part2 (sides cells))))
 
 (defn plot-price
   "Returns the price for a given plot of a type of plant"
-  [[_ regions]]
-  (->> (map region-price regions)
+  [part [_ regions]]
+  (->> (map #(region-price part %) regions)
        (reduce +)))
 
 (defn total-price
   "Computes the total price for a map of regions"
-  [region-map]
-  (->> (map plot-price region-map)
+  [part region-map]
+  (->> (map #(plot-price part %) region-map)
        (reduce +)))
 
 ;; Puzzle solutions
 (defn part1
   "What is the total price of fencing all regions on your map?"
   [input]
-  (total-price input))
+  (total-price :part1 input))
+
+(defn part2
+  "What is the new total price of fencing all regions on your map?"
+  [input]
+  (total-price :part2 input))
