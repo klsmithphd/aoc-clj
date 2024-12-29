@@ -50,16 +50,28 @@
       (assoc-in [:grid :grid to-pos] :robot)
       (assoc-in [:grid :grid robot-pos] :space)))
 
+(defn aligned-boxes
+  "Returns a seq of all the boxes that are going to each be pushed if
+   the robot attempts to move to `to-pos`"
+  [grid delta to-pos]
+  (->> (iterate #(v/vec-add delta %) to-pos)
+       (take-while #(= :box (grid/value grid %)))))
+
+(defn beyond-aligned-boxes
+  "Returns the state of the space just beyond the boxes to be moved"
+  [grid delta boxes]
+  (->> (last boxes)
+       (v/vec-add delta)
+       (grid/value grid)))
+
 (defn box-move
   "Updates the state by moving the robot and any boxes in front of it
    if they can be moved (meaning there's a free space at the end
    of the line of boxes). If the boxes can't be moved, just returns
    the state as-is"
-  [{:keys [grid robot-pos] :as state} to-pos delta]
-  (let [box-seq (->> (iterate #(v/vec-add delta %) to-pos)
-                     (take-while #(= :box (grid/value grid %))))
-        after-boxes (->> (v/vec-add delta (last box-seq))
-                         (grid/value grid))]
+  [{:keys [grid robot-pos] :as state} delta to-pos]
+  (let [box-seq     (aligned-boxes grid delta to-pos)
+        after-boxes (beyond-aligned-boxes grid delta box-seq)]
     (case after-boxes
       :wall state
       :space
@@ -80,7 +92,7 @@
     (case (grid/value grid to-pos)
       :wall state
       :space (robot-move state robot-pos to-pos)
-      :box   (box-move state to-pos delta))))
+      :box   (box-move state delta to-pos))))
 
 (defn all-moves
   "Returns the state after all the moves in the move sequence have
@@ -109,3 +121,15 @@
    GPS coordinates?"
   [input]
   (-> input all-moves box-gps-sum))
+
+;; In part 2, the boxes are 2 units wide in the horizontal direction.
+;; This means that it's possible that pushing on one box up or down can
+;; cause more than one adjacent box to be pushed. 
+;; 
+;; The logic I have generally works, but the concept of how to identify
+;; the box chain needs to change.
+;;
+;; Needs:
+;; * a new representation that knows that boxes are either 1 unit or 2 units wide
+;; * a function to expand the input space by 2x in the horizontal dir
+;; * New logic for identifying the chain of boxes (and any walls they touch)
