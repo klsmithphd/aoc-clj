@@ -34,38 +34,77 @@
      :moves (parse-moves moves-str)}))
 
 ;; Puzzle logic
+(defn double-x
+  "Return a coordinate vector with the x-coordinated doubled, leaving y same"
+  [[x y]]
+  [(* 2 x) y])
+
+(defn spread-x
+  [[x y]]
+  [[x y] [(inc x) y]])
+
+(defn widen-input
+  "For part2, double the width of the warehouse space"
+  [{:keys [robot boxes walls moves]}]
+  {:robot (double-x robot)
+   :walls (set (mapcat (comp spread-x double-x) walls))
+   :boxes (set (map double-x boxes))
+   :moves moves})
+
 (defn robot-move
   "Updates the state by moving the robot to its new position"
   [state to-pos]
   (assoc state :robot to-pos))
 
-(defn boxes-to-be-moved
-  "Returns a seq of all the boxes that are going to each be pushed if
-   the robot attempts to move to `to-pos`"
-  [part boxes delta to-pos]
-  (->> (iterate #(v/vec-add delta %) to-pos)
-       (take-while boxes)))
+(defn box-check-deltas
+  [part dir delta]
+  (case part
+    :part1 [delta]
+    :part2 (case dir
+             (:e :w) [(v/scalar-mult delta 2)]
+             (:n :s) [delta
+                      (v/vec-add delta [-1 0])])))
+
+(defn adjacent-boxes
+  [part boxes pos dir delta]
+  (let [deltas (box-check-deltas part dir delta)]
+    (->> (map #(v/vec-add pos %) deltas)
+         (filter boxes)
+         set)))
+
+(defn next-boxes
+  [part boxes dir delta positions]
+  (->> (if (and (= part :part2) (#{:n :s} dir))
+         (mapcat spread-x positions)
+         positions)
+       (mapcat #(adjacent-boxes part boxes % dir delta))))
+
+(defn box-chain
+  [part boxes dir delta prev-boxes]
+  (->> (iterate (partial next-boxes part boxes dir delta) prev-boxes)
+       (take-while seq)
+       rest
+       (mapcat identity)))
 
 (defn boxes-free-to-move?
   "Returns the state of the space just beyond the boxes to be moved"
-  [part walls delta boxes-to-move]
+  [part walls new-box-positions]
   (let [not-a-wall (complement walls)]
-    (->> (last boxes-to-move)
-         (v/vec-add delta)
-         not-a-wall)))
+    (every? not-a-wall (case part
+                         :part1 new-box-positions
+                         :part2 (mapcat spread-x new-box-positions)))))
 
 (defn box-move
   "Updates the state by moving the robot and any boxes in front of it
    if they can be moved (meaning there's a free space at the end
    of the line of boxes). If the boxes can't be moved, just returns
    the state as-is"
-  [part {:keys [boxes walls] :as state} delta to-pos]
-  (let [box-seq     (boxes-to-be-moved part boxes delta to-pos)]
-    (if (boxes-free-to-move? part walls delta box-seq)
-      (let [new-boxes  (map #(v/vec-add delta %) box-seq)]
-        (-> (robot-move state to-pos)
-            (update :boxes #(reduce disj % box-seq))
-            (update :boxes #(reduce conj % new-boxes))))
+  [part {:keys [walls] :as state} delta box-seq to-pos]
+  (let [new-boxes (map #(v/vec-add delta %) box-seq)]
+    (if (boxes-free-to-move? part walls new-boxes)
+      (-> (robot-move state to-pos)
+          (update :boxes #(reduce disj % box-seq))
+          (update :boxes #(reduce conj % new-boxes)))
       state)))
 
 (defn move
@@ -80,11 +119,14 @@
                  :s [0 1]
                  :e [1 0]
                  :w [-1 0])
-        to-pos (v/vec-add robot delta)]
+        to-pos    (v/vec-add robot delta)
+        box-checks (->> (box-check-deltas part dir delta)
+                        (map #(v/vec-add robot %)))
+        adj-boxes (box-chain part boxes dir delta [robot])]
     (cond
-      (walls to-pos) state
-      (boxes to-pos) (box-move part state delta to-pos)
-      :else          (robot-move state to-pos))))
+      (walls to-pos)  state
+      (some boxes box-checks) (box-move part state delta adj-boxes to-pos)
+      :else           (robot-move state to-pos))))
 
 (defn all-moves
   "Returns the state after all the moves in the move sequence have
@@ -112,6 +154,12 @@
   [input]
   (->> input
        (all-moves :part1)
+       box-gps-sum))
+
+(defn part2
+  [input]
+  (->> (widen-input input)
+       (all-moves :part2)
        box-gps-sum))
 
 ;; In part 2, the boxes are 2 units wide in the horizontal direction.
