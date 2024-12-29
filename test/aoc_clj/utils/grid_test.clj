@@ -10,6 +10,10 @@
 
 (def sample-grid (mg/->MapGrid2D 3 3 sample))
 
+(deftest find-nodes-test
+  (testing "Retrieves the positions of the nodes with the provided value"
+    (is (= [[1 1]] (grid/find-nodes 5 sample-grid)))))
+
 (deftest neighbor-data-test
   (testing "Retrieves the position, value, and bearing of all the neighboring values"
     (is (= [{:pos [1 2] :val 8 :heading :n}
@@ -97,7 +101,6 @@
             [-1 0 0]]
            (grid/adj-coords-3d [0 0 0])))))
 
-
 (deftest neighbors-test
   (testing "Returns the position and values of points adjacent to pos"
     (is (= {[0 1] 4 [1 2] 8 [2 1] 6 [1 0] 2}
@@ -115,7 +118,6 @@
             [0 0 0 0 2]
             [1 0 0 0 0]]
            (grid/mapgrid->vectors sparse-sample)))))
-
 
 (deftest interpolated-test
   (testing "Computes the collection of points between two co-linear points"

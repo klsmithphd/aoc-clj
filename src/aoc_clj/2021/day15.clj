@@ -17,7 +17,7 @@
   [{:keys [width height grid] :as input}]
   (let [start  [0 0]
         end    (u/equals? [(dec width) (dec height)])
-        path (g/dijkstra (->GridGraph input) start end)]
+        path (g/shortest-path (->GridGraph input) start end)]
     (map grid path)))
 
 (defn path-risk
