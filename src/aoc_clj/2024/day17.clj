@@ -137,12 +137,19 @@
 (defn a-value-that-copies2
   [{:keys [prog] :as input}]
   (let [size (count prog)
-        n    1
-        shift 10
         init (->> (range 1024)
                   (filter #(= (take 1 prog)
                               (take 1 (execute-with-a-reg input %)))))]
-    (loop [])))
+    (loop [n 2 shift 10 candidates init]
+      (if (= n size)
+        candidates
+        (recur (inc n)
+               (+ shift 3)
+               (->> (range 8)
+                    (map #(bit-shift-left % shift))
+                    (mapcat #(map (fn [x] (+ x %)) candidates))
+                    (filter #(= (take n prog)
+                                (take n (execute-with-a-reg input %))))))))))
 
 ;; Puzzle solutions
 (defn part1
@@ -155,7 +162,7 @@
   "What is the lowest positive initial value for register A that causes
    the program to output a copy of itself?"
   [input]
-  (a-value-that-copies input))
+  (a-value-that-copies2 input))
 
 ;; When I look at my personal puzzle input, the program is:
 ;; 2,4 1,7 7,5 1,7 4,6 0,3 5,5 3,0

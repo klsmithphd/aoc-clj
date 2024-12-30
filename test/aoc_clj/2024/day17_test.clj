@@ -81,11 +81,18 @@
             into the output"
     (is (= 117440 (d17/a-value-that-copies d17-s06)))))
 
+(d17/a-value-that-copies2 d17-s06)
+
 (def day17-input (u/parse-puzzle-input d17/parse 2024 17))
 
 (deftest part1-test
   (testing "Reproduces the answer for day17, part1"
     (is (= "1,4,6,1,6,4,3,0,3" (d17/part1 day17-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day17, part2"
+    ;; This value is too high
+    (is (= 265061364597659 (d17/part2 day17-input)))))
 
 ;; (d17/a-value-that-copies day17-input)
 ;; (reduce + (map * (iterate #(* 8 %) 8)
@@ -158,8 +165,15 @@
 ;; (:out (d17/execute (assoc-in day17-input [:regs :a] 253323235763101)))
 
 ;; ;; 569982584554395 too high
-;; (mod 569982584554395 (* 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 2))
+(mod 265061364597659 (* 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8))
 
+;; Too high
+;; 265061364597659
 ;; 569982584554395
 
+
+
+
+
+(d17/execute-with-a-reg day17-input (+ 18770759975835 (* 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 7)))
 
