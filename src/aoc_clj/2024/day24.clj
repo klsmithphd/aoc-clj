@@ -32,8 +32,8 @@
   (->> wires
        (filter #(str/starts-with? (key %) letter))))
 
-(def x-wires (partial wires-starting-with "x"))
-(def y-wires (partial wires-starting-with "y"))
+;; (def x-wires (partial wires-starting-with "x"))
+;; (def y-wires (partial wires-starting-with "y"))
 (def z-wires (partial wires-starting-with "z"))
 
 (defn output-bits
@@ -128,49 +128,52 @@
   (let [last-z (->> gates (map last) sort last)]
     (Integer/parseInt (subs last-z 1))))
 
-(defn gate-input-map
-  [[w1 w2 op w3]]
-  [[#{w1 w2} op] w3])
+
+(defn zs-not-output-from-xor
+  "Any of the z wires should only be attached to the output of an XOR
+   gate, so any z wires appearing as the output from an AND or an OR 
+   gate must be swapped."
+  [gates]
+  (->> gates
+       (filter #(str/starts-with? (nth % 3) "z"))
+       (filter #(#{:and :or} (nth % 2)))
+       (map last)))
+
+(defn xy-xor-not-zs
+  "When a non-x and non-y wire are both inputs to an XOR, the output should
+   be a z-wire. When the output isn't a z-wire, that wire must be swapped."
+  [gates]
+  (->> gates
+       (filter #(= :xor (nth % 2)))
+       (remove #(str/starts-with? (nth % 0) "x"))
+       (remove #(str/starts-with? (nth % 0) "y"))
+       (remove #(str/starts-with? (nth % 3) "z"))
+       (map last)))
+
+(defn or-inputs-not-and-outputs
+  "All of the inputs to the OR gates ought to be outputs from the AND gates.
+   Any wires that are inputs to the OR gates not coming from an AND must
+   be swapped."
+  [gates]
+  (let [and-outputs (->> gates
+                         (filter #(= :and (nth % 2)))
+                         (map last)
+                         set)
+        or-inputs   (->> gates
+                         (filter #(= :or (nth % 2)))
+                         (mapcat #(take 2 %)))]
+    (remove and-outputs or-inputs)))
 
 
-(defn match?
-  [conditions gate]
-  ((map #(%1 %2) conditions gate)))
-
-
-
-(defn s-condition
-  [i]
-  [#{(var-name "x" i) (var-name "y" i)} :xor])
-
-(defn b-condition
-  [i]
-  [#{(var-name "x" i) (var-name "y" i)} :and])
-
-(defn wrong-wires
+(defn swapped-wires
   [{:keys [gates]}]
-  (filter #(and (#{:and :or} (nth % 2))
-                (str/starts-with? (nth % 3) "z")) gates))
+  (->> (concat (zs-not-output-from-xor gates)
+               (xy-xor-not-zs gates)
+               (or-inputs-not-and-outputs gates))
+       (into #{})
+       sort
+       (str/join ",")))
 
-(defn wire-slots
-  [condition {:keys [gates] :as state}]
-  (let [last-z (max-z-bit state)
-        in-map (->> gates
-                    (map gate-input-map)
-                    (into {}))]
-    (->> (range 1 last-z)
-         (map #(get in-map (condition %))))))
-
-(defn wrong-zs
-  [{:keys [gates]}]
-  (->> (map #(drop 2 %) gates)
-       (filter #(str/starts-with? (second %) "z"))
-       (remove #(= :xor (first %)))))
-
-(defn wrong-thingies
-  [{:keys [gates]}]
-  (->> (mapcat #(take 2 %) gates)
-       frequencies))
 
 ;; Puzzle solutions
 (defn part1
@@ -178,3 +181,8 @@
   [input]
   (circuit-output input))
 
+(defn part2
+  "What do you get if you sort the names of the eight wires involved in a
+   swap and then join those names with commas?"
+  [input]
+  (swapped-wires input))

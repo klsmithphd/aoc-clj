@@ -166,13 +166,7 @@
   (testing "Reproduces the answer for day24, part1"
     (is (= 46463754151024 (d24/part1 day24-input)))))
 
-
-(d24/wrong-wires day24-input)
-
-(d24/wrong-zs day24-input)
-
-(filter #(> (second %) 1) (d24/wrong-thingies day24-input))
-
-
-(clojure.pprint/pprint
- (d24/wire-slots d24/b-condition day24-input))
+(deftest part2-test
+  (testing "Reproduces the answer for day24, part2"
+    ;; Not the correct answer
+    (is (= "cqk,fph,gds,jrs,z15,z21,z34,z45" (d24/part2 day24-input)))))
