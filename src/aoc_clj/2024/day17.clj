@@ -121,13 +121,28 @@
        (drop-while running?)
        first))
 
+(defn execute-with-a-reg
+  [input a-reg]
+  (:out (execute (assoc-in input [:regs :a] a-reg))))
+
 (defn a-value-that-copies
   "Returns the value that, when set to the A register, causes the program
    to return a copy of itself"
   [{:keys [prog] :as input}]
-  (->> (range)
-       (filter #(= prog (:out (execute (assoc-in input [:regs :a] %)))))
+  (->> (range 42217003221915
+              569982584554395)
+       (filter #(= prog (execute-with-a-reg input %)))
        first))
+
+(defn a-value-that-copies2
+  [{:keys [prog] :as input}]
+  (let [size (count prog)
+        n    1
+        shift 10
+        init (->> (range 1024)
+                  (filter #(= (take 1 prog)
+                              (take 1 (execute-with-a-reg input %)))))]
+    (loop [])))
 
 ;; Puzzle solutions
 (defn part1
@@ -192,3 +207,11 @@
 ;; [* * 0 | 1 0 * | * * * | 0 0 0] = [0,2,4,6 | 4,5 | * | 0]
 ;;
 ;; The program is 16 ints long, so we need at minimum 3*19 bits (3*3 for padding)
+
+;; More generally, we need to look 10 bits at a time, which are 1024 values.
+;; Those 10 bits determine which possible numbers will output our desired
+;; sequence. 
+;; We'll come up with a set of options that all work for the lowest output number.
+
+;; Then we shift up 3 bits and consider all the variations that
+;; will now work for outputting this number.
