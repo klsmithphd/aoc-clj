@@ -122,34 +122,47 @@
        first))
 
 (defn execute-with-a-reg
+  "Returns the output of executing the program when the A register
+   is overridden by `a-reg`"
   [input a-reg]
   (:out (execute (assoc-in input [:regs :a] a-reg))))
 
+(defn viable-candidates
+  "Returns only those candidate a-register values that are capable of
+   matching `n` values in the program output with the program itself"
+  [prog input n candidates]
+  (filter #(= (take n prog)
+              (take n (execute-with-a-reg input %))) candidates))
+
 (defn a-value-that-copies
   "Returns the value that, when set to the A register, causes the program
-   to return a copy of itself"
+   to return a copy of itself."
   [{:keys [prog] :as input}]
-  (->> (range 42217003221915
-              569982584554395)
-       (filter #(= prog (execute-with-a-reg input %)))
-       first))
-
-(defn a-value-that-copies2
-  [{:keys [prog] :as input}]
+  ;; The opcodes work on data in 3-bit chunks, but may bit-shift in
+  ;; data from outside of those 3 bits. In my puzzle input, the maximum
+  ;; possible bit-shift was 7. Because of that, we start by looking at
+  ;; 10-bit candidates that are capable of outputting the first number
+  ;; that matches the program itself. 10-bits = numbers in the range 0
+  ;; to 1023, hence the `init` value below.
+  ;; `init` consists of a collection of numbers that all end up 
+  ;; correctly outputting the first value of the program.
   (let [size (count prog)
         init (->> (range 1024)
-                  (filter #(= (take 1 prog)
-                              (take 1 (execute-with-a-reg input %)))))]
+                  (viable-candidates prog input 1))]
+    ;; Now, we move "left" 3 bits at a time, considering tacking on 
+    ;; to the front of each of our candidates 3 new bits, i.e.,
+    ;; numbers in the range 0..7, shifted accordingly. For each new
+    ;; 3-bit chunk we tack on to the front, we require that the output
+    ;; of the program match the program itself to one more place.
     (loop [n 2 shift 10 candidates init]
       (if (= n size)
-        candidates
+        (first candidates)
         (recur (inc n)
                (+ shift 3)
                (->> (range 8)
                     (map #(bit-shift-left % shift))
                     (mapcat #(map (fn [x] (+ x %)) candidates))
-                    (filter #(= (take n prog)
-                                (take n (execute-with-a-reg input %))))))))))
+                    (viable-candidates prog input n)))))))
 
 ;; Puzzle solutions
 (defn part1
@@ -162,7 +175,9 @@
   "What is the lowest positive initial value for register A that causes
    the program to output a copy of itself?"
   [input]
-  (a-value-that-copies2 input))
+  (a-value-that-copies input))
+
+;; Working notes
 
 ;; When I look at my personal puzzle input, the program is:
 ;; 2,4 1,7 7,5 1,7 4,6 0,3 5,5 3,0

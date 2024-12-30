@@ -81,8 +81,6 @@
             into the output"
     (is (= 117440 (d17/a-value-that-copies d17-s06)))))
 
-(d17/a-value-that-copies2 d17-s06)
-
 (def day17-input (u/parse-puzzle-input d17/parse 2024 17))
 
 (deftest part1-test
@@ -91,89 +89,4 @@
 
 (deftest part2-test
   (testing "Reproduces the answer for day17, part2"
-    ;; This value is too high
     (is (= 265061364597659 (d17/part2 day17-input)))))
-
-;; (d17/a-value-that-copies day17-input)
-;; (reduce + (map * (iterate #(* 8 %) 8)
-;;                [0 3 5 4 3 0]))
-
-;; (* 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8)
-
-;; ;; (deftest part2-test
-;; ;;   (testing "Reproduces the answer for day17, part2"
-;; ;;     (is (= 117440 (d17/part2 day17-input)))))
-
-;; day17-input
-
-;; (defn test-exec
-;;   [input a-reg]
-;;   (:out (d17/execute (assoc-in input [:regs :a] a-reg))))
-
-;; (defn a-value-that-copies
-;;   [{:keys [prog] :as input}]
-;;   (let [first-pass (->> (range 4096)
-;;                         (filter #(= (take 2 prog) (take 2 (test-exec input %)))))]
-;;     first-pass))
-
-;; (map #(test-exec day17-input %) (a-value-that-copies day17-input))
-;; (count *1)
-
-;; (:prog day17-input)
-;; (test-exec day17-input (+ 7032631133083 (* 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8)))
-;; (bit-shift-left 2 12)
-
-;; (->> (mapcat #(map (fn [x] (+ x (bit-shift-left % 10))) *1) (range 1024))
-;;      (filter #(= [2 4]
-;;                  (take 2 (:out (d17/execute (assoc-in day17-input [:regs :a] %)))))))
-
-;; (def foo
-;;   (->> (range 1024)
-;;        (filter #(= [2 4]
-;;                    (take 2 (:out (d17/execute (assoc-in day17-input [:regs :a] %))))))))
-;; foo
-
-
-;; (def bar
-;;   (->> (mapcat #(map (fn [x] (+ x (bit-shift-left % 10))) foo) (range 8))
-;;        (filter #(= [2 4 1]
-;;                    (take 3 (:out (d17/execute (assoc-in day17-input [:regs :a] %))))))))
-;; bar
-;; (:out (d17/execute (assoc-in day17-input [:regs :a] 8093)))
-
-
-;; (->> (mapcat #(map (fn [x] (+ x (bit-shift-left % 13))) bar) (range 8))
-;;      (filter #(= [2 4 1]
-;;                  (take 3 (:out (d17/execute (assoc-in day17-input [:regs :a] %)))))))
-
-
-;; (def baz '(7032631133083 7032631133085 7032631137179 7032631137181 7032631141275 7032631141277 7032631137179 7032631137181 7032631141275 7032631141277 42217003221915 42217003221917 42217003226011 42217003226013 42217003230107 42217003230109 42217003226011 42217003226013 42217003230107 42217003230109 77401375310747 77401375310749 77401375314843 77401375314845 77401375318939 77401375318941 77401375314843 77401375314845 77401375318939 77401375318941 112585747399579 112585747399581 112585747403675 112585747403677 112585747407771 112585747407773 112585747403675 112585747403677 112585747407771 112585747407773 147770119488411 147770119488413 147770119492507 147770119492509 147770119496603 147770119496605 147770119492507 147770119492509 147770119496603 147770119496605 182954491577243 182954491577245 182954491581339 182954491581341 182954491585435 182954491585437 182954491581339 182954491581341 182954491585435 182954491585437 218138863666075 218138863666077 218138863670171 218138863670173 218138863674267 218138863674269 218138863670171 218138863670173 218138863674267 218138863674269 253323235754907 253323235754909 253323235759003 253323235759005 253323235763099 253323235763101 253323235759003 253323235759005 253323235763099 253323235763101))
-;; (->> (mapcat #(map (fn [x] (+ x (bit-shift-left % 45))) baz) (range 1024))
-;;      (filter #(= [2 4 1 7 7 5 1 7 4 6 0 3 5 5 3 0]
-;;                  (:out (d17/execute (assoc-in day17-input [:regs :a] %))))))
-
-
-
-;; (->> baz
-;;      (filter #(= [2 4 1 7 7 5 1 7 4 6 0 3 5 5 3 0]
-;;                  (:out (d17/execute (assoc-in day17-input [:regs :a] %))))))
-;; (map #(:out (d17/execute (assoc-in day17-input [:regs :a] %))) (map #(+ 10 %) (take 10 baz)))
-
-;; (count foo)
-;; (count (mapcat #(map (fn [x] (+ x (bit-shift-left % 10))) foo) (range 8)))
-
-;; (:out (d17/execute (assoc-in day17-input [:regs :a] 253323235763101)))
-
-;; ;; 569982584554395 too high
-(mod 265061364597659 (* 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8))
-
-;; Too high
-;; 265061364597659
-;; 569982584554395
-
-
-
-
-
-(d17/execute-with-a-reg day17-input (+ 18770759975835 (* 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 7)))
-
