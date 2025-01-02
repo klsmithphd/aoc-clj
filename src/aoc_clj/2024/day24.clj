@@ -11,7 +11,8 @@
 
 (defn parse-gates
   [gates]
-  (let [[w1 op w2 _ w3] (str/split gates #" ")]
+  (let [[i1 op i2 _ w3] (str/split gates #" ")
+        [w1 w2]         (sort [i1 i2])]
     [w1 w2 (keyword (str/lower-case op)) w3]))
 
 (defn parse
@@ -28,12 +29,11 @@
     (filter #(= 2 (count (set/intersection wireset (set (take 2 %))))) gates)))
 
 (defn wires-starting-with
+  "Returns the wires whos name starts with the given letter"
   [letter wires]
   (->> wires
        (filter #(str/starts-with? (key %) letter))))
 
-;; (def x-wires (partial wires-starting-with "x"))
-;; (def y-wires (partial wires-starting-with "y"))
 (def z-wires (partial wires-starting-with "z"))
 
 (defn output-bits
@@ -106,21 +106,12 @@
                                                   (var-name "z" (inc n))
                                                   (var-name "c" n))]])
 
-(defn correct-gates
+(defn adder-circuit
   "Returns a correct collection of logic gates to perform bitwise
    addition for up to `maxn` input bits."
   [maxn]
   (concat half-adder (->> (range 1 (inc maxn))
                           (mapcat #(full-adder maxn %)))))
-
-;; Given the correct circuit, we need to figure out how our
-;; incorrect circuit should map to it.
-
-;; xNN yNN :xor uniquely defines sNN
-;; xNN yNN :and uniquely defines bNN
-;; When sNN is determined, zNN, sNN and :xOR identifies cNN-1
-;; cNN-1 sNN :and identifies aNN
-;; aNN bNN should identify cNN or zNN+1
 
 (defn max-z-bit
   "Returns the number of the last z wire in the circuit"
@@ -128,26 +119,71 @@
   (let [last-z (->> gates (map last) sort last)]
     (Integer/parseInt (subs last-z 1))))
 
+(defn op-match
+  "Returns the gates that either do or do not satisfy the `op-pred` predicate
+   applied to the operation value, based on whether `in-out` is
+   set to `:include` or `:exclude`."
+  [in-out op-pred gates]
+  ((case in-out
+     :include filter
+     :exclude remove) #(op-pred (nth % 2)) gates))
+
+(defn input-wire-match
+  "Returns the gates that either do or do not satisfy the `wire-pred` predicate
+   applied to the input wires, based on whether `in-out` is
+   set to `:include` or `:exclude`."
+  [in-out wire-pred gates]
+  ((case in-out
+     :include filter
+     :exclude remove) #(or (wire-pred (nth % 0))
+                           (wire-pred (nth % 1))) gates))
+
+(defn output-wire-match
+  "Returns the gates that either do or do not satisfy the `wire-pred` predicate
+   applied to the output wire, based on whether `in-out` is
+   set to `:include` or `:exclude`."
+  [in-out wire-pred gates]
+  ((case in-out
+     :include filter
+     :exclude remove) #(wire-pred (nth % 3)) gates))
 
 (defn zs-not-output-from-xor
   "Any of the z wires should only be attached to the output of an XOR
    gate, so any z wires appearing as the output from an AND or an OR 
    gate must be swapped."
   [gates]
-  (->> gates
-       (filter #(str/starts-with? (nth % 3) "z"))
-       (filter #(#{:and :or} (nth % 2)))
-       (map last)))
+  (->> (op-match :include #{:and :or} gates)
+       (output-wire-match :include #(str/starts-with? % "z"))
+       (map last)
+       sort
+       butlast))
+
+(defn wrong-xor-outs
+  "The outputs of an XOR gate that has the xNN and yNN wires as inputs
+   should itself be an input to another XOR gate and an AND gate.
+   This function returns the wires that don't meet that criteria and thus
+   should be swapped."
+  [gates]
+  (let [op-finder (fn [wire]
+                    (->> gates
+                         (input-wire-match :include #(= wire %))
+                         (map #(nth % 2))
+                         set))
+        xor-outs (->> gates
+                      (op-match :include #{:xor})
+                      (input-wire-match :include #(str/starts-with? % "x"))
+                      (map last)
+                      (filter #(not= #{:xor :and} (op-finder %))))]
+    (remove #{"z00"} xor-outs)))
 
 (defn xy-xor-not-zs
   "When a non-x and non-y wire are both inputs to an XOR, the output should
    be a z-wire. When the output isn't a z-wire, that wire must be swapped."
   [gates]
   (->> gates
-       (filter #(= :xor (nth % 2)))
-       (remove #(str/starts-with? (nth % 0) "x"))
-       (remove #(str/starts-with? (nth % 0) "y"))
-       (remove #(str/starts-with? (nth % 3) "z"))
+       (op-match :include #{:xor})
+       (input-wire-match :exclude #(str/starts-with? % "x"))
+       (output-wire-match :exclude #(str/starts-with? % "z"))
        (map last)))
 
 (defn or-inputs-not-and-outputs
@@ -155,25 +191,35 @@
    Any wires that are inputs to the OR gates not coming from an AND must
    be swapped."
   [gates]
-  (let [and-outputs (->> gates
-                         (filter #(= :and (nth % 2)))
+  ;; The output of the AND gate with x00 and y00 as inputs is a special
+  ;; case from the half-adder circuit. 
+  (let [x00-y00-out (->> gates
+                         (op-match :include #{:and})
+                         (input-wire-match :include #{"x00"})
+                         first
+                         last)
+        and-outputs (->> gates
+                         (op-match :include #{:and})
                          (map last)
                          set)
         or-inputs   (->> gates
-                         (filter #(= :or (nth % 2)))
-                         (mapcat #(take 2 %)))]
-    (remove and-outputs or-inputs)))
-
+                         (op-match :include #{:or})
+                         (mapcat #(take 2 %))
+                         set)]
+    (->> (remove or-inputs and-outputs)
+         (remove #{x00-y00-out}))))
 
 (defn swapped-wires
+  "Returns a sorted, comma-separated string of the names of the output wires
+   that have been swapped in the adder circuit."
   [{:keys [gates]}]
   (->> (concat (zs-not-output-from-xor gates)
                (xy-xor-not-zs gates)
-               (or-inputs-not-and-outputs gates))
+               (or-inputs-not-and-outputs gates)
+               (wrong-xor-outs gates))
        (into #{})
        sort
        (str/join ",")))
-
 
 ;; Puzzle solutions
 (defn part1

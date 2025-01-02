@@ -120,7 +120,7 @@
     (is (= 4    (d24/circuit-output d24-s00)))
     (is (= 2024 (d24/circuit-output d24-s01)))))
 
-(deftest correct-gates-test
+(deftest adder-circuit-test
   (testing "Returns a circuit config that can add two bitwise numbers up to N bits"
     (is (= [["x00" "y00" :xor "z00"]
             ["x00" "y00" :and "c00"]
@@ -129,31 +129,37 @@
             ["s01" "c00" :and "a01"]
             ["x01" "y01" :and "b01"]
             ["a01" "b01" :or "z02"]]
-           (d24/correct-gates 1)))
+           (d24/adder-circuit 1)))
 
+    ;; Adds 00 and 00 to get 00
     (is (= 0
            (d24/circuit-output {:wires {"x00" 0 "y00" 0 "x01" 0 "y01" 0}
-                                :gates (d24/correct-gates 1)})))
+                                :gates (d24/adder-circuit 1)})))
 
+    ;; Adds 01 and 00 to get 01
     (is (= 1
            (d24/circuit-output {:wires {"x00" 1 "y00" 0 "x01" 0 "y01" 0}
-                                :gates (d24/correct-gates 1)})))
+                                :gates (d24/adder-circuit 1)})))
 
+    ;; Adds 01 and 01 to get 10
     (is (= 2
            (d24/circuit-output {:wires {"x00" 1 "y00" 1 "x01" 0 "y01" 0}
-                                :gates (d24/correct-gates 1)})))
+                                :gates (d24/adder-circuit 1)})))
 
+    ;; Adds 01 and 10 to get 11
     (is (= 3
            (d24/circuit-output {:wires {"x00" 0 "y00" 1 "x01" 1 "y01" 0}
-                                :gates (d24/correct-gates 1)})))
+                                :gates (d24/adder-circuit 1)})))
 
+    ;; Adds 10 and 10 to get 100
     (is (= 4
            (d24/circuit-output {:wires {"x00" 0 "y00" 0 "x01" 1 "y01" 1}
-                                :gates (d24/correct-gates 1)})))
+                                :gates (d24/adder-circuit 1)})))
 
+    ;; Adds 11 and 11 to get 110
     (is (= 6
            (d24/circuit-output {:wires {"x00" 1 "y00" 1 "x01" 1 "y01" 1}
-                                :gates (d24/correct-gates 1)})))))
+                                :gates (d24/adder-circuit 1)})))))
 
 (deftest max-z-bit-test
   (testing "Returns the maximum z-bit wire number"
@@ -168,5 +174,4 @@
 
 (deftest part2-test
   (testing "Reproduces the answer for day24, part2"
-    ;; Not the correct answer
-    (is (= "cqk,fph,gds,jrs,z15,z21,z34,z45" (d24/part2 day24-input)))))
+    (is (= "cqk,fph,gds,jrs,wrk,z15,z21,z34" (d24/part2 day24-input)))))
