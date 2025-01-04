@@ -98,66 +98,33 @@
     (->> (map #(vector % (button-paths keypad graph %)) pairs)
          (into {}))))
 
-(defn all-alternatives
-  "For a given sequence of `moves`, i.e. a collection where each element is
-   itself a collection that represents the possible moves to get from one button
-   to the next, return all viable button press sequences."
-  [moves]
-  (loop [options (first moves) rst (next moves)]
-    (if (nil? rst)
-      options
-      (recur (mapcat #(map (fn [x] (str % x)) (first rst)) options)
-             (next rst)))))
+(def numeric-paths     (keypad-paths numeric-keypad))
+(def directional-paths (keypad-paths directional-keypad))
 
-(defn directions
-  "For a given move-map (keypad-specific mapping between pairs-of-buttons
-   and the moves required to there) and a collection of intended buttons
-   to press, returns all possible sequences of moves for the next-level
-   keypad."
-  [move-map coll]
-  (->> (concat [\A] coll)
-       (partition 2 1)
-       (map move-map)
-       all-alternatives))
+(declare cost)
+(def cost-between
+  "Computes the cost (in terms of number of button presses) to
+   get from `start` to `end` when working through `layers` of directional
+   keypads, and an already known mapping between button-pairs and
+   shortest paths of lower-layer buttons."
+  (memoize
+   (fn [button-paths layers button-pair]
+     (if (zero? layers)
+       1
+       (->> (button-paths button-pair)
+            (map #(cost directional-paths (dec layers) %))
+            (apply min))))))
 
-(def robot-dirs  (partial directions (keypad-paths numeric-keypad)))
-(def remote-dirs (partial directions (keypad-paths directional-keypad)))
-
-(defn keep-shortest
-  "Keeps only the shortest sequences from among the current coll"
-  [coll]
-  (let [min-size (apply min (map count coll))]
-    (remove #(> (count %) min-size) coll)))
-
-(defn remote-layer
-  "A single layer of the remote control"
-  [input]
-  (->> (mapcat remote-dirs input)
-       keep-shortest))
-
-(defn remote-layers
-  "Applies `n` instances of the remote control layer"
-  [n input]
-  (->> input
-       (iterate remote-layer)
-       (drop n)
-       first))
-
-(defn all-presses
-  "For `n` layers of the remote controls, returns the shortest seq of button
-   presses required for the deepest layer to ultimately press the `code`
-   at the first robot."
-  [layers code]
-  (->> code
-       robot-dirs
-       keep-shortest
-       (remote-layers layers)
-       (apply min-key count)))
-
-(defn seq-length
-  "Returns the length of the shortest button-press sequence"
-  [layers code]
-  (count (all-presses layers code)))
+(def cost
+  "Computes the total cost to enter a sequence of buttons on the
+   given keypad (represented by button-paths), accounting for the
+   other layers of directional keypads that intervene."
+  (memoize
+   (fn [button-paths layers buttons]
+     (->> (concat [\A] buttons)
+          (partition 2 1)
+          (map #(cost-between button-paths layers %))
+          (reduce +)))))
 
 (defn numeric-part
   "Returns the numeric part of the keypad code"
@@ -169,7 +136,7 @@
    deepest layer remote control button presses and the numeric value of the
    code"
   [layers code]
-  (* (seq-length layers code) (numeric-part code)))
+  (* (cost numeric-paths (inc layers) code) (numeric-part code)))
 
 (defn complexity-sum
   "Returns the sum of the complexities across all codes"

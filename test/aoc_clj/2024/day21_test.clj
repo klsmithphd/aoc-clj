@@ -44,29 +44,17 @@
             [\v \v] ["A"]}
            (d21/keypad-paths d21/directional-keypad)))))
 
-(deftest robot-dirs-test
-  (testing "Converts the keypad code into robot arm moves"
-    (is (= #{"<A^A>^^AvvvA"
-             "<A^A^>^AvvvA"
-             "<A^A^^>AvvvA"}
-           (set (d21/robot-dirs "029A"))))))
+(deftest cost-test
+  (testing "Computes the cost of entering a code sequence on the numeric keypad"
+    (is (= 4  (d21/cost d21/numeric-paths 0 (nth d21-s00 0))))
+    (is (= 12 (d21/cost d21/numeric-paths 1 (nth d21-s00 0))))
+    (is (= 28 (d21/cost d21/numeric-paths 2 (nth d21-s00 0))))
+    (is (= 68 (d21/cost d21/numeric-paths 3 (nth d21-s00 0))))
 
-;; (deftest remote-dirs-test
-;;   (testing "Converts the robot move codes into remote directions"
-;;     (is (= "v<<A>>^A<A>AvA<^AA>A<vAAA>^A"
-;;            (->> "029A"
-;;                 d21/robot-dirs
-;;                 d21/remote-dirs)))
-
-;;     (is (= "<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A"
-;;            (d21/all-presses "029A")))
-
-;;     (is (= "<v<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A"
-;;            (d21/all-presses "379A")))))
-
-(deftest seq-length
-  (testing "Computes the shortest move sequence"
-    (is (= [68 60 68 64 64] (map #(d21/seq-length 2 %) d21-s00)))))
+    (is (= 60 (d21/cost d21/numeric-paths 3 (nth d21-s00 1))))
+    (is (= 68 (d21/cost d21/numeric-paths 3 (nth d21-s00 2))))
+    (is (= 64 (d21/cost d21/numeric-paths 3 (nth d21-s00 3))))
+    (is (= 64 (d21/cost d21/numeric-paths 3 (nth d21-s00 4))))))
 
 (deftest complexity-sum
   (testing "Computes the sum of the complexity of the codes"
@@ -74,6 +62,10 @@
 
 (def day21-input (u/parse-puzzle-input d21/parse 2024 21))
 
-(deftest ^:slow part1-test
+(deftest part1-test
   (testing "Reproduces the answer for day21, part1"
-    (is (= 94284 (d21/part2 day21-input)))))
+    (is (= 94284 (d21/part1 day21-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day21, part2"
+    (is (= 116821732384052 (d21/part2 day21-input)))))
