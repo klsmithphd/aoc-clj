@@ -77,7 +77,7 @@ Options:
 ```
 
 # License
-Copyright 2024 Ken Smith
+Copyright &copy; 2025 Ken Smith
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
