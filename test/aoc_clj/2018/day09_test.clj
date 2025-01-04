@@ -15,61 +15,22 @@
   (testing "Correctly parses the input"
     (is (= d09-s00 (d09/parse d09-s00-raw)))))
 
-(deftest insert-marble-test
-  (testing "Updates the game state with a new marble"
-    (is (= {:marbles [0 1]
-            :marble 2
-            :players {0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0}
-            :player 1
-            :pos 1}
-           (d09/insert-marble (d09/init-state 9))))
-
-    (is (= {:marbles [0 2 1]
-            :marble 3
-            :players {0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0}
-            :player 2
-            :pos 1}
-           (d09/insert-marble
-            {:marbles [0 1]
-             :marble 2
-             :players {0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0}
-             :player 1
-             :pos 1})))
-
-    (is (= {:marbles [0 2 1 3]
-            :marble 4
-            :players {0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0}
-            :player 3
-            :pos 3}
-           (d09/insert-marble
-            {:marbles [0 2 1]
-             :marble 3
-             :players {0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0}
-             :player 2
-             :pos 1})))
-
-    ;; Skip ahead to 23
-    (is (= {:marbles [0 16 8 17 4 18 19 2 20 10 21 5 22 11 1 12 6 13 3 14 7 15]
-            :marble 24
-            :players {0 0 1 0 2 0 3 0 4 32 5 0 6 0 7 0 8 0}
-            :player 5
-            :pos 6}
-           (d09/insert-marble
-            {:marbles [0 16 8 17 4 18 9 19 2 20 10 21 5 22 11 1 12 6 13 3 14 7 15]
-             :marble 23
-             :players {0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0}
-             :player 4
-             :pos 13})))))
-
-
 (deftest play-test
-  (testing "Achieves correct end state at the last marble"
-    (is (= {:marbles [0 16 8 17 4 18 19 2 24 20 25 10 21 5 22 11 1 12 6 13 3 14 7 15]
-            :marble 26
-            :players {0 0 1 0 2 0 3 0 4 32 5 0 6 0 7 0 8 0}
-            :player 7
-            :pos 10}
-           (d09/play [9 25])))))
+  (testing "Plays the game up to the limit specified"
+    (is (= [1 0]
+           (seq (:marbles (d09/play [9 1])))))
+
+    (is (= [2 1 0]
+           (seq (:marbles (d09/play [9 2])))))
+
+    (is (= [3 0 2 1]
+           (seq (:marbles (d09/play [9 3])))))
+
+    (is (= [22 11 1 12 6 13 3 14 7 15 0 16 8 17 4 18 9 19 2 20 10 21 5]
+           (seq (:marbles (d09/play [9 22])))))
+
+    (is (= [19 2 20 10 21 5 22 11 1 12 6 13 3 14 7 15 0 16 8 17 4 18]
+           (seq (:marbles (d09/play [9 23])))))))
 
 (deftest high-score-test
   (testing "Reports out the correct high score after playing the game"
@@ -81,11 +42,10 @@
 
 (def day09-input (u/parse-puzzle-input d09/parse 2018 9))
 
-;; FIXME too slow: https://github.com/klsmithphd/aoc-clj/issues/124
-(deftest ^:slow part1-test
+(deftest part1-test
   (testing "Reproduces the answer for day09, part1"
     (is (= 404611 (d09/part1 day09-input)))))
 
-(deftest ^:slow part2-test
+(deftest part2-test
   (testing "Reproduces the answer for day09, part2"
-    (is (= 1 (d09/part2 day09-input)))))
+    (is (= 3350093681 (d09/part2 day09-input)))))

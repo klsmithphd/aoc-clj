@@ -1,7 +1,6 @@
 (ns aoc-clj.2018.day09
   "Solution to https://adventofcode.com/2018/day/9"
-  (:require
-   [aoc-clj.utils.core :as u]))
+  (:require [data.deque :as deque]))
 
 ;; Input parsing
 (defn parse
@@ -10,50 +9,72 @@
 
 ;; Puzzle logic
 (defn init-state
+  "Constructs the initial state object for the game"
   [players]
-  {:players (zipmap (range players) (repeat 0))
-   :player  0
-   :marbles [0]
-   :marble  1
-   :pos     0})
+  {:marbles (deque/deque 0)
+   :scores  (zipmap (range players) (repeat 0))})
+
+(defn rotate-left
+  "Shifts the deque to the left (moving items from front to back)"
+  [dq]
+  (let [elem (deque/peek-first dq)]
+    (-> dq
+        deque/remove-first
+        (deque/add-last elem))))
+
+(defn rotate-right
+  "Shifts the deque to the right (moving items from the back to the front)"
+  [dq]
+  (let [elem (deque/peek-last dq)]
+    (-> dq
+        (deque/remove-last)
+        (deque/add-first elem))))
+
+(def left2
+  "Rotates the deque two moves to the left"
+  (apply comp (repeat 2 rotate-left)))
+(def right7
+  "Rotates the deque seven moves to the right"
+  (apply comp (repeat 7 rotate-right)))
+
+(defn remove-seven-marbles-back
+  "Removes the seventh marble back, adding it to the current player's score
+   in addition to the current marble, and returns the new state."
+  [{:keys [marbles scores] :as state} marble]
+  (let [new-marbles (right7 marbles)
+        player (mod marble (count scores))]
+    (-> state
+        (update-in [:scores player] + marble (deque/peek-first new-marbles))
+        (assoc :marbles (deque/remove-first new-marbles)))))
+
+(defn insert-marble-two-ahead
+  "Shifts the deque two places to the left and adds the new marble to the
+   front of the deque."
+  [marbles marble]
+  (deque/add-first (left2 marbles) marble))
 
 (defn insert-marble
-  "Add the next marble into the circle, returning the new game state"
-  [{:keys [players marbles pos marble player] :as state}]
+  "Inserts the next marble numbered `marble` into the circle."
+  [state marble]
   (if (zero? (mod marble 23))
-    ;; Special rules if marble is a multiple of 23
-    (let [remove-pos (mod (- pos 7) (count marbles))]
-      (-> state
-          (update-in [:players player] + marble (get marbles remove-pos))
-          (update    :marbles u/vec-remove remove-pos)
-          (assoc     :player (mod (inc player) (count players)))
-          (assoc     :pos remove-pos)
-          (update    :marble inc)))
-    ;; Normal rules
-    (let [add-pos (inc (mod (inc pos) (count marbles)))]
-      (-> state
-          (update :marbles u/vec-insert add-pos marble)
-          (assoc  :player (mod (inc player) (count players)))
-          (assoc  :pos add-pos)
-          (update :marble inc)))))
+    (remove-seven-marbles-back state marble)
+    (update state :marbles insert-marble-two-ahead marble)))
 
 (defn play
   "Play the game with the provided number of players and the final
    marble to play"
   [[players last-marble]]
-  (letfn [(not-done? [{:keys [marble]}]
-            (<= marble last-marble))]
-    (->> (init-state players)
-         (iterate insert-marble)
-         (drop-while not-done?)
-         first)))
+  (reduce insert-marble (init-state players) (range 1 (inc last-marble))))
+
+(->> (play [9 23])
+     :scores)
 
 (defn high-score
   "Play the game with the provided number of players and final marble,
    returning the high score"
   [input]
   (->> (play input)
-       :players
+       :scores
        vals
        (apply max)))
 
