@@ -40,6 +40,8 @@
   [(* 2 x) y])
 
 (defn spread-x
+  "Given a coordinate vector, return a collection of the coordinate and
+   the location one unit to the right"
   [[x y]]
   [[x y] [(inc x) y]])
 
@@ -57,34 +59,53 @@
   (assoc state :robot to-pos))
 
 (defn box-check-deltas
-  [part dir delta]
+  "For `part=:part1`, just returns the delta as-is
+   For `part=:part2`, it *may* modify the deltas based on the `dir` to account
+   for the double-wide boxes."
+  [part first? dir delta]
   (case part
     :part1 [delta]
     :part2 (case dir
-             (:e :w) [(v/scalar-mult delta 2)]
-             (:n :s) [delta
-                      (v/vec-add delta [-1 0])])))
+             ;; In the east direction, we only need to check the immediately
+             ;; adjacent cell for the first go (from robot).
+             ;; For each subsequence box, we check two units to the right.
+             :e (if first?
+                  [delta]
+                  [(v/vec-add delta [1 0])])
+             ;; In the west direction, we need to check to see if there's
+             ;; a box two units to the left.
+             :w [(v/vec-add delta [-1 0])]
+             ;; For north and south, we need to check to see if there's
+             ;; a box at delta, but also one unit to the left of delta on
+             ;; the first go. For each subsequent go, we check up, up-left,
+             ;; and up-right.
+             (:n :s) (if first?
+                       [(v/vec-add delta [-1 0]) delta]
+                       [(v/vec-add delta [-1 0]) delta (v/vec-add delta [1 0])]))))
 
 (defn adjacent-boxes
-  [part boxes pos dir delta]
-  (let [deltas (box-check-deltas part dir delta)]
+  "Returns the set of boxes that are adjacent to the current position
+   based on the direction of intended movement."
+  [part first? boxes pos dir delta]
+  (let [deltas (box-check-deltas part first? dir delta)]
     (->> (map #(v/vec-add pos %) deltas)
          (filter boxes)
          set)))
 
 (defn next-boxes
-  [part boxes dir delta positions]
-  (->> (if (and (= part :part2) (#{:n :s} dir))
-         (mapcat spread-x positions)
-         positions)
-       (mapcat #(adjacent-boxes part boxes % dir delta))))
+  "For any given existing box `positions`, returns a collection of the
+   adjacent boxes that will also be moved if the current boxes are moved."
+  [part first? boxes dir delta positions]
+  (mapcat #(adjacent-boxes part first? boxes % dir delta) positions))
 
 (defn box-chain
-  [part boxes dir delta prev-boxes]
-  (->> (iterate (partial next-boxes part boxes dir delta) prev-boxes)
-       (take-while seq)
-       rest
-       (mapcat identity)))
+  "Returns a collection of all of the touching boxes that will potentially
+   be moved"
+  [part boxes dir delta start-pos]
+  (let [first-layer (next-boxes part true boxes dir delta [start-pos])]
+    (->> (iterate (partial next-boxes part false boxes dir delta) first-layer)
+         (take-while seq)
+         (mapcat identity))))
 
 (defn boxes-free-to-move?
   "Returns the state of the space just beyond the boxes to be moved"
@@ -120,12 +141,10 @@
                  :e [1 0]
                  :w [-1 0])
         to-pos    (v/vec-add robot delta)
-        box-checks (->> (box-check-deltas part dir delta)
-                        (map #(v/vec-add robot %)))
-        adj-boxes (box-chain part boxes dir delta [robot])]
+        adj-boxes (box-chain part boxes dir delta robot)]
     (cond
       (walls to-pos)  state
-      (some boxes box-checks) (box-move part state delta adj-boxes to-pos)
+      (seq adj-boxes) (box-move part state delta adj-boxes to-pos)
       :else           (robot-move state to-pos))))
 
 (defn all-moves
@@ -157,27 +176,9 @@
        box-gps-sum))
 
 (defn part2
+  "Predict the motion of the robot and boxes in this new, scaled-up warehouse.
+   What is the sum of all boxes' final GPS coordinates?"
   [input]
   (->> (widen-input input)
        (all-moves :part2)
        box-gps-sum))
-
-;; In part 2, the boxes are 2 units wide in the horizontal direction.
-;; This means that it's possible that pushing on one box up or down can
-;; cause more than one adjacent box to be pushed. 
-;; 
-;; The logic I have generally works, but the concept of how to identify
-;; the box chain needs to change.
-;;
-;; Needs:
-;; * a new representation that knows that boxes are either 1 unit or 2 units wide
-;; * a function to expand the input space by 2x in the horizontal dir
-;; * New logic for identifying the chain of boxes (and any walls they touch)
-
-;; One possible representation -- leave the grid as is, but have the robot
-;; only move 1/2 a step in the :w :e directions. Then, when checking to 
-;; see if there are any touching boxes, I need to look at boxes whose
-;; coordinates are 1/2 a unit to the left or equal to the x pos of
-;; the previous box (or robot)
-;; 
-

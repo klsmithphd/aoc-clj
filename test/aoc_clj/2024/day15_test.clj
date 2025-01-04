@@ -171,6 +171,21 @@
                          (update :boxes conj [6 1]))
                      :s)))))
 
+(deftest box-chain-test
+  (testing "Returns the chain of boxes that might be moved together"
+    (is (= [[8 3] [6 3]]
+           (d15/box-chain :part2 #{[6 3] [8 3] [6 4]} :w [-1 0] [10 3])))
+
+    (is (= [[6 4] [7 3] [5 3]]
+           (d15/box-chain :part2 #{[5 3] [7 3] [6 4]} :n [0 -1] [7 5])))
+
+    (is (= [[8 6]]
+           (d15/box-chain
+            :part2
+            #{[10 5] [4 3] [2 5] [6 7] [5 4] [10 8] [6 3] [14 6]
+              [8 6] [16 7] [12 1] [4 7] [16 3] [10 7] [14 4]
+              [6 1] [12 3] [14 2] [16 1] [2 6] [14 7]} :e [1 0] [7 6])))))
+
 (deftest part2-move-test
   (testing "Performs a move attempt by the robot and updates the state"
     ;; Robot moves left, shifting two boxes to the left
@@ -250,15 +265,15 @@
     (is (= (u/without-keys
             (-> (d15/widen-input d15-s01)
                 (assoc :robot [4 7])
-                (assoc :boxes #{[3 1] [3 2] [3 4] [3 5]
-                                [12 1] [15 1] [17 1]
-                                [16 2]
-                                [13 3] [15 3] [17 3]
-                                [11 4] [17 4]
-                                [13 5]
+                (assoc :boxes #{[2 1] [2 2] [2 3] [2 4]
+                                [11 1] [14 1] [16 1]
+                                [15 2]
+                                [12 3] [14 3] [16 3]
+                                [10 4] [16 4]
+                                [12 5]
                                 [4 6]
-                                [12 7] [15 7] [17 7]
-                                [9 8] [11 8] [15 8]}))
+                                [11 7] [14 7] [16 7]
+                                [8 8] [10 8] [14 8]}))
             [:moves])
            (d15/all-moves :part2 (d15/widen-input d15-s01))))))
 
@@ -278,3 +293,7 @@
 (deftest part1-test
   (testing "Reproduces the answer for day15, part1"
     (is (= 1478649 (d15/part1 day15-input)))))
+
+(deftest part2-test
+  (testing "Reproduces the answer for day15, part2"
+    (is (= 1495455 (d15/part2 day15-input)))))
