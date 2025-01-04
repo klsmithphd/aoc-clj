@@ -151,3 +151,11 @@
     (is (= [0 :a 1] (u/vec-insert [0 1] 1 :a)))
     (is (= [0 1 :a] (u/vec-insert [0 1] 2 :a)))
     (is (thrown? IndexOutOfBoundsException (u/vec-insert [0 1] 3 :a)))))
+
+(deftest vec-remove-test
+  (testing "Demonstration of vec-remove: given a vector, return a new
+            vector with the item at `index` removed"
+    (is (= [1 2] (u/vec-remove [0 1 2] 0)))
+    (is (= [0 2] (u/vec-remove [0 1 2] 1)))
+    (is (= [0 1] (u/vec-remove [0 1 2] 2)))
+    (is (= [0 1 2] (u/vec-remove [0 1 2] 3)))))

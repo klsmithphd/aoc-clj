@@ -9,6 +9,7 @@
                  [org.clojure/tools.cli "1.0.219"]
                  [cheshire "5.10.0"]
                  [clojure-lanterna "0.9.7"]
+                 [data.deque "0.1.0"]
                  [manifold "0.2.4"]
                  [net.mikera/core.matrix "0.63.0"]
                  [net.mikera/vectorz-clj "0.48.0"]]
