@@ -21,7 +21,7 @@
   [num]
   (mod (quot num 100) 10))
 
-(def power-level
+(def cell-power-level
   "Returns the power level as a function of the serial number and the 
    cell coordinate"
   (memoize
@@ -34,48 +34,72 @@
            hundreds
            (- 5))))))
 
-(defn squares
-  "For a square of `square-size` and the coordinate of the upper-left 
-   corner of the square, returns all the cell coordinates within that
-   square"
-  [square-size [up-x up-y]]
-  (for [y (range up-y (+ up-y square-size))
-        x (range up-x (+ up-x square-size))]
-    [x y]))
+(defn power-levels
+  "Returns a vec-of-vecs of the power levels across the grid"
+  [serial]
+  (vec (for [y (range grid-size)]
+         (vec (for [x (range grid-size)]
+                (cell-power-level serial [x y]))))))
+
+(defn summed-area-table
+  "Returns a summed-area table for a given 2d vec-of-vecs.
+   See https://en.wikipedia.org/wiki/Summed-area_table"
+  [vecs]
+  (let [ltor-sums (map #(reductions + %) vecs)]
+    (vec (concat [(vec (first ltor-sums))]
+                 (rest (reductions #(mapv + %1 %2) ltor-sums))))))
+
+(defn area-sum
+  "Given a summed-area table,
+   the x,y coordinates of the upper-left corner of the area, and
+   the x,y coordinates of the lower-right corner of the area,
+   returns the sum all the values contained within that area."
+  [sat [ul-x ul-y] [lr-x lr-y]]
+  (- (+ (get-in sat [lr-y lr-x] 0)
+        (get-in sat [(dec ul-y) (dec ul-x)] 0))
+     (+ (get-in sat [(dec ul-y) lr-x] 0)
+        (get-in sat [lr-y (dec ul-x)] 0))))
+
+(defn square-area-sum
+  "Returns the sum of all the values contained within a square
+   whose upper-left corner is at [ul-x, ul-y] with side length `size`"
+  [sat [ul-x ul-y size]]
+  (area-sum sat [ul-x ul-y] [(+ ul-x (dec size)) (+ ul-y (dec size))]))
 
 (defn upper-coords
   "For a given square size, returns all the possible upper-left coordinates
    of squares within the grid."
   [square-size]
-  (for [y (range 1 (- grid-size square-size -2))
-        x (range 1 (- grid-size square-size -2))]
-    [x y]))
+  (for [y (range (- grid-size square-size -1))
+        x (range (- grid-size square-size -1))]
+    [x y square-size]))
 
-(defn total-power
-  "For a given serial number, upper-left coordinate, and square size,
-   computes the total power of the square"
-  [serial [upper square-size]]
-  (->> (squares square-size upper)
-       (map #(power-level serial %))
-       (reduce +)))
+(defn highest-power-square
+  "Returns the upper-left coordinate and size of the square of size
+   `size` that has the highest total power."
+  [sat size]
+  (->> (upper-coords size)
+       (apply max-key #(square-area-sum sat %))))
 
 (defn highest-power-any-size-square
   "Returns the upper-left coordinate and size of the NxN square that has
    the highest total power for the given serial number, where N is an
    integer between `min-square` and `max-square`, inclusively"
-  [serial min-square max-square]
-  (let [square-options (for [size   (range min-square (inc max-square))
-                             upper  (upper-coords size)]
-                         [upper size])]
-    (apply max-key #(total-power serial %) square-options)))
+  [serial]
+  (let [sat (summed-area-table (power-levels serial))]
+    (->> (range 1 (inc grid-size))
+         (map #(highest-power-square sat %))
+         (apply max-key #(square-area-sum sat %))
+         (str/join ","))))
 
 (defn highest-power-3x3-square
   "Returns the upper-left coordinates of the 3x3 square that has the
    highest total power for the given serial number"
   [serial]
-  (->> (highest-power-any-size-square serial 3 3)
-       first
-       (str/join ",")))
+  (let [sat (summed-area-table (power-levels serial))]
+    (->> (highest-power-square sat 3)
+         (take 2)
+         (str/join ","))))
 
 ;; Puzzle solution
 (defn part1
@@ -86,6 +110,4 @@
 (defn part2
   "What is the X,Y,size identifier of the square with the largest total power?"
   [input]
-  (->> (highest-power-any-size-square input 1 grid-size)
-       flatten
-       (str/join ",")))
+  (highest-power-any-size-square input))
