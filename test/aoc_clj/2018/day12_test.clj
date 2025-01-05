@@ -67,12 +67,23 @@
   (testing "Returns the sum of the pot ids with plants after n steps"
     (is (= 325 (d12/pot-sum-at-n 20 d12-s00)))))
 
+(deftest n-until-linear-test
+  (testing "Finds the point where the simulation grows at a steady state"
+    ;; The meaning is at n=86, the pot count is 1094, and from that point
+    ;; forward, the pot count grows by 20 every generation.
+    (is (= [86 1094 20] (d12/n-until-linear d12-s00)))))
+
+(deftest pot-sum-at-large-n-test
+  (testing "Finds the sum of occupied pots after a recurrence has kicked in"
+    (is (= (d12/pot-sum-at-large-n 100 d12-s00)
+           (d12/pot-sum-at-n 100 d12-s00)))))
+
 (def day12-input (u/parse-puzzle-input d12/parse 2018 12))
 
 (deftest part1-test
   (testing "Reproduces the answer for day12, part1"
     (is (= 3725 (d12/part1 day12-input)))))
 
-(deftest ^:slow part2-test
+(deftest part2-test
   (testing "Reproduces the answer for day12, part2"
-    (is (= 0 (d12/part2 day12-input)))))
+    (is (= 3100000000293 (d12/part2 day12-input)))))

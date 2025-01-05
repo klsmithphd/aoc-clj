@@ -57,6 +57,28 @@
        pots-with-plants
        (reduce +)))
 
+(defn n-until-linear
+  "Finds the n value at which the evolution gets into a linearly evolving
+   pattern, where the number of new pots each generation becomes a constant."
+  [state]
+  (let [pot-seq    (->> (range 200)
+                        (map #(pot-sum-at-n % state)))
+        deltas-seq (->> pot-seq
+                        (partition 2 1)
+                        (map #(apply - (reverse %)))
+                        (partition 5 1)
+                        (take-while #(apply not= %)))
+        skip-to    (count deltas-seq)
+        pot-count  (nth pot-seq skip-to)]
+    [skip-to pot-count (last (last deltas-seq))]))
+
+(defn pot-sum-at-large-n
+  "Returns the sum of the occupied pots after n generations by
+   finding when the growth becomes linear and then extrapolating."
+  [n state]
+  (let [[repeat-n count-at-repeat delta] (n-until-linear state)]
+    (+ count-at-repeat (* (- n repeat-n) delta))))
+
 ;; Puzzle solutions
 (defn part1
   "After 20 generations, what is the sum of the numbers of all pots
@@ -68,4 +90,4 @@
   "After fifty billion (50000000000) generations, 
    what is the sum of the numbers of all pots which contain a plant?"
   [input]
-  (pot-sum-at-n part2-generations input))
+  (pot-sum-at-large-n part2-generations input))
