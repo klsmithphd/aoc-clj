@@ -1,6 +1,7 @@
 (ns aoc-clj.2018.day11
   "Solution to https://adventofcode.com/2018/day/11"
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [aoc-clj.utils.grid.vecgrid :as vg]))
 
 ;; Constants
 (def grid-size 300)
@@ -41,31 +42,6 @@
          (vec (for [x (range grid-size)]
                 (cell-power-level serial [x y]))))))
 
-(defn summed-area-table
-  "Returns a summed-area table for a given 2d vec-of-vecs.
-   See https://en.wikipedia.org/wiki/Summed-area_table"
-  [vecs]
-  (let [ltor-sums (map #(reductions + %) vecs)]
-    (vec (concat [(vec (first ltor-sums))]
-                 (rest (reductions #(mapv + %1 %2) ltor-sums))))))
-
-(defn area-sum
-  "Given a summed-area table,
-   the x,y coordinates of the upper-left corner of the area, and
-   the x,y coordinates of the lower-right corner of the area,
-   returns the sum all the values contained within that area."
-  [sat [ul-x ul-y] [lr-x lr-y]]
-  (- (+ (get-in sat [lr-y lr-x] 0)
-        (get-in sat [(dec ul-y) (dec ul-x)] 0))
-     (+ (get-in sat [(dec ul-y) lr-x] 0)
-        (get-in sat [lr-y (dec ul-x)] 0))))
-
-(defn square-area-sum
-  "Returns the sum of all the values contained within a square
-   whose upper-left corner is at [ul-x, ul-y] with side length `size`"
-  [sat [ul-x ul-y size]]
-  (area-sum sat [ul-x ul-y] [(+ ul-x (dec size)) (+ ul-y (dec size))]))
-
 (defn upper-coords
   "For a given square size, returns all the possible upper-left coordinates
    of squares within the grid."
@@ -79,24 +55,24 @@
    `size` that has the highest total power."
   [sat size]
   (->> (upper-coords size)
-       (apply max-key #(square-area-sum sat %))))
+       (apply max-key #(vg/square-area-sum sat %))))
 
 (defn highest-power-any-size-square
   "Returns the upper-left coordinate and size of the NxN square that has
    the highest total power for the given serial number, where N is an
    integer between `min-square` and `max-square`, inclusively"
   [serial]
-  (let [sat (summed-area-table (power-levels serial))]
+  (let [sat (vg/summed-area-table (power-levels serial))]
     (->> (range 1 (inc grid-size))
          (map #(highest-power-square sat %))
-         (apply max-key #(square-area-sum sat %))
+         (apply max-key #(vg/square-area-sum sat %))
          (str/join ","))))
 
 (defn highest-power-3x3-square
   "Returns the upper-left coordinates of the 3x3 square that has the
    highest total power for the given serial number"
   [serial]
-  (let [sat (summed-area-table (power-levels serial))]
+  (let [sat (vg/summed-area-table (power-levels serial))]
     (->> (highest-power-square sat 3)
          (take 2)
          (str/join ","))))
