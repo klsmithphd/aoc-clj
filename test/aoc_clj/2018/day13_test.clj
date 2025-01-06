@@ -15,54 +15,54 @@
 
 (def d13-s00
   (mg/->MapGrid2D 13 6
-                  {[0 0] :curve-45
-                   [1 0] :h
-                   [2 0] :cart-r
-                   [3 0] :h
-                   [4 0] :curve-135
-                   [0 1] :v
-                   [4 1] :v
-                   [7 1] :curve-45
-                   [8 1] :h
-                   [9 1] :h
-                   [10 1] :h
-                   [11 1] :h
-                   [12 1] :curve-135
-                   [0 2] :v
-                   [2 2] :curve-45
-                   [3 2] :h
-                   [4 2] :intersection
-                   [5 2] :h
-                   [6 2] :h
-                   [7 2] :intersection
-                   [8 2] :h
-                   [9 2] :curve-135
-                   [12 2] :v
-                   [0 3] :v
-                   [2 3] :v
-                   [4 3] :v
-                   [7 3] :v
-                   [9 3] :cart-d
-                   [12 3] :v
-                   [0 4] :curve-135
-                   [1 4] :h
-                   [2 4] :intersection
-                   [3 4] :h
-                   [4 4] :curve-45
-                   [7 4] :curve-135
+                  {[0 5] :curve-45
+                   [1 5] :h
+                   [2 5] :cart-r
+                   [3 5] :h
+                   [4 5] :curve-135
+                   [0 4] :v
+                   [4 4] :v
+                   [7 4] :curve-45
                    [8 4] :h
-                   [9 4] :intersection
+                   [9 4] :h
                    [10 4] :h
                    [11 4] :h
-                   [12 4] :curve-45
-                   [2 5] :curve-135
-                   [3 5] :h
-                   [4 5] :h
-                   [5 5] :h
-                   [6 5] :h
-                   [7 5] :h
-                   [8 5] :h
-                   [9 5] :curve-45}))
+                   [12 4] :curve-135
+                   [0 3] :v
+                   [2 3] :curve-45
+                   [3 3] :h
+                   [4 3] :intersection
+                   [5 3] :h
+                   [6 3] :h
+                   [7 3] :intersection
+                   [8 3] :h
+                   [9 3] :curve-135
+                   [12 3] :v
+                   [0 2] :v
+                   [2 2] :v
+                   [4 2] :v
+                   [7 2] :v
+                   [9 2] :cart-d
+                   [12 2] :v
+                   [0 1] :curve-135
+                   [1 1] :h
+                   [2 1] :intersection
+                   [3 1] :h
+                   [4 1] :curve-45
+                   [7 1] :curve-135
+                   [8 1] :h
+                   [9 1] :intersection
+                   [10 1] :h
+                   [11 1] :h
+                   [12 1] :curve-45
+                   [2 0] :curve-135
+                   [3 0] :h
+                   [4 0] :h
+                   [5 0] :h
+                   [6 0] :h
+                   [7 0] :h
+                   [8 0] :h
+                   [9 0] :curve-45}))
 
 (deftest parse-test
   (testing "Correctly parses the input"
@@ -70,65 +70,65 @@
 
 (deftest carts-test
   (testing "Finds the carts in the map"
-    (is (= #{{:pos [9 3] :heading :n :int-cnt 0}
-             {:pos [2 0] :heading :e :int-cnt 0}}
+    (is (= #{{:pos [9 2] :heading :s :int-cnt 0}
+             {:pos [2 5] :heading :e :int-cnt 0}}
            (set (d13/carts d13-s00))))))
 
 (deftest tick-test
   (testing "Updates the cart state by one tick"
-    (is (= [{:pos [3 0] :heading :e :int-cnt 0}
-            {:pos [9 4] :heading :e :int-cnt 1}]
+    (is (= [{:pos [9 1] :heading :e :int-cnt 1}
+            {:pos [3 5] :heading :e :int-cnt 0}]
            (d13/tick d13-s00
-                     [{:pos [2 0] :heading :e :int-cnt 0}
-                      {:pos [9 3] :heading :n :int-cnt 0}])))
+                     [{:pos [9 2] :heading :s :int-cnt 0}
+                      {:pos [2 5] :heading :e :int-cnt 0}])))
 
-    (is (= [{:pos [4 0] :heading :n :int-cnt 0}
-            {:pos [10 4] :heading :e :int-cnt 1}]
+    (is (= [{:pos [10 1] :heading :e :int-cnt 1}
+            {:pos [4 5] :heading :s :int-cnt 0}]
            (d13/tick d13-s00
-                     [{:pos [3 0] :heading :e :int-cnt 0}
-                      {:pos [9 4] :heading :e :int-cnt 1}])))
+                     [{:pos [9 1] :heading :e :int-cnt 1}
+                      {:pos [3 5] :heading :e :int-cnt 0}])))
 
-    (is (= [{:pos [4 1] :heading :n :int-cnt 0}
-            {:pos [11 4] :heading :e :int-cnt 1}]
+    (is (= [{:pos [11 1] :heading :e :int-cnt 1}
+            {:pos [4 4] :heading :s :int-cnt 0}]
            (d13/tick d13-s00
-                     [{:pos [4 0] :heading :n :int-cnt 0}
-                      {:pos [10 4] :heading :e :int-cnt 1}])))
+                     [{:pos [10 1] :heading :e :int-cnt 1}
+                      {:pos [4 5] :heading :s :int-cnt 0}])))
 
-    (is (= [{:pos [4 2] :heading :e :int-cnt 1}
-            {:pos [12 4] :heading :s :int-cnt 1}]
+    (is (= [{:pos [12 1] :heading :n :int-cnt 1}
+            {:pos [4 3] :heading :e :int-cnt 1}]
            (d13/tick d13-s00
-                     [{:pos [4 1] :heading :n :int-cnt 0}
-                      {:pos [11 4] :heading :e :int-cnt 1}])))
+                     [{:pos [11 1] :heading :e :int-cnt 1}
+                      {:pos [4 4] :heading :s :int-cnt 0}])))
 
-    (is (= [{:pos [5 2] :heading :e :int-cnt 1}
-            {:pos [12 3] :heading :s :int-cnt 1}]
+    (is (= [{:pos [12 2] :heading :n :int-cnt 1}
+            {:pos [5 3] :heading :e :int-cnt 1}]
            (d13/tick d13-s00
-                     [{:pos [4 2] :heading :e :int-cnt 1}
-                      {:pos [12 4] :heading :s :int-cnt 1}])))
+                     [{:pos [12 1] :heading :n :int-cnt 1}
+                      {:pos [4 3] :heading :e :int-cnt 1}])))
 
-    (is (= [{:pos [6 2] :heading :e :int-cnt 1}
-            {:pos [12 2] :heading :s :int-cnt 1}]
+    (is (= [{:pos [12 3] :heading :n :int-cnt 1}
+            {:pos [6 3] :heading :e :int-cnt 1}]
            (d13/tick d13-s00
-                     [{:pos [5 2] :heading :e :int-cnt 1}
-                      {:pos [12 3] :heading :s :int-cnt 1}])))
+                     [{:pos [12 2] :heading :n :int-cnt 1}
+                      {:pos [5 3] :heading :e :int-cnt 1}])))
 
-    (is (= [{:pos [7 2] :heading :e :int-cnt 2}
-            {:pos [12 1] :heading :w :int-cnt 1}]
+    (is (= [{:pos [12 4] :heading :w :int-cnt 1}
+            {:pos [7 3] :heading :e :int-cnt 2}]
            (d13/tick d13-s00
-                     [{:pos [6 2] :heading :e :int-cnt 1}
-                      {:pos [12 2] :heading :s :int-cnt 1}])))
+                     [{:pos [12 3] :heading :n :int-cnt 1}
+                      {:pos [6 3] :heading :e :int-cnt 1}])))
 
-    (is (= [{:pos [8 2] :heading :e :int-cnt 2}
-            {:pos [11 1] :heading :w :int-cnt 1}]
+    (is (= [{:pos [11 4] :heading :w :int-cnt 1}
+            {:pos [8 3] :heading :e :int-cnt 2}]
            (d13/tick d13-s00
-                     [{:pos [7 2] :heading :e :int-cnt 2}
-                      {:pos [12 1] :heading :w :int-cnt 1}])))
+                     [{:pos [12 4] :heading :w :int-cnt 1}
+                      {:pos [7 3] :heading :e :int-cnt 2}])))
 
-    (is (= [{:pos [9 4] :heading :w :int-cnt 3}
-            {:pos [8 1] :heading :w :int-cnt 1}]
+    (is (= [{:pos [10 4] :heading :w :int-cnt 1}
+            {:pos [9 3] :heading :s :int-cnt 2}]
            (d13/tick d13-s00
-                     [{:pos [9 3] :heading :n :int-cnt 2}
-                      {:pos [9 1] :heading :w :int-cnt 1}])))))
+                     [{:pos [11 4] :heading :w :int-cnt 1}
+                      {:pos [8 3] :heading :e :int-cnt 2}])))))
 
 (deftest first-crash-test
   (testing "Finds the location of the first crash"
@@ -138,4 +138,5 @@
 
 (deftest part1-test
   (testing "Reproduces the answer for day13, part1"
+    ;; Not the correct answer.
     (is (= "112,69" (d13/part1 day13-input)))))

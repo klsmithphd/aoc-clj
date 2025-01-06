@@ -22,7 +22,7 @@
 
 (defn parse
   [input]
-  (let [{:keys [grid width height]} (mg/ascii->MapGrid2D charmap input :down true)]
+  (let [{:keys [grid width height]} (mg/ascii->MapGrid2D charmap input)]
     (mg/->MapGrid2D width height (into {} (remove #(nil? (val %)) grid)))))
 
 ;; Puzzle logic
@@ -31,8 +31,8 @@
   [[pos cart]]
   {:pos pos
    :heading (case cart
-              :cart-u :s
-              :cart-d :n
+              :cart-u :n
+              :cart-d :s
               :cart-l :w
               :cart-r :e)
    :int-cnt  0})
@@ -47,9 +47,9 @@
 (defn turn-cart
   [{:keys [int-cnt] :as cart}]
   (-> (case (mod int-cnt 3)
-        0 (grid/turn cart :right)
+        0 (grid/turn cart :left)
         1 (grid/turn cart :forward)
-        2 (grid/turn cart :left))
+        2 (grid/turn cart :right))
       (update :int-cnt inc)))
 
 (defn on-curve
@@ -57,17 +57,18 @@
   (assoc cart :heading
          (case curve
            :curve-45 (case heading
-                       :n :w
-                       :s :e
-                       :e :s
-                       :w :n)
+                       :n :e
+                       :s :w
+                       :e :n
+                       :w :s)
            :curve-135 (case heading
-                        :s :w
-                        :n :e
-                        :e :n
-                        :w :s))))
+                        :s :e
+                        :n :w
+                        :e :s
+                        :w :n))))
 
 (defn tick-cart
+  "Update one cart forward in time."
   [tracks cart]
   (let [{:keys [pos] :as new-cart} (grid/forward cart 1)
         track (grid/value tracks pos)]
@@ -78,10 +79,14 @@
       new-cart)))
 
 (defn tick
+  "Evolve every cart forward by one unit of time."
   [tracks carts]
   (map #(tick-cart tracks %) carts))
 
+
+
 (defn not-crashed?
+  "Returns true if no crash has yet occurred"
   [carts]
   (->> carts
        (map :pos)
@@ -89,8 +94,18 @@
        vals
        (not-any? #(> % 1))))
 
+(defn correct-coordinates
+  [height [x y]]
+  [x (- height y 1)])
+
+;; The issue with this implementation is that I'm allowing every cart to
+;; move --- I need to check the crash condition after each cart has
+;; been allowed to go.
+;;
+;; I'm not taking into account the ordering of the carts properly.
 (defn first-crash
-  [tracks]
+  "Returns the location of the first cart crash"
+  [{:keys [height] :as tracks}]
   (->> (carts tracks)
        (iterate #(tick tracks %))
        (drop-while not-crashed?)
@@ -100,9 +115,11 @@
        (filter #(> (val %) 1))
        first
        key
+       (correct-coordinates height)
        (str/join ",")))
 
 ;; Puzzle solutions
 (defn part1
+  "To help prevent crashes, you'd like to know the location of the first crash."
   [input]
   (first-crash input))
