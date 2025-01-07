@@ -42,7 +42,8 @@
   [{:keys [grid]}]
   (->> grid
        (filter #(cart-keys (val %)))
-       (map cart-map)))
+       (map cart-map)
+       set))
 
 (defn turn-cart
   [{:keys [int-cnt] :as cart}]
@@ -69,52 +70,62 @@
 
 (defn tick-cart
   "Update one cart forward in time."
-  [tracks cart]
-  (let [{:keys [pos] :as new-cart} (grid/forward cart 1)
-        track (grid/value tracks pos)]
-    (case track
-      :intersection (turn-cart new-cart)
-      :curve-45     (on-curve track new-cart)
-      :curve-135    (on-curve track new-cart)
-      new-cart)))
+  [{:keys [carts] :as state} cart]
+  (let [{:keys [pos] :as fwd-cart} (grid/forward cart 1)
+        track  (grid/value state pos)
+        new-cart (case track
+                   :intersection (turn-cart fwd-cart)
+                   :curve-45     (on-curve track fwd-cart)
+                   :curve-135    (on-curve track fwd-cart)
+                   fwd-cart)
+        final-cart (if ((set (map :pos carts)) pos)
+                     (assoc new-cart :collided true)
+                     new-cart)]
+    (-> state
+        (update :carts disj cart)
+        (update :carts conj final-cart))))
+
+(defn cart-compare
+  "Compares the positions of two carts."
+  [carta cartb]
+  (let [[xa ya] (:pos carta)
+        [xb yb] (:pos cartb)]
+    (if (= ya yb)
+      (compare xa xb)
+      (compare yb ya))))
+
+(defn cart-order
+  "Sorts the carts into reading order (top-to-bottom, then left to right)"
+  [carts]
+  (sort cart-compare carts))
 
 (defn tick
   "Evolve every cart forward by one unit of time."
-  [tracks carts]
-  (map #(tick-cart tracks %) carts))
-
-
-
-(defn not-crashed?
-  "Returns true if no crash has yet occurred"
-  [carts]
-  (->> carts
-       (map :pos)
-       frequencies
-       vals
-       (not-any? #(> % 1))))
+  [{:keys [carts] :as state}]
+  (reduce tick-cart state (cart-order carts)))
 
 (defn correct-coordinates
   [height [x y]]
   [x (- height y 1)])
 
-;; The issue with this implementation is that I'm allowing every cart to
-;; move --- I need to check the crash condition after each cart has
-;; been allowed to go.
-;;
-;; I'm not taking into account the ordering of the carts properly.
+(defn not-crashed?
+  "Returns true if no crash has yet occurred"
+  [{:keys [carts]}]
+  (->> carts
+       (map :collided)
+       (not-any? true?)))
+
 (defn first-crash
   "Returns the location of the first cart crash"
-  [{:keys [height] :as tracks}]
-  (->> (carts tracks)
-       (iterate #(tick tracks %))
+  [{:keys [height] :as state}]
+  (->> (assoc state :carts (carts state))
+       (iterate tick)
        (drop-while not-crashed?)
        first
-       (map :pos)
-       frequencies
-       (filter #(> (val %) 1))
+       :carts
+       (filter :collided)
        first
-       key
+       :pos
        (correct-coordinates height)
        (str/join ",")))
 

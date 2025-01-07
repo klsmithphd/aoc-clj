@@ -13,6 +13,16 @@
    "\\-+-/  \\-+--/"
    "  \\------/   "])
 
+(def d13-s01
+  (d13/parse
+   ["/>-<\\  "
+    "|   |  "
+    "| /<+-\\"
+    "| | | v"
+    "\\>+</ |"
+    "  |   ^"
+    "  \\<->/"]))
+
 (def d13-s00
   (mg/->MapGrid2D 13 6
                   {[0 5] :curve-45
@@ -72,63 +82,89 @@
   (testing "Finds the carts in the map"
     (is (= #{{:pos [9 2] :heading :s :int-cnt 0}
              {:pos [2 5] :heading :e :int-cnt 0}}
-           (set (d13/carts d13-s00))))))
+           (d13/carts d13-s00)))))
+
+(deftest cart-order
+  (testing "Places carts in the correct order"
+    (is (= [{:pos [2 5]} {:pos [9 2]}]
+           (d13/cart-order [{:pos [9 2]} {:pos [2 5]}])))
+
+    (is (= [{:pos [0 2]} {:pos [2 1]} {:pos [3 1]}]
+           (d13/cart-order [{:pos [3 1]} {:pos [0 2]} {:pos [2 1]}])))))
 
 (deftest tick-test
   (testing "Updates the cart state by one tick"
-    (is (= [{:pos [9 1] :heading :e :int-cnt 1}
-            {:pos [3 5] :heading :e :int-cnt 0}]
-           (d13/tick d13-s00
-                     [{:pos [9 2] :heading :s :int-cnt 0}
-                      {:pos [2 5] :heading :e :int-cnt 0}])))
+    (is (= #{{:pos [9 1] :heading :e :int-cnt 1}
+             {:pos [3 5] :heading :e :int-cnt 0}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [9 2] :heading :s :int-cnt 0}
+                      {:pos [2 5] :heading :e :int-cnt 0}})))))
 
-    (is (= [{:pos [10 1] :heading :e :int-cnt 1}
-            {:pos [4 5] :heading :s :int-cnt 0}]
-           (d13/tick d13-s00
-                     [{:pos [9 1] :heading :e :int-cnt 1}
-                      {:pos [3 5] :heading :e :int-cnt 0}])))
+    (is (= #{{:pos [10 1] :heading :e :int-cnt 1}
+             {:pos [4 5] :heading :s :int-cnt 0}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [9 1] :heading :e :int-cnt 1}
+                      {:pos [3 5] :heading :e :int-cnt 0}})))))
 
-    (is (= [{:pos [11 1] :heading :e :int-cnt 1}
-            {:pos [4 4] :heading :s :int-cnt 0}]
-           (d13/tick d13-s00
-                     [{:pos [10 1] :heading :e :int-cnt 1}
-                      {:pos [4 5] :heading :s :int-cnt 0}])))
+    (is (= #{{:pos [11 1] :heading :e :int-cnt 1}
+             {:pos [4 4] :heading :s :int-cnt 0}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [10 1] :heading :e :int-cnt 1}
+                      {:pos [4 5] :heading :s :int-cnt 0}})))))
 
-    (is (= [{:pos [12 1] :heading :n :int-cnt 1}
-            {:pos [4 3] :heading :e :int-cnt 1}]
-           (d13/tick d13-s00
-                     [{:pos [11 1] :heading :e :int-cnt 1}
-                      {:pos [4 4] :heading :s :int-cnt 0}])))
+    (is (= #{{:pos [12 1] :heading :n :int-cnt 1}
+             {:pos [4 3] :heading :e :int-cnt 1}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [11 1] :heading :e :int-cnt 1}
+                      {:pos [4 4] :heading :s :int-cnt 0}})))))
 
-    (is (= [{:pos [12 2] :heading :n :int-cnt 1}
-            {:pos [5 3] :heading :e :int-cnt 1}]
-           (d13/tick d13-s00
-                     [{:pos [12 1] :heading :n :int-cnt 1}
-                      {:pos [4 3] :heading :e :int-cnt 1}])))
+    (is (= #{{:pos [12 2] :heading :n :int-cnt 1}
+             {:pos [5 3] :heading :e :int-cnt 1}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [12 1] :heading :n :int-cnt 1}
+                      {:pos [4 3] :heading :e :int-cnt 1}})))))
 
-    (is (= [{:pos [12 3] :heading :n :int-cnt 1}
-            {:pos [6 3] :heading :e :int-cnt 1}]
-           (d13/tick d13-s00
-                     [{:pos [12 2] :heading :n :int-cnt 1}
-                      {:pos [5 3] :heading :e :int-cnt 1}])))
+    (is (= #{{:pos [12 3] :heading :n :int-cnt 1}
+             {:pos [6 3] :heading :e :int-cnt 1}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [12 2] :heading :n :int-cnt 1}
+                      {:pos [5 3] :heading :e :int-cnt 1}})))))
 
-    (is (= [{:pos [12 4] :heading :w :int-cnt 1}
-            {:pos [7 3] :heading :e :int-cnt 2}]
-           (d13/tick d13-s00
-                     [{:pos [12 3] :heading :n :int-cnt 1}
-                      {:pos [6 3] :heading :e :int-cnt 1}])))
+    (is (= #{{:pos [12 4] :heading :w :int-cnt 1}
+             {:pos [7 3] :heading :e :int-cnt 2}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [12 3] :heading :n :int-cnt 1}
+                      {:pos [6 3] :heading :e :int-cnt 1}})))))
 
-    (is (= [{:pos [11 4] :heading :w :int-cnt 1}
-            {:pos [8 3] :heading :e :int-cnt 2}]
-           (d13/tick d13-s00
-                     [{:pos [12 4] :heading :w :int-cnt 1}
-                      {:pos [7 3] :heading :e :int-cnt 2}])))
+    (is (= #{{:pos [11 4] :heading :w :int-cnt 1}
+             {:pos [8 3] :heading :e :int-cnt 2}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [12 4] :heading :w :int-cnt 1}
+                      {:pos [7 3] :heading :e :int-cnt 2}})))))
 
-    (is (= [{:pos [10 4] :heading :w :int-cnt 1}
-            {:pos [9 3] :heading :s :int-cnt 2}]
-           (d13/tick d13-s00
-                     [{:pos [11 4] :heading :w :int-cnt 1}
-                      {:pos [8 3] :heading :e :int-cnt 2}])))))
+    (is (= #{{:pos [10 4] :heading :w :int-cnt 1}
+             {:pos [9 3] :heading :s :int-cnt 2}}
+           (:carts
+            (d13/tick
+             (assoc d13-s00 :carts
+                    #{{:pos [11 4] :heading :w :int-cnt 1}
+                      {:pos [8 3] :heading :e :int-cnt 2}})))))))
 
 (deftest first-crash-test
   (testing "Finds the location of the first crash"
@@ -139,4 +175,4 @@
 (deftest part1-test
   (testing "Reproduces the answer for day13, part1"
     ;; Not the correct answer.
-    (is (= "112,69" (d13/part1 day13-input)))))
+    (is (= "118,112" (d13/part1 day13-input)))))
