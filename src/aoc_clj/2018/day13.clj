@@ -70,7 +70,7 @@
 
 (defn tick-cart
   "Update one cart forward in time."
-  [{:keys [carts] :as state} cart]
+  [part {:keys [carts] :as state} cart]
   (let [{:keys [pos] :as fwd-cart} (grid/forward cart 1)
         track  (grid/value state pos)
         new-cart (case track
@@ -80,10 +80,17 @@
                    fwd-cart)
         final-cart (if ((set (map :pos carts)) pos)
                      (assoc new-cart :collided true)
-                     new-cart)]
-    (-> state
-        (update :carts disj cart)
-        (update :carts conj final-cart))))
+                     new-cart)
+        other-cart (first (filter #(= pos (:pos %)) carts))]
+    (if (and (= :part2 part) (some? other-cart))
+      (-> state
+          (update :carts disj cart other-cart))
+      (-> state
+          (update :carts disj cart)
+          (update :carts conj final-cart)))))
+
+(def tick-cart-p1 (partial tick-cart :part1))
+(def tick-cart-p2 (partial tick-cart :part2))
 
 (defn cart-compare
   "Compares the positions of two carts."
@@ -101,8 +108,14 @@
 
 (defn tick
   "Evolve every cart forward by one unit of time."
-  [{:keys [carts] :as state}]
-  (reduce tick-cart state (cart-order carts)))
+  [part {:keys [carts] :as state}]
+  (let [ticker (case part
+                 :part1 tick-cart-p1
+                 :part2 tick-cart-p2)]
+    (reduce ticker state (cart-order carts))))
+
+(def tick-part1 (partial tick :part1))
+(def tick-part2 (partial tick :part2))
 
 (defn correct-coordinates
   [height [x y]]
@@ -119,11 +132,24 @@
   "Returns the location of the first cart crash"
   [{:keys [height] :as state}]
   (->> (assoc state :carts (carts state))
-       (iterate tick)
+       (iterate tick-part1)
        (drop-while not-crashed?)
        first
        :carts
        (filter :collided)
+       first
+       :pos
+       (correct-coordinates height)
+       (str/join ",")))
+
+(defn last-cart
+  "Returns the location of the only remaining cart after crashed carts are removed"
+  [{:keys [height] :as state}]
+  (->> (assoc state :carts (carts state))
+       (iterate tick-part2)
+       (drop-while #(> (count (:carts %)) 1))
+       first
+       :carts
        first
        :pos
        (correct-coordinates height)
@@ -134,3 +160,9 @@
   "To help prevent crashes, you'd like to know the location of the first crash."
   [input]
   (first-crash input))
+
+(defn part2
+  "What is the location of the last cart at the end of the first tick where it
+   is the only cart left?"
+  [input]
+  (last-cart input))
