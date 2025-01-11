@@ -7,6 +7,17 @@
 ;; Constants
 (def cart-keys #{:cart-l :cart-r :cart-d :cart-u})
 
+(def curve-mapping
+  "For a given curve type, maps between current heading and new heading"
+  {:curve-45 {:n :e
+              :s :w
+              :e :n
+              :w :s}
+   :curve-135 {:s :e
+               :n :w
+               :e :s
+               :w :n}})
+
 ;; Input parsing
 (def charmap
   {\\ :curve-135
@@ -54,38 +65,40 @@
       (update :int-cnt inc)))
 
 (defn on-curve
+  "Returns the new cart state when the cart is on a curved track segment"
   [curve {:keys [heading] :as cart}]
-  (assoc cart :heading
-         (case curve
-           :curve-45 (case heading
-                       :n :e
-                       :s :w
-                       :e :n
-                       :w :s)
-           :curve-135 (case heading
-                        :s :e
-                        :n :w
-                        :e :s
-                        :w :n))))
+  (assoc cart :heading (get-in curve-mapping [curve heading])))
+
+(defn updated-cart
+  "Given the state grid and the new cart position, reorients the
+   cart depending upon the track at that new position"
+  [state pos cart]
+  (let [track (grid/value state pos)]
+    (case track
+      :intersection (turn-cart cart)
+      :curve-45     (on-curve track cart)
+      :curve-135    (on-curve track cart)
+      cart)))
 
 (defn tick-cart
-  "Update one cart forward in time."
+  "Update the currently active cart forward one tick in time."
   [part {:keys [carts removed] :as state} cart]
+  ;; In part 2, we need to remove both carts simultaneously, but the
+  ;; reduce function in `tick` won't know that, so we use the 
+  ;; `removed` set to skip updates on already removed carts.
   (if (and (= :part2 part) (removed cart))
     state
     (let [{:keys [pos] :as fwd-cart} (grid/forward cart 1)
-          track  (grid/value state pos)
-          new-cart (case track
-                     :intersection (turn-cart fwd-cart)
-                     :curve-45     (on-curve track fwd-cart)
-                     :curve-135    (on-curve track fwd-cart)
-                     fwd-cart)
+          new-cart   (updated-cart state pos fwd-cart)
+          ;; If the cart collided with another, we updated its state
           final-cart (if ((set (map :pos carts)) pos)
                        (assoc new-cart :collided true)
                        new-cart)
+          ;; For part 2, we need the other cart to remove as well
           other-cart (first (filter #(= pos (:pos %)) carts))]
       (if (and (= :part2 part) (some? other-cart))
         (-> state
+            ;; We keep track of the removed carts in part2
             (update :removed conj cart other-cart)
             (update :carts disj cart other-cart))
         (-> state
@@ -116,12 +129,16 @@
                  :part1 tick-cart-p1
                  :part2 tick-cart-p2)]
     (-> (reduce ticker state (cart-order carts))
+        ;; We reset the removed after every tick so we don't accidentally
+        ;; remove anything that happens to cross the path of an old
+        ;; cart that got removed
         (assoc :removed #{}))))
 
 (def tick-part1 (partial tick :part1))
 (def tick-part2 (partial tick :part2))
 
 (defn correct-coordinates
+  "Corrects the coordinates from bottom-0 to to top-0 oriented."
   [height [x y]]
   [x (- height y 1)])
 
@@ -130,32 +147,38 @@
   [{:keys [carts]}]
   (not-any? :collided carts))
 
-(defn first-crash
-  "Returns the location of the first cart crash"
-  [{:keys [height] :as state}]
-  (->> (merge state {:carts (carts state) :removed #{}})
-       (iterate tick-part1)
-       (drop-while not-crashed?)
-       first
-       :carts
-       (filter :collided)
+(defn cart->str
+  "Converts the first element of the returned carts coordinate into a
+   comma-separated string"
+  [height carts]
+  (->> carts
        first
        :pos
        (correct-coordinates height)
        (str/join ",")))
 
+(defn tick-till-cond
+  "Evolves the state using the `ticker` function until `run-cond` turns false
+   and then returns the carts"
+  [state ticker run-cond]
+  (->> (merge state {:carts (carts state) :removed #{}})
+       (iterate ticker)
+       (drop-while run-cond)
+       first
+       :carts))
+
+(defn first-crash
+  "Returns the location of the first cart crash"
+  [{:keys [height] :as state}]
+  (->> (tick-till-cond state tick-part1 not-crashed?)
+       (filter :collided)
+       (cart->str height)))
+
 (defn last-cart
   "Returns the location of the only remaining cart after crashed carts are removed"
   [{:keys [height] :as state}]
-  (->> (merge state {:carts (carts state) :removed #{}})
-       (iterate tick-part2)
-       (drop-while #(> (count (:carts %)) 1))
-       first
-       :carts
-       first
-       :pos
-       (correct-coordinates height)
-       (str/join ",")))
+  (->> (tick-till-cond state tick-part2 #(> (count (:carts %)) 1))
+       (cart->str height)))
 
 ;; Puzzle solutions
 (defn part1
