@@ -70,24 +70,27 @@
 
 (defn tick-cart
   "Update one cart forward in time."
-  [part {:keys [carts] :as state} cart]
-  (let [{:keys [pos] :as fwd-cart} (grid/forward cart 1)
-        track  (grid/value state pos)
-        new-cart (case track
-                   :intersection (turn-cart fwd-cart)
-                   :curve-45     (on-curve track fwd-cart)
-                   :curve-135    (on-curve track fwd-cart)
-                   fwd-cart)
-        final-cart (if ((set (map :pos carts)) pos)
-                     (assoc new-cart :collided true)
-                     new-cart)
-        other-cart (first (filter #(= pos (:pos %)) carts))]
-    (if (and (= :part2 part) (some? other-cart))
-      (-> state
-          (update :carts disj cart other-cart))
-      (-> state
-          (update :carts disj cart)
-          (update :carts conj final-cart)))))
+  [part {:keys [carts removed] :as state} cart]
+  (if (and (= :part2 part) (removed cart))
+    state
+    (let [{:keys [pos] :as fwd-cart} (grid/forward cart 1)
+          track  (grid/value state pos)
+          new-cart (case track
+                     :intersection (turn-cart fwd-cart)
+                     :curve-45     (on-curve track fwd-cart)
+                     :curve-135    (on-curve track fwd-cart)
+                     fwd-cart)
+          final-cart (if ((set (map :pos carts)) pos)
+                       (assoc new-cart :collided true)
+                       new-cart)
+          other-cart (first (filter #(= pos (:pos %)) carts))]
+      (if (and (= :part2 part) (some? other-cart))
+        (-> state
+            (update :removed conj cart other-cart)
+            (update :carts disj cart other-cart))
+        (-> state
+            (update :carts disj cart)
+            (update :carts conj final-cart))))))
 
 (def tick-cart-p1 (partial tick-cart :part1))
 (def tick-cart-p2 (partial tick-cart :part2))
@@ -112,7 +115,8 @@
   (let [ticker (case part
                  :part1 tick-cart-p1
                  :part2 tick-cart-p2)]
-    (reduce ticker state (cart-order carts))))
+    (-> (reduce ticker state (cart-order carts))
+        (assoc :removed #{}))))
 
 (def tick-part1 (partial tick :part1))
 (def tick-part2 (partial tick :part2))
@@ -124,14 +128,12 @@
 (defn not-crashed?
   "Returns true if no crash has yet occurred"
   [{:keys [carts]}]
-  (->> carts
-       (map :collided)
-       (not-any? true?)))
+  (not-any? :collided carts))
 
 (defn first-crash
   "Returns the location of the first cart crash"
   [{:keys [height] :as state}]
-  (->> (assoc state :carts (carts state))
+  (->> (merge state {:carts (carts state) :removed #{}})
        (iterate tick-part1)
        (drop-while not-crashed?)
        first
@@ -145,7 +147,7 @@
 (defn last-cart
   "Returns the location of the only remaining cart after crashed carts are removed"
   [{:keys [height] :as state}]
-  (->> (assoc state :carts (carts state))
+  (->> (merge state {:carts (carts state) :removed #{}})
        (iterate tick-part2)
        (drop-while #(> (count (:carts %)) 1))
        first

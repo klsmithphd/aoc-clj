@@ -182,6 +182,4 @@
 
 (deftest part2-test
   (testing "Reproduces the answer for day13, part2"
-    ;; Not the right answer
-    ;; Not 3,123 or 3,122
-    (is (= "3,123" (d13/part2 day13-input)))))
+    (is (= "50,21" (d13/part2 day13-input)))))
