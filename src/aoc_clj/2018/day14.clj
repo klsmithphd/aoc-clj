@@ -38,16 +38,14 @@
        (apply str)))
 
 (defn recipes-until-score
-  "How many recipes before the next recipes match the provided scores"
-  [score]
-  (let [c (count score)]
-    (->> init-state
-         (iterate step)
-         (map (comp str/join :scores))
-         (drop-while #(not (str/includes? % score)))
-         first
-         count
-         (+ (- c)))))
+  [score limit]
+  (let [big-scores (->> init-state
+                        (iterate step)
+                        (drop limit)
+                        first
+                        :scores
+                        (apply str))]
+    (str/index-of big-scores score)))
 
 ;; Puzzle solutions
 (defn part1
@@ -60,4 +58,4 @@
   "How many recipes appear on the scoreboard to the left of the score sequence
    in your puzzle input?"
   [input]
-  (recipes-until-score (str input)))
+  (recipes-until-score (str input) 30000000))

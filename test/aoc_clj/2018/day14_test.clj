@@ -26,10 +26,10 @@
 
 (deftest recipes-until-score
   (testing "How many recipes until the final scores match the digits provided"
-    (is (= 9    (d14/recipes-until-score "51589")))
-    (is (= 5    (d14/recipes-until-score "01245")))
-    (is (= 18   (d14/recipes-until-score "92510")))
-    (is (= 2018 (d14/recipes-until-score "59414")))))
+    (is (= 9    (d14/recipes-until-score "51589" 10)))
+    (is (= 5    (d14/recipes-until-score "01245" 10)))
+    (is (= 18   (d14/recipes-until-score "92510" 20)))
+    (is (= 2018 (d14/recipes-until-score "59414" 3000)))))
 
 (def day14-input (u/parse-puzzle-input d14/parse 2018 14))
 
@@ -39,4 +39,4 @@
 
 (deftest ^:slow part2-test
   (testing "Reproduces the answer for day14, part2"
-    (is (= 1 (d14/part2 day14-input)))))
+    (is (= 20231866 (d14/part2 day14-input)))))
