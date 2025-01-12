@@ -37,6 +37,8 @@
   (testing "Reproduces the answer for day14, part1"
     (is (= "9315164154" (d14/part1 day14-input)))))
 
+;; FIXME: https://github.com/klsmithphd/aoc-clj/issues/163
+;; Solution is too slow
 (deftest ^:slow part2-test
   (testing "Reproduces the answer for day14, part2"
     (is (= 20231866 (d14/part2 day14-input)))))

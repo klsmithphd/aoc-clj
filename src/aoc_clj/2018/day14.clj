@@ -38,6 +38,11 @@
        (apply str)))
 
 (defn recipes-until-score
+  "Returns the number of recipes generated until the sequence of scores
+   given by `score` is produced. `limit` is used to control how many 
+   scores are pre-computed before checking to see if `score` is produced.
+   
+   If `limit` is too low, this function will return nil."
   [score limit]
   (let [big-scores (->> init-state
                         (iterate step)
