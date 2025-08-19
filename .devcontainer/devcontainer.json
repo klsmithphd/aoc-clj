@@ -1,6 +1,12 @@
 {
   "build": {
     "dockerfile": "Dockerfile"
-  },  
-  "extensions": ["betterthantomorrow.calva"]
+  },
+    "customizations": {
+    "vscode": {
+      "extensions": [
+        "betterthantomorrow.calva"
+      ]
+    }
+  }  
 }
