@@ -22,11 +22,20 @@
   (testing "Correctly parses the input"
     (is (= d01-s00 (d01/parse d01-s00-raw)))))
 
+(deftest dial-positions-test
+  (testing "Returns a seq of all the dial positions"
+    (is (= [50 82 52 0 95 55 0 99 0 14 32]
+           (d01/dial-positions d01-s00)))))
+
+(deftest zero-count-test
+  (testing "Returns the number of times the dial was at position zero"
+    (is (= 3 (d01/zero-count d01-s00)))))
+
 (def day01-input (u/parse-puzzle-input d01/parse 2025 1))
 
 (deftest part1-test
   (testing "Reproduces the answer for day01, part1"
-    (is (= :not-implemented (d01/part1 day01-input)))))
+    (is (= 1172 (d01/part1 day01-input)))))
 
 (deftest part2-test
   (testing "Reproduces the answer for day01, part2"
