@@ -31,6 +31,15 @@
   (testing "Returns the number of times the dial was at position zero"
     (is (= 3 (d01/zero-count d01-s00)))))
 
+(deftest clicks-test
+  (testing "Expands turns into individual clicks"
+    (is (= [-1 -1 1 1 1 1 -1 -1 -1 -1 -1]
+           (d01/clicks [-2 4 -5])))))
+
+(deftest zero-click-count-test
+  (testing "Counts the number of times the dial passed position zero"
+    (is (= 6 (d01/zero-click-count d01-s00)))))
+
 (def day01-input (u/parse-puzzle-input d01/parse 2025 1))
 
 (deftest part1-test
@@ -39,4 +48,4 @@
 
 (deftest part2-test
   (testing "Reproduces the answer for day01, part2"
-    (is (= :not-implemented (d01/part2 day01-input)))))
+    (is (= 6932 (d01/part2 day01-input)))))
