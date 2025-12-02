@@ -25,6 +25,12 @@
   [num]
   (some? (re-matches #"^(\d+)(\1)$" (str num))))
 
+(defn part2-invalid?
+  "Returns true if the number is made only of some sequence of digits repeated
+   at least twice"
+  [num]
+  (some? (re-matches #"^(\d+)(\1)+$" (str num))))
+
 (defn all-invalid-ids
   "Returns all of the invalid IDs across the ranges given"
   [invalid? ranges]
@@ -44,5 +50,6 @@
   (all-invalid-ids-sum part1-invalid? input))
 
 (defn part2
-  [_]
-  :not-implemented)
+  "What do you get if you add up all of the invalid IDs using these new rules?"
+  [input]
+  (all-invalid-ids-sum part2-invalid? input))
