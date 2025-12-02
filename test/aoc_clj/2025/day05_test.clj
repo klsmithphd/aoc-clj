@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.2025.day05 :as d05]))
 
-(def day05-input (u/parse-puzzle-input d05/parse 2025 1))
+(def day05-input (u/parse-puzzle-input d05/parse 2025 5))
 
 (deftest part1-test
   (testing "Reproduces the answer for day05, part1"
