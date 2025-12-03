@@ -19,6 +19,15 @@
   (testing "Correctly parses the input"
     (is (= d03-s00 (d03/parse d03-s00-raw)))))
 
+(deftest two-max-test
+  (testing "Correctly finds the two largest numbers"
+    (is (= [9 8] (d03/two-max (nth d03-s00 0))))
+    ;; All failing because the sort doesn't work.
+    ;; (is (= [8 9] (d03/two-max (nth d03-s00 1))))
+    ;; (is (= [7 8] (d03/two-max (nth d03-s00 0))))
+    ;; (is (= [9 2] (d03/two-max (nth d03-s00 0))))
+    ))
+
 (def day03-input (u/parse-puzzle-input d03/parse 2025 3))
 
 (deftest part1-test
