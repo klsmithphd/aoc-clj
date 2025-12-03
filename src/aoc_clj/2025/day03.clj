@@ -2,9 +2,13 @@
   "Solution to https://adventofcode.com/2025/day/3")
 
 ;; Input parsing
+(defn parse-line
+  [line]
+  (map #(Character/digit % 10) line))
+
 (defn parse
   [input]
-  input)
+  (map parse-line input))
 
 ;; Puzzle logic
 
