@@ -19,6 +19,25 @@
        (sort >)
        (take 2)))
 
+(defn digit-positions
+  [nums]
+  (->> (map-indexed vector nums)
+       (group-by second)
+       (u/fmap #(mapv first %))))
+
+(defn next-digit
+  [digit-pos a a-pos])
+
+;; (defn largest-two-digits
+;;   [nums]
+;;   (let [digit-pos (digit-positions nums)
+;;         digits    (sort > (keys digit-pos))
+;;         start     (first digits)
+;;         start-pos (first (digit-pos start))]
+;;     (loop [a start a-pos start-pos]
+;;       (if ()))))
+;; 
+(keys (digit-positions [8 1 8 1 8 1 9 1 1 1 1 2 1 1 1]))
 
 ;; Thoughts
 ;; Create a map of digit to position in order, e.g.
