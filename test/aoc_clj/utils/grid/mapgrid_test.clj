@@ -1,40 +1,40 @@
 (ns aoc-clj.utils.grid.mapgrid-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.grid :refer
-             [width height value pos-seq val-seq slice neighbors-4 neighbors-8]]
+            [aoc-clj.utils.grid :as grid :refer
+             [width height orientation value pos-seq val-seq slice neighbors-4 neighbors-8]]
             [aoc-clj.utils.grid.mapgrid :as mg :refer [->MapGrid2D]]))
 
 (def sample
-  (->MapGrid2D 3 2 {[0 0] 1 [1 0] 2 [2 0] 3
-                    [0 1] 4 [1 1] 5 [2 1] 6}))
+  (->MapGrid2D 3 2 :y-down {[0 0] 1 [1 0] 2 [2 0] 3
+                            [0 1] 4 [1 1] 5 [2 1] 6}))
 
 (deftest MapGrid2D-test
   (testing "Satisifies the Grid2D protocol"
     (is (= 3 (width sample)))
     (is (= 2 (height sample)))
+    (is (= :y-down (orientation sample)))
     (is (= 5 (value sample [1 1])))
     (is (= [[0 0] [1 0] [2 0] [0 1] [1 1] [2 1]] (pos-seq sample)))
     (is (= [1 2 3 4 5 6] (val-seq sample)))
-    (is (= (->MapGrid2D 3 1 {[0 1] 4 [1 1] 5 [2 1] 6})
+    (is (= (->MapGrid2D 3 1 :y-down {[0 1] 4 [1 1] 5 [2 1] 6})
            (slice sample :row 1)))
-    (is (= (->MapGrid2D 1 2 {[2 0] 3 [2 1] 6})
+    (is (= (->MapGrid2D 1 2 :y-down {[2 0] 3 [2 1] 6})
            (slice sample :col 2)))
     (is (= {[1 0] 2 [0 1] 4 [1 2] nil [2 1] 6}
            (neighbors-4 sample [1 1])))
-    (is (= {[0 -1] nil [1 -1] nil [2 -1] nil
-            [0 0] 1               [2 0] 3
-            [0 1] 4    [1 1] 5    [2 1] 6}
+    (is (= {[1 -1] nil [2 -1] nil [2 0] 3 [2 1] 6 [1 1] 5 [0 1] 4 [0 0] 1 [0 -1] nil}
            (neighbors-8 sample [1 0])))))
 
 (deftest lists->MapGrid2D-test
   (testing "Transform a list-of-lists into a MapGrid2D"
-    (is (= (->MapGrid2D 2 2 {[0 0] :a [1 0] :b [0 1] :c [1 1] :d})
+    (is (= (->MapGrid2D 2 2 :y-up {[0 1] :a [1 1] :b [0 0] :c [1 0] :d})
            (mg/lists->MapGrid2D [[:a :b] [:c :d]])))))
 
 (deftest ascii->MapGrid2D-test
   (testing "Successfully transforms ASCII art into a MapGrid2D"
     (is (= (->MapGrid2D
             3 2
+            :y-down
             {[0 0] :space
              [1 0] :space
              [2 0] :wall

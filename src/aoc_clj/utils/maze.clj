@@ -4,8 +4,9 @@
             [aoc-clj.utils.core :as u]))
 
 (defn one-step
-  [{:keys [pos heading] :as walker}]
-  (assoc walker :pos (mapv + pos (grid/cardinal-offsets heading))))
+  ([walker] (one-step walker :y-up))
+  ([{:keys [pos heading] :as walker} orientation]
+   (assoc walker :pos (mapv + pos (get-in grid/cardinal-offsets [orientation heading])))))
 
 (defn next-cells
   "Returns the next viable cells to visit (if any) for a given `grid`,
@@ -13,8 +14,8 @@
    
    Requires a function `open?` which should accept the map of neighbor
    data as a single argument"
-  [grid open? {:keys [pos heading]}]
-  (->> (grid/neighbor-data grid pos)
+  [grid open? {:keys [pos heading]} & {:keys [orientation] :or {orientation :y-up}}]
+  (->> (grid/neighbor-data grid pos :orientation orientation)
        (grid/with-rel-bearings heading)
        (filter open?)))
 
@@ -22,7 +23,7 @@
   [open? maze]
   (map first (filter #(open? (val %)) maze)))
 
-(defrecord Maze [maze open?]
+(defrecord Maze [maze orientation open?]
   Graph
   (vertices
     [_]
@@ -30,7 +31,7 @@
 
   (edges
     [_ v]
-    (all-open open? (grid/neighbors-2d maze v)))
+    (all-open open? (grid/neighbors-2d maze v :orientation orientation)))
 
   (distance
     [_ _ _]
@@ -38,7 +39,7 @@
 
   (without-vertex
     [_ v]
-    (->Maze (assoc maze v :wall) open?)))
+    (->Maze (assoc maze v :wall) orientation open?)))
 
 (defn Maze->Graph
   [maze]
@@ -93,7 +94,7 @@
       ;; know all of the adjacent values
     (if (and (= [0 0] (state :pos))
              (= 4 (count (grid/neighbors-2d (state :maze) (state :pos)))))
-      (->Maze (:maze state) (complement wall?))
+      (->Maze (:maze state) :y-up (complement wall?))
       (recur (maze-step probe state)))))
 
 (defn find-target
@@ -102,16 +103,16 @@
   (ffirst (filter #(= target (val %)) (:maze maze))))
 
 (defn spread-to-adjacent
-  [maze [x y]]
-  (let [thens (grid/neighbors-2d maze [x y])
+  [maze [x y] & {:keys [orientation] :or {orientation :y-up}}]
+  (let [thens (grid/neighbors-2d maze [x y] :orientation orientation)
         to-add (filter #(= :open (val %)) thens)]
     (keys to-add)))
 
 (defn flood-fill
-  [maze start]
+  [maze start & {:keys [orientation] :or {orientation :y-up}}]
   (loop [newmaze (:maze maze) last-added [start] count 0]
     (if (= 0 (u/count-if newmaze #(= :open (val %))))
       count
-      (let [changes (mapcat (partial spread-to-adjacent newmaze) last-added)
+      (let [changes (mapcat #(spread-to-adjacent newmaze % :orientation orientation) last-added)
             updates (merge newmaze (zipmap changes (repeat :oxygen)))]
         (recur updates changes (inc count))))))

@@ -1,28 +1,34 @@
 (ns aoc-clj.utils.grid.vecgrid
   (:require [aoc-clj.utils.grid :as grid :refer [Grid2D]]))
 
-(defrecord VecGrid2D [v]
+(defrecord VecGrid2D [orientation v]
   Grid2D
   (width [_] (count (first v)))
   (height [_] (count v))
-  (value [_ [x y]] (get-in v [y x]))
+  (orientation [_] orientation)
+  (value [_ [x y]]
+    (let [h (count v)]
+      (if (= :y-up orientation)
+        (get-in v [(- h 1 y) x])
+        (get-in v [y x]))))
   (pos-seq [this] (grid/positions this))
   (val-seq [_] (flatten v))
   (in-grid? [this pos] (grid/within-grid? this pos))
   (slice
     [_ dim idx]
     (->VecGrid2D
+     orientation
      (case dim
        :row (vector (get v idx))
        :col (mapv vector (map #(nth % idx) v)))))
   (neighbors-4
-    [_ pos]
-    (let [locs (grid/adj-coords-2d pos)]
-      (zipmap locs (map #(get-in v (-> % reverse vec)) locs))))
+    [this pos]
+    (let [locs (grid/adj-coords-2d pos :orientation orientation)]
+      (zipmap locs (map (partial grid/value this) locs))))
   (neighbors-8
-    [_ pos]
-    (let [locs (grid/adj-coords-2d pos :include-diagonals true)]
-      (zipmap locs (map #(get-in v (-> % reverse vec)) locs)))))
+    [this pos]
+    (let [locs (grid/adj-coords-2d pos :include-diagonals true :orientation orientation)]
+      (zipmap locs (map (partial grid/value this) locs)))))
 
 (defn summed-area-table
   "Returns a summed-area table for a given 2d vec-of-vecs.
@@ -61,5 +67,5 @@
    y coordinate increases in the down direction, i.e the way
    screen coordinates typically work."
   [charmap lines & {:keys [down]}]
-  (->VecGrid2D (mapv #(mapv charmap %)
-                     (if down lines (reverse lines)))))
+  (let [orientation (if down :y-down :y-up)]
+    (->VecGrid2D orientation (mapv #(mapv charmap %) lines))))

@@ -114,6 +114,7 @@
                              :grid
                              (filter #(not= :nothing (val %)))
                              (into {}))
+                        :y-down
                         (partial = :open))
         graph   (-> themaze
                     maze/Maze->Graph

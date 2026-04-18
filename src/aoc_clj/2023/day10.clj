@@ -28,20 +28,23 @@
 
 (defn allowed-tiles
   "For the set of neighboring tile locations and their values,
-   return in the order S E N W, determine which are allowable moves
+   determine which are allowable moves
    (based on which ends of the pipes are open to the direction we'd be
    heading in)"
-  [neighbors]
-  (let [[south east north west] (seq neighbors)]
-    (filter some?
-            [(when (#{:pipe-v :ell-ne :ell-nw} (val south))
-               (key south))
-             (when (#{:pipe-h :ell-nw :ell-sw} (val east))
-               (key east))
-             (when (#{:pipe-v :ell-se :ell-sw} (val north))
-               (key north))
-             (when (#{:pipe-h :ell-ne :ell-se} (val west))
-               (key west))])))
+  [grid pos]
+  (filter some?
+          [(let [south-pos (grid/neighbor-pos pos :s :y-down)]
+             (when (#{:pipe-v :ell-ne :ell-nw} (grid/value grid south-pos))
+               south-pos))
+           (let [east-pos (grid/neighbor-pos pos :e :y-down)]
+             (when (#{:pipe-h :ell-nw :ell-sw} (grid/value grid east-pos))
+               east-pos))
+           (let [north-pos (grid/neighbor-pos pos :n :y-down)]
+             (when (#{:pipe-v :ell-se :ell-sw} (grid/value grid north-pos))
+               north-pos))
+           (let [west-pos (grid/neighbor-pos pos :w :y-down)]
+             (when (#{:pipe-h :ell-ne :ell-se} (grid/value grid west-pos))
+               west-pos))]))
 
 (defn heading
   "Determines the direction we just came from by comparing the current
@@ -55,40 +58,39 @@
       :down
       :up)))
 
-(defn next-location
-  "Returns the next location along the loop based on the current pipe
+(defn next-direction
+  "Returns the next direction along the loop based on the current pipe
    and the direction we entered from"
   [prev curr tile]
   (let [dir (heading prev curr)]
-    ;; S = 0, E = 1, N = 2, W = 3
     (case dir
       :right (case tile
-               :pipe-h 1
-               :ell-nw 2
-               :ell-sw 0)
+               :pipe-h :e
+               :ell-nw :n
+               :ell-sw :s)
       :left  (case tile
-               :pipe-h 3
-               :ell-ne 2
-               :ell-se 0)
+               :pipe-h :w
+               :ell-ne :n
+               :ell-se :s)
       :up    (case tile
-               :pipe-v 2
-               :ell-se 1
-               :ell-sw 3)
+               :pipe-v :n
+               :ell-se :e
+               :ell-sw :w)
       :down  (case tile
-               :pipe-v 0
-               :ell-ne 1
-               :ell-nw 3))))
+               :pipe-v :s
+               :ell-ne :e
+               :ell-nw :w))))
 
 
 (defn loop-positions
   "Finds all of the positions along the loop"
   [grid]
   (let [init (start grid)]
-    (loop [pos (first (allowed-tiles (neighbors-4 grid init)))
+    (loop [pos (first (allowed-tiles grid init))
            visited [init]]
       (if (= pos init)
         visited
-        (recur (key (nth (seq (neighbors-4 grid pos)) (next-location (last visited) pos (value grid pos))))
+        (recur (grid/neighbor-pos pos (next-direction (last visited) pos (value grid pos)) :y-down)
                (into visited [pos]))))))
 
 (defn farthest-steps-from-start

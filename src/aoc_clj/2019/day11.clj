@@ -8,32 +8,21 @@
 
 (def parse u/firstv)
 
-(defn turn-left-and-move
-  [{:keys [direction] [x y] :position}]
-  (case direction
-    :up    {:position [(dec x) y] :direction :left}
-    :left  {:position [x (dec y)] :direction :down}
-    :down  {:position [(inc x) y] :direction :right}
-    :right {:position [x (inc y)] :direction :up}))
-
-(defn turn-right-and-move
-  [{:keys [direction] [x y] :position}]
-  (case direction
-    :up    {:position [(inc x) y] :direction :right}
-    :right {:position [x (dec y)] :direction :down}
-    :down  {:position [(dec x) y] :direction :left}
-    :left  {:position [x (inc y)] :direction :up}))
+(defn turn-and-move
+  [{:keys [heading pos] :as state} bearing]
+  (-> state
+      (grid/turn bearing)
+      (grid/forward 1 :y-up)))
 
 (defn move-and-paint
-  [{:keys [hull position] :as state} paint turn]
-  (assoc (case turn
-           0 (turn-left-and-move state)
-           1 (turn-right-and-move state))
-         :hull (assoc hull position paint)))
+  [{:keys [hull pos] :as state} paint turn-cmd]
+  (let [bearing (case turn-cmd 0 :left 1 :right)
+        new-state (turn-and-move state bearing)]
+    (assoc new-state :hull (assoc hull pos paint))))
 
 (defn robot-step
-  [in out {:keys [hull position] :as state}]
-  (let [_ (s/put! in (get hull position 0))
+  [in out {:keys [hull pos] :as state}]
+  (let [_ (s/put! in (get hull pos 0))
         paint @(s/take! out)
         turn  @(s/take! out)]
     (if (and paint turn)
@@ -46,7 +35,7 @@
         out (s/stream)
         stepper (partial robot-step in out)
         program (future (intcode/intcode-exec intcode in out))]
-    (loop [state {:hull {[0,0] start-panel} :position [0,0] :direction :up}]
+    (loop [state {:hull {[0,0] start-panel} :pos [0,0] :heading :n}]
       (if (realized? program)
         state
         (recur (stepper state))))))
@@ -60,7 +49,7 @@
   (->> (paint-bot input 1)
        :hull
        grid/mapgrid->vectors
-       ->VecGrid2D
+       (->VecGrid2D :y-up)
        (grid/Grid2D->ascii {\  0 \* 1})
        print))
 

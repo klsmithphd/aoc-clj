@@ -12,11 +12,11 @@
    "L|-JF"])
 
 (def d10-s00
-  (vg/->VecGrid2D [[:pipe-h :ell-ne :pipe-v :ell-se :ell-sw]
-                   [:ell-sw :start :pipe-h :ell-sw :pipe-v]
-                   [:ell-ne :pipe-v :ell-sw :pipe-v :pipe-v]
-                   [:pipe-h :ell-ne :pipe-h :ell-nw :pipe-v]
-                   [:ell-ne :pipe-v :pipe-h :ell-nw :ell-se]]))
+  (vg/->VecGrid2D :y-down [[:pipe-h :ell-ne :pipe-v :ell-se :ell-sw]
+                           [:ell-sw :start :pipe-h :ell-sw :pipe-v]
+                           [:ell-ne :pipe-v :ell-sw :pipe-v :pipe-v]
+                           [:pipe-h :ell-ne :pipe-h :ell-nw :pipe-v]
+                           [:ell-ne :pipe-v :pipe-h :ell-nw :ell-se]]))
 
 (def d10-s01-raw ["7-F7-"
                   ".FJ|7"

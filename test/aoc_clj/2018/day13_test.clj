@@ -24,7 +24,7 @@
     "  \\<->/"]))
 
 (def d13-s00
-  (mg/->MapGrid2D 13 6
+  (mg/->MapGrid2D 13 6 :y-up
                   {[0 5] :curve-45
                    [1 5] :h
                    [2 5] :cart-r

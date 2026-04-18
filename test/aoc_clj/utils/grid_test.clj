@@ -8,7 +8,7 @@
    [0 1] 4 [1 1] 5 [2 1] 6
    [0 0] 1 [1 0] 2 [2 0] 3})
 
-(def sample-grid (mg/->MapGrid2D 3 3 sample))
+(def sample-grid (mg/->MapGrid2D 3 3 :y-up sample))
 
 (deftest find-nodes-test
   (testing "Retrieves the positions of the nodes with the provided value"
@@ -86,9 +86,7 @@
 (deftest adj-coords-2d-test
   (testing "Returns the directly adjacent coordinates to the given pos"
     (is (= [[0 1] [1 0] [0 -1] [-1 0]] (grid/adj-coords-2d [0 0])))
-    (is (= [[-1 -1] [0 -1] [1 -1]
-            [-1  0]        [1  0]
-            [-1  1] [0  1] [1  1]]
+    (is (= [[0 1] [1 1] [1 0] [1 -1] [0 -1] [-1 -1] [-1 0] [-1 1]]
            (grid/adj-coords-2d [0 0] :include-diagonals true)))))
 
 (deftest adj-coords-3d-test
@@ -120,7 +118,9 @@
            (grid/mapgrid->vectors sparse-sample)))))
 
 (deftest interpolated-test
-  (testing "Computes the collection of points between two co-linear points"
+  (testing "Computes the collection of points between two points (H, V, or diagonal)"
     (is (= [[1 4] [2 4] [3 4] [4 4]] (grid/interpolated [[1 4] [4 4]])))
     (is (= [[3 2] [3 1] [3 0] [3 -1]] (grid/interpolated [[3 2] [3 -1]])))
+    (is (= [[1 1] [2 2] [3 3]] (grid/interpolated [[1 1] [3 3]])))
+    (is (= [[5 5] [4 6] [3 7]] (grid/interpolated [[5 5] [3 7]])))
     (is (= [[1 1]] (grid/interpolated [[1 1] [1 1]])))))

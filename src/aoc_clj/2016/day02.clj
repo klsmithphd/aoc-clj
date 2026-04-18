@@ -1,5 +1,6 @@
 (ns aoc-clj.2016.day02
-  "Solution to https://adventofcode.com/2016/day/2")
+  "Solution to https://adventofcode.com/2016/day/2"
+  (:require [aoc-clj.utils.grid :as grid]))
 
 ;; Constants
 (def first-pos [0 0])
@@ -22,12 +23,8 @@
 ;; Puzzle logic
 (defn intended-step
   "Determine the grid position that `cmd` would have you try to move to next"
-  [[x y] cmd]
-  (case cmd
-    \U [x (dec y)]
-    \D [x (inc y)]
-    \R [(inc x) y]
-    \L [(dec x) y]))
+  [pos cmd]
+  (grid/neighbor-pos pos ({\U :n \D :s \R :e \L :w} cmd) :y-down))
 
 (defn move
   "Apply the given `cmd` to move (or not move if impossible) to the next

@@ -19,6 +19,7 @@
 
 (def d21-s00
   (vg/->VecGrid2D
+   :y-down
    [[:plot :plot :plot :plot :plot :plot :plot :plot :plot :plot :plot]
     [:plot :plot :plot :plot :plot :rock :rock :rock :plot :rock :plot]
     [:plot :rock :rock :rock :plot :rock :rock :plot :plot :rock :plot]

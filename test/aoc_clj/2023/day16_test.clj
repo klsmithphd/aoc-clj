@@ -18,6 +18,7 @@
 
 (def d16-s00
   (vg/->VecGrid2D
+   :y-down
    [[:empty :spltv :empty :empty :empty :mrrr1 :empty :empty :empty :empty]
     [:spltv :empty :splth :empty :mrrr1 :empty :empty :empty :empty :empty]
     [:empty :empty :empty :empty :empty :spltv :splth :empty :empty :empty]

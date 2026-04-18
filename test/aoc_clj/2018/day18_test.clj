@@ -18,6 +18,7 @@
 
 (def d18-s00
   (vg/->VecGrid2D
+   :y-down
    [[:o :l :o :l :o :o :o :t :l :o]
     [:o :o :o :o :o :l :t :l :l :t]
     [:o :t :o :o :t :o :o :o :l :o]
@@ -31,6 +32,7 @@
 
 (def d18-s00-step1
   (vg/->VecGrid2D
+   :y-down
    [[:o :o :o :o :o :o :o :l :l :o]
     [:o :o :o :o :o :o :t :l :l :l]
     [:o :t :o :o :t :o :o :o :l :o]
@@ -44,6 +46,7 @@
 
 (def d18-s00-step10
   (vg/->VecGrid2D
+   :y-down
    [[:o :t :t :l :l :o :o :o :o :o]
     [:t :t :l :l :l :o :o :o :o :o]
     [:t :t :l :l :o :o :o :o :o :o]

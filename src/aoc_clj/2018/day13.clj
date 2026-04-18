@@ -33,8 +33,8 @@
 
 (defn parse
   [input]
-  (let [{:keys [grid width height]} (mg/ascii->MapGrid2D charmap input)]
-    (mg/->MapGrid2D width height (into {} (remove #(nil? (val %)) grid)))))
+  (let [{:keys [grid width height orientation]} (mg/ascii->MapGrid2D charmap input)]
+    (mg/->MapGrid2D width height orientation (into {} (remove #(nil? (val %)) grid)))))
 
 ;; Puzzle logic
 (defn cart-map
@@ -88,7 +88,7 @@
   ;; `removed` set to skip updates on already removed carts.
   (if (and (= :part2 part) (removed cart))
     state
-    (let [{:keys [pos] :as fwd-cart} (grid/forward cart 1)
+    (let [{:keys [pos] :as fwd-cart} (grid/forward cart 1 (grid/orientation state))
           new-cart   (updated-cart state pos fwd-cart)
           ;; If the cart collided with another, we updated its state
           final-cart (if ((set (map :pos carts)) pos)
@@ -109,7 +109,8 @@
 (def tick-cart-p2 (partial tick-cart :part2))
 
 (defn cart-compare
-  "Compares the positions of two carts."
+  "Compares the positions of two carts. Reading order is top-to-bottom
+   (descending y), then left-to-right (ascending x)"
   [carta cartb]
   (let [[xa ya] (:pos carta)
         [xb yb] (:pos cartb)]
@@ -137,15 +138,16 @@
 (def tick-part1 (partial tick :part1))
 (def tick-part2 (partial tick :part2))
 
-(defn correct-coordinates
-  "Corrects the coordinates from bottom-0 to to top-0 oriented."
-  [height [x y]]
-  [x (- height y 1)])
-
 (defn not-crashed?
   "Returns true if no crash has yet occurred"
   [{:keys [carts]}]
   (not-any? :collided carts))
+
+(defn correct-coordinates
+  "Corrects the coordinates from internal Y-up (0 is bottom) to 
+   puzzle output reading-order (0 is top)."
+  [height [x y]]
+  [x (- height y 1)])
 
 (defn cart->str
   "Converts the first element of the returned carts coordinate into a

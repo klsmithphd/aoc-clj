@@ -109,6 +109,7 @@
             (mg/->MapGrid2D
              screen-width
              screen-height
+             :y-down
              (final-state screen-width screen-height input))
             :down true))
   (comment

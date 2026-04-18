@@ -74,6 +74,7 @@
         shifted               (map #(v/vec-add [(- mnx) (- mny)] %) positions)
         grid                  (mg/->MapGrid2D
                                (inc (- mxx mnx)) (inc (- mxy mny))
+                               :y-down
                                (zipmap shifted (repeat :on)))]
     (grid/Grid2D->ascii {\# :on \  nil} grid :down true)))
 

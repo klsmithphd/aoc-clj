@@ -55,7 +55,7 @@
          (map #(cell-update scan %))
          (partition width)
          (mapv vec)
-         vg/->VecGrid2D)))
+         (vg/->VecGrid2D (grid/orientation scan)))))
 
 (defn state-at-t
   "Returns the updated state of the scan at time `t`"

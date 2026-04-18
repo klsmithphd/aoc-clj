@@ -57,7 +57,7 @@
   [input]
   (-> (mg/ascii->MapGrid2D charmap input :down true)
       :grid
-      (maze/->Maze #(not= :wall %))
+      (maze/->Maze :y-down #(not= :wall %))
       stop-graph))
 
 ;; Puzzle logic
