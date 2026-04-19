@@ -13,16 +13,16 @@
 
 (deftest power-level-test
   (testing "Computes the power level of any cell"
-    (is (= 4  (d11/cell-power-level 8 [3 5])))
-    (is (= -5 (d11/cell-power-level 57 [122 79])))
-    (is (= 0  (d11/cell-power-level 39 [217 196])))
-    (is (= 4  (d11/cell-power-level 71 [101 153])))))
+    (is (= 4  (d11/cell-power-level 8 [5 3])))
+    (is (= -5 (d11/cell-power-level 57 [79 122])))
+    (is (= 0  (d11/cell-power-level 39 [196 217])))
+    (is (= 4  (d11/cell-power-level 71 [153 101])))))
 
 (deftest upper-coords-test
   (testing "Returns the upper-left square definitions for all
             squares of a given size that can fit in a 300x300 grid"
     (is (= [[0 0 300]] (d11/upper-coords 300)))
-    (is (= [[0 0 299] [1 0 299] [0 1 299] [1 1 299]]
+    (is (= [[0 0 299] [0 1 299] [1 0 299] [1 1 299]]
            (d11/upper-coords 299)))))
 
 (deftest highest-power-3x3-square-test
