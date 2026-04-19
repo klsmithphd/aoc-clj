@@ -15,8 +15,8 @@
 
 (deftest intersection-test
   (testing "Can find the intersections of the scaffolding"
-    (is (= [[2 2] [6 4] [2 4] [10 4]]
-           (t/intersections (t/scaffold-map d17-s00))))))
+    (is (= #{[2 2] [4 6] [4 2] [4 10]}
+           (set (t/intersections (t/scaffold-map d17-s00)))))))
 
 (def day17-input (u/parse-puzzle-input t/parse 2019 17))
 
