@@ -1,8 +1,8 @@
 (ns aoc-clj.2022.day24
   "Solution to https://adventofcode.com/2022/day/24"
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
-            [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]
+            [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
             [aoc-clj.utils.math :as math]
             [aoc-clj.utils.vectors :as v]))
 
@@ -18,23 +18,23 @@
 
 (defn parse
   [input]
-  (let [{:keys [width height grid]}
-        (mapgrid/ascii->MapGrid2D charmap input :down true)]
+  (let [{:keys [width height grid-map]}
+        (mapgrid/ascii->MapGridRC charmap input)]
     {:x-bound   (- width 2)
      :y-bound   (- height 2)
-     :blizzards (blizzards grid)}))
+     :blizzards (blizzards grid-map)}))
 
 ;;;; Puzzle logic
 
 (defn blizzard-update
   "Evolve a blizzards one step forward in time, implementing
    wrap-around logic."
-  [{:keys [x-bound y-bound]} [[x y] dir]]
+  [{:keys [x-bound y-bound]} [[row col] dir]]
   (let [newpos (case dir
-                 :u (if (= 1 y)       [x y-bound] [x (dec y)])
-                 :d (if (= y-bound y) [x 1]       [x (inc y)])
-                 :l (if (= 1 x)       [x-bound y] [(dec x) y])
-                 :r (if (= x-bound x) [1 y]       [(inc x) y]))]
+                 :u (if (= 1 row)       [y-bound col]   [(dec row) col])
+                 :d (if (= y-bound row) [1 col]         [(inc row) col])
+                 :l (if (= 1 col)       [row x-bound]   [row (dec col)])
+                 :r (if (= x-bound col) [row 1]         [row (inc col)]))]
     [newpos dir]))
 
 (defn step
@@ -58,11 +58,11 @@
       (nth states (mod time recurrence)))))
 
 (defn in-bounds?
-  [{:keys [x-bound y-bound]} [x y]]
-  (or (= [x y] [1 0])
-      (= [x y] [x-bound (inc y-bound)])
-      (and (<= 1 x x-bound)
-           (<= 1 y y-bound))))
+  [{:keys [x-bound y-bound]} [row col]]
+  (or (= [row col] [0 1])
+      (= [row col] [(inc y-bound) x-bound])
+      (and (<= 1 row y-bound)
+           (<= 1 col x-bound))))
 
 (defn augment
   "Remove the list of blizzard locations and add a blizzard
@@ -111,14 +111,14 @@
    beginning at time `t`"
   [{:keys [x-bound y-bound] :as state} t]
   (let [g (->BlizzardGraph (augment state))]
-    (find-path g [t [1 0]] [x-bound y-bound])))
+    (find-path g [t [0 1]] [y-bound x-bound])))
 
 (defn path-to-start
   "Find the path from the exit to the cell immediately before the start,
    beginning at time `t`"
   [{:keys [x-bound y-bound] :as state} t]
   (let [g (->BlizzardGraph (augment state))]
-    (find-path g [t [x-bound (inc y-bound)]] [1 1])))
+    (find-path g [t [(inc y-bound) x-bound]] [1 1])))
 
 (defn shortest-time-to-exit
   "Compute the shortest path from the start to the exit"
