@@ -157,7 +157,7 @@ functionality already in the grid namespace, but do not require it.
 
 ---
 
-## Alternatives
+## Design Improvement Alternatives
 
 ### Option A — Standardize on screen coordinates everywhere (recommended)
 
@@ -176,10 +176,32 @@ Eliminate the `:down` flag entirely — constructors always use screen conventio
 iteration becomes top-to-bottom, matching display order. `Grid2D->ascii` no longer needs a
 `:down` option.
 
-**Cost:** existing solutions using the default math convention (the majority) need their
-`cardinal-offsets` assumptions for `:n`/`:s` reviewed, and any explicit y-comparisons updated.
-However, the coordinate direction only affects solutions that navigate cardinally or compare
-absolute y values — many solutions are unaffected.
+**Cost:** fewer files need substantive changes than the size of the dependent-files list suggests.
+The migration falls into three categories:
+
+*Already on screen convention — no change needed (~7 files):*
+These files already pass `:down true` to the constructors, or use `lists->MapGrid2D` (which
+assigns y=0 to the top row), so they would be unaffected by the convention change:
+`2018/day10.clj`, `2021/day25.clj`, `2022/day12.clj`, `2023/day11.clj`,
+`2023/day16.clj`, `2023/day23.clj`, `2024/day15.clj`.
+
+*Topologically indifferent — no change needed (~15 files):*
+Solutions that do BFS/DFS, flood-fill, neighbor scanning, or cellular automata where only
+the graph structure matters and no absolute y value is compared against a semantically
+meaningful row. The convention change alters which y value each cell gets, but the answer is
+preserved. This covers most of the remaining dependent solutions.
+
+*Confirmed as needing updates (~2 files):*
+- `2022/day23.clj` — `open-dir` hardcodes `(inc y)` for `:n` neighbors and `(dec y)` for `:s`
+  (math convention) but then calls `cardinal-offsets` for the actual proposed move. Under
+  screen convention these would diverge and produce wrong answers.
+- `2019/day11.clj` — the robot's movement functions use math-convention y-arithmetic
+  (`dec y` when moving down), and `mapgrid->vectors` compensates with y-reversal at render
+  time. Both sides would need to be updated together.
+
+A handful of additional solutions that use the default constructor (math convention) may
+contain absolute y-coordinate comparisons that require inspection before migrating, but
+the number is expected to be small.
 
 ### Option B — Standardize on math coordinates everywhere
 
