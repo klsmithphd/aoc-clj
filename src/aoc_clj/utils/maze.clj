@@ -103,7 +103,7 @@
 
 (defn spread-to-adjacent
   [maze [row col]]
-  (let [thens (select-keys (:maze maze) (grid/adj-coords-2d [row col]))
+  (let [thens (select-keys maze (grid/adj-coords-2d [row col]))
         to-add (filter #(= :open (val %)) thens)]
     (keys to-add)))
 
