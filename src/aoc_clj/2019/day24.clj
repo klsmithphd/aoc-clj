@@ -1,8 +1,8 @@
 (ns aoc-clj.2019.day24
   "Solution to https://adventofcode.com/2019/day/24"
   (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+            [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid-rc]))
 
 (def bug-map
   {\. :space
@@ -11,7 +11,7 @@
 
 (defn parse
   [input]
-  (:grid (mapgrid/ascii->MapGrid2D bug-map input :down true)))
+  (:grid-map (mapgrid-rc/ascii->MapGridRC bug-map input)))
 
 (defn conway-rule
   [space pos neighbor-fn]
@@ -34,7 +34,7 @@
 
 (defn conway-rule-2d
   [space pos]
-  (conway-rule space pos grid/neighbors-2d))
+  (conway-rule space pos #(select-keys %1 (grid/adj-coords-2d %2))))
 
 (defn conway-step-2d
   [space]
@@ -42,7 +42,7 @@
 
 (defn biodiversity
   [space]
-  (read-string (apply str "2r" (map {:bug 1 :space 0} (reverse (for [y (range 5) x (range 5)] (space [x y])))))))
+  (read-string (apply str "2r" (map {:bug 1 :space 0} (reverse (for [row (range 5) col (range 5)] (space [row col])))))))
 
 (defn find-recurrence
   [space]
@@ -54,48 +54,48 @@
         (recur nextgrid nextbio (conj seen last))))))
 
 (defn base-neighbor-coords
-  [[x y z]]
-  [[x (dec y) z] [(dec x) y z] [x (inc y) z] [(inc x) y z]])
+  [[row col z]]
+  [[(dec row) col z] [row (dec col) z] [(inc row) col z] [row (inc col) z]])
 
 (defn outer-top
-  [coords [_ y z]]
-  (if (= 0 y)
-    (conj coords [2 1 (inc z)])
-    coords))
-(defn outer-bottom
-  [coords [_ y z]]
-  (if (= 4 y)
-    (conj coords [2 3 (inc z)])
-    coords))
-(defn outer-left
-  [coords [x _ z]]
-  (if (= 0 x)
+  [coords [row _ z]]
+  (if (= 0 row)
     (conj coords [1 2 (inc z)])
     coords))
-(defn outer-right
-  [coords [x _ z]]
-  (if (= 4 x)
+(defn outer-bottom
+  [coords [row _ z]]
+  (if (= 4 row)
     (conj coords [3 2 (inc z)])
     coords))
+(defn outer-left
+  [coords [_ col z]]
+  (if (= 0 col)
+    (conj coords [2 1 (inc z)])
+    coords))
+(defn outer-right
+  [coords [_ col z]]
+  (if (= 4 col)
+    (conj coords [2 3 (inc z)])
+    coords))
 (defn inner-top
-  [coords [x y z]]
-  (if (= [2 1] [x y])
-    (into coords (for [x (range 5)] [x 0 (dec z)]))
+  [coords [row col z]]
+  (if (= [1 2] [row col])
+    (into coords (for [c (range 5)] [0 c (dec z)]))
     coords))
 (defn inner-bottom
-  [coords [x y z]]
-  (if (= [2 3] [x y])
-    (into coords (for [x (range 5)] [x 4 (dec z)]))
+  [coords [row col z]]
+  (if (= [3 2] [row col])
+    (into coords (for [c (range 5)] [4 c (dec z)]))
     coords))
 (defn inner-left
-  [coords [x y z]]
-  (if (= [1 2] [x y])
-    (into coords (for [y (range 5)] [0 y (dec z)]))
+  [coords [row col z]]
+  (if (= [2 1] [row col])
+    (into coords (for [r (range 5)] [r 0 (dec z)]))
     coords))
 (defn inner-right
-  [coords [x y z]]
-  (if (= [3 2] [x y])
-    (into coords (for [y (range 5)] [4 y (dec z)]))
+  [coords [row col z]]
+  (if (= [2 3] [row col])
+    (into coords (for [r (range 5)] [r 4 (dec z)]))
     coords))
 
 (def appenders
@@ -116,17 +116,17 @@
   [level0 depth]
   (merge
    (zipmap (for [z (range (- depth) (inc depth))
-                 y (range 5)
-                 x (range 5)]
-             [x y z])
+                 row (range 5)
+                 col (range 5)]
+             [row col z])
            (cycle (flatten [(repeat 12 :space) :down (repeat 12 :space)])))
-   (zipmap (map (fn [[x y]] [x y 0]) (keys level0))
+   (zipmap (map (fn [[row col]] [row col 0]) (keys level0))
            (vals (assoc level0 [2 2] :down)))))
 
 (defn space3d-level
   [space z]
-  (let [coords (for [x (range 5) y (range 5)] [x y])]
-    (zipmap coords (map (fn [[x y]] (space [x y z])) coords))))
+  (let [coords (for [row (range 5) col (range 5)] [row col])]
+    (zipmap coords (map (fn [[row col]] (space [row col z])) coords))))
 
 (defn conway-rule-3d
   [space pos]
