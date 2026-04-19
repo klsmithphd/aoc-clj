@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day20
   "Solution to https://adventofcode.com/2021/day/20"
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
+  (:require [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
             [aoc-clj.utils.core :as u]))
 
 (def char-map {\. 0 \# 1})
@@ -9,14 +9,14 @@
   [input]
   (let [[part1 part2] (u/split-at-blankline input)]
     {:algorithm (mapv char-map (first part1))
-     :image (mapgrid/ascii->MapGrid2D char-map part2 :down true)}))
+     :image (mapgrid/ascii->MapGridRC char-map part2)}))
 
 ;; TODO variant of adj-coords. Consider consolidating
 (defn three-by-cell
-  [[x y]]
-  (for [ny (range (dec y) (+ y 2))
-        nx (range (dec x) (+ x 2))]
-    [nx ny]))
+  [[row col]]
+  (for [nr (range (dec row) (+ row 2))
+        nc (range (dec col) (+ col 2))]
+    [nr nc]))
 
 ;; TODO make this a utility fn
 (defn binstr->int
@@ -26,7 +26,7 @@
 (defn next-pixel
   [{:keys [algorithm image field]} pos]
   (->> (three-by-cell pos)
-       (map #(get-in image [:grid %] field))
+       (map #(get-in image [:grid-map %] field))
        (apply str)
        binstr->int
        (get algorithm)))
@@ -34,15 +34,15 @@
 (defn enhance
   [{:keys [image algorithm field] :as input}]
   (let [{:keys [width height]} image
-        coords (for [y (range -1 (+ height 1))
-                     x (range -1 (+ width 1))]
-                 [x y])
+        coords (for [row (range -1 (+ height 1))
+                     col (range -1 (+ width 1))]
+                 [row col])
         vals   (map (partial next-pixel input) coords)
         adj-coords (map (fn [[a b]] [(inc a) (inc b)]) coords)]
     (assoc input
            :image {:width (+ 2 width)
                    :height (+ 2 height)
-                   :grid (zipmap adj-coords vals)}
+                   :grid-map (zipmap adj-coords vals)}
            :field (if (zero? field) (get algorithm 0) (get algorithm 511)))))
 
 (defn enhance-n-times
@@ -53,7 +53,7 @@
 (defn illuminated
   [{:keys [image]}]
   (->> image
-       :grid
+       :grid-map
        vals
        (filter pos?)
        count))
