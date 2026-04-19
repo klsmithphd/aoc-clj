@@ -1,7 +1,7 @@
 (ns aoc-clj.2021.day09
   "Solution to https://adventofcode.com/2021/day/9"
-  (:require [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+  (:require [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
 
 (defn parse-line
   [line]
@@ -10,8 +10,8 @@
 (defn parse
   [input]
   (->> (map parse-line input)
-       mapgrid/lists->MapGrid2D
-       :grid))
+       mapgrid/lists->MapGridRC
+       :grid-map))
 
 (defn low-point?
   [grid pos]
