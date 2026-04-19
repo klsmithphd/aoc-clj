@@ -16,9 +16,9 @@
 
 (deftest move-test
   (testing "Moves to the correct location on sample data"
-    (is (= [2 3]  (:pos (d01/move d01-s00))))
-    (is (= [0 -2] (:pos (d01/move d01-s01))))
-    (is (= [10 2] (:pos (d01/move d01-s02))))))
+    (is (= [-3 2]  (:pos (d01/move d01-s00))))
+    (is (= [2 0]   (:pos (d01/move d01-s01))))
+    (is (= [-2 10] (:pos (d01/move d01-s02))))))
 
 (deftest distance-test
   (testing "Moves to the correct location on sample data"
@@ -28,7 +28,7 @@
 
 (deftest first-location-visited-twice-test
   (testing "Finds the first location visited twice"
-    (is (= [4 0] (u/first-duplicate (d01/all-points d01-s03)))))
+    (is (= [0 4] (u/first-duplicate (d01/all-points d01-s03)))))
   (testing "Finds distance to the first location visited twice"
     (is (= 4 (d01/distance-to-first-duplicate d01-s03)))))
 

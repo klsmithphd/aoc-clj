@@ -35,17 +35,17 @@
 
 (deftest next-beams-test
   (testing "Determines the next position and heading of a light beam"
-    (is (= #{[[1 0] :R]}             (t/next-beams d16-s00 [[0 0] :R])))
-    (is (= #{[[1 1] :D]}             (t/next-beams d16-s00 [[1 0] :R])))
-    (is (= #{[[0 7] :L] [[2 7] :R]}  (t/next-beams d16-s00 [[1 7] :D])))
-    (is (= #{[[4 7] :R]}             (t/next-beams d16-s00 [[3 7] :R])))
-    (is (= #{[[4 6] :U]}             (t/next-beams d16-s00 [[4 7] :R])))
-    (is (= #{[[5 6] :R]}             (t/next-beams d16-s00 [[4 6] :U])))))
+    (is (= #{[[0 1] :R]}             (t/next-beams d16-s00 [[0 0] :R])))
+    (is (= #{[[1 1] :D]}             (t/next-beams d16-s00 [[0 1] :R])))
+    (is (= #{[[7 0] :L] [[7 2] :R]}  (t/next-beams d16-s00 [[7 1] :D])))
+    (is (= #{[[7 4] :R]}             (t/next-beams d16-s00 [[7 3] :R])))
+    (is (= #{[[6 4] :U]}             (t/next-beams d16-s00 [[7 4] :R])))
+    (is (= #{[[6 5] :R]}             (t/next-beams d16-s00 [[6 4] :U])))))
 
 (deftest energized-count-test
   (testing "Counts the number of energized cells"
     (is (= 46 (t/energized-count d16-s00 [[0 0] :R])))
-    (is (= 51 (t/energized-count d16-s00 [[3 0] :D])))))
+    (is (= 51 (t/energized-count d16-s00 [[0 3] :D])))))
 
 (deftest max-energization-test
   (testing "Finds the maximum possible number of energized cells"

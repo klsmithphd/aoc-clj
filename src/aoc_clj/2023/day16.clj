@@ -1,5 +1,5 @@
 (ns aoc-clj.2023.day16
-  (:require [aoc-clj.utils.grid :as grid :refer [value width height]]
+  (:require [aoc-clj.utils.grid.core :as grid :refer [value width height]]
             [aoc-clj.utils.grid.vecgrid :as vg]))
 
 (def part1-start [[0 0] :R])
@@ -37,23 +37,23 @@
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input :down true))
+  (vg/ascii->VecGrid2D charmap input))
 
 (defn next-cell
   "Returns the next cell from the position along the `heading` direction"
-  [[x y] heading]
+  [[row col] heading]
   (case heading
-    :U [x (dec y)]
-    :R [(inc x) y]
-    :D [x (inc y)]
-    :L [(dec x) y]))
+    :U [(dec row) col]
+    :R [row (inc col)]
+    :D [(inc row) col]
+    :L [row (dec col)]))
 
 (defn in-grid?
   "Returns true if the position is contained within the `grid`"
-  [grid [x y]]
+  [grid [row col]]
   (let [h (dec (height grid))
         w (dec (width grid))]
-    (and (<= 0 x w) (<= 0 y h))))
+    (and (<= 0 row h) (<= 0 col w))))
 
 (defn next-beams
   "For a given `grid` and a light beam represented by a position in the grid
@@ -94,10 +94,10 @@
   [grid]
   (let [w (width grid)
         h (height grid)]
-    (concat (for [x (range w)] [[x 0] :D])
-            (for [x (range w)] [[x (dec h) :U]])
-            (for [y (range h)] [[0 y] :R])
-            (for [y (range h)] [[(dec w) y] :L]))))
+    (concat (for [col (range w)] [[0 col] :D])
+            (for [col (range w)] [[(dec h) col] :U])
+            (for [row (range h)] [[row 0] :R])
+            (for [row (range h)] [[row (dec w)] :L]))))
 
 (defn max-energization
   "Computes the energization for all possible starting positions and headings

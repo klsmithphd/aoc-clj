@@ -4,15 +4,15 @@
             [aoc-clj.utils.core :as u]))
 
 (defn twod->threed
-  [[x y]]
-  [x y 0])
+  [[row col]]
+  [row col 0])
 
 (defn parse
   [ascii-lines]
   (let [char-map {\. :inactive
                   \# :active}
         slice (mapgrid/ascii->MapGrid2D char-map ascii-lines)]
-    (update slice :grid (partial u/kmap twod->threed))))
+    (update slice :grid-map (partial u/kmap twod->threed))))
 
 (def adjacent-dirs-3d
   (->> (for [z (range -1 2)
@@ -68,24 +68,24 @@
 ;; known points instead of the entire grid
 (defn scan-space-3d
   [height width limit]
-  (for [z (range (- limit) (inc limit))
-        y (range (- limit) (+ height limit))
-        x (range (- limit) (+ width limit))]
-    [x y z]))
+  (for [z   (range (- limit) (inc limit))
+        row (range (- limit) (+ height limit))
+        col (range (- limit) (+ width limit))]
+    [row col z]))
 
 ;; TODO - come back and make this only expand from
 ;; known points instead of the entire grid
 (defn scan-space-4d
   [height width limit]
-  (for [w (range (- limit) (inc limit))
-        z (range (- limit) (inc limit))
-        y (range (- limit) (+ height limit))
-        x (range (- limit) (+ width limit))]
-    [x y z w]))
+  (for [w   (range (- limit) (inc limit))
+        z   (range (- limit) (inc limit))
+        row (range (- limit) (+ height limit))
+        col (range (- limit) (+ width limit))]
+    [row col z w]))
 
 (defn evolve-3d
-  [{:keys [height width grid]} limit]
-  (loop [statemap grid cnt 0]
+  [{:keys [height width grid-map]} limit]
+  (loop [statemap grid-map cnt 0]
     (if (= limit cnt)
       statemap
       (let [locs (scan-space-3d height width limit)
@@ -93,8 +93,8 @@
         (recur (zipmap locs newvals) (inc cnt))))))
 
 (defn evolve-4d
-  [{:keys [height width grid]} limit]
-  (loop [statemap grid cnt 0]
+  [{:keys [height width grid-map]} limit]
+  (loop [statemap grid-map cnt 0]
     (if (= limit cnt)
       statemap
       (let [locs (scan-space-4d height width limit)
@@ -102,9 +102,9 @@
         (recur (zipmap locs newvals) (inc cnt))))))
 
 (defn promote-to-4d
-  [{:keys [grid] :as input}]
-  (let [add-dim (fn [[x y z]] [x y z 0])]
-    (assoc input :grid (u/kmap add-dim grid))))
+  [{:keys [grid-map] :as input}]
+  (let [add-dim (fn [[row col z]] [row col z 0])]
+    (assoc input :grid-map (u/kmap add-dim grid-map))))
 
 (defn part1
   [input]

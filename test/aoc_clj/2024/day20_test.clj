@@ -28,10 +28,10 @@
 (deftest cheat-savings-test
   (testing "Finds how much time can be saved by various cheats"
     (let [fullpath (d20/full-path d20-s00)]
-      (is (= [4]     (d20/cheat-savings d20/p1-range fullpath [[1 11] 0])))
-      (is (= [12]    (d20/cheat-savings d20/p1-range fullpath [[7 13] 12])))
-      (is (= [20 36] (d20/cheat-savings d20/p1-range fullpath [[9 7] 20])))
-      (is (= [64 40] (d20/cheat-savings d20/p1-range fullpath [[7 7] 18]))))))
+      (is (= [4]     (d20/cheat-savings d20/p1-range fullpath [[3 1] 0])))
+      (is (= [12]    (d20/cheat-savings d20/p1-range fullpath [[1 7] 12])))
+      (is (= [36 20] (d20/cheat-savings d20/p1-range fullpath [[7 9] 20])))
+      (is (= [40 64] (d20/cheat-savings d20/p1-range fullpath [[7 7] 18]))))))
 
 (deftest cheats-more-than-test
   (testing "Computes a histogram of the possible cheat savings opportunities"

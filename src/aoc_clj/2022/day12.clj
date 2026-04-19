@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2022/day/12"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.graph :as graph :refer [->MapGraph]]
-            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 ;;;; Input parsing
@@ -21,25 +21,27 @@
 
 (defn find-matches
   "Given the `grid`, find the coordinates of the location with `value`"
-  [{:keys [grid]} value]
-  (map first (filter #(= value (second %)) grid)))
+  [{:keys [grid-map]} value]
+  (map first (filter #(= value (second %)) grid-map)))
 
 (defn transitions
   "Given the `grid` and a position `pos`, return a map of all the
    allowed moves, with the allowed move positions as keys and the value
    of 1 as the values (signifying the distance of the move)"
   [grid pos]
-  (let [v (get grid pos)
+  (let [v          (grid/value grid pos)
         candidates (grid/neighbors-2d grid pos)
-        moves (keys (filter #(<= (- (val %) v) 1) candidates))]
+        moves      (keys (filter #(and (some? (val %))
+                                       (<= (- (val %) v) 1))
+                                 candidates))]
     [pos (zipmap moves (repeat 1))]))
 
 (defn grid->graph
-  "Using the transition rules (that you can only move up at most one 
+  "Using the transition rules (that you can only move up at most one
    level in height), construct a graph of the possible moves between
    grid locations"
-  [{:keys [grid]}]
-  (->MapGraph (into {} (map (partial transitions grid) (keys grid)))))
+  [grid]
+  (->MapGraph (into {} (map (partial transitions grid) (grid/pos-seq grid)))))
 
 (defn shortest-path-length
   [g s e]

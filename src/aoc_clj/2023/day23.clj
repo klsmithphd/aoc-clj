@@ -1,13 +1,13 @@
 (ns aoc-clj.2023.day23
   (:require [aoc-clj.utils.graph :as graph :refer [vertex]]
-            [aoc-clj.utils.grid :as grid :refer [width height in-grid?]]
+            [aoc-clj.utils.grid.core :as grid :refer [width height in-grid?]]
             [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.utils.maze :as maze]
             [aoc-clj.utils.core :as u]))
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D identity input :down true))
+  (vg/ascii->VecGrid2D identity input))
 
 (defn open?
   "Returns true if the cell is a valid neighbor to reach in the maze"
@@ -23,8 +23,8 @@
   (or
    (and (= \> val) (= :w heading))
    (and (= \< val) (= :e heading))
-   (and (= \v val) (= :s heading))
-   (and (= \^ val) (= :n heading))))
+   (and (= \v val) (= :n heading))
+   (and (= \^ val) (= :s heading))))
 
 (defn next-node
   [grid start]
@@ -52,16 +52,16 @@
 
 (defn grid->graph
   "Construct a map of the edges between nodes in the maze, where
-   a node is either the start/finish point or a junction where 
+   a node is either the start/finish point or a junction where
    multiple options are possible"
   [grid]
-  (trace-maze grid {:pos [1 0] :heading :n}))
+  (trace-maze grid {:pos [0 1] :heading :s}))
 
 (defn finish
   "The finish cell is always in the the bottom right corner, two cells
    in from the edge"
   [grid]
-  [(- (width grid) 2) (- (height grid) 1)])
+  [(- (height grid) 1) (- (width grid) 2)])
 
 (defn dfs-path-length
   "Helper function for performing a depth-first search (DFS) of a `graph`
@@ -83,10 +83,10 @@
          (apply max))))
 
 (defn longest-downslope-path
-  "Find the longest path through the graph when disallowing 
+  "Find the longest path through the graph when disallowing
    going uphill against a slope"
   [grid]
-  (longest-path (grid->graph grid) [1 0] (finish grid)))
+  (longest-path (grid->graph grid) [0 1] (finish grid)))
 
 (defn full-graph
   "Take a directed graph and make it effectively an undirected
@@ -97,7 +97,7 @@
 (defn longest-full-path
   "Returns the longest path for the full (bidirectional graph)"
   [grid]
-  (longest-path (full-graph (grid->graph grid)) [1 0] (finish grid)))
+  (longest-path (full-graph (grid->graph grid)) [0 1] (finish grid)))
 
 (defn part1
   "Find the longest hike you can take through the hiking trails listed on 

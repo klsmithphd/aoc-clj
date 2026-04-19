@@ -25,16 +25,16 @@
 
 (deftest neighbors3d-coords-test
   (testing "Can correctly determine the right neighbors in 3d recursive space"
-    (is (= [[3 2 1] [2 3 1] [3 4 1] [4 3 1]]
+    (is (= [[2 3 1] [3 2 1] [4 3 1] [3 4 1]]
            (t/neighbors3d-coords [3 3 1])))
-    (is (= [[1 0 0] [0 1 0] [1 2 0] [2 1 0]]
+    (is (= [[0 1 0] [1 0 0] [2 1 0] [1 2 0]]
            (t/neighbors3d-coords [1 1 0])))
-    (is (= [[3 -1 0] [2 0 0] [3 1 0] [4 0 0] [2 1 1]]
-           (t/neighbors3d-coords [3 0 0])))
-    (is (= [[4 -1 0] [3 0 0] [4 1 0] [5 0 0] [2 1 1] [3 2 1]]
-           (t/neighbors3d-coords [4 0 0])))
-    (is (= [[3 1 1] [2 2 1] [3 3 1] [4 2 1] [4 0 0] [4 1 0] [4 2 0] [4 3 0] [4 4 0]]
-           (t/neighbors3d-coords [3 2 1])))))
+    (is (= [[-1 3 0] [0 2 0] [1 3 0] [0 4 0] [1 2 1]]
+           (t/neighbors3d-coords [0 3 0])))
+    (is (= [[-1 4 0] [0 3 0] [1 4 0] [0 5 0] [1 2 1] [2 3 1]]
+           (t/neighbors3d-coords [0 4 0])))
+    (is (= [[1 3 1] [2 2 1] [3 3 1] [2 4 1] [0 4 0] [1 4 0] [2 4 0] [3 4 0] [4 4 0]]
+           (t/neighbors3d-coords [2 3 1])))))
 
 (def d24-s02         (t/parse ["....#" "#..#." "#.?##" "..#.." "#...."]))
 (def d24-s02-level-5 (t/parse ["..#.." ".#.#." "..?.#" ".#.#." "..#.."]))

@@ -14,24 +14,24 @@
   (mapgrid/lists->MapGrid2D (map parse-line lines)))
 
 (defn find-path-vals
-  [{:keys [width height grid] :as input}]
+  [{:keys [width height grid-map] :as input}]
   (let [start  [0 0]
-        end    (u/equals? [(dec width) (dec height)])
+        end    (u/equals? [(dec height) (dec width)])
         path (g/shortest-path (->GridGraph input) start end)]
-    (map grid path)))
+    (map grid-map path)))
 
 (defn path-risk
   [input]
   (reduce + (rest (find-path-vals input))))
 
 (defn tiled-value
-  [{:keys [width height grid]} [x y]]
-  (let [tilex (quot x width)
-        posx  (mod  x width)
-        tiley (quot y height)
-        posy  (mod  y height)
-        raw   (get grid [posx posy])
-        to-add (mod (+ tilex tiley) 9)
+  [{:keys [width height grid-map]} [row col]]
+  (let [tilerow (quot row height)
+        posrow  (mod  row height)
+        tilecol (quot col width)
+        poscol  (mod  col width)
+        raw   (get grid-map [posrow poscol])
+        to-add (mod (+ tilerow tilecol) 9)
         adj   (+ raw to-add)]
     (if (>= adj 10) (mod adj 9) adj)))
 
@@ -39,12 +39,12 @@
   [{:keys [width height] :as input} count]
   (let [new-width  (* count width)
         new-height (* count height)
-        coords (for [y (range new-height)
-                     x (range new-width)]
-                 [x y])]
+        coords (for [row (range new-height)
+                     col (range new-width)]
+                 [row col])]
     {:width new-width
      :height new-height
-     :grid
+     :grid-map
      (zipmap coords (map (partial tiled-value input) coords))}))
 
 (defn part1

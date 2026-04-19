@@ -1,6 +1,6 @@
 (ns aoc-clj.2018.day10
   "Solution to https://adventofcode.com/2018/day/10"
-  (:require [aoc-clj.utils.grid :as grid]
+  (:require [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.utils.vectors :as v]))
 
@@ -71,11 +71,11 @@
   (let [time                  (condensed-time lights)
         positions             (positions-at-t lights time)
         [[mnx mxx] [mny mxy]] (bounds positions)
-        shifted               (map #(v/vec-add [(- mnx) (- mny)] %) positions)
-        grid                  (mg/->MapGrid2D
+        shifted               (map (fn [[x y]] [(- y mny) (- x mnx)]) positions)
+        g                     (mg/->MapGrid2D
                                (inc (- mxx mnx)) (inc (- mxy mny))
                                (zipmap shifted (repeat :on)))]
-    (grid/Grid2D->ascii {\# :on \  nil} grid :down true)))
+    (grid/Grid2D->ascii {\# :on \  nil} g)))
 
 ;; Puzzle solutions
 (defn part1

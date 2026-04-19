@@ -2,27 +2,27 @@
   "Solution to https://adventofcode.com/2019/day/11"
   (:require [manifold.stream :as s]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.vecgrid :refer [->VecGrid2D]]
             [aoc-clj.utils.intcode :as intcode]))
 
 (def parse u/firstv)
 
 (defn turn-left-and-move
-  [{:keys [direction] [x y] :position}]
+  [{:keys [direction] [row col] :position}]
   (case direction
-    :up    {:position [(dec x) y] :direction :left}
-    :left  {:position [x (dec y)] :direction :down}
-    :down  {:position [(inc x) y] :direction :right}
-    :right {:position [x (inc y)] :direction :up}))
+    :up    {:position [row (dec col)] :direction :left}
+    :left  {:position [(inc row) col] :direction :down}
+    :down  {:position [row (inc col)] :direction :right}
+    :right {:position [(dec row) col] :direction :up}))
 
 (defn turn-right-and-move
-  [{:keys [direction] [x y] :position}]
+  [{:keys [direction] [row col] :position}]
   (case direction
-    :up    {:position [(inc x) y] :direction :right}
-    :right {:position [x (dec y)] :direction :down}
-    :down  {:position [(dec x) y] :direction :left}
-    :left  {:position [x (inc y)] :direction :up}))
+    :up    {:position [row (inc col)] :direction :right}
+    :right {:position [(inc row) col] :direction :down}
+    :down  {:position [row (dec col)] :direction :left}
+    :left  {:position [(dec row) col] :direction :up}))
 
 (defn move-and-paint
   [{:keys [hull position] :as state} paint turn]

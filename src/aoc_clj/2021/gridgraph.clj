@@ -1,21 +1,21 @@
 (ns aoc-clj.2021.gridgraph
-  (:require [aoc-clj.utils.grid :as grid]
+  (:require [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.graph :as g :refer [Graph]]))
 
 (defrecord GridGraph [grid]
   Graph
   (vertices
     [_]
-    (keys (:grid grid)))
+    (keys (:grid-map grid)))
 
   (edges
     [_ v]
     (->> (grid/adj-coords-2d v)
-         (filter (comp some? (:grid grid)))))
+         (filter (comp some? (:grid-map grid)))))
 
   (distance
     [_ _ v2]
-    (get-in grid [:grid v2])))
+    (get-in grid [:grid-map v2])))
 
 ;; (defn in-bounds?
 ;;   [width height [x y]]

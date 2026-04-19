@@ -1,7 +1,7 @@
 (ns aoc-clj.2024.day16
   "Solution to https://adventofcode.com/2024/day/16"
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
-            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.mapgrid :as mg]))
 
 ;; Records

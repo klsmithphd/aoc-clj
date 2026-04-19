@@ -10,9 +10,9 @@
     (mapgrid/ascii->MapGrid2D seat-mapping ascii-lines)))
 
 (def dirs
-  (->> (for [y (range -1 2)
-             x (range -1 2)]
-         [x y])
+  (->> (for [dr (range -1 2)
+             dc (range -1 2)]
+         [dr dc])
        (filter #(not= [0 0] %))))
 
 (defn seats
@@ -24,8 +24,8 @@
   (map #(mapv + pos %) dirs))
 
 (defn adjacency
-  [{:keys [grid]}]
-  (let [seats (seats grid)]
+  [{:keys [grid-map]}]
+  (let [seats (seats grid-map)]
     (zipmap seats (map adjacent seats))))
 
 (defn rules
@@ -42,11 +42,11 @@
       seat)))
 
 (defn apply-rules-until-static
-  [limit adjacency {:keys [grid] :as seatmap}]
+  [limit adjacency {:keys [grid-map] :as seatmap}]
   (let [adjacencies (adjacency seatmap)
         seats       (keys adjacencies)
         apply-rules (partial rules limit adjacencies)]
-    (loop [statemap grid]
+    (loop [statemap grid-map]
       (let [nextmap (map (partial apply-rules statemap) seats)]
         (if (= nextmap (vals statemap))
           nextmap
@@ -60,11 +60,11 @@
        count))
 
 (defn valid-pos?
-  [height width [x y]]
-  (and (>= x 0)
-       (< x width)
-       (>= y 0)
-       (< y height)))
+  [height width [row col]]
+  (and (>= row 0)
+       (< row height)
+       (>= col 0)
+       (< col width)))
 
 (defn sightline
   [height width pos dir]
@@ -78,14 +78,14 @@
        first))
 
 (defn first-visible-seats
-  [{:keys [height width grid]} pos]
+  [{:keys [height width grid-map]} pos]
   (let [sightlines (->> (map (partial sightline height width pos) dirs)
                         (filter (complement empty?)))]
-    (filter some? (map (partial first-visible-seat grid) sightlines))))
+    (filter some? (map (partial first-visible-seat grid-map) sightlines))))
 
 (defn visibility
-  [{:keys [grid] :as seatmap}]
-  (let [seats (seats grid)]
+  [{:keys [grid-map] :as seatmap}]
+  (let [seats (seats grid-map)]
     (zipmap seats (map (partial first-visible-seats seatmap) seats))))
 
 (defn part1

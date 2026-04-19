@@ -9,10 +9,10 @@
                {:pos [0 0] :dir :n :maze {}})))
     ;; If the position to the west is a wall, check north (when facing north)
     (is (= :n (m/next-move-attempt
-               {:pos [0 0] :dir :n :maze {[-1 0] :wall}})))
+               {:pos [0 0] :dir :n :maze {[0 -1] :wall}})))
     ;; West/North are walls, try east
     (is (= :e (m/next-move-attempt
-               {:pos [0 0] :dir :n :maze {[-1 0] :wall [0 1] :wall}})))
+               {:pos [0 0] :dir :n :maze {[0 -1] :wall [-1 0] :wall}})))
     ;; Dead-end, try south
     (is (= :s (m/next-move-attempt
-               {:pos [0 0] :dir :n :maze {[-1 0] :wall [0 1] :wall [1 0] :wall}})))))
+               {:pos [0 0] :dir :n :maze {[0 -1] :wall [-1 0] :wall [0 1] :wall}})))))

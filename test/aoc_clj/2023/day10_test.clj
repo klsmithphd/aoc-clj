@@ -74,8 +74,8 @@
   (testing "Follows the loop from the start returning positions along the way"
     (is (= [[1 1] [1 2] [1 3] [2 3] [3 3] [3 2] [3 1] [2 1]]
            (t/loop-positions d10-s00)))
-    (is (= [[0 2] [0 3] [0 4] [1 4] [1 3] [2 3] [3 3] [4 3]
-            [4 2] [3 2] [3 1] [3 0] [2 0] [2 1] [1 1] [1 2]]
+    (is (= [[2 0] [2 1] [1 1] [1 2] [0 2] [0 3] [1 3] [2 3]
+            [2 4] [3 4] [3 3] [3 2] [3 1] [4 1] [4 0] [3 0]]
            (t/loop-positions d10-s01)))))
 
 (deftest farthest-steps-from-start-test

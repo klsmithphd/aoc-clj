@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day13
   "Solution to https://adventofcode.com/2018/day/13"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.mapgrid :as mg]))
 
 ;; Constants
@@ -33,8 +33,8 @@
 
 (defn parse
   [input]
-  (let [{:keys [grid width height]} (mg/ascii->MapGrid2D charmap input)]
-    (mg/->MapGrid2D width height (into {} (remove #(nil? (val %)) grid)))))
+  (let [{:keys [grid-map width height]} (mg/ascii->MapGrid2D charmap input)]
+    (mg/->MapGrid2D width height (into {} (remove #(nil? (val %)) grid-map)))))
 
 ;; Puzzle logic
 (defn cart-map
@@ -50,8 +50,8 @@
 
 (defn carts
   "Returns the carts found within the map."
-  [{:keys [grid]}]
-  (->> grid
+  [{:keys [grid-map]}]
+  (->> grid-map
        (filter #(cart-keys (val %)))
        (map cart-map)
        set))
@@ -111,11 +111,11 @@
 (defn cart-compare
   "Compares the positions of two carts."
   [carta cartb]
-  (let [[xa ya] (:pos carta)
-        [xb yb] (:pos cartb)]
-    (if (= ya yb)
-      (compare xa xb)
-      (compare yb ya))))
+  (let [[ra ca] (:pos carta)
+        [rb cb] (:pos cartb)]
+    (if (= ra rb)
+      (compare ca cb)
+      (compare ra rb))))
 
 (defn cart-order
   "Sorts the carts into reading order (top-to-bottom, then left to right)"
@@ -137,11 +137,6 @@
 (def tick-part1 (partial tick :part1))
 (def tick-part2 (partial tick :part2))
 
-(defn correct-coordinates
-  "Corrects the coordinates from bottom-0 to to top-0 oriented."
-  [height [x y]]
-  [x (- height y 1)])
-
 (defn not-crashed?
   "Returns true if no crash has yet occurred"
   [{:keys [carts]}]
@@ -149,13 +144,10 @@
 
 (defn cart->str
   "Converts the first element of the returned carts coordinate into a
-   comma-separated string"
-  [height carts]
-  (->> carts
-       first
-       :pos
-       (correct-coordinates height)
-       (str/join ",")))
+   comma-separated string in puzzle output format (col,row)"
+  [carts]
+  (let [[row col] (-> carts first :pos)]
+    (str/join "," [col row])))
 
 (defn tick-till-cond
   "Evolves the state using the `ticker` function until `run-cond` turns false
@@ -169,16 +161,16 @@
 
 (defn first-crash
   "Returns the location of the first cart crash"
-  [{:keys [height] :as state}]
+  [state]
   (->> (tick-till-cond state tick-part1 not-crashed?)
        (filter :collided)
-       (cart->str height)))
+       cart->str))
 
 (defn last-cart
   "Returns the location of the only remaining cart after crashed carts are removed"
-  [{:keys [height] :as state}]
+  [state]
   (->> (tick-till-cond state tick-part2 #(> (count (:carts %)) 1))
-       (cart->str height)))
+       cart->str))
 
 ;; Puzzle solutions
 (defn part1

@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day10
   (:require [aoc-clj.utils.grid.vecgrid :as vg]
-            [aoc-clj.utils.grid :as grid
+            [aoc-clj.utils.grid.core :as grid
              :refer [height width value neighbors-4]]
             [aoc-clj.utils.geometry :as geo]))
 
@@ -16,14 +16,14 @@
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input :down true))
+  (vg/ascii->VecGrid2D charmap input))
 
 (defn start
   "Returns the grid position of the starting tile"
   [grid]
-  (let [locs (for [y (range (height grid))
-                   x (range (width grid))]
-               [x y])]
+  (let [locs (for [row (range (height grid))
+                   col (range (width grid))]
+               [row col])]
     (first (drop-while #(not= :start (value grid %)) locs))))
 
 (defn allowed-tiles
@@ -32,26 +32,26 @@
    (based on which ends of the pipes are open to the direction we'd be
    heading in)"
   [neighbors]
-  (let [[south east north west] (seq neighbors)]
+  (let [[north east south west] (seq neighbors)]
     (filter some?
-            [(when (#{:pipe-v :ell-ne :ell-nw} (val south))
-               (key south))
+            [(when (#{:pipe-v :ell-se :ell-sw} (val north))
+               (key north))
              (when (#{:pipe-h :ell-nw :ell-sw} (val east))
                (key east))
-             (when (#{:pipe-v :ell-se :ell-sw} (val north))
-               (key north))
+             (when (#{:pipe-v :ell-ne :ell-nw} (val south))
+               (key south))
              (when (#{:pipe-h :ell-ne :ell-se} (val west))
                (key west))])))
 
 (defn heading
   "Determines the direction we just came from by comparing the current
    and previous positions. Returns `:right`, `:left:`, `:up`, or `:down`"
-  [[px py] [cx cy]]
-  (if (zero? (- cy py))
-    (if (> cx px)
+  [[pr pc] [cr cc]]
+  (if (zero? (- cr pr))
+    (if (> cc pc)
       :right
       :left)
-    (if (> cy py)
+    (if (> cr pr)
       :down
       :up)))
 
@@ -60,22 +60,22 @@
    and the direction we entered from"
   [prev curr tile]
   (let [dir (heading prev curr)]
-    ;; S = 0, E = 1, N = 2, W = 3
+    ;; N = 0, E = 1, S = 2, W = 3
     (case dir
       :right (case tile
                :pipe-h 1
-               :ell-nw 2
-               :ell-sw 0)
+               :ell-nw 0
+               :ell-sw 2)
       :left  (case tile
                :pipe-h 3
-               :ell-ne 2
-               :ell-se 0)
+               :ell-ne 0
+               :ell-se 2)
       :up    (case tile
-               :pipe-v 2
+               :pipe-v 0
                :ell-se 1
                :ell-sw 3)
       :down  (case tile
-               :pipe-v 0
+               :pipe-v 2
                :ell-ne 1
                :ell-nw 3))))
 

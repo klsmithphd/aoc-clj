@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2023/day/3"
   (:require [clojure.set :as set]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid :as grid]))
+            [aoc-clj.utils.grid.core :as grid]))
 
 (def digit-chars
   "The set of characters representing the digits 0-9"

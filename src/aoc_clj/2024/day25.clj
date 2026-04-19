@@ -10,8 +10,8 @@
 (defn key-lock-parse
   [lines]
   [(case (ffirst lines)
-     0 :locks
-     1 :keys)
+     1 :locks
+     0 :keys)
    (mapv #(reduce + -1 %) lines)])
 
 (defn parse

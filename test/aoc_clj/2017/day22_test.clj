@@ -9,7 +9,7 @@
    "..."])
 
 (def d22-s00
-  {:cells {[1 1] 2 [-1 0] 2} :pos [0 0] :heading :n :infect-cnt 0})
+  {:cells {[-1 1] 2 [0 -1] 2} :pos [0 0] :heading :n :infect-cnt 0})
 
 (deftest parse-test
   (testing "Correctly parses the input"
@@ -17,63 +17,63 @@
 
 (deftest step-p1-test
   (testing "Evolves the state forward one iteration"
-    (is (= {:cells {[-1 0] 2 [1 1] 2 [0 0] 2}
-            :infect-cnt 1 :pos [-1 0] :heading :w}
+    (is (= {:cells {[0 -1] 2 [-1 1] 2 [0 0] 2}
+            :infect-cnt 1 :pos [0 -1] :heading :w}
            (d22/step-p1 d22-s00)))
 
-    (is (= {:cells {[-1 0] 0 [1 1] 2 [0 0] 2}
-            :infect-cnt 1 :pos [-1 1] :heading :n}
+    (is (= {:cells {[0 -1] 0 [-1 1] 2 [0 0] 2}
+            :infect-cnt 1 :pos [-1 -1] :heading :n}
            (d22/step-p1
-            {:cells {[-1 0] 2 [1 1] 2 [0 0] 2}
-             :infect-cnt 1 :pos [-1 0] :heading :w})))
+            {:cells {[0 -1] 2 [-1 1] 2 [0 0] 2}
+             :infect-cnt 1 :pos [0 -1] :heading :w})))
 
-    (is (= {:cells {[-1 0] 0 [-1 1] 2 [1 1] 2 [0 0] 2}
-            :infect-cnt 2 :pos [-2 1] :heading :w}
+    (is (= {:cells {[0 -1] 0 [-1 -1] 2 [-1 1] 2 [0 0] 2}
+            :infect-cnt 2 :pos [-1 -2] :heading :w}
            (d22/step-p1
-            {:cells {[-1 0] 0 [1 1] 2 [0 0] 2}
-             :infect-cnt 1 :pos [-1 1] :heading :n})))))
+            {:cells {[0 -1] 0 [-1 1] 2 [0 0] 2}
+             :infect-cnt 1 :pos [-1 -1] :heading :n})))))
 
 (deftest step-p2-test
   (testing "Evolves the state one step using the logic of part 2"
-    (is (= {:cells {[1 1] 2 [-1 0] 2 [0 0] 1}
-            :infect-cnt 0 :pos [-1 0] :heading :w}
+    (is (= {:cells {[-1 1] 2 [0 -1] 2 [0 0] 1}
+            :infect-cnt 0 :pos [0 -1] :heading :w}
            (d22/step-p2 d22-s00)))
 
-    (is (= {:cells {[1 1] 2 [-1 0] 3 [0 0] 1}
-            :infect-cnt 0 :pos [-1 1] :heading :n}
+    (is (= {:cells {[-1 1] 2 [0 -1] 3 [0 0] 1}
+            :infect-cnt 0 :pos [-1 -1] :heading :n}
            (d22/step-p2
-            {:cells {[1 1] 2 [-1 0] 2 [0 0] 1}
-             :infect-cnt 0 :pos [-1 0] :heading :w})))
+            {:cells {[-1 1] 2 [0 -1] 2 [0 0] 1}
+             :infect-cnt 0 :pos [0 -1] :heading :w})))
 
-    (is (= {:cells {[1 1] 2 [-1 0] 3 [0 0] 1 [-1 1] 1}
-            :infect-cnt 0 :pos [-2 1] :heading :w}
+    (is (= {:cells {[-1 1] 2 [0 -1] 3 [0 0] 1 [-1 -1] 1}
+            :infect-cnt 0 :pos [-1 -2] :heading :w}
            (d22/step-p2
-            {:cells {[1 1] 2 [-1 0] 3 [0 0] 1}
-             :infect-cnt 0 :pos [-1 1] :heading :n})))
+            {:cells {[-1 1] 2 [0 -1] 3 [0 0] 1}
+             :infect-cnt 0 :pos [-1 -1] :heading :n})))
 
-    (is (= {:cells {[1 1] 2 [-1 0] 3 [0 0] 1 [-1 1] 1 [-2 1] 1}
-            :infect-cnt 0 :pos [-2 0] :heading :s}
+    (is (= {:cells {[-1 1] 2 [0 -1] 3 [0 0] 1 [-1 -1] 1 [-1 -2] 1}
+            :infect-cnt 0 :pos [0 -2] :heading :s}
            (d22/step-p2
-            {:cells {[1 1] 2 [-1 0] 3 [0 0] 1 [-1 1] 1}
-             :infect-cnt 0 :pos [-2 1] :heading :w})))
+            {:cells {[-1 1] 2 [0 -1] 3 [0 0] 1 [-1 -1] 1}
+             :infect-cnt 0 :pos [-1 -2] :heading :w})))
 
-    (is (= {:cells {[1 1] 2 [-1 0] 3 [0 0] 1 [-1 1] 1 [-2 1] 1 [-2 0] 1}
-            :infect-cnt 0 :pos [-1 0] :heading :e}
+    (is (= {:cells {[-1 1] 2 [0 -1] 3 [0 0] 1 [-1 -1] 1 [-1 -2] 1 [0 -2] 1}
+            :infect-cnt 0 :pos [0 -1] :heading :e}
            (d22/step-p2
-            {:cells {[1 1] 2 [-1 0] 3 [0 0] 1 [-1 1] 1 [-2 1] 1}
-             :infect-cnt 0 :pos [-2 0] :heading :s})))
+            {:cells {[-1 1] 2 [0 -1] 3 [0 0] 1 [-1 -1] 1 [-1 -2] 1}
+             :infect-cnt 0 :pos [0 -2] :heading :s})))
 
-    (is (= {:cells {[1 1] 2 [-1 0] 0 [0 0] 1 [-1 1] 1 [-2 1] 1 [-2 0] 1}
-            :infect-cnt 0 :pos [-2 0] :heading :w}
+    (is (= {:cells {[-1 1] 2 [0 -1] 0 [0 0] 1 [-1 -1] 1 [-1 -2] 1 [0 -2] 1}
+            :infect-cnt 0 :pos [0 -2] :heading :w}
            (d22/step-p2
-            {:cells {[1 1] 2 [-1 0] 3 [0 0] 1 [-1 1] 1 [-2 1] 1 [-2 0] 1}
-             :infect-cnt 0 :pos [-1 0] :heading :e})))
+            {:cells {[-1 1] 2 [0 -1] 3 [0 0] 1 [-1 -1] 1 [-1 -2] 1 [0 -2] 1}
+             :infect-cnt 0 :pos [0 -1] :heading :e})))
 
-    (is (= {:cells {[1 1] 2 [-1 0] 0 [0 0] 1 [-1 1] 1 [-2 1] 1 [-2 0] 2}
-            :infect-cnt 1 :pos [-3 0] :heading :w}
+    (is (= {:cells {[-1 1] 2 [0 -1] 0 [0 0] 1 [-1 -1] 1 [-1 -2] 1 [0 -2] 2}
+            :infect-cnt 1 :pos [0 -3] :heading :w}
            (d22/step-p2
-            {:cells {[1 1] 2 [-1 0] 0 [0 0] 1 [-1 1] 1 [-2 1] 1 [-2 0] 1}
-             :infect-cnt 0 :pos [-2 0] :heading :w})))))
+            {:cells {[-1 1] 2 [0 -1] 0 [0 0] 1 [-1 -1] 1 [-1 -2] 1 [0 -2] 1}
+             :infect-cnt 0 :pos [0 -2] :heading :w})))))
 
 (deftest infections-caused-at-n-test
   (testing "Counts how many infections were caused after n bursts"

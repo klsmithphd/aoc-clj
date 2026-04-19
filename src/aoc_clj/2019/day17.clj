@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2019/day/17"
   (:require [clojure.string :as str]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.intcode :as intcode]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
@@ -20,7 +20,7 @@
 (defn scaffold-map
   [ascii]
   (let [lines (str/split (str/join (map char ascii)) #"\n")]
-    (:grid (mapgrid/ascii->MapGrid2D scaffold-mapping lines :down true))))
+    (:grid-map (mapgrid/ascii->MapGrid2D scaffold-mapping lines))))
 
 (defn day17-map
   [input]
@@ -31,7 +31,7 @@
 (defn intersection?
   [space pos]
   (if (= :scaffold (space pos))
-    (every? #(= :scaffold %) (vals (grid/neighbors-2d space pos)))
+    (every? #(= :scaffold %) (vals (select-keys space (grid/adj-coords-2d pos))))
     false))
 
 (defn intersections

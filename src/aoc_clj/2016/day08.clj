@@ -2,7 +2,7 @@
     "Solution to https://adventofcode.com/2016/day/8"
     (:require [clojure.string :as str]
               [aoc-clj.utils.core :as u]
-              [aoc-clj.utils.grid :as grid]
+              [aoc-clj.utils.grid.core :as grid]
               [aoc-clj.utils.grid.mapgrid :as mg]))
 
 ;; Constants
@@ -39,17 +39,17 @@
 (defn grid-set
   "Return a (w x h) grid map with all values set to `val`"
   [width height val]
-  (into {} (for [y (range height)
-                 x (range width)]
-             [[x y] val])))
+  (into {} (for [row (range height)
+                 col (range width)]
+             [[row col] val])))
 
 (defn get-slice
   "Retrieve a slice of the `grid` of `type` (`:row|:column`) at
    index `pos` (0-indexed)"
   [grid type pos]
   (let [coord (case type
-                :column first
-                :row second)]
+                :column second
+                :row first)]
     (into (sorted-map) (filter #(= pos (-> % key coord)) grid))))
 
 (defn rotate-slice
@@ -109,8 +109,7 @@
             (mg/->MapGrid2D
              screen-width
              screen-height
-             (final-state screen-width screen-height input))
-            :down true))
+             (final-state screen-width screen-height input))))
   (comment
     "####  ##   ##  ###   ##  ###  #  # #   # ##   ##  "
     "#    #  # #  # #  # #  # #  # #  # #   ##  # #  # "

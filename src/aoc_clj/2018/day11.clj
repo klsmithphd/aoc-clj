@@ -13,9 +13,9 @@
 
 ;; Puzzle logic
 (defn rack-id
-  "Computes the rack ID of a cell (its x position plus 10)"
-  [[x _]]
-  (+ x 10))
+  "Computes the rack ID of a cell (its col position plus 10)"
+  [[_ col]]
+  (+ col 10))
 
 (defn hundreds
   "Returns the hundreds digit of any integer"
@@ -23,13 +23,13 @@
   (mod (quot num 100) 10))
 
 (def cell-power-level
-  "Returns the power level as a function of the serial number and the 
-   cell coordinate"
+  "Returns the power level as a function of the serial number and the
+   cell coordinate [row col]"
   (memoize
-   (fn [serial [_ y :as cell]]
+   (fn [serial [row _ :as cell]]
      (let [r-id (rack-id cell)]
        (-> r-id
-           (* y)
+           (* row)
            (+ serial)
            (* r-id)
            hundreds
@@ -38,17 +38,17 @@
 (defn power-levels
   "Returns a vec-of-vecs of the power levels across the grid"
   [serial]
-  (vec (for [y (range grid-size)]
-         (vec (for [x (range grid-size)]
-                (cell-power-level serial [x y]))))))
+  (vec (for [row (range grid-size)]
+         (vec (for [col (range grid-size)]
+                (cell-power-level serial [row col]))))))
 
 (defn upper-coords
   "For a given square size, returns all the possible upper-left coordinates
    of squares within the grid."
   [square-size]
-  (for [y (range (- grid-size square-size -1))
-        x (range (- grid-size square-size -1))]
-    [x y square-size]))
+  (for [row (range (- grid-size square-size -1))
+        col (range (- grid-size square-size -1))]
+    [row col square-size]))
 
 (defn highest-power-square
   "Returns the upper-left coordinate and size of the square of size
@@ -62,20 +62,19 @@
    the highest total power for the given serial number, where N is an
    integer between `min-square` and `max-square`, inclusively"
   [serial]
-  (let [sat (vg/summed-area-table (power-levels serial))]
-    (->> (range 1 (inc grid-size))
-         (map #(highest-power-square sat %))
-         (apply max-key #(vg/square-area-sum sat %))
-         (str/join ","))))
+  (let [sat (vg/summed-area-table (power-levels serial))
+        [row col size] (->> (range 1 (inc grid-size))
+                            (map #(highest-power-square sat %))
+                            (apply max-key #(vg/square-area-sum sat %)))]
+    (str/join "," [col row size])))
 
 (defn highest-power-3x3-square
   "Returns the upper-left coordinates of the 3x3 square that has the
    highest total power for the given serial number"
   [serial]
-  (let [sat (vg/summed-area-table (power-levels serial))]
-    (->> (highest-power-square sat 3)
-         (take 2)
-         (str/join ","))))
+  (let [sat (vg/summed-area-table (power-levels serial))
+        [row col] (highest-power-square sat 3)]
+    (str/join "," [col row])))
 
 ;; Puzzle solution
 (defn part1

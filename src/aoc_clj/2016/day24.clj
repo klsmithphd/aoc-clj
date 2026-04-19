@@ -55,8 +55,8 @@
 
 (defn parse
   [input]
-  (-> (mg/ascii->MapGrid2D charmap input :down true)
-      :grid
+  (-> (mg/ascii->MapGrid2D charmap input)
+      :grid-map
       (maze/->Maze #(not= :wall %))
       stop-graph))
 

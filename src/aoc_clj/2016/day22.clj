@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2016/day/22"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.graph :as g :refer [Graph]]
-            [aoc-clj.utils.grid :as grid]))
+            [aoc-clj.utils.grid.core :as grid]))
 
 ;; Input parsing
 (defn parse-line
