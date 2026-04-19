@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day21-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.vecgrid :as vg]
+            [aoc-clj.utils.grid.vecgrid-rc :as vg]
             [aoc-clj.2023.day21 :as t]))
 
 (def d21-s00-raw
@@ -18,7 +18,7 @@
    "..........."])
 
 (def d21-s00
-  (vg/->VecGrid2D
+  (vg/->VecGridRC
    [[:plot :plot :plot :plot :plot :plot :plot :plot :plot :plot :plot]
     [:plot :plot :plot :plot :plot :rock :rock :rock :plot :rock :plot]
     [:plot :rock :rock :rock :plot :rock :rock :plot :plot :rock :plot]
@@ -44,10 +44,10 @@
             move locations"
     (is (= #{[5 4] [4 5]}
            (t/all-possible-locations d21-s00 [[5 5]])))
-    (is (= #{[5 3] [3 5] [5 5] [4 6]}
+    (is (= #{[3 5] [5 3] [5 5] [6 4]}
            (t/all-possible-locations d21-s00 #{[5 4] [4 5]})))
-    (is (= #{[6 3] [3 4] [5 4] [4 5] [3 6] [4 7]}
-           (t/all-possible-locations d21-s00 #{[5 3] [3 5] [5 5] [4 6]})))))
+    (is (= #{[3 6] [4 3] [4 5] [5 4] [6 3] [7 4]}
+           (t/all-possible-locations d21-s00 #{[3 5] [5 3] [5 5] [6 4]})))))
 
 (deftest reachable-steps-test
   (testing "Returns the number of plot tiles reachable within exactly n steps"
