@@ -1,18 +1,17 @@
 (ns aoc-clj.2020.day20
   "Solution to https://adventofcode.com/2020/day/20"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
             [aoc-clj.utils.core :as u]))
 
 (def charmap  {\. 0 \# 1})
 (def sea-monster-pattern
-  (->> (mapgrid/ascii->MapGrid2D
+  (->> (mapgrid/ascii->MapGridRC
         charmap
         ["                  # "
          "#    ##    ##    ###"
-         " #  #  #  #  #  #   "]
-        :down true)
-       :grid
+         " #  #  #  #  #  #   "])
+       :grid-map
        (filter (comp some? second))
        (map first)))
 
@@ -20,10 +19,9 @@
   [tile-str]
   (let [[header grid] (str/split tile-str #":\n")
         tile-id (read-string (subs header 5 9))]
-    [tile-id (mapgrid/ascii->MapGrid2D
+    [tile-id (mapgrid/ascii->MapGridRC
               charmap
-              (str/split grid #"\n")
-              :down true)]))
+              (str/split grid #"\n"))]))
 
 (defn intermediate-parse
   [input]
@@ -48,12 +46,12 @@
     (str/reverse edge)))
 
 (defn tile-edges
-  [[tile-id {:keys [width height grid]}]]
-  (let [edge-coords [(map vector (range width)        (repeat 0))
-                     (map vector (range width)        (repeat (dec height)))
-                     (map vector (repeat 0)           (range height))
-                     (map vector (repeat (dec width)) (range height))]]
-    [tile-id (zipmap '(:n :s :w :e) (map (partial edge grid) edge-coords))]))
+  [[tile-id {:keys [width height grid-map]}]]
+  (let [edge-coords [(map vector (repeat 0)           (range width))
+                     (map vector (repeat (dec height)) (range width))
+                     (map vector (range height)        (repeat 0))
+                     (map vector (range height)        (repeat (dec width)))]]
+    [tile-id (zipmap '(:n :s :w :e) (map (partial edge grid-map) edge-coords))]))
 
 (defn tile-edge-map
   [tiles]
@@ -115,13 +113,13 @@
         cols         (/ (count ordered-tiles) rows)]
     {:width cols
      :height rows
-     :grid (zipmap (for [y (range rows) x (range cols)] [x y])
-                   ordered-tiles)}))
+     :grid-map (zipmap (for [row (range rows) col (range cols)] [row col])
+                       ordered-tiles)}))
 
-(def neighbors {[0 -1] :n
-                [1 0] :e
-                [0 1] :s
-                [-1 0] :w})
+(def neighbors {[-1 0] :n
+                [0 1] :e
+                [1 0] :s
+                [0 -1] :w})
 
 (defn desired-edge
   [grid valid-locs [pos tile]]
@@ -133,9 +131,9 @@
                          n-pos))}))
 
 (defn desired-edges
-  [{:keys [grid]}]
-  (let [valid-locs (set (keys grid))]
-    (apply merge (map (partial desired-edge grid valid-locs) grid))))
+  [{:keys [grid-map]}]
+  (let [valid-locs (set (keys grid-map))]
+    (apply merge (map (partial desired-edge grid-map valid-locs) grid-map))))
 
 (defn fliph-edge
   [edges]
@@ -184,33 +182,33 @@
             (map (comp flatten orient) (map c tiles) (map d tiles)))))
 
 (defn is-edge?
-  [width height [x y]]
-  (or (= 0 x)
-      (= 0 y)
-      (= (dec width) x)
-      (= (dec height) y)))
+  [width height [row col]]
+  (or (= 0 row)
+      (= 0 col)
+      (= (dec height) row)
+      (= (dec width) col)))
 
 (defn trim-edge
-  [{:keys [width height grid]}]
+  [{:keys [width height grid-map]}]
   (let [is-not-edge? (complement (partial is-edge? width height))]
     {:width (- width 2)
      :height (- height 2)
-     :grid (into {} (filter (comp is-not-edge? key) grid))}))
+     :grid-map (into {} (filter (comp is-not-edge? key) grid-map))}))
 
 (defn fliph
-  [{:keys [width grid] :as tile}]
-  (assoc tile :grid (u/kmap (fn [[x y]] [(- (dec width) x) y]) grid)))
+  [{:keys [width grid-map] :as tile}]
+  (assoc tile :grid-map (u/kmap (fn [[row col]] [row (- (dec width) col)]) grid-map)))
 
 (defn flipv
-  [{:keys [height grid] :as tile}]
-  (assoc tile :grid (u/kmap (fn [[x y]] [x (- (dec height) y)]) grid)))
+  [{:keys [height grid-map] :as tile}]
+  (assoc tile :grid-map (u/kmap (fn [[row col]] [(- (dec height) row) col]) grid-map)))
 
 (defn rotate
-  [{:keys [width height grid]}]
-  (let [mapping (fn [[x y]] [(- (dec height) y) x])]
+  [{:keys [width height grid-map]}]
+  (let [mapping (fn [[row col]] [col (- (dec height) row)])]
     {:width height
      :height width
-     :grid (u/kmap mapping grid)}))
+     :grid-map (u/kmap mapping grid-map)}))
 
 (defn oriented
   [tile command]
@@ -221,16 +219,16 @@
     :rotate (rotate tile)))
 
 (defn corrected-tile
-  [tiles orientations [[shift-x shift-y] tile-id]]
+  [tiles orientations [[shift-row shift-col] tile-id]]
   (let [tile     (get tiles tile-id)
         commands (get orientations tile-id)]
     (->>
      (reduce oriented tile commands)
      trim-edge
-     :grid
-     (u/kmap (fn [[x y]]
-               [(+ (* 8 shift-x) x -1)
-                (+ (* 8 shift-y) y -1)])))))
+     :grid-map
+     (u/kmap (fn [[row col]]
+               [(+ (* 8 shift-row) row -1)
+                (+ (* 8 shift-col) col -1)])))))
 
 (defn reassembled-image
   [tiles]
@@ -243,7 +241,7 @@
         height        (* 8 (:height positions))]
     {:height height
      :width  width
-     :grid (apply merge (map do-everything (:grid positions)))}))
+     :grid-map (apply merge (map do-everything (:grid-map positions)))}))
 
 (def all-orientation-cmds
   [[:no-op]
@@ -265,17 +263,17 @@
     (every? #(= 1 %) (map grid positions))))
 
 (defn sea-monster-count
-  [{:keys [width height grid]}]
-  (->> (filter (partial is-sea-monster? grid)
-               (for [x (range (- width 20))
-                     y (range (- height 3))]
-                 [x y]))
+  [{:keys [width height grid-map]}]
+  (->> (filter (partial is-sea-monster? grid-map)
+               (for [row (range (- height 3))
+                     col (range (- width 20))]
+                 [row col]))
        count))
 
 (defn sea-roughness
   [tiles]
   (let [image (reassembled-image tiles)
-        ones  (count (filter #(= 1 (val %)) (:grid image)))
+        ones  (count (filter #(= 1 (val %)) (:grid-map image)))
         sea-monsters (apply max (map sea-monster-count (all-orientations image)))]
     (- ones (* sea-monsters (count sea-monster-pattern)))))
 
