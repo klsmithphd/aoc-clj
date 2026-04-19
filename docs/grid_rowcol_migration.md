@@ -32,6 +32,32 @@ we will use the **strangler fig** pattern:
 This keeps the codebase in a fully working state at every step and avoids getting
 stuck mid-migration if an unexpectedly tricky puzzle solution is encountered.
 
+## Per-puzzle workflow
+
+Once the new parallel files and their tests are committed, every puzzle solution migration
+follows this sequence:
+
+1. **Verify** — run the existing tests for that solution and confirm they pass before
+   touching anything
+2. **Migrate** — update the solution source to use the new `GridRC` protocol and `[row col]`
+   coordinates
+3. **Verify** — run the tests again and confirm they pass with the new implementation
+4. **Commit** — commit the migrated source and any test changes before moving on to the
+   next puzzle
+
+### A note on test data risk
+
+Because we are changing the coordinate convention from `[x y]` to `[row col]`, the sample
+data embedded in test files is likely to need updating as well. In `[x y]`, the column
+index comes first; in `[row col]`, the row index comes first — so every explicit coordinate
+pair in the test data is transposed. A position that was `[3 2]` (col 3, row 2) becomes
+`[2 3]` (row 2, col 3) in the new convention.
+
+This means step 3 above is not a passive check: when a test fails after migration, the
+first question to ask is whether the failure is in the solution logic or in the test
+data itself. Keeping steps 2 and 3 tight (small change, immediate verify) is the best
+defence against conflating these two sources of failure.
+
 ## Naming
 
 The new protocol will be named `GridRC` (row/col) to avoid conflicts with the existing
