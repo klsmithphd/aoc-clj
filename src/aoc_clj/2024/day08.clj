@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/8"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]
             [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
@@ -19,10 +19,10 @@
 ;; Input parsing
 (defn parse
   [input]
-  (let [{:keys [width height grid]} (mg/ascii->MapGrid2D identity input)]
+  (let [{:keys [width height grid-map]} (mg/ascii->MapGridRC identity input)]
     {:width width
      :height height
-     :antennae (->> grid
+     :antennae (->> grid-map
                     (remove #(= \. (val %)))
                     (group-by val)
                     (u/fmap #(into #{} (map first %))))}))
@@ -30,8 +30,8 @@
 ;; Puzzle logic
 (defn in-bounds?
   "Returns true if the location is within the bounds of the map"
-  [width height [x y]]
-  (and (< -1 x width) (< -1 y height)))
+  [width height [row col]]
+  (and (< -1 row height) (< -1 col width)))
 
 (defn pair-antinodes
   "For a pair of two antenna locations, returns the two antinode locations"
