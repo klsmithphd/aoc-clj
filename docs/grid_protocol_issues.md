@@ -220,12 +220,51 @@ Add a `:convention :math` or `:convention :screen` field to the grid records. Op
 **Cost:** more complex; does not eliminate the dual-convention problem, just makes it visible.
 Operating in two conventions simultaneously remains a potential source of bugs.
 
+### Option D — Rename axes to `[row col]` and treat the grid as a matrix (chosen)
+
+Stop using `[x y]` pairs, which carry implicit Cartesian meaning, and index instead by
+`[row col]`. Row 0 is unambiguously the first line of the input — no convention to choose.
+Cardinal directions in `[row col]` space are honest about what they mean:
+
+```clojure
+(def cardinal-offsets
+  {:n [-1 0]   ; north = decrease row = move up the screen
+   :e [0 1]    ; east  = increase col = move right
+   :s [1 0]    ; south = increase row = move down the screen
+   :w [0 -1]}) ; west  = decrease col = move left
+```
+
+When a puzzle genuinely requires Cartesian geometry (distances, angles, areas), the
+conversion is explicit at the call site: `x = col`, `y = (height - 1 - row)`. This
+surfaces the coordinate-system choice rather than hiding it in a constructor flag.
+
+Note that this is not purely a rename — `[x y]` stores column first, whereas `[row col]`
+stores row first. Every existing coordinate pair is transposed: old `[3 2]` (col 3, row 2)
+becomes `[2 3]` (row 2, col 3).
+
+**Cost:** a naming and transposition refactor across all call sites. The handful of
+solutions confirmed to need directional logic updates (`2022/day23.clj`,
+`2019/day11.clj`) are the same under this option as under Option A. The benefit is that
+the axis names are now honest — a physicist or anyone familiar with matrix indexing will
+find `[row col]` immediately legible.
+
+### Option E — Strict separation: grid protocol is pure storage, spatial semantics live elsewhere
+
+The `Grid2D` protocol deals only with storage indices — `[i j]` or `[row col]` with no
+spatial meaning. A separate `spatial` namespace wraps a grid with a declared coordinate
+system and provides cardinal-direction navigation that respects it. Solutions needing
+navigation use the spatial layer; solutions just reading values use the grid directly.
+
+**Cost:** most AoC solutions would need to cross the abstraction boundary on nearly every
+line, making this over-engineered for the domain. Deferred as a potential future direction
+if the codebase grows significantly.
+
 ---
 
 ## Recommendation
 
-**Option A (screen coordinates)** produces the cleanest outcome: no reversal logic anywhere,
-natural top-to-bottom iteration order, consistent constructors with no `:down` flag, and a
-simpler `Grid2D->ascii`. The migration cost is real but bounded — the vast majority of solutions
-use relative navigation (move north/south/east/west) and the direction of y only matters when
-explicitly comparing or displaying absolute coordinates.
+**Option D (`[row col]` indexing)** is the chosen approach. It is honest about what grids
+are as data structures, eliminates the hidden `:down` convention entirely, gives
+Cartesian coordinates on demand via an explicit conversion, and is immediately legible to
+anyone accustomed to matrix or physics notation. The migration plan is captured in
+`grid_rowcol_migration.md`.
