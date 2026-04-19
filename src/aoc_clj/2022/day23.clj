@@ -1,8 +1,8 @@
 (ns aoc-clj.2022.day23
   "Solution to https://adventofcode.com/2022/day/23"
   (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+            [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
 
 ;;;; Constants
 
@@ -15,8 +15,8 @@
 
 (defn parse
   [input]
-  (->> (mapgrid/ascii->MapGrid2D charmap input)
-       :grid
+  (->> (mapgrid/ascii->MapGridRC charmap input)
+       :grid-map
        (filter #(elf? (val %)))
        (map first)
        (into #{})))
@@ -31,18 +31,18 @@
 (defn open-dir
   "Check to see if there are any adjacent elves in the direction
    being checked"
-  [elves [x y] dir]
+  [elves [row col] dir]
   (let [opts (case dir
-               ;; Check Nw, N, and NE
-               :n [[(dec x) (inc y)] [x (inc y)] [(inc x) (inc y)]]
+               ;; Check NW, N, and NE
+               :n [[(dec row) (dec col)] [(dec row) col] [(dec row) (inc col)]]
                ;; Check SW, S, and SE
-               :s [[(dec x) (dec y)] [x (dec y)] [(inc x) (dec y)]]
+               :s [[(inc row) (dec col)] [(inc row) col] [(inc row) (inc col)]]
                ;; Check SW, W, and NW
-               :w [[(dec x) (dec y)] [(dec x) y] [(dec x) (inc y)]]
+               :w [[(inc row) (dec col)] [row (dec col)] [(dec row) (dec col)]]
                ;; Check SE, E, and NE
-               :e [[(inc x) (dec y)] [(inc x) y] [(inc x) (inc y)]])]
+               :e [[(inc row) (inc col)] [row (inc col)] [(dec row) (inc col)]])]
     (when (not-any? elves opts)
-      (mapv + [x y] (grid/cardinal-offsets dir)))))
+      (mapv + [row col] (grid/cardinal-offsets dir)))))
 
 (defn propose-move
   "For an elf at `pos` with all other elves at `elves`, and
