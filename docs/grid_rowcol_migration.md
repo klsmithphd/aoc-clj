@@ -86,25 +86,13 @@ Write tests for all three new files before moving to Phase 1.
 
 ---
 
-## Phase 1 — Migrate dependent utilities
-
-**`src/aoc_clj/utils/maze.clj`**
-Uses `grid/adj-coords-2d`, `cardinal-offsets`, and maintains an internal plain Clojure map
-with `[x y]` coordinate keys. Update all coordinate pairs to `[row col]` and switch
-requires to the new `core.clj` / `mapgrid_rc.clj`.
-
-**`src/aoc_clj/2021/gridgraph.clj`**
-Uses `grid/adj-coords-2d` and `[x y]`-keyed map lookups. Update similarly.
-
-Verify: run the full test suite after each file.
-
----
-
-## Phase 2 — Migrate puzzle solutions, Wave 1: already on screen convention
+## Phase 1 — Migrate puzzle solutions, Wave 1: already on screen convention
 
 These files use `:down true` or `lists->MapGrid2D` and already store row 0 at the top.
 They only need the coordinate pair ordering updated (`[x y]` → `[row col]`), swapping
 the pair elements wherever coordinates are constructed or destructured.
+
+Note: `2023/day23.clj` also depends on `maze.clj` and is therefore deferred to Phase 4.
 
 | File | Current grid usage |
 |------|--------------------|
@@ -113,29 +101,31 @@ the pair elements wherever coordinates are constructed or destructured.
 | `src/aoc_clj/2022/day12.clj` | `lists->MapGrid2D` |
 | `src/aoc_clj/2023/day11.clj` | `ascii->VecGrid2D` with `:down true` |
 | `src/aoc_clj/2023/day16.clj` | `ascii->VecGrid2D` with `:down true` |
-| `src/aoc_clj/2023/day23.clj` | `ascii->VecGrid2D` with `:down true` |
 | `src/aoc_clj/2024/day15.clj` | `ascii->MapGrid2D` with `:down true` |
 
 ---
 
-## Phase 3 — Migrate puzzle solutions, Wave 2: topologically indifferent
+## Phase 2 — Migrate puzzle solutions, Wave 2: topologically indifferent
 
 Solutions doing pure BFS, DFS, flood-fill, or cellular automata where no absolute
 coordinate value carries directional meaning. The constructor change handles the storage
 convention automatically; most require only pair-ordering updates where `[x y]` is
 explicitly constructed or destructured.
 
+Note: `2019/day15`, `2019/day18`, `2019/day20`, and `2021/day15` depend on `maze.clj`
+or `gridgraph.clj` and are therefore deferred to Phase 4.
+
 Work year by year (oldest to newest). Run the full test suite after each file.
 
 Expected files (confirm as migration proceeds):
 `2017/day22`, `2018/day13`, `2018/day18`, `2019/day24`, `2020/day03`, `2020/day11`,
-`2020/day17`, `2021/day09`, `2021/day20`, `2022/day18`, `2022/day23` (see Wave 3),
+`2020/day17`, `2021/day09`, `2021/day20`, `2022/day18`,
 `2023/day10`, `2023/day21`, `2024/day04`, `2024/day06`, `2024/day08`, `2024/day10`,
 `2024/day12`, `2024/day20`, `2024/day25`
 
 ---
 
-## Phase 4 — Migrate puzzle solutions, Wave 3: direction-sensitive cases
+## Phase 3 — Migrate puzzle solutions, Wave 3: direction-sensitive cases
 
 These two files have logic that depends on the direction of y and require careful
 inspection alongside the coordinate changes.
@@ -150,6 +140,32 @@ The robot movement functions (`turn-left-and-move`, `turn-right-and-move`) use
 math-convention y-arithmetic, and `mapgrid->vectors` compensates with y-reversal at
 render time. Both must be updated together: movement functions switch to `[row col]`
 arithmetic, and the new `mapgrid->vectors` (without reversal) handles the rest.
+
+---
+
+## Phase 4 — Migrate dependent utilities and deferred solutions
+
+Migrate the shared utilities first, then the puzzle solutions that depend on them.
+Run the full test suite after each file.
+
+**`src/aoc_clj/utils/maze.clj`**
+Uses `grid/adj-coords-2d`, `cardinal-offsets`, and maintains an internal plain Clojure map
+with `[x y]` coordinate keys. Update all coordinate pairs to `[row col]` and switch
+requires to the new `core.clj` / `mapgrid_rc.clj`.
+
+**`src/aoc_clj/2021/gridgraph.clj`**
+Uses `grid/adj-coords-2d` and `[x y]`-keyed map lookups. Update similarly.
+
+**Deferred puzzle solutions** (blocked on the above utilities):
+
+| File | Blocked on |
+|------|------------|
+| `src/aoc_clj/2016/day24.clj` | `maze.clj` |
+| `src/aoc_clj/2019/day15.clj` | `maze.clj` |
+| `src/aoc_clj/2019/day18.clj` | `maze.clj` |
+| `src/aoc_clj/2019/day20.clj` | `maze.clj` |
+| `src/aoc_clj/2021/day15.clj` | `gridgraph.clj` |
+| `src/aoc_clj/2023/day23.clj` | `maze.clj` |
 
 ---
 
