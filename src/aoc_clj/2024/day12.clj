@@ -1,8 +1,8 @@
 (ns aoc-clj.2024.day12
   "Solution to https://adventofcode.com/2024/day/12"
   (:require [clojure.set :as set]
-            [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.vectors :as v]))
 
@@ -39,13 +39,13 @@
 (defn plots
   "Returns a map of all the lettered plots, with the plot letter as the key
    and the continguous coordinate location regions as the value"
-  [{:keys [grid]}]
-  (->> (group-by val grid)
+  [{:keys [grid-map]}]
+  (->> (group-by val grid-map)
        (u/fmap #(regions (set (map key %))))))
 
 (defn parse
   [input]
-  (plots (mg/ascii->MapGrid2D identity input :down true)))
+  (plots (mg/ascii->MapGridRC identity input)))
 
 ;; Puzzle logic
 (defn area
@@ -81,15 +81,6 @@
        (map count)
        (reduce +)))
 
-(defn y-desc-then-x-asc-compare
-  "Comparator to sort y values in a descending order then x values in an
-   ascending order for x,y coordinate pairs"
-  [[xa ya] [xb yb]]
-  (let [yc (compare yb ya)]
-    (if (zero? yc)
-      (compare xa xb)
-      yc)))
-
 (defn side-aggregator
   "Helper function that counts up the number of unique sides for a given
    perimeter cell and its non-region neighbor directions"
@@ -110,7 +101,7 @@
   [cells]
   (let [perim-data (perimeter-data cells)]
     ;; Examine the cells in reading order (i.e. top left down to bottom right)
-    (->> (sort-by key y-desc-then-x-asc-compare perim-data)
+    (->> (sort-by key perim-data)
          (reduce side-aggregator {:visited {} :sides 0})
          :sides)))
 
