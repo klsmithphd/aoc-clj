@@ -1,37 +1,37 @@
 (ns aoc-clj.2021.day25
   "Solution to https://adventofcode.com/2021/day/25"
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+  (:require [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
 
 (def charmap {\v :down \> :right \. :open})
 
 (defn parse
   [input]
-  (mapgrid/ascii->MapGrid2D charmap input :down true))
+  (mapgrid/ascii->MapGridRC charmap input))
 
 (defn available?
-  [grid pos]
-  (= :open (get grid pos)))
+  [grid-map pos]
+  (= :open (get grid-map pos)))
 
 (defn right-from
-  [{:keys [width]} [x y]]
-  (if (= (inc x) width)
-    [0 y]
-    [(inc x) y]))
+  [{:keys [width]} [row col]]
+  (if (= (inc col) width)
+    [row 0]
+    [row (inc col)]))
 
 (defn down-from
-  [{:keys [height]} [x y]]
-  (if (= (inc y) height)
-    [x 0]
-    [x (inc y)]))
+  [{:keys [height]} [row col]]
+  (if (= (inc row) height)
+    [0 col]
+    [(inc row) col]))
 
 (defn move-dir
-  [label direction {:keys [grid] :as state}]
-  (let [locs        (map first (filter #(= label (val %)) grid))
+  [label direction {:keys [grid-map] :as state}]
+  (let [locs        (map first (filter #(= label (val %)) grid-map))
         moveto-locs (map (partial direction state) locs)
         moves      (->> (zipmap locs moveto-locs)
-                        (filter #(available? grid (val %)))
+                        (filter #(available? grid-map (val %)))
                         (into {}))]
-    (update state :grid merge
+    (update state :grid-map merge
             (zipmap (keys moves) (repeat :open))
             (zipmap (vals moves) (repeat label)))))
 
