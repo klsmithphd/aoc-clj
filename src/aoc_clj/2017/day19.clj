@@ -1,8 +1,8 @@
 (ns aoc-clj.2017.day19
   "Solution to https://adventofcode.com/2017/day/19"
   (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid :as grid :refer [value]]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.utils.grid.core :as grid :refer [value]]
+            [aoc-clj.utils.grid.vecgrid-rc :as vg]))
 
 ;; Input parsing
 (defn charmap
@@ -16,14 +16,14 @@
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input :down true))
+  (vg/ascii->VecGridRC charmap input))
 
 ;; Puzzle logic
 (defn start
   "Returns the starting position, the first vertical pipe at the top of
    the diagram"
   [grid]
-  [(u/index-of (u/equals? :vert) (first (:v grid))) 0])
+  [0 (u/index-of (u/equals? :vert) (first (:v grid)))])
 
 (def perpendicular
   "For a given heading, returns the perpendicular directions"
@@ -63,7 +63,7 @@
 (defn path
   "Returns a seq of all the positions along the path through the network"
   [grid]
-  (->> {:pos (start grid) :heading :n}
+  (->> {:pos (start grid) :heading :s}
        (iterate #(next-cell grid %))
        (take-while some?)
        (map :pos)))
