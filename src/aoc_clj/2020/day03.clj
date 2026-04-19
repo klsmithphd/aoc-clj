@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day03
   "Solution to https://adventofcode.com/2020/day/3"
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+  (:require [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
 
 (def parse identity)
 
@@ -8,18 +8,18 @@
   [ascii-lines]
   (let [forest-mapping {\. :space
                         \# :tree}]
-    (mapgrid/ascii->MapGrid2D forest-mapping ascii-lines :down true)))
+    (mapgrid/ascii->MapGridRC forest-mapping ascii-lines)))
 
 (defn get-position
-  [{:keys [height width grid]} [x y]]
-  (let [realx (mod x width)
-        realy (mod y height)]
-    (get grid [realx realy])))
+  [{:keys [height width grid-map]} [row col]]
+  (let [realrow (mod row height)
+        realcol (mod col width)]
+    (get grid-map [realrow realcol])))
 
 (defn items-along-slope
   [{:keys [height] :as basemap} [right down]]
   (let [positions (for [step (range 0 (/ height down))]
-                    [(* step right) (* step down)])]
+                    [(* step down) (* step right)])]
     (map (partial get-position basemap) positions)))
 
 (defn trees-along-slope
