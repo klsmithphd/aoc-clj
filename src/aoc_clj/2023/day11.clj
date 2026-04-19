@@ -1,44 +1,38 @@
 (ns aoc-clj.2023.day11
   (:require [clojure.math.combinatorics :as combo]
             [clojure.set :as set]
-            [aoc-clj.utils.grid :as grid :refer [height width value]]
-            [aoc-clj.utils.grid.vecgrid :as vg]
+            [aoc-clj.utils.grid.core :as grid :refer [height width value]]
+            [aoc-clj.utils.grid.vecgrid-rc :as vg]
             [aoc-clj.utils.vectors :as v]))
 
 (def charmap {\. :empty \# :galaxy})
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input :down true))
+  (vg/ascii->VecGridRC charmap input))
 
-;; TODO -- finding the points that match a type should be part of the grid
-;; protocol
 (defn galaxies
   "Find the location of the galaxies in the grid"
   [grid]
-  (let [locs (for [y (range (height grid))
-                   x (range (width grid))]
-               [x y])]
-    (filter #(= :galaxy (value grid %)) locs)))
+  (filter #(= :galaxy (value grid %)) (grid/pos-seq grid)))
 
 (defn voids
-  "Finds the rows and columns (y and x indices) where there are no galaxies
-   in the map"
+  "Finds the rows and columns where there are no galaxies in the map"
   [grid]
-  (let [galaxy-locs (galaxies grid)
-        xs          (set (map first galaxy-locs))
-        ys          (set (map second galaxy-locs))]
-    {:cols (set/difference (set (range (width grid))) xs)
-     :rows (set/difference (set (range (height grid))) ys)}))
+  (let [galaxy-locs   (galaxies grid)
+        occupied-rows (set (map first galaxy-locs))
+        occupied-cols (set (map second galaxy-locs))]
+    {:cols (set/difference (set (range (width grid))) occupied-cols)
+     :rows (set/difference (set (range (height grid))) occupied-rows)}))
 
 (defn expand-coord
   "Scale out the coordinate location by expansion factor `expn` given
    the location of the `voids`."
-  [expn {:keys [rows cols]} [x y]]
-  (let [x-shift (count (filter #(> x %) cols))
-        y-shift (count (filter #(> y %) rows))]
-    [(+ x (* (dec expn) x-shift))
-     (+ y (* (dec expn) y-shift))]))
+  [expn {:keys [rows cols]} [row col]]
+  (let [col-shift (count (filter #(> col %) cols))
+        row-shift (count (filter #(> row %) rows))]
+    [(+ row (* (dec expn) row-shift))
+     (+ col (* (dec expn) col-shift))]))
 
 (defn expanded-coords
   "Given a galaxy map `grid` and an expansion factor `expn`, return the

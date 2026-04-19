@@ -38,9 +38,9 @@
 
 (deftest galaxies-text
   (testing "Returns the locations of the galaxies in the grid"
-    (is (= [[3 0] [7 1] [0 2] [6 4] [1 5] [9 6] [7 8] [0 9] [4 9]]
+    (is (= [[0 3] [1 7] [2 0] [4 6] [5 1] [6 9] [8 7] [9 0] [9 4]]
            (t/galaxies d11-s00)))
-    (is (= [[4 0] [9 1] [0 2] [8 5] [1 6] [12 7] [9 10] [0 11] [5 11]]
+    (is (= [[0 4] [1 9] [2 0] [5 8] [6 1] [7 12] [10 9] [11 0] [11 5]]
            (t/galaxies d11-s00-expanded)))))
 
 (deftest expanded-coords-test
