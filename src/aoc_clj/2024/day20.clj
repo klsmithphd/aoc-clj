@@ -1,7 +1,7 @@
 (ns aoc-clj.2024.day20
   "Solution to https://adventofcode.com/2024/day/20"
-  (:require [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+  (:require [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]
             [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
@@ -17,7 +17,7 @@
 
 (defn parse
   [input]
-  (mg/ascii->MapGrid2D charmap input))
+  (mg/ascii->MapGridRC charmap input))
 
 ;; Puzzle logic
 (def start-node (comp first (partial grid/find-nodes :start)))
@@ -47,20 +47,20 @@
 (defn p1-range
   "Returns a collection of the possible cheat points to jump to from
    the current position in part1, where we only have 2 picoseconds to cheat"
-  [[x y]]
-  [[(+ x 2) y]
-   [(- x 2) y]
-   [x (+ y 2)]
-   [x (- y 2)]])
+  [[row col]]
+  [[(+ row 2) col]
+   [(- row 2) col]
+   [row (+ col 2)]
+   [row (- col 2)]])
 
 (defn p2-range
   "Returns a collection of the possible cheat points to jump to from the
    current position in part2, where we can move to any non-wall location
    that we can reach in 20 picoseconds or less."
   [pos]
-  (for [y (range (- p2-limit) (inc p2-limit))
-        x (range (- (abs y) p2-limit) (- (inc p2-limit) (abs y)))]
-    (v/vec-add pos [x y])))
+  (for [dr (range (- p2-limit) (inc p2-limit))
+        dc (range (- (abs dr) p2-limit) (- (inc p2-limit) (abs dr)))]
+    (v/vec-add pos [dr dc])))
 
 (defn cheat-savings
   "Computes the possible cheat savings options for a given node along the
