@@ -1,6 +1,6 @@
 (ns aoc-clj.2018.day13-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]
             [aoc-clj.utils.core :as u]
             [aoc-clj.2018.day13 :as d13]))
 
@@ -24,55 +24,55 @@
     "  \\<->/"]))
 
 (def d13-s00
-  (mg/->MapGrid2D 13 6
-                  {[0 5] :curve-45
-                   [1 5] :h
-                   [2 5] :cart-r
-                   [3 5] :h
-                   [4 5] :curve-135
-                   [0 4] :v
-                   [4 4] :v
-                   [7 4] :curve-45
-                   [8 4] :h
-                   [9 4] :h
-                   [10 4] :h
-                   [11 4] :h
-                   [12 4] :curve-135
-                   [0 3] :v
-                   [2 3] :curve-45
-                   [3 3] :h
-                   [4 3] :intersection
+  (mg/->MapGridRC 13 6
+                  {[0 0] :curve-45
+                   [0 1] :h
+                   [0 2] :cart-r
+                   [0 3] :h
+                   [0 4] :curve-135
+                   [1 0] :v
+                   [1 4] :v
+                   [1 7] :curve-45
+                   [1 8] :h
+                   [1 9] :h
+                   [1 10] :h
+                   [1 11] :h
+                   [1 12] :curve-135
+                   [2 0] :v
+                   [2 2] :curve-45
+                   [2 3] :h
+                   [2 4] :intersection
+                   [2 5] :h
+                   [2 6] :h
+                   [2 7] :intersection
+                   [2 8] :h
+                   [2 9] :curve-135
+                   [2 12] :v
+                   [3 0] :v
+                   [3 2] :v
+                   [3 4] :v
+                   [3 7] :v
+                   [3 9] :cart-d
+                   [3 12] :v
+                   [4 0] :curve-135
+                   [4 1] :h
+                   [4 2] :intersection
+                   [4 3] :h
+                   [4 4] :curve-45
+                   [4 7] :curve-135
+                   [4 8] :h
+                   [4 9] :intersection
+                   [4 10] :h
+                   [4 11] :h
+                   [4 12] :curve-45
+                   [5 2] :curve-135
                    [5 3] :h
-                   [6 3] :h
-                   [7 3] :intersection
-                   [8 3] :h
-                   [9 3] :curve-135
-                   [12 3] :v
-                   [0 2] :v
-                   [2 2] :v
-                   [4 2] :v
-                   [7 2] :v
-                   [9 2] :cart-d
-                   [12 2] :v
-                   [0 1] :curve-135
-                   [1 1] :h
-                   [2 1] :intersection
-                   [3 1] :h
-                   [4 1] :curve-45
-                   [7 1] :curve-135
-                   [8 1] :h
-                   [9 1] :intersection
-                   [10 1] :h
-                   [11 1] :h
-                   [12 1] :curve-45
-                   [2 0] :curve-135
-                   [3 0] :h
-                   [4 0] :h
-                   [5 0] :h
-                   [6 0] :h
-                   [7 0] :h
-                   [8 0] :h
-                   [9 0] :curve-45}))
+                   [5 4] :h
+                   [5 5] :h
+                   [5 6] :h
+                   [5 7] :h
+                   [5 8] :h
+                   [5 9] :curve-45}))
 
 (deftest parse-test
   (testing "Correctly parses the input"
@@ -80,91 +80,91 @@
 
 (deftest carts-test
   (testing "Finds the carts in the map"
-    (is (= #{{:pos [9 2] :heading :s :int-cnt 0}
-             {:pos [2 5] :heading :e :int-cnt 0}}
+    (is (= #{{:pos [3 9] :heading :s :int-cnt 0}
+             {:pos [0 2] :heading :e :int-cnt 0}}
            (d13/carts d13-s00)))))
 
 (deftest cart-order
   (testing "Places carts in the correct order"
-    (is (= [{:pos [2 5]} {:pos [9 2]}]
-           (d13/cart-order [{:pos [9 2]} {:pos [2 5]}])))
+    (is (= [{:pos [0 2]} {:pos [3 9]}]
+           (d13/cart-order [{:pos [3 9]} {:pos [0 2]}])))
 
-    (is (= [{:pos [0 2]} {:pos [2 1]} {:pos [3 1]}]
-           (d13/cart-order [{:pos [3 1]} {:pos [0 2]} {:pos [2 1]}])))))
+    (is (= [{:pos [3 0]} {:pos [4 2]} {:pos [4 3]}]
+           (d13/cart-order [{:pos [4 3]} {:pos [3 0]} {:pos [4 2]}])))))
 
 (deftest tick-part1-test
   (testing "Updates the cart state by one tick"
-    (is (= #{{:pos [9 1] :heading :e :int-cnt 1}
-             {:pos [3 5] :heading :e :int-cnt 0}}
+    (is (= #{{:pos [4 9] :heading :e :int-cnt 1}
+             {:pos [0 3] :heading :e :int-cnt 0}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [9 2] :heading :s :int-cnt 0}
-                      {:pos [2 5] :heading :e :int-cnt 0}})))))
+                    #{{:pos [3 9] :heading :s :int-cnt 0}
+                      {:pos [0 2] :heading :e :int-cnt 0}})))))
 
-    (is (= #{{:pos [10 1] :heading :e :int-cnt 1}
-             {:pos [4 5] :heading :s :int-cnt 0}}
+    (is (= #{{:pos [4 10] :heading :e :int-cnt 1}
+             {:pos [0 4] :heading :s :int-cnt 0}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [9 1] :heading :e :int-cnt 1}
-                      {:pos [3 5] :heading :e :int-cnt 0}})))))
+                    #{{:pos [4 9] :heading :e :int-cnt 1}
+                      {:pos [0 3] :heading :e :int-cnt 0}})))))
 
-    (is (= #{{:pos [11 1] :heading :e :int-cnt 1}
-             {:pos [4 4] :heading :s :int-cnt 0}}
+    (is (= #{{:pos [4 11] :heading :e :int-cnt 1}
+             {:pos [1 4] :heading :s :int-cnt 0}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [10 1] :heading :e :int-cnt 1}
-                      {:pos [4 5] :heading :s :int-cnt 0}})))))
+                    #{{:pos [4 10] :heading :e :int-cnt 1}
+                      {:pos [0 4] :heading :s :int-cnt 0}})))))
 
-    (is (= #{{:pos [12 1] :heading :n :int-cnt 1}
-             {:pos [4 3] :heading :e :int-cnt 1}}
+    (is (= #{{:pos [4 12] :heading :n :int-cnt 1}
+             {:pos [2 4] :heading :e :int-cnt 1}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [11 1] :heading :e :int-cnt 1}
-                      {:pos [4 4] :heading :s :int-cnt 0}})))))
+                    #{{:pos [4 11] :heading :e :int-cnt 1}
+                      {:pos [1 4] :heading :s :int-cnt 0}})))))
 
-    (is (= #{{:pos [12 2] :heading :n :int-cnt 1}
-             {:pos [5 3] :heading :e :int-cnt 1}}
+    (is (= #{{:pos [3 12] :heading :n :int-cnt 1}
+             {:pos [2 5] :heading :e :int-cnt 1}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [12 1] :heading :n :int-cnt 1}
-                      {:pos [4 3] :heading :e :int-cnt 1}})))))
+                    #{{:pos [4 12] :heading :n :int-cnt 1}
+                      {:pos [2 4] :heading :e :int-cnt 1}})))))
 
-    (is (= #{{:pos [12 3] :heading :n :int-cnt 1}
-             {:pos [6 3] :heading :e :int-cnt 1}}
+    (is (= #{{:pos [2 12] :heading :n :int-cnt 1}
+             {:pos [2 6] :heading :e :int-cnt 1}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [12 2] :heading :n :int-cnt 1}
-                      {:pos [5 3] :heading :e :int-cnt 1}})))))
+                    #{{:pos [3 12] :heading :n :int-cnt 1}
+                      {:pos [2 5] :heading :e :int-cnt 1}})))))
 
-    (is (= #{{:pos [12 4] :heading :w :int-cnt 1}
-             {:pos [7 3] :heading :e :int-cnt 2}}
+    (is (= #{{:pos [1 12] :heading :w :int-cnt 1}
+             {:pos [2 7] :heading :e :int-cnt 2}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [12 3] :heading :n :int-cnt 1}
-                      {:pos [6 3] :heading :e :int-cnt 1}})))))
+                    #{{:pos [2 12] :heading :n :int-cnt 1}
+                      {:pos [2 6] :heading :e :int-cnt 1}})))))
 
-    (is (= #{{:pos [11 4] :heading :w :int-cnt 1}
-             {:pos [8 3] :heading :e :int-cnt 2}}
+    (is (= #{{:pos [1 11] :heading :w :int-cnt 1}
+             {:pos [2 8] :heading :e :int-cnt 2}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [12 4] :heading :w :int-cnt 1}
-                      {:pos [7 3] :heading :e :int-cnt 2}})))))
+                    #{{:pos [1 12] :heading :w :int-cnt 1}
+                      {:pos [2 7] :heading :e :int-cnt 2}})))))
 
-    (is (= #{{:pos [10 4] :heading :w :int-cnt 1}
-             {:pos [9 3] :heading :s :int-cnt 2}}
+    (is (= #{{:pos [1 10] :heading :w :int-cnt 1}
+             {:pos [2 9] :heading :s :int-cnt 2}}
            (:carts
             (d13/tick-part1
              (assoc d13-s00 :carts
-                    #{{:pos [11 4] :heading :w :int-cnt 1}
-                      {:pos [8 3] :heading :e :int-cnt 2}})))))))
+                    #{{:pos [1 11] :heading :w :int-cnt 1}
+                      {:pos [2 8] :heading :e :int-cnt 2}})))))))
 
 (deftest first-crash-test
   (testing "Finds the location of the first crash"
