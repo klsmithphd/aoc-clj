@@ -1,8 +1,8 @@
 (ns aoc-clj.2024.day16
   "Solution to https://adventofcode.com/2024/day/16"
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
-            [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]))
+            [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]))
 
 ;; Records
 (defrecord MoveGraph [grid]
@@ -33,7 +33,7 @@
 
 (defn parse
   [input]
-  (mg/ascii->MapGrid2D charmap input))
+  (mg/ascii->MapGridRC charmap input))
 
 ;; Puzzle logic
 (def start-node (comp first (partial grid/find-nodes :start)))
