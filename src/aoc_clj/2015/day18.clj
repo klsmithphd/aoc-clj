@@ -1,13 +1,13 @@
 (ns aoc-clj.2015.day18
   "Solution to https://adventofcode.com/2015/day/18"
   (:require [clojure.set :as set]
-            [aoc-clj.utils.grid :as grid]))
+            [aoc-clj.utils.grid.core :as grid]))
 
 ;; Constants
 (def iterations 100)
 
 ;; Input parsing
-(def grid
+(def makegrid
   "Returns a list of all NxN [x y] position vecs in a grid of size N"
   (memoize
    (fn [size]
@@ -21,7 +21,7 @@
 (defn parse
   [input]
   (let [size   (count input)
-        lights (->> (grid size)
+        lights (->> (makegrid size)
                     (filter #(= \# (char-at input %)))
                     set)]
     [size lights]))
@@ -70,7 +70,7 @@
    positions of currently on lights, compute the next state according to the
    neighbor rules."
   [[size lights]]
-  [size (->> (grid size)
+  [size (->> (makegrid size)
              (filter #(on-condition lights %))
              set)])
 
