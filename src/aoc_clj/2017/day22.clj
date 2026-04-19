@@ -1,6 +1,6 @@
 (ns aoc-clj.2017.day22
   "Solution to https://adventofcode.com/2017/day/22"
-  (:require [aoc-clj.utils.grid :as grid]))
+  (:require [aoc-clj.utils.grid.core :as grid]))
 
 ;; Constants
 (def burst-count-p1 10000)
@@ -29,9 +29,9 @@
   [input]
   (let [size     (count input)
         dim      (quot size 2)
-        coords   (for [y (reverse (range (- dim) (inc dim)))
-                       x (range (- dim) (inc dim))]
-                   [x y])
+        coords   (for [row (range (- dim) (inc dim))
+                       col (range (- dim) (inc dim))]
+                   [row col])
         infected (->> (zipmap coords (apply concat input))
                       (filter #(= \# (val %)))
                       keys)]
