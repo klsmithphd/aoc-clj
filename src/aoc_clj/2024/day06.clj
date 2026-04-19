@@ -1,21 +1,21 @@
 (ns aoc-clj.2024.day06
   "Solution to https://adventofcode.com/2024/day/6"
-  (:require [aoc-clj.utils.grid :as grid :refer [value]]
-            [aoc-clj.utils.grid.mapgrid :as mg]))
+  (:require [aoc-clj.utils.grid.core :as grid :refer [value]]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]))
 
 ;; Input parsing
 (def charmap {\. nil \# :wall \^ :guard})
 
 (defn parse
   [input]
-  (mg/ascii->MapGrid2D charmap input))
+  (mg/ascii->MapGridRC charmap input))
 
 ;; Puzzle logic
 (defn guard-start
   "Returns the starting state of the guard given the grid"
-  [{:keys [grid]}]
+  [{:keys [grid-map]}]
   {:heading :n
-   :pos (ffirst (filter #(= :guard (val %)) grid))
+   :pos (ffirst (filter #(= :guard (val %)) grid-map))
    :visited #{}})
 
 (defn guard-state
@@ -50,7 +50,7 @@
   "Identifies whether adding an obstruction at `obs` will
    cause the guard to enter a loop"
   [grid obs]
-  (let [new-grid (assoc-in grid [:grid obs] :wall)
+  (let [new-grid (assoc-in grid [:grid-map obs] :wall)
         end      (last (guard-path new-grid))]
     (not (new-state? (next-move new-grid end)))))
 

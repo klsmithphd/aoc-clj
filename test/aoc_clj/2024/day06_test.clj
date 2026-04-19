@@ -18,7 +18,7 @@
 
 (deftest guard-start-test
   (testing "Finds the initial state of the guard"
-    (is (= {:heading :n :pos [4 3] :visited #{}}
+    (is (= {:heading :n :pos [6 4] :visited #{}}
            (d06/guard-start d06-s00)))))
 
 (deftest distinct-guard-positions-test
