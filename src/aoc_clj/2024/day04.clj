@@ -1,25 +1,25 @@
 (ns aoc-clj.2024.day04
   "Solution to https://adventofcode.com/2024/day/4"
-  (:require [aoc-clj.utils.grid :refer [value]]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+  (:require [aoc-clj.utils.grid.core :refer [value]]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]
             [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
 (def xmas-deltas
-  [[[0 0] [1 0] [2 0] [3 0]]       ;; right
-   [[0 0] [0 1] [0 2] [0 3]]       ;; up
-   [[0 0] [0 -1] [0 -2] [0 -3]]    ;; down
-   [[0 0] [-1 0] [-2 0] [-3 0]]    ;; left
-   [[0 0] [1 1] [2 2] [3 3]]       ;; up-right
-   [[0 0] [1 -1] [2 -2] [3 -3]]    ;; down-right
-   [[0 0] [-1 1] [-2 2] [-3 3]]    ;; up-left
-   [[0 0] [-1 -1] [-2 -2] [-3 -3]] ;; down-left
+  [[[0 0] [0 1] [0 2] [0 3]]       ;; right
+   [[0 0] [1 0] [2 0] [3 0]]       ;; down
+   [[0 0] [-1 0] [-2 0] [-3 0]]    ;; up
+   [[0 0] [0 -1] [0 -2] [0 -3]]    ;; left
+   [[0 0] [1 1] [2 2] [3 3]]       ;; down-right
+   [[0 0] [-1 1] [-2 2] [-3 3]]    ;; up-right
+   [[0 0] [1 -1] [2 -2] [3 -3]]    ;; down-left
+   [[0 0] [-1 -1] [-2 -2] [-3 -3]] ;; up-left
    ])
 
-(def x-mas-down-right [[-1 1] [0 0] [1 -1]])
+(def x-mas-down-right [[1 -1] [0 0] [-1 1]])
 (def x-mas-up-right   [[-1 -1] [0 0] [1 1]])
 (def x-mas-down-left  [[1 1] [0 0] [-1 -1]])
-(def x-mas-up-left    [[1 -1] [0 0] [-1 1]])
+(def x-mas-up-left    [[-1 1] [0 0] [1 -1]])
 (def x-mas-deltas
   [(concat x-mas-up-right x-mas-down-right)
    (concat x-mas-up-right x-mas-up-left)
@@ -29,14 +29,14 @@
 ;; Input parsing
 (defn parse
   [input]
-  (mg/ascii->MapGrid2D identity input :down true))
+  (mg/ascii->MapGridRC identity input))
 
 ;; Puzzle logic
 (defn char-positions
   "Returns the set of coordinate positions in the grid that match
    the provided character value"
-  [ch {:keys [grid]}]
-  (->> grid
+  [ch {:keys [grid-map]}]
+  (->> grid-map
        (filter #(= ch (val %)))
        keys
        set))
