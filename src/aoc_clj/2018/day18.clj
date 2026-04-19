@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day18
   "Solution to https://adventofcode.com/2018/day/18"
-  (:require [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.vecgrid :as vg]
+  (:require [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.vecgrid-rc :as vg]
             [aoc-clj.utils.core :as u]))
 
 ;; Constants
@@ -17,7 +17,7 @@
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input :down true))
+  (vg/ascii->VecGridRC charmap input))
 
 ;; Puzzle logic
 (defn cell-update
@@ -55,7 +55,7 @@
          (map #(cell-update scan %))
          (partition width)
          (mapv vec)
-         vg/->VecGrid2D)))
+         vg/->VecGridRC)))
 
 (defn state-at-t
   "Returns the updated state of the scan at time `t`"
