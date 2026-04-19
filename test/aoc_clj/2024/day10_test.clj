@@ -73,24 +73,24 @@
 (deftest trailheads-test
   (testing "Returns the location of any of the trailheads"
     (is (= #{[0 0]} (d10/trailheads d10-s00)))
-    (is (= #{[3 0]} (d10/trailheads d10-s01)))
-    (is (= #{[3 0]} (d10/trailheads d10-s02)))
-    (is (= #{[1 0] [5 6]} (d10/trailheads d10-s03)))
-    (is (= #{[2 0] [4 0] [4 2] [6 4] [2 5] [5 5] [0 6] [6 6] [1 7]}
+    (is (= #{[0 3]} (d10/trailheads d10-s01)))
+    (is (= #{[0 3]} (d10/trailheads d10-s02)))
+    (is (= #{[0 1] [6 5]} (d10/trailheads d10-s03)))
+    (is (= #{[0 2] [0 4] [2 4] [4 6] [5 2] [5 5] [6 0] [6 6] [7 1]}
            (d10/trailheads d10-s04)))))
 
 (deftest score-test
   (testing "Returns the number of distinct summits reachable from a given trailhead"
     (is (= 1 (d10/score d10-s00 [0 0])))
-    (is (= 2 (d10/score d10-s01 [3 0])))
-    (is (= 4 (d10/score d10-s02 [3 0])))
-    (is (= 1 (d10/score d10-s03 [1 0])))
-    (is (= 2 (d10/score d10-s03 [5 6])))))
+    (is (= 2 (d10/score d10-s01 [0 3])))
+    (is (= 4 (d10/score d10-s02 [0 3])))
+    (is (= 1 (d10/score d10-s03 [0 1])))
+    (is (= 2 (d10/score d10-s03 [6 5])))))
 
 (deftest rating-test
   (testing "Returns the number of distinct hiking trails from a given trailhead"
-    (is (= 3   (d10/rating d10-s05 [5 0])))
-    (is (= 13  (d10/rating d10-s02 [3 0])))
+    (is (= 3   (d10/rating d10-s05 [0 5])))
+    (is (= 13  (d10/rating d10-s02 [0 3])))
     (is (= 227 (d10/rating d10-s06 [0 0])))))
 
 (deftest trailhead-score-sum-test
