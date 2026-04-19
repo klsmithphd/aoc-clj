@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2017/day/3"
   (:require [clojure.math :as math]
             [aoc-clj.utils.vectors :as v]
-            [aoc-clj.utils.grid :as grid]))
+            [aoc-clj.utils.grid.core :as grid]))
 
 ;; Constants
 (def start-grid {[0 0] 1})
@@ -57,7 +57,7 @@
   "Adds a new grid value to the grid whose value is equal to the sum of a
    the diagonally adjacent values filled in so far."
   [grid pos]
-  (let [new-val (->> (grid/neighbors-2d grid pos :include-diagonals true)
+  (let [new-val (->> (select-keys grid (grid/adj-coords-2d pos :include-diagonals true))
                      vals
                      (reduce +))]
     (assoc grid pos new-val)))
