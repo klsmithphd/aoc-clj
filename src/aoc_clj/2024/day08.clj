@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/8"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.mapgrid-rc :as mg]
+            [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
@@ -19,7 +19,7 @@
 ;; Input parsing
 (defn parse
   [input]
-  (let [{:keys [width height grid-map]} (mg/ascii->MapGridRC identity input)]
+  (let [{:keys [width height grid-map]} (mg/ascii->MapGrid2D identity input)]
     {:width width
      :height height
      :antennae (->> grid-map

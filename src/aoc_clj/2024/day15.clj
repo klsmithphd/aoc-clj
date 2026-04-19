@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/15"
   (:require [clojure.string :as str]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid-rc :as mg]
+            [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.vectors :as v]))
 
@@ -27,7 +27,7 @@
 (defn parse
   [input]
   (let [[grid-str moves-str] (u/split-at-blankline input)
-        grid (mg/ascii->MapGridRC grid-charmap grid-str)]
+        grid (mg/ascii->MapGrid2D grid-charmap grid-str)]
     {:robot (first (grid/find-nodes :robot grid))
      :walls (set (grid/find-nodes :wall grid))
      :boxes (set (grid/find-nodes :box grid))

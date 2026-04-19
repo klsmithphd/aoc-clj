@@ -1,12 +1,12 @@
 (ns aoc-clj.2021.day25
   "Solution to https://adventofcode.com/2021/day/25"
-  (:require [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 (def charmap {\v :down \> :right \. :open})
 
 (defn parse
   [input]
-  (mapgrid/ascii->MapGridRC charmap input))
+  (mapgrid/ascii->MapGrid2D charmap input))
 
 (defn available?
   [grid-map pos]

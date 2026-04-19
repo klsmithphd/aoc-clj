@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day20
   "Solution to https://adventofcode.com/2021/day/20"
-  (:require [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.core :as u]))
 
 (def char-map {\. 0 \# 1})
@@ -9,7 +9,7 @@
   [input]
   (let [[part1 part2] (u/split-at-blankline input)]
     {:algorithm (mapv char-map (first part1))
-     :image (mapgrid/ascii->MapGridRC char-map part2)}))
+     :image (mapgrid/ascii->MapGrid2D char-map part2)}))
 
 ;; TODO variant of adj-coords. Consider consolidating
 (defn three-by-cell

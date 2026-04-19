@@ -1,8 +1,8 @@
-(ns aoc-clj.utils.grid.mapgrid-rc
-  (:require [aoc-clj.utils.grid.core :as grid :refer [GridRC]]))
+(ns aoc-clj.utils.grid.mapgrid
+  (:require [aoc-clj.utils.grid.core :as grid :refer [Grid2D]]))
 
-(defrecord MapGridRC [width height grid-map]
-  GridRC
+(defrecord MapGrid2D [width height grid-map]
+  Grid2D
   (width    [_] width)
   (height   [_] height)
   (value    [_ pos] (get grid-map pos))
@@ -14,7 +14,7 @@
     (let [coord (case dim :row first  :col second)
           w     (case dim :row width  :col 1)
           h     (case dim :row 1      :col height)]
-      (->MapGridRC w h (into (sorted-map) (filter #(= idx (-> % key coord)) grid-map)))))
+      (->MapGrid2D w h (into (sorted-map) (filter #(= idx (-> % key coord)) grid-map)))))
   (neighbors-4
     [_ pos]
     (let [locs (grid/adj-coords-2d pos)]
@@ -24,8 +24,8 @@
     (let [locs (grid/adj-coords-2d pos :include-diagonals true)]
       (zipmap locs (map (partial get grid-map) locs)))))
 
-(defn lists->MapGridRC
-  "Index a 2D list-of-lists into a MapGridRC with [row col] coordinates.
+(defn lists->MapGrid2D
+  "Index a 2D list-of-lists into a MapGrid2D with [row col] coordinates.
    Row 0 is the first list; col 0 is the first element of each list."
   [values]
   (let [width  (count (first values))
@@ -33,10 +33,10 @@
         coords (for [row (range height)
                      col (range width)]
                  [row col])]
-    (->MapGridRC width height (zipmap coords (flatten values)))))
+    (->MapGrid2D width height (zipmap coords (flatten values)))))
 
-(defn ascii->MapGridRC
-  "Convert an ASCII representation of a 2D grid into a MapGridRC.
+(defn ascii->MapGrid2D
+  "Convert an ASCII representation of a 2D grid into a MapGrid2D.
 
    charmap is a map where the keys are ASCII chars and the values are the
    symbols used in your application. Ex.: (def codes {\\. :space \\# :wall})
@@ -49,4 +49,4 @@
                      col (range width)]
                  [row col])
         syms   (mapcat #(map charmap %) lines)]
-    (->MapGridRC width height (zipmap coords syms))))
+    (->MapGrid2D width height (zipmap coords syms))))

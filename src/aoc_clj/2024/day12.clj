@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/12"
   (:require [clojure.set :as set]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid-rc :as mg]
+            [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.vectors :as v]))
 
@@ -45,7 +45,7 @@
 
 (defn parse
   [input]
-  (plots (mg/ascii->MapGridRC identity input)))
+  (plots (mg/ascii->MapGrid2D identity input)))
 
 ;; Puzzle logic
 (defn area

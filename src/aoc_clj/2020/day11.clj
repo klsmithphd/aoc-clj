@@ -1,13 +1,13 @@
 (ns aoc-clj.2020.day11
   "Solution to https://adventofcode.com/2020/day/11"
-  (:require [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 (defn parse
   [ascii-lines]
   (let [seat-mapping {\. :space
                       \# :occupied
                       \L :seat}]
-    (mapgrid/ascii->MapGridRC seat-mapping ascii-lines)))
+    (mapgrid/ascii->MapGrid2D seat-mapping ascii-lines)))
 
 (def dirs
   (->> (for [dr (range -1 2)

@@ -1,7 +1,7 @@
 (ns aoc-clj.2021.day15
   "Solution to https://adventofcode.com/2021/day/15"
   (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
+            [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.graph :as g]
             [aoc-clj.2021.gridgraph :refer [->GridGraph]]))
 
@@ -11,7 +11,7 @@
 
 (defn parse
   [lines]
-  (mapgrid/lists->MapGridRC (map parse-line lines)))
+  (mapgrid/lists->MapGrid2D (map parse-line lines)))
 
 (defn find-path-vals
   [{:keys [width height grid-map] :as input}]

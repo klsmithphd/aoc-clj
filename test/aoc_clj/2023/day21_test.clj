@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day21-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.vecgrid-rc :as vg]
+            [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.2023.day21 :as t]))
 
 (def d21-s00-raw
@@ -18,7 +18,7 @@
    "..........."])
 
 (def d21-s00
-  (vg/->VecGridRC
+  (vg/->VecGrid2D
    [[:plot :plot :plot :plot :plot :plot :plot :plot :plot :plot :plot]
     [:plot :plot :plot :plot :plot :rock :rock :rock :plot :rock :plot]
     [:plot :rock :rock :rock :plot :rock :rock :plot :plot :rock :plot]

@@ -3,7 +3,7 @@
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.graph :as graph :refer [->MapGraph]]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
+            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 ;;;; Input parsing
 
@@ -15,7 +15,7 @@
 
 (defn parse
   [input]
-  (mapgrid/lists->MapGridRC (map (partial map translate) input)))
+  (mapgrid/lists->MapGrid2D (map (partial map translate) input)))
 
 ;;;; Puzzle logic
 

@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2022/day/23"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
+            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 ;;;; Constants
 
@@ -15,7 +15,7 @@
 
 (defn parse
   [input]
-  (->> (mapgrid/ascii->MapGridRC charmap input)
+  (->> (mapgrid/ascii->MapGrid2D charmap input)
        :grid-map
        (filter #(elf? (val %)))
        (map first)

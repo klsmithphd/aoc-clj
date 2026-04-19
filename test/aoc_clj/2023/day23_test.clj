@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day23-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.vecgrid-rc :as vg]
+            [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.2023.day23 :as t]))
 
 (def d23-s00-raw
@@ -30,7 +30,7 @@
    "#####################.#"])
 
 (def d23-s00
-  (vg/->VecGridRC
+  (vg/->VecGrid2D
    [[\# \. \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \# \#]
     [\# \. \. \. \. \. \. \. \# \# \# \# \# \# \# \# \# \. \. \. \# \# \#]
     [\# \# \# \# \# \# \# \. \# \# \# \# \# \# \# \# \# \. \# \. \# \# \#]

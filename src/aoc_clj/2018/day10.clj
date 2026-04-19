@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day10
   "Solution to https://adventofcode.com/2018/day/10"
   (:require [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid-rc :as mg]
+            [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
@@ -72,10 +72,10 @@
         positions             (positions-at-t lights time)
         [[mnx mxx] [mny mxy]] (bounds positions)
         shifted               (map (fn [[x y]] [(- y mny) (- x mnx)]) positions)
-        g                     (mg/->MapGridRC
+        g                     (mg/->MapGrid2D
                                (inc (- mxx mnx)) (inc (- mxy mny))
                                (zipmap shifted (repeat :on)))]
-    (grid/GridRC->ascii {\# :on \  nil} g)))
+    (grid/Grid2D->ascii {\# :on \  nil} g)))
 
 ;; Puzzle solutions
 (defn part1

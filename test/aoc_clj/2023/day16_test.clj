@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day16-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.vecgrid-rc :as vg]
+            [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.2023.day16 :as t]))
 
 (def d16-s00-raw
@@ -17,7 +17,7 @@
    "..//.|...."])
 
 (def d16-s00
-  (vg/->VecGridRC
+  (vg/->VecGrid2D
    [[:empty :spltv :empty :empty :empty :mrrr1 :empty :empty :empty :empty]
     [:spltv :empty :splth :empty :mrrr1 :empty :empty :empty :empty :empty]
     [:empty :empty :empty :empty :empty :spltv :splth :empty :empty :empty]

@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2019/day/24"
   (:require [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid-rc]))
+            [aoc-clj.utils.grid.mapgrid :as mapgrid-rc]))
 
 (def bug-map
   {\. :space
@@ -11,7 +11,7 @@
 
 (defn parse
   [input]
-  (:grid-map (mapgrid-rc/ascii->MapGridRC bug-map input)))
+  (:grid-map (mapgrid-rc/ascii->MapGrid2D bug-map input)))
 
 (defn conway-rule
   [space pos neighbor-fn]

@@ -3,7 +3,7 @@
     (:require [clojure.string :as str]
               [aoc-clj.utils.core :as u]
               [aoc-clj.utils.grid.core :as grid]
-              [aoc-clj.utils.grid.mapgrid-rc :as mg]))
+              [aoc-clj.utils.grid.mapgrid :as mg]))
 
 ;; Constants
 (def screen-width 50)
@@ -104,9 +104,9 @@
   "What string do the lit up pixels spell after following the instructions"
   [input]
   ;; Print the grid so as to be able to read the block characters
-  (println (grid/GridRC->ascii
+  (println (grid/Grid2D->ascii
             {\  0 \# 1}
-            (mg/->MapGridRC
+            (mg/->MapGrid2D
              screen-width
              screen-height
              (final-state screen-width screen-height input))))

@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day10-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.vecgrid-rc :as vg]
+            [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.2023.day10 :as t]))
 
 (def d10-s00-raw
@@ -12,7 +12,7 @@
    "L|-JF"])
 
 (def d10-s00
-  (vg/->VecGridRC [[:pipe-h :ell-ne :pipe-v :ell-se :ell-sw]
+  (vg/->VecGrid2D [[:pipe-h :ell-ne :pipe-v :ell-se :ell-sw]
                    [:ell-sw :start :pipe-h :ell-sw :pipe-v]
                    [:ell-ne :pipe-v :ell-sw :pipe-v :pipe-v]
                    [:pipe-h :ell-ne :pipe-h :ell-nw :pipe-v]

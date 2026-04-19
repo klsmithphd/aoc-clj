@@ -1,6 +1,6 @@
 (ns aoc-clj.2018.day13-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.grid.mapgrid-rc :as mg]
+            [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.utils.core :as u]
             [aoc-clj.2018.day13 :as d13]))
 
@@ -24,7 +24,7 @@
     "  \\<->/"]))
 
 (def d13-s00
-  (mg/->MapGridRC 13 6
+  (mg/->MapGrid2D 13 6
                   {[0 0] :curve-45
                    [0 1] :h
                    [0 2] :cart-r

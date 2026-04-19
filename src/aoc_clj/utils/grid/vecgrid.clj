@@ -1,8 +1,8 @@
-(ns aoc-clj.utils.grid.vecgrid-rc
-  (:require [aoc-clj.utils.grid.core :as grid :refer [GridRC]]))
+(ns aoc-clj.utils.grid.vecgrid
+  (:require [aoc-clj.utils.grid.core :as grid :refer [Grid2D]]))
 
-(defrecord VecGridRC [v]
-  GridRC
+(defrecord VecGrid2D [v]
+  Grid2D
   (width    [_] (count (first v)))
   (height   [_] (count v))
   (value    [_ [row col]] (get-in v [row col]))
@@ -11,7 +11,7 @@
   (in-grid? [this pos] (grid/within-grid? this pos))
   (slice
     [_ dim idx]
-    (->VecGridRC
+    (->VecGrid2D
      (case dim
        :row (vector (get v idx))
        :col (mapv vector (map #(nth % idx) v)))))
@@ -48,12 +48,12 @@
   [sat [ul-row ul-col size]]
   (area-sum sat [ul-row ul-col] [(+ ul-row (dec size)) (+ ul-col (dec size))]))
 
-(defn ascii->VecGridRC
-  "Convert an ASCII representation of a 2D grid into a VecGridRC.
+(defn ascii->VecGrid2D
+  "Convert an ASCII representation of a 2D grid into a VecGrid2D.
 
    charmap is a map where the keys are ASCII chars and the values are the
    symbols used in your application. Ex.: (def codes {\\. :space \\# :wall})
 
    Row 0 is always the first line of input; no :down option is needed."
   [charmap lines]
-  (->VecGridRC (mapv #(mapv charmap %) lines)))
+  (->VecGrid2D (mapv #(mapv charmap %) lines)))

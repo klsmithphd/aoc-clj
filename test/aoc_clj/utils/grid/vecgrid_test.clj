@@ -1,13 +1,13 @@
-(ns aoc-clj.utils.grid.vecgrid-rc-test
+(ns aoc-clj.utils.grid.vecgrid-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.grid.core :refer
              [width height value pos-seq val-seq slice neighbors-4 neighbors-8]]
-            [aoc-clj.utils.grid.vecgrid-rc :as vg :refer [->VecGridRC]]))
+            [aoc-clj.utils.grid.vecgrid :as vg :refer [->VecGrid2D]]))
 
 ;; A 2×3 grid (2 rows, 3 cols) in row-major order:
 ;;   row 0: 1 2 3
 ;;   row 1: 4 5 6
-(def sample (->VecGridRC [[1 2 3]
+(def sample (->VecGrid2D [[1 2 3]
                           [4 5 6]]))
 
 (def sample-grid
@@ -26,16 +26,16 @@
    [25 46 78  90 110 141]
    [34 60 92 106 134 173]])
 
-(deftest VecGridRC-test
-  (testing "Satisfies the GridRC protocol"
+(deftest VecGrid2D-test
+  (testing "Satisfies the Grid2D protocol"
     (is (= 3 (width sample)))
     (is (= 2 (height sample)))
     (is (= 5 (value sample [1 1])))
     (is (= [[0 0] [0 1] [0 2] [1 0] [1 1] [1 2]] (pos-seq sample)))
     (is (= [1 2 3 4 5 6] (val-seq sample)))
-    (is (= (->VecGridRC [[4 5 6]])
+    (is (= (->VecGrid2D [[4 5 6]])
            (slice sample :row 1)))
-    (is (= (->VecGridRC [[3] [6]])
+    (is (= (->VecGrid2D [[3] [6]])
            (slice sample :col 2)))
     (is (= {[0 1] 2 [1 2] 6 [2 1] nil [1 0] 4}
            (neighbors-4 sample [1 1])))
@@ -44,12 +44,12 @@
             [1 0] 4   [1 1] 5   [1 2] 6}
            (neighbors-8 sample [0 1])))))
 
-(deftest ascii->VecGridRC-test
-  (testing "Successfully transforms ASCII art into a VecGridRC, row 0 first"
-    (is (= (->VecGridRC
+(deftest ascii->VecGrid2D-test
+  (testing "Successfully transforms ASCII art into a VecGrid2D, row 0 first"
+    (is (= (->VecGrid2D
             [[:space :space :wall]
              [:space :wall  :space]])
-           (vg/ascii->VecGridRC
+           (vg/ascii->VecGrid2D
             {\. :space \# :wall}
             ["..#"
              ".#."])))))

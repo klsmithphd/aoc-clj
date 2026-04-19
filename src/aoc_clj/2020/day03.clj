@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day03
   "Solution to https://adventofcode.com/2020/day/3"
-  (:require [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 (def parse identity)
 
@@ -8,7 +8,7 @@
   [ascii-lines]
   (let [forest-mapping {\. :space
                         \# :tree}]
-    (mapgrid/ascii->MapGridRC forest-mapping ascii-lines)))
+    (mapgrid/ascii->MapGrid2D forest-mapping ascii-lines)))
 
 (defn get-position
   [{:keys [height width grid-map]} [row col]]

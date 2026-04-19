@@ -4,7 +4,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.intcode :as intcode]
-            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
+            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 (def parse u/firstv)
 
@@ -20,7 +20,7 @@
 (defn scaffold-map
   [ascii]
   (let [lines (str/split (str/join (map char ascii)) #"\n")]
-    (:grid-map (mapgrid/ascii->MapGridRC scaffold-mapping lines))))
+    (:grid-map (mapgrid/ascii->MapGrid2D scaffold-mapping lines))))
 
 (defn day17-map
   [input]

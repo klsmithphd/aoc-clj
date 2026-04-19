@@ -1,7 +1,7 @@
 (ns aoc-clj.2024.day04
   "Solution to https://adventofcode.com/2024/day/4"
   (:require [aoc-clj.utils.grid.core :refer [value]]
-            [aoc-clj.utils.grid.mapgrid-rc :as mg]
+            [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.utils.vectors :as v]))
 
 ;; Constants
@@ -29,7 +29,7 @@
 ;; Input parsing
 (defn parse
   [input]
-  (mg/ascii->MapGridRC identity input))
+  (mg/ascii->MapGrid2D identity input))
 
 ;; Puzzle logic
 (defn char-positions

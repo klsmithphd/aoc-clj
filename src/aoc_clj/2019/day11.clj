@@ -3,7 +3,7 @@
   (:require [manifold.stream :as s]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.vecgrid-rc :refer [->VecGridRC]]
+            [aoc-clj.utils.grid.vecgrid :refer [->VecGrid2D]]
             [aoc-clj.utils.intcode :as intcode]))
 
 (def parse u/firstv)
@@ -60,8 +60,8 @@
   (->> (paint-bot input 1)
        :hull
        grid/mapgrid->vectors
-       ->VecGridRC
-       (grid/GridRC->ascii {\  0 \* 1})
+       ->VecGrid2D
+       (grid/Grid2D->ascii {\  0 \* 1})
        print))
 
 (defn part2

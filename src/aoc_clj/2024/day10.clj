@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/10"
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.vecgrid-rc :as vg]))
+            [aoc-clj.utils.grid.vecgrid :as vg]))
 
 ;; Records
 (defrecord GridGraph [grid]
@@ -24,7 +24,7 @@
 ;; Input parsing
 (defn parse
   [input]
-  (vg/ascii->VecGridRC (comp read-string str) input))
+  (vg/ascii->VecGrid2D (comp read-string str) input))
 
 ;; Puzzle logic
 (defn trailheads

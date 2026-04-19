@@ -1,12 +1,12 @@
 (ns aoc-clj.2020.day20
   "Solution to https://adventofcode.com/2020/day/20"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
+            [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.core :as u]))
 
 (def charmap  {\. 0 \# 1})
 (def sea-monster-pattern
-  (->> (mapgrid/ascii->MapGridRC
+  (->> (mapgrid/ascii->MapGrid2D
         charmap
         ["                  # "
          "#    ##    ##    ###"
@@ -19,7 +19,7 @@
   [tile-str]
   (let [[header grid] (str/split tile-str #":\n")
         tile-id (read-string (subs header 5 9))]
-    [tile-id (mapgrid/ascii->MapGridRC
+    [tile-id (mapgrid/ascii->MapGrid2D
               charmap
               (str/split grid #"\n"))]))
 

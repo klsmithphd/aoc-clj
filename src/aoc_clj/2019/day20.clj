@@ -4,7 +4,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.graph :as g :refer [Graph ->MapGraph without-vertex]]
             [aoc-clj.utils.maze :as maze :refer [->Maze]]
-            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
+            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
 
 ;; TODO: 2019 Day 20 implementation is too complex and undocumented 
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/21
@@ -110,7 +110,7 @@
         portals (labels->portals labels)
         start   (get-in portals ["AA" :outer])
         end     (get-in portals ["ZZ" :outer])
-        themaze (->Maze (->> (mapgrid/ascii->MapGridRC maze-map (trim-maze maze))
+        themaze (->Maze (->> (mapgrid/ascii->MapGrid2D maze-map (trim-maze maze))
                              :grid-map
                              (filter #(not= :nothing (val %)))
                              (into {}))

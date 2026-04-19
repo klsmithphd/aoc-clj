@@ -8,7 +8,7 @@
                                                map->MapGraph
                                                edges
                                                vertices]]
-            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
+            [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.maze :as maze :refer [map->Maze]]))
 ;; FIXME: This implementation is too complex and not sufficiently documented
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/19
@@ -27,7 +27,7 @@
 ; TODO - think about when to cull the dead ends from the maze
 (defn load-maze
   [maze]
-  (let [themaze (:grid-map (mapgrid/ascii->MapGridRC maze-map maze))
+  (let [themaze (:grid-map (mapgrid/ascii->MapGrid2D maze-map maze))
         entrances (map first (filter #(= :entrance (val %)) themaze))
         specials (into {} (filter #(not (keyword? (val %))) themaze))
         keys (map first (filter #(re-find #"[a-z]" (val %)) specials))

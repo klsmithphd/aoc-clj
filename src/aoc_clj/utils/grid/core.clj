@@ -3,7 +3,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.vectors :as v]))
 
-(defprotocol GridRC
+(defprotocol Grid2D
   "A two-dimensional grid of values indexed by [row col]"
   (width [this] "The total width of the grid (number of columns)")
   (height [this] "The total height of the grid (number of rows)")
@@ -86,8 +86,8 @@
   (->> (pos-seq grid)
        (filter #(= v (value grid %)))))
 
-(defn GridRC->ascii
-  "Convert a GridRC into an ASCII-art string representation.
+(defn Grid2D->ascii
+  "Convert a Grid2D into an ASCII-art string representation.
 
    charmap is a map where the keys are ASCII chars and the values are the
    symbols used in your application. Ex.: (def charmap {\\. :space \\# :wall})
@@ -169,7 +169,7 @@
 
 (defn neighbors-2d
   "Map of positions to values for the nearest neighbors of pos.
-   Works correctly with any GridRC implementation."
+   Works correctly with any Grid2D implementation."
   [grid pos & {:keys [include-diagonals]}]
   (let [locs (adj-coords-2d pos :include-diagonals include-diagonals)]
     (zipmap locs (map (partial value grid) locs))))

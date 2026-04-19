@@ -1,7 +1,7 @@
 (ns aoc-clj.utils.grid.core-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid-rc :as mg :refer [->MapGridRC]]))
+            [aoc-clj.utils.grid.mapgrid :as mg :refer [->MapGrid2D]]))
 
 ;; A 3×3 grid in [row col] coordinates:
 ;;   row 0 (top):    7 8 9
@@ -12,18 +12,18 @@
    [1 0] 4 [1 1] 5 [1 2] 6
    [2 0] 1 [2 1] 2 [2 2] 3})
 
-(def sample-grid (->MapGridRC 3 3 sample))
+(def sample-grid (->MapGrid2D 3 3 sample))
 
 (deftest find-nodes-test
   (testing "Retrieves the positions of the nodes with the provided value"
     (is (= [[1 1]] (grid/find-nodes 5 sample-grid)))))
 
-(deftest GridRC->ascii-test
-  (testing "Converts a GridRC to an ASCII-art string, row 0 at the top"
+(deftest Grid2D->ascii-test
+  (testing "Converts a Grid2D to an ASCII-art string, row 0 at the top"
     (is (= "..#\n.#."
-           (grid/GridRC->ascii
+           (grid/Grid2D->ascii
             {\. :space \# :wall}
-            (->MapGridRC 3 2
+            (->MapGrid2D 3 2
                          {[0 0] :space [0 1] :space [0 2] :wall
                           [1 0] :space [1 1] :wall  [1 2] :space}))))))
 

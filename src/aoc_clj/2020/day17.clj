@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day17
   "Solution to https://adventofcode.com/2020/day/17"
-  (:require [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
+  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
             [aoc-clj.utils.core :as u]))
 
 (defn twod->threed
@@ -11,7 +11,7 @@
   [ascii-lines]
   (let [char-map {\. :inactive
                   \# :active}
-        slice (mapgrid/ascii->MapGridRC char-map ascii-lines)]
+        slice (mapgrid/ascii->MapGrid2D char-map ascii-lines)]
     (update slice :grid-map (partial u/kmap twod->threed))))
 
 (def adjacent-dirs-3d
