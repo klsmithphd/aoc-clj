@@ -4,7 +4,7 @@
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.graph :as g :refer [Graph ->MapGraph without-vertex]]
             [aoc-clj.utils.maze :as maze :refer [->Maze]]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]))
 
 ;; TODO: 2019 Day 20 implementation is too complex and undocumented 
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/21
@@ -52,15 +52,15 @@
   (let [val [label inout]]
     (case inout
       :outer (case side
-               :top [[pos 0] val]
-               :bot [[pos (dec height)] val]
-               :lft [[0 pos] val]
-               :rgt [[(dec width) pos] val])
+               :top [[0 pos] val]
+               :bot [[(dec height) pos] val]
+               :lft [[pos 0] val]
+               :rgt [[pos (dec width)] val])
       :inner (case side
-               :top [[pos (dec thickness)] val]
-               :bot [[pos (- height thickness)] val]
-               :lft [[(dec thickness) pos] val]
-               :rgt [[(- width thickness) pos] val]))))
+               :top [[(dec thickness) pos] val]
+               :bot [[(- height thickness) pos] val]
+               :lft [[pos (dec thickness)] val]
+               :rgt [[pos (- width thickness)] val]))))
 
 (defn label-locations
   [maze]
@@ -110,8 +110,8 @@
         portals (labels->portals labels)
         start   (get-in portals ["AA" :outer])
         end     (get-in portals ["ZZ" :outer])
-        themaze (->Maze (->> (mapgrid/ascii->MapGrid2D maze-map (trim-maze maze) :down true)
-                             :grid
+        themaze (->Maze (->> (mapgrid/ascii->MapGridRC maze-map (trim-maze maze))
+                             :grid-map
                              (filter #(not= :nothing (val %)))
                              (into {}))
                         (partial = :open))
@@ -170,13 +170,13 @@
       ->MapGraph))
 
 (defn append-if-portal
-  [{:keys [labels portals]} [x y z] edges]
-  (let [maybe-portal (labels [x y])]
+  [{:keys [labels portals]} [row col z] edges]
+  (let [maybe-portal (labels [row col])]
     (if (nil? maybe-portal)
       edges
       (let [[name side] maybe-portal
-            [newx newy] (get-in portals [name (switch-side side)])
-            newcoord [newx newy (if (= side :inner) (inc z) (dec z))]]
+            [new-row new-col] (get-in portals [name (switch-side side)])
+            newcoord [new-row new-col (if (= side :inner) (inc z) (dec z))]]
         (assoc edges newcoord 1)))))
 
 (defn to-3d
@@ -187,10 +187,10 @@
   [state]
   (let [top-graph (top-layer state)
         lower-graph (lower-layer state)
-        lookup-fn (fn [[x y z]]
+        lookup-fn (fn [[row col z]]
                     (if (= z 0)
-                      (append-if-portal state [x y z] (to-3d 0 (get-in top-graph [:graph [x y]])))
-                      (append-if-portal state [x y z] (to-3d z (get-in lower-graph [:graph [x y]])))))]
+                      (append-if-portal state [row col z] (to-3d 0 (get-in top-graph [:graph [row col]])))
+                      (append-if-portal state [row col z] (to-3d z (get-in lower-graph [:graph [row col]])))))]
     (->RecursiveMaze lookup-fn)))
 
 (defn solve-recursive-maze

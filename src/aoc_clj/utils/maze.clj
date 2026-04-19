@@ -1,6 +1,6 @@
 (ns aoc-clj.utils.maze
   (:require [aoc-clj.utils.graph :as graph :refer [Graph ->MapGraph]]
-            [aoc-clj.utils.grid :as grid]
+            [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.core :as u]))
 
 (defn one-step
@@ -30,7 +30,7 @@
 
   (edges
     [_ v]
-    (all-open open? (grid/neighbors-2d maze v)))
+    (all-open open? (select-keys maze (grid/adj-coords-2d v))))
 
   (distance
     [_ _ _]
@@ -92,7 +92,7 @@
       ;; Stop when we return back to the origin and we 
       ;; know all of the adjacent values
     (if (and (= [0 0] (state :pos))
-             (= 4 (count (grid/neighbors-2d (state :maze) (state :pos)))))
+             (= 4 (count (select-keys (state :maze) (grid/adj-coords-2d (state :pos))))))
       (->Maze (:maze state) (complement wall?))
       (recur (maze-step probe state)))))
 
@@ -102,8 +102,8 @@
   (ffirst (filter #(= target (val %)) (:maze maze))))
 
 (defn spread-to-adjacent
-  [maze [x y]]
-  (let [thens (grid/neighbors-2d maze [x y])
+  [maze [row col]]
+  (let [thens (select-keys (:maze maze) (grid/adj-coords-2d [row col]))
         to-add (filter #(= :open (val %)) thens)]
     (keys to-add)))
 

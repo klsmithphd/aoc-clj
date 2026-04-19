@@ -8,7 +8,7 @@
                                                map->MapGraph
                                                edges
                                                vertices]]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mapgrid]
             [aoc-clj.utils.maze :as maze :refer [map->Maze]]))
 ;; FIXME: This implementation is too complex and not sufficiently documented
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/19
@@ -27,7 +27,7 @@
 ; TODO - think about when to cull the dead ends from the maze
 (defn load-maze
   [maze]
-  (let [themaze (:grid (mapgrid/ascii->MapGrid2D maze-map maze :down true))
+  (let [themaze (:grid-map (mapgrid/ascii->MapGridRC maze-map maze))
         entrances (map first (filter #(= :entrance (val %)) themaze))
         specials (into {} (filter #(not (keyword? (val %))) themaze))
         keys (map first (filter #(re-find #"[a-z]" (val %)) specials))
@@ -42,12 +42,12 @@
       :nodes nodes})))
 
 (defn unique-label
-  [{:keys [maze entrances]} [x y]]
-  (let [foo (maze [x y])]
+  [{:keys [maze entrances]} [row col]]
+  (let [foo (maze [row col])]
     (if (keyword? foo)
       (if (= :entrance foo)
-        (entrances [x y])
-        (str "_" x "," y))
+        (entrances [row col])
+        (str "_" row "," col))
       foo)))
 
 (defn summarize-path
@@ -181,24 +181,24 @@
 
 (defn fix-maze
   [{:keys [entrances maze nodes] :as input}]
-  (let [[x y] (first (keys entrances))
-        newents [[(dec x) (dec y)]
-                 [(dec x) (inc y)]
-                 [(inc x) (dec y)]
-                 [(inc x) (inc y)]]
+  (let [[row col] (first (keys entrances))
+        newents [[(dec row) (dec col)]
+                 [(inc row) (dec col)]
+                 [(dec row) (inc col)]
+                 [(inc row) (inc col)]]
         fixedmaze (assoc maze
-                         [x y] :wall
-                         [(dec x) y] :wall
-                         [(inc x) y] :wall
-                         [x (dec y)] :wall
-                         [x (inc y)] :wall
-                         [(dec x) (dec y)] :entrance
-                         [(dec x) (inc y)] :entrance
-                         [(inc x) (dec y)] :entrance
-                         [(inc x) (inc y)] :entrance)]
+                         [row col] :wall
+                         [row (dec col)] :wall
+                         [row (inc col)] :wall
+                         [(dec row) col] :wall
+                         [(inc row) col] :wall
+                         [(dec row) (dec col)] :entrance
+                         [(inc row) (dec col)] :entrance
+                         [(dec row) (inc col)] :entrance
+                         [(inc row) (inc col)] :entrance)]
     (assoc input
            :maze fixedmaze
-           :nodes (into (filter (partial not= [x y]) nodes) newents)
+           :nodes (into (filter (partial not= [row col]) nodes) newents)
            :entrances (zipmap newents (map str (range))))))
 
 (defn part1

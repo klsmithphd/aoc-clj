@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2016/day/24"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]
             [aoc-clj.utils.graph :as g :refer [Graph]]
             [aoc-clj.utils.maze :as maze]))
 
@@ -55,8 +55,8 @@
 
 (defn parse
   [input]
-  (-> (mg/ascii->MapGrid2D charmap input :down true)
-      :grid
+  (-> (mg/ascii->MapGridRC charmap input)
+      :grid-map
       (maze/->Maze #(not= :wall %))
       stop-graph))
 
