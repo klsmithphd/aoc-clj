@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/25"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.utils.grid.vecgrid-rc :as vg]))
 
 ;; Input parsing
 (def charmap {\# 1 \. 0})
@@ -10,14 +10,14 @@
 (defn key-lock-parse
   [lines]
   [(case (ffirst lines)
-     0 :locks
-     1 :keys)
+     1 :locks
+     0 :keys)
    (mapv #(reduce + -1 %) lines)])
 
 (defn parse
   [input]
   (->> (u/split-at-blankline input)
-       (map #(:v (vg/ascii->VecGrid2D charmap %)))
+       (map #(:v (vg/ascii->VecGridRC charmap %)))
        (map u/transpose)
        (map key-lock-parse)
        (group-by first)
