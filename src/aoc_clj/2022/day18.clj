@@ -1,6 +1,6 @@
 (ns aoc-clj.2022.day18
   "Solution to https://adventofcode.com/2022/day/18"
-  (:require [aoc-clj.utils.grid :as grid]
+  (:require [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.core :as u]))
 
 ;;;; Input parsing 
