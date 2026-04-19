@@ -1,8 +1,8 @@
 (ns aoc-clj.2024.day15
   "Solution to https://adventofcode.com/2024/day/15"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.utils.grid.mapgrid-rc :as mg]
             [aoc-clj.utils.core :as u]
             [aoc-clj.utils.vectors :as v]))
 
@@ -27,7 +27,7 @@
 (defn parse
   [input]
   (let [[grid-str moves-str] (u/split-at-blankline input)
-        grid (mg/ascii->MapGrid2D grid-charmap grid-str :down true)]
+        grid (mg/ascii->MapGridRC grid-charmap grid-str)]
     {:robot (first (grid/find-nodes :robot grid))
      :walls (set (grid/find-nodes :wall grid))
      :boxes (set (grid/find-nodes :box grid))
@@ -35,15 +35,14 @@
 
 ;; Puzzle logic
 (defn double-x
-  "Return a coordinate vector with the x-coordinated doubled, leaving y same"
-  [[x y]]
-  [(* 2 x) y])
+  "Return a [row col] coordinate with the column doubled"
+  [[row col]]
+  [row (* 2 col)])
 
 (defn spread-x
-  "Given a coordinate vector, return a collection of the coordinate and
-   the location one unit to the right"
-  [[x y]]
-  [[x y] [(inc x) y]])
+  "Given a [row col] coordinate, return it and the cell one column to the right"
+  [[row col]]
+  [[row col] [row (inc col)]])
 
 (defn widen-input
   "For part2, double the width of the warehouse space"
@@ -71,17 +70,17 @@
              ;; For each subsequence box, we check two units to the right.
              :e (if first?
                   [delta]
-                  [(v/vec-add delta [1 0])])
+                  [(v/vec-add delta [0 1])])
              ;; In the west direction, we need to check to see if there's
              ;; a box two units to the left.
-             :w [(v/vec-add delta [-1 0])]
+             :w [(v/vec-add delta [0 -1])]
              ;; For north and south, we need to check to see if there's
              ;; a box at delta, but also one unit to the left of delta on
              ;; the first go. For each subsequent go, we check up, up-left,
              ;; and up-right.
              (:n :s) (if first?
-                       [(v/vec-add delta [-1 0]) delta]
-                       [(v/vec-add delta [-1 0]) delta (v/vec-add delta [1 0])]))))
+                       [(v/vec-add delta [0 -1]) delta]
+                       [(v/vec-add delta [0 -1]) delta (v/vec-add delta [0 1])]))))
 
 (defn adjacent-boxes
   "Returns the set of boxes that are adjacent to the current position
@@ -136,10 +135,10 @@
    a line of 1-to-N boxes can be moved."
   [part {:keys [walls boxes robot] :as state} dir]
   (let [delta  (case dir
-                 :n [0 -1]
-                 :s [0 1]
-                 :e [1 0]
-                 :w [-1 0])
+                 :n [-1 0]
+                 :s [1 0]
+                 :e [0 1]
+                 :w [0 -1])
         to-pos    (v/vec-add robot delta)
         adj-boxes (box-chain part boxes dir delta robot)]
     (cond
@@ -156,8 +155,8 @@
 (defn box-gps
   "Returns the GPS coordinate of a box, which is 100 times its distance
    from the top edge of the map plus its distance from the left edge"
-  [[x y]]
-  (+ x (* y 100)))
+  [[row col]]
+  (+ (* row 100) col))
 
 (defn box-gps-sum
   "Returns the sum of the GPS coordinates of all the boxes"
