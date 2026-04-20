@@ -70,7 +70,6 @@
    height and the equivalent distance to the right"
   [row i]
   (let [[l [x & r]] (split-at i row)]
-    [x l r]
     (* (min (count l) (inc (count (take-while #(> x %) (reverse l)))))
        (min (count r) (inc (count (take-while #(> x %) r)))))))
 
