@@ -1,7 +1,6 @@
 (ns aoc-clj.utils.graph
   (:require [clojure.set :as set]
             [clojure.data.priority-map :refer [priority-map]]
-            [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.core :as u]))
 
 (defprotocol Graph
@@ -9,8 +8,7 @@
   (vertex [this v] "Any data/information/label associated with the given vertex in the graph")
   (edges [this v] "A collection of the edges for the given vertex in the graph")
   (distance [this v1 v2] "The distance (or edge weight) between two vertices")
-  (without-vertex [this v] "Produces a new graph with the vertex removed")
-  (rewired-without-vertex [this v] "Produces a new graph, re-wired to preserve the transitive edges through the removed vertex"))
+  (without-vertex [this v] "Produces a new graph with the vertex removed"))
 
 (defrecord MapGraph [graph]
   Graph
@@ -35,16 +33,7 @@
     (let [neighbors (edges g v)
           newgraph (-> (reduce #(update %1 %2 dissoc v) graph neighbors)
                        (dissoc v))]
-      (assoc g :graph newgraph)))
-
-  (rewired-without-vertex
-    [g v]
-    (let [neighbors (edges g v)
-          all-pairs (combo/permuted-combinations neighbors 2)
-          newedge-fn (fn [g [v1 v2]]
-                       (update-in g [:graph v1] assoc v2 (+ (distance g v1 v)
-                                                            (distance g v v2))))]
-      (without-vertex (reduce newedge-fn g all-pairs) v))))
+      (assoc g :graph newgraph))))
 
 (defrecord SubMapGraph [graph subg]
   Graph
@@ -60,31 +49,6 @@
     [_ v1 v2]
     (get-in graph [v1 v2])))
 
-(defrecord LabeledMapGraph [graph]
-  Graph
-  (vertices
-    [_]
-    (keys graph))
-
-  (vertex
-    [_ v]
-    (graph v))
-
-  (edges
-    [_ v]
-    (keys (:edges (graph v))))
-
-  (distance
-    [_ v1 v2]
-    (get-in graph [:edges v1 v2]))
-
-  (without-vertex
-    [_ v]
-    (let [neighbors (keys (:edges graph v))
-          newgraph (-> (reduce #(update-in %1 [:edges %2] dissoc v) graph neighbors)
-                       (dissoc v))]
-      (->LabeledMapGraph newgraph))))
-
 (defn degree
   "The degree of a vertex is the number of edges it has"
   [g v]
@@ -99,10 +63,6 @@
   "Whether a vertex is a junction (meaning that it has more than two edges)"
   [g v]
   (> (degree g v) 2))
-
-;; (defn entries-in-set
-;;   [s m]
-;;   (filter (fn [[k _]] (s k)) m))
 
 (defn entries-not-in-set
   [s m]
@@ -271,11 +231,11 @@
         {:dist  (assoc dist neighbor alt)
          :queue (assoc queue neighbor (+ alt (h neighbor)))
          :prev  (if (< alt d)
-                ;; If the new alt is strictly better, it becomes the only
-                ;; known value in the prev map
+                  ;; If the new alt is strictly better, it becomes the only
+                  ;; known value in the prev map
                   (assoc prev neighbor #{vertex})
-                ;; If the new alt is equivalent, then add it to the known
-                ;; prev set
+                  ;; If the new alt is equivalent, then add it to the known
+                  ;; prev set
                   (update prev neighbor nil-setconj vertex))}
         state)
 
