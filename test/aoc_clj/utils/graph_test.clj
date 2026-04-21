@@ -1,6 +1,6 @@
 (ns aoc-clj.utils.graph-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.graph :as g :refer [without-vertex rewired-without-vertex ->MapGraph]]
+            [aoc-clj.utils.graph :as g :refer [without-vertex ->MapGraph]]
             [aoc-clj.utils.core :as u]))
 
 (def t1 (->MapGraph {:a {:b 1}
@@ -24,20 +24,14 @@
                      :e {:b 15 :d 11 :f 6}
                      :f {:c 9 :e 6}}))
 
-(def t4 (->MapGraph {:a {:j 3}
-                     :b {:j 2}
-                     :c {:j 4}
-                     :d {:j 6}
-                     :j {:a 3 :b 2 :c 4 :d 6}}))
-
-(def t5 (->MapGraph {:a {:b 1.5 :e 2}
+(def t4 (->MapGraph {:a {:b 1.5 :e 2}
                      :b {:c 2}
                      :c {:d 3}
                      :d {:g 4}
                      :e {:f 3}
                      :f {:g 2}}))
 
-(def t6 (->MapGraph {:a {:b 1 :c 1}
+(def t5 (->MapGraph {:a {:b 1 :c 1}
                      :b {:d 1}
                      :c {:d 1}}))
 
@@ -45,14 +39,6 @@
   (testing "Can return a new graph with a vertex (and its corresponding edges) removed"
     (is (= (->MapGraph {:b {:c 2}, :c {:b 2, :d 3}, :d {:c 3, :e 1}, :e {:d 1}})
            (without-vertex t1 :a)))))
-
-(deftest rewired-without-vertex-test
-  (testing "Can return a new graph with a vertex removed, preserving the transitive relationships"
-    (is (= (->MapGraph {:a {:b 5 :c 7 :d 9}
-                        :b {:a 5 :c 6 :d 8}
-                        :c {:a 7 :b 6 :d 10}
-                        :d {:a 9 :b 8 :c 10}})
-           (rewired-without-vertex t4 :j)))))
 
 (deftest pruned-test
   (testing "Can prune a graph of unnecessary branches"
@@ -80,20 +66,20 @@
 (deftest shortest-path-test
   (testing "Finds a shortest path between two vertices"
     (is (= [:a :d :c :f] (g/shortest-path t3 :a (u/equals? :f))))
-    (is (= [:a :e :f :g] (g/shortest-path t5 :a (u/equals? :g) h5)))))
+    (is (= [:a :e :f :g] (g/shortest-path t4 :a (u/equals? :g) h5)))))
 
 (deftest all-shortest-paths-test
   (testing "Finds all the shortest paths between two vertices"
     (is (= #{[:a :b :d]
              [:a :c :d]}
-           (set (g/all-shortest-paths true t6 :a (u/equals? :d)))))))
+           (set (g/all-shortest-paths true t5 :a (u/equals? :d)))))))
 
 (deftest all-paths-dfs-test
   (testing "Finds all of the paths from start to finish using a depth-first
             search"
     (is (= [[:a :b :f :g]] (g/all-paths-dfs t2 :a (u/equals? :g))))
     (is (= [[:a :b :c :d :g]
-            [:a :e :f :g]] (g/all-paths-dfs t5 :a (u/equals? :g))))
+            [:a :e :f :g]] (g/all-paths-dfs t4 :a (u/equals? :g))))
     (is (= [[:a :b :d :c :f]
             [:a :b :d :e :f]
             [:a :b :e :d :c :f]
@@ -108,8 +94,8 @@
 (deftest flood-fill-test
   (testing "Returns the set of all distinct vertices in a graph reachable from a
             starting vertex, up to an optional traversal count limit"
-    (is (= #{:a}                   (g/flood-fill t5 :a :limit 0)))
-    (is (= #{:a :b :e}             (g/flood-fill t5 :a :limit 1)))
-    (is (= #{:a :b :e :c :f}       (g/flood-fill t5 :a :limit 2)))
-    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t5 :a :limit 3)))
-    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t5 :a)))))
+    (is (= #{:a}                   (g/flood-fill t4 :a :limit 0)))
+    (is (= #{:a :b :e}             (g/flood-fill t4 :a :limit 1)))
+    (is (= #{:a :b :e :c :f}       (g/flood-fill t4 :a :limit 2)))
+    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t4 :a :limit 3)))
+    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t4 :a)))))

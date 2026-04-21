@@ -61,7 +61,7 @@
         program (future (intcode/intcode-exec code in out))
         paddle-loc (atom 20)]
     (scr/start screen)
-    (scr/put-string screen 43 0 (str "Score: 0"))
+    (scr/put-string screen 43 0 "Score: 0")
     (while (not (realized? program))
       (update-screen screen in out paddle-loc))
     @program

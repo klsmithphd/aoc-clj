@@ -27,11 +27,11 @@
   (testing "Can decode the digit codes in sample data"
     (is (= 5353 (t/decode-notes d08-s00)))
     (is (= [8394 9781 1197 9361 4873 8418 4548 1625 8717 4315]
-           (map t/decode-notes d08-s01))))
+           (map t/decode-notes d08-s01)))))
 
-  (deftest sum-of-decoded-digits
-    (testing "Can add up all the decoded digits from the sample data"
-      (is (= 61229 (t/sum-of-decoded-digits d08-s01))))))
+(deftest sum-of-decoded-digits
+  (testing "Can add up all the decoded digits from the sample data"
+    (is (= 61229 (t/sum-of-decoded-digits d08-s01)))))
 
 (def day08-input (u/parse-puzzle-input t/parse 2021 8))
 
