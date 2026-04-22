@@ -20,14 +20,16 @@
                  "components/digest/src"
                  "components/math/src"
                  "components/vectors/src"
-                 "components/geometry/src"]
+                 "components/geometry/src"
+                 "components/intervals/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
                  "components/digest/test"
                  "components/math/test"
                  "components/vectors/test"
-                 "components/geometry/test"]
+                 "components/geometry/test"
+                 "components/intervals/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

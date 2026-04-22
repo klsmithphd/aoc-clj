@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.intervals)
+(ns aoc-clj.intervals.interface)
 
 (defn fully-contained?
   "Return true if one of the ranges (determined by inclusive left/right bounds)
@@ -9,7 +9,7 @@
    ;; l2----------r2
    (<= l2 l1 r1 r2)
    ;; l1----------r1
-   ;;     l2--r2   
+   ;;     l2--r2
    (<= l1 l2 r2 r1)))
 
 (defn overlap?
@@ -27,23 +27,22 @@
    ;; l2----------r2
    (<= l2 l1 r1 r2)
    ;; l1----------r1
-   ;;     l2--r2   
+   ;;     l2--r2
    (<= l1 l2 r2 r1)))
 
 (defn abut?
-  "Return true if two intervals (with inclusive left/right bounds) 
+  "Return true if two intervals (with inclusive left/right bounds)
    abut one another, i.e., they are situated consecutively such
    that the upper-end of one is exactly one less than the lower
    bound of the other."
   [[l1 r1] [l2 r2]]
-  (or 
+  (or
    ;; l1-----r1
    ;;          l2-----r2
    (= (inc r1) l2)
    ;; l2-----r2
    ;;          l1-----r1
-   (= (inc r2) l1)
-   ))
+   (= (inc r2) l1)))
 
 (defn contained?
   "Return true if the point `x` is contained within range (determined by

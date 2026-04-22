@@ -1,6 +1,6 @@
-(ns aoc-clj.utils.intervals-test
+(ns aoc-clj.intervals.interface-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.intervals :as ivs]))
+            [aoc-clj.intervals.interface :as ivs]))
 
 (deftest fully-contained-test
   (testing "Finds the pairs where one is fully contained in the other"
@@ -29,7 +29,7 @@
     (is (false? (ivs/contained? 6 [1 5])))))
 
 (deftest in-intervals?-test
-  (testing "Whether the point is contained within any interval in 
+  (testing "Whether the point is contained within any interval in
             `intervals`"
     (is (false? (ivs/in-intervals? 0 [[1 3] [5 7]])))
     (is (true?  (ivs/in-intervals? 1 [[1 3] [5 7]])))
