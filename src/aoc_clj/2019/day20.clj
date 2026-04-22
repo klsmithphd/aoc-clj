@@ -4,7 +4,7 @@
             [aoc-clj.util.interface :as u]
             [aoc-clj.utils.graph :as g :refer [Graph ->MapGraph without-vertex]]
             [aoc-clj.utils.maze :as maze :refer [->Maze]]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+            [aoc-clj.grid.interface :as mapgrid]))
 
 ;; TODO: 2019 Day 20 implementation is too complex and undocumented 
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/21

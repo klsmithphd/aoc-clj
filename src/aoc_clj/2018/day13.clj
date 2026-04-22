@@ -1,8 +1,8 @@
 (ns aoc-clj.2018.day13
   "Solution to https://adventofcode.com/2018/day/13"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]))
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :as mg]))
 
 ;; Constants
 (def cart-keys #{:cart-l :cart-r :cart-d :cart-u})

@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/25"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.grid.interface :as vg]))
 
 ;; Input parsing
 (def charmap {\# 1 \. 0})

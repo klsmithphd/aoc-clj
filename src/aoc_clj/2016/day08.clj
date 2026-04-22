@@ -2,8 +2,8 @@
     "Solution to https://adventofcode.com/2016/day/8"
     (:require [clojure.string :as str]
               [aoc-clj.util.interface :as u]
-              [aoc-clj.utils.grid.core :as grid]
-              [aoc-clj.utils.grid.mapgrid :as mg]))
+              [aoc-clj.grid.interface :as grid]
+              [aoc-clj.grid.interface :as mg]))
 
 ;; Constants
 (def screen-width 50)

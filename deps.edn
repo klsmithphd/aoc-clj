@@ -7,7 +7,8 @@
                        poly/math            {:local/root "components/math"}
                        poly/vectors         {:local/root "components/vectors"}
                        poly/geometry        {:local/root "components/geometry"}
-                       poly/intervals       {:local/root "components/intervals"}}}
+                       poly/intervals       {:local/root "components/intervals"}
+                       poly/grid            {:local/root "components/grid"}}}
 
   :test {:extra-paths []
          :extra-deps  {poly/util      {:local/root "components/util"}
@@ -16,7 +17,8 @@
                        poly/math      {:local/root "components/math"}
                        poly/vectors   {:local/root "components/vectors"}
                        poly/geometry  {:local/root "components/geometry"}
-                       poly/intervals {:local/root "components/intervals"}}}
+                       poly/intervals {:local/root "components/intervals"}
+                       poly/grid      {:local/root "components/grid"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}}}}}

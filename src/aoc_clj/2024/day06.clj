@@ -1,7 +1,7 @@
 (ns aoc-clj.2024.day06
   "Solution to https://adventofcode.com/2024/day/6"
-  (:require [aoc-clj.utils.grid.core :as grid :refer [value]]
-            [aoc-clj.utils.grid.mapgrid :as mg]))
+  (:require [aoc-clj.grid.interface :as grid :refer [value]]
+            [aoc-clj.grid.interface :as mg]))
 
 ;; Input parsing
 (def charmap {\. nil \# :wall \^ :guard})

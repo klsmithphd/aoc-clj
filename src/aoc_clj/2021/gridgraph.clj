@@ -1,5 +1,5 @@
 (ns aoc-clj.2021.gridgraph
-  (:require [aoc-clj.utils.grid.core :as grid]
+  (:require [aoc-clj.grid.interface :as grid]
             [aoc-clj.utils.graph :as g :refer [Graph]]))
 
 (defrecord GridGraph [grid]

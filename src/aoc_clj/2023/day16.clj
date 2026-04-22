@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day16
-  (:require [aoc-clj.utils.grid.core :as grid :refer [value width height]]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+  (:require [aoc-clj.grid.interface :as grid :refer [value width height]]
+            [aoc-clj.grid.interface :as vg]))
 
 (def part1-start [[0 0] :R])
 

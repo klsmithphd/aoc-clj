@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day03
   "Solution to https://adventofcode.com/2020/day/3"
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+  (:require [aoc-clj.grid.interface :as mapgrid]))
 
 (def parse identity)
 

@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/18"
   (:require [clojure.string :as str]
             [aoc-clj.utils.graph :as graph :refer [Graph]]
-            [aoc-clj.utils.grid.core :as grid]))
+            [aoc-clj.grid.interface :as grid]))
 
 ;; Constants
 (def grid-size 71)

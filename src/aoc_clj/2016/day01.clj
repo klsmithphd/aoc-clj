@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day01
   "Solution to https://adventofcode.com/2016/day/1"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.core :as grid]
+            [aoc-clj.grid.interface :as grid]
             [aoc-clj.util.interface :as u]
             [aoc-clj.vectors.interface :as v]))
 

@@ -1,6 +1,6 @@
 (ns aoc-clj.2017.day22
   "Solution to https://adventofcode.com/2017/day/22"
-  (:require [aoc-clj.utils.grid.core :as grid]))
+  (:require [aoc-clj.grid.interface :as grid]))
 
 ;; Constants
 (def burst-count-p1 10000)

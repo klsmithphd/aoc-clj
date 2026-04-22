@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day11
   "Solution to https://adventofcode.com/2018/day/11"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.grid.interface :as vg]))
 
 ;; Constants
 (def grid-size 300)

@@ -105,7 +105,7 @@ Dijkstra's algorithm.
 
 TODO: Add more documentation
 
-### aoc-clj.utils.grid
+### aoc-clj.grid.interface
 The `grid` namespace has helpers for dealing with values on a regular
 2D grid of values, i.e. where there are values/objects at given `[x y]`
 coordinates. 
@@ -121,9 +121,9 @@ is particularly useful if the grid size does not remain static
 
 ```clojure
 (ns foo
-  (:require [aoc-clj.utils.grid :as grid :refer [width height value neighbors-4 neighbors-8]]
-            [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+  (:require [aoc-clj.grid.interface :as grid :refer [width height value neighbors-4 neighbors-8]]
+            [aoc-clj.grid.interface :as mg]
+            [aoc-clj.grid.interface :as vg]))
 
 ;; Compute the adjacent coordinates for a given position
 => (grid/adj-coords-2d [0 0])

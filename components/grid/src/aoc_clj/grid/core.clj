@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.grid.core
+(ns aoc-clj.grid.core
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
             [aoc-clj.vectors.interface :as v]))

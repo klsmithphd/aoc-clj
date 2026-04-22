@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day10
-  (:require [aoc-clj.utils.grid.vecgrid :as vg]
-            [aoc-clj.utils.grid.core :as grid
+  (:require [aoc-clj.grid.interface :as vg]
+            [aoc-clj.grid.interface :as grid
              :refer [height width value neighbors-4]]
             [aoc-clj.geometry.interface :as geo]))
 

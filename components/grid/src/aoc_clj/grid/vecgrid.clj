@@ -1,14 +1,14 @@
-(ns aoc-clj.utils.grid.vecgrid
-  (:require [aoc-clj.utils.grid.core :as grid :refer [Grid2D]]))
+(ns aoc-clj.grid.vecgrid
+  (:require [aoc-clj.grid.core :as core :refer [Grid2D]]))
 
 (defrecord VecGrid2D [v]
   Grid2D
   (width    [_] (count (first v)))
   (height   [_] (count v))
   (value    [_ [row col]] (get-in v [row col]))
-  (pos-seq  [this] (grid/positions this))
+  (pos-seq  [this] (core/positions this))
   (val-seq  [_] (flatten v))
-  (in-grid? [this pos] (grid/within-grid? this pos))
+  (in-grid? [this pos] (core/within-grid? this pos))
   (slice
     [_ dim idx]
     (->VecGrid2D
@@ -17,11 +17,11 @@
        :col (mapv vector (map #(nth % idx) v)))))
   (neighbors-4
     [_ pos]
-    (let [locs (grid/adj-coords-2d pos)]
+    (let [locs (core/adj-coords-2d pos)]
       (zipmap locs (map #(get-in v %) locs))))
   (neighbors-8
     [_ pos]
-    (let [locs (grid/adj-coords-2d pos :include-diagonals true)]
+    (let [locs (core/adj-coords-2d pos :include-diagonals true)]
       (zipmap locs (map #(get-in v %) locs)))))
 
 (defn summed-area-table

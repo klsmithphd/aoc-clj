@@ -1,14 +1,14 @@
-(ns aoc-clj.utils.grid.mapgrid
-  (:require [aoc-clj.utils.grid.core :as grid :refer [Grid2D]]))
+(ns aoc-clj.grid.mapgrid
+  (:require [aoc-clj.grid.core :as core :refer [Grid2D]]))
 
 (defrecord MapGrid2D [width height grid-map]
   Grid2D
   (width    [_] width)
   (height   [_] height)
   (value    [_ pos] (get grid-map pos))
-  (pos-seq  [this] (grid/positions this))
-  (val-seq  [this] (map grid-map (grid/positions this)))
-  (in-grid? [this pos] (grid/within-grid? this pos))
+  (pos-seq  [this] (core/positions this))
+  (val-seq  [this] (map grid-map (core/positions this)))
+  (in-grid? [this pos] (core/within-grid? this pos))
   (slice
     [_ dim idx]
     (let [coord (case dim :row first  :col second)
@@ -17,11 +17,11 @@
       (->MapGrid2D w h (into (sorted-map) (filter #(= idx (-> % key coord)) grid-map)))))
   (neighbors-4
     [_ pos]
-    (let [locs (grid/adj-coords-2d pos)]
+    (let [locs (core/adj-coords-2d pos)]
       (zipmap locs (map (partial get grid-map) locs))))
   (neighbors-8
     [_ pos]
-    (let [locs (grid/adj-coords-2d pos :include-diagonals true)]
+    (let [locs (core/adj-coords-2d pos :include-diagonals true)]
       (zipmap locs (map (partial get grid-map) locs)))))
 
 (defn lists->MapGrid2D

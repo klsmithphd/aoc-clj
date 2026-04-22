@@ -1,8 +1,8 @@
 (ns aoc-clj.2022.day24
   "Solution to https://adventofcode.com/2022/day/24"
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :as mapgrid]
             [aoc-clj.math.interface :as math]
             [aoc-clj.vectors.interface :as v]))
 

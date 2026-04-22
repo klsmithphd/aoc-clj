@@ -3,7 +3,7 @@
   (:require [aoc-clj.util.interface :as u]
             [aoc-clj.binary.interface :as b]
             [aoc-clj.utils.graph :as g :refer [Graph]]
-            [aoc-clj.utils.grid.core :as grid]))
+            [aoc-clj.grid.interface :as grid]))
 
 ;; Constants
 (def start-pos [1 1])

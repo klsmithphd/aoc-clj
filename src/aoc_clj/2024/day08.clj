@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/8"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.grid.interface :as mg]
             [aoc-clj.vectors.interface :as v]))
 
 ;; Constants

@@ -2,8 +2,8 @@
   "Solution to https://adventofcode.com/2017/day/14"
   (:require [aoc-clj.2017.day10 :as d10]
             [aoc-clj.binary.interface :as b]
-            [aoc-clj.utils.grid.core :as grid :refer [pos-seq value neighbors-4]]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.grid.interface :as grid :refer [pos-seq value neighbors-4]]
+            [aoc-clj.grid.interface :as vg]))
 
 ;; Input parsing
 (def parse first)

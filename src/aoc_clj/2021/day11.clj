@@ -1,8 +1,8 @@
 (ns aoc-clj.2021.day11
   "Solution to https://adventofcode.com/2021/day/11"
   (:require [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :as mapgrid]))
 
 (defn parse-line
   [line]

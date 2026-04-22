@@ -1,7 +1,7 @@
 (ns aoc-clj.2015.day18
   "Solution to https://adventofcode.com/2015/day/18"
   (:require [clojure.set :as set]
-            [aoc-clj.utils.grid.core :as grid]))
+            [aoc-clj.grid.interface :as grid]))
 
 ;; Constants
 (def iterations 100)

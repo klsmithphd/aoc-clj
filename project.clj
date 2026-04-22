@@ -12,7 +12,8 @@
                  [data.deque "0.1.0"]
                  [manifold "0.2.4"]
                  [net.mikera/core.matrix "0.63.0"]
-                 [net.mikera/vectorz-clj "0.48.0"]]
+                 [net.mikera/vectorz-clj "0.48.0"]
+                 [potemkin "0.4.7"]]
   :profiles {:dev {:plugins [[com.github.clj-kondo/lein-clj-kondo "2026.04.15"]]}}
   :source-paths ["src"
                  "components/util/src"
@@ -21,7 +22,8 @@
                  "components/math/src"
                  "components/vectors/src"
                  "components/geometry/src"
-                 "components/intervals/src"]
+                 "components/intervals/src"
+                 "components/grid/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
@@ -29,7 +31,8 @@
                  "components/math/test"
                  "components/vectors/test"
                  "components/geometry/test"
-                 "components/intervals/test"]
+                 "components/intervals/test"
+                 "components/grid/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

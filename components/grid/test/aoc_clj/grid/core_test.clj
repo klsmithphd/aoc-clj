@@ -1,7 +1,7 @@
-(ns aoc-clj.utils.grid.core-test
+(ns aoc-clj.grid.core-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg :refer [->MapGrid2D]]))
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :as mg :refer [->MapGrid2D]]))
 
 ;; A 3×3 grid in [row col] coordinates:
 ;;   row 0 (top):    7 8 9

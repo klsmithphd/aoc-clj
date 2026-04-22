@@ -1,8 +1,8 @@
 (ns aoc-clj.2024.day12
   "Solution to https://adventofcode.com/2024/day/12"
   (:require [clojure.set :as set]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :as mg]
             [aoc-clj.util.interface :as u]
             [aoc-clj.vectors.interface :as v]))
 

@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day18
   "Solution to https://adventofcode.com/2018/day/18"
-  (:require [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.vecgrid :as vg]
+  (:require [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :as vg]
             [aoc-clj.util.interface :as u]))
 
 ;; Constants

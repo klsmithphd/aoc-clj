@@ -1,0 +1,6 @@
+{:paths ["src"]
+ :deps  {poly/util    {:local/root "../util"}
+         poly/vectors {:local/root "../vectors"}
+         potemkin/potemkin {:mvn/version "0.4.7"}}
+ :aliases
+ {:test {:extra-paths ["test"]}}}

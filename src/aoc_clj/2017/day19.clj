@@ -1,8 +1,8 @@
 (ns aoc-clj.2017.day19
   "Solution to https://adventofcode.com/2017/day/19"
   (:require [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.grid.core :as grid :refer [value]]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.grid.interface :as grid :refer [value]]
+            [aoc-clj.grid.interface :as vg]))
 
 ;; Input parsing
 (defn charmap

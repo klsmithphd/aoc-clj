@@ -1,8 +1,8 @@
 (ns aoc-clj.2024.day10
   "Solution to https://adventofcode.com/2024/day/10"
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :as vg]))
 
 ;; Records
 (defrecord GridGraph [grid]

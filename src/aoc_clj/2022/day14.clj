@@ -1,7 +1,7 @@
 (ns aoc-clj.2022.day14
   "Solution to https://adventofcode.com/2022/day/14"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.core :as grid]))
+            [aoc-clj.grid.interface :as grid]))
 
 ;;;; Input parsing
 (defn parse-line

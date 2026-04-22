@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2016/day/24"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.grid.mapgrid :as mg]
+            [aoc-clj.grid.interface :as mg]
             [aoc-clj.utils.graph :as g :refer [Graph]]
             [aoc-clj.utils.maze :as maze]))
 

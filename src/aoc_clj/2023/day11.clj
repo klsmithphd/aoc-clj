@@ -1,8 +1,8 @@
 (ns aoc-clj.2023.day11
   (:require [clojure.math.combinatorics :as combo]
             [clojure.set :as set]
-            [aoc-clj.utils.grid.core :as grid :refer [height width value]]
-            [aoc-clj.utils.grid.vecgrid :as vg]
+            [aoc-clj.grid.interface :as grid :refer [height width value]]
+            [aoc-clj.grid.interface :as vg]
             [aoc-clj.vectors.interface :as v]))
 
 (def charmap {\. :empty \# :galaxy})

@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day21
-  (:require [aoc-clj.utils.grid.core :refer [height width value neighbors-4]]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+  (:require [aoc-clj.grid.interface :refer [height width value neighbors-4]]
+            [aoc-clj.grid.interface :as vg]))
 
 (def steps-part1 64)
 ;; (def steps-part2 26501365)

@@ -1,8 +1,8 @@
 (ns aoc-clj.2019.day24
   "Solution to https://adventofcode.com/2019/day/24"
   (:require [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid-rc]))
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :as mapgrid-rc]))
 
 (def bug-map
   {\. :space

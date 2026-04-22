@@ -2,8 +2,8 @@
   "Solution to https://adventofcode.com/2019/day/11"
   (:require [manifold.stream :as s]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.vecgrid :refer [->VecGrid2D]]
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.grid.interface :refer [->VecGrid2D]]
             [aoc-clj.utils.intcode :as intcode]))
 
 (def parse u/firstv)
