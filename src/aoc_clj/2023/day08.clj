@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day08
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.math.interface :as math]))
 
 (defn parse-node
   [s]

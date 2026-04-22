@@ -1,6 +1,6 @@
 (ns aoc-clj.2017.day15
   "Solution to https://adventofcode.com/2017/day/15"
-  (:require [aoc-clj.utils.math :as math]))
+  (:require [aoc-clj.math.interface :as math]))
 
 ;; Constants
 (def lower-sixteen 65535)

@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2022/day/11"
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.math.interface :as math]))
 
 ;;;; Input parsing
 

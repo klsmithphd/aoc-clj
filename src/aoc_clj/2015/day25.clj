@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day25
   "Solution to https://adventofcode.com/2015/day/25"
-  (:require [aoc-clj.utils.math :as m]))
+  (:require [aoc-clj.math.interface :as m]))
 
 ;; Constants
 (def first-code 20151125)

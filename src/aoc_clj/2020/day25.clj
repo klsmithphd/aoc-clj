@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day25
   "Solution to https://adventofcode.com/2020/day/25"
-  (:require [aoc-clj.utils.math :as math]))
+  (:require [aoc-clj.math.interface :as math]))
 
 (defn parse
   [input]

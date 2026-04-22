@@ -1,6 +1,6 @@
-(ns aoc-clj.utils.math-test
+(ns aoc-clj.math.interface-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.math.interface :as math]))
 
 (deftest gcd-test
   (testing "Computes the Greatest Common Divisor (GCD)"

@@ -3,7 +3,7 @@
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
             [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.math :as math]
+            [aoc-clj.math.interface :as math]
             [aoc-clj.utils.vectors :as v]))
 
 ;;;; Constants

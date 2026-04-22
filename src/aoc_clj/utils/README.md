@@ -166,12 +166,12 @@ is particularly useful if the grid size does not remain static
  [0 2] :wall  [1 2] :space [2 2] :space}
 ```
 
-### aoc-clj.utils.math
+### aoc-clj.math.interface
 The `math` namespace contains helper functions, especially for modular arithmetic
 
 ```clojure
 (ns foo
-  (:require [aoc-clj.utils.math :as math]))
+  (:require [aoc-clj.math.interface :as math]))
 ```
 
 TODO: Add more documentation
@@ -181,7 +181,7 @@ The `maze` namespace has functions that help with path-finding in a maze.
 
 ```clojure
 (ns foo
-  (:require [aoc-clj.utils.math :as math]))
+  (:require [aoc-clj.math.interface :as math]))
 ```
 
 TODO: Add more documentation

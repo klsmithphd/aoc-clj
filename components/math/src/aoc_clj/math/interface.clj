@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.math
+(ns aoc-clj.math.interface
   "Mathematical helper utilities")
 
 (defn gcd
@@ -97,9 +97,9 @@
 (defn mod-linear-pow
   "Determines the coefficients of the a linear function composed on itself multiple times, i.e.,
    if f(x) = a*x + b, determines f^n(x) = f(f(f(f...(f(x))))) with n nestings
-   
+
    [a b]^n = [a^n (a^(n-1) + a^(n-2) + ... + a^1 + 1)b]
-   
+
    Should be equivalent to (first (drop n (iterate (partial mod-linear-comp m) [a b])))"
   [m n [a b]]
   [(mod-pow m a n) (mod-mul m b (mod-geometric-sum m a (dec n)))])
