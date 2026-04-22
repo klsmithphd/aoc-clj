@@ -1,10 +1,10 @@
-(ns aoc-clj.utils.geometry
+(ns aoc-clj.geometry.interface
   "Utility functions for dealing with polygonal geometry"
   (:require [aoc-clj.util.interface :as u]
             [aoc-clj.vectors.interface :as v]))
 
 (defn vertices->edges
-  "Take an ordered collection of the vertices and return a collection of all 
+  "Take an ordered collection of the vertices and return a collection of all
    the edges"
   [vertices]
   (->> (u/ring vertices)

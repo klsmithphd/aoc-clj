@@ -1,6 +1,6 @@
-(ns aoc-clj.utils.geometry-test
+(ns aoc-clj.geometry.interface-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.geometry :as geo]))
+            [aoc-clj.geometry.interface :as geo]))
 
 (def s01-vertices
   "Sample data representing a polygon depicted as follows

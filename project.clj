@@ -19,13 +19,15 @@
                  "components/binary/src"
                  "components/digest/src"
                  "components/math/src"
-                 "components/vectors/src"]
+                 "components/vectors/src"
+                 "components/geometry/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
                  "components/digest/test"
                  "components/math/test"
-                 "components/vectors/test"]
+                 "components/vectors/test"
+                 "components/geometry/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

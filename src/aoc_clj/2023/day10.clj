@@ -2,7 +2,7 @@
   (:require [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.utils.grid.core :as grid
              :refer [height width value neighbors-4]]
-            [aoc-clj.utils.geometry :as geo]))
+            [aoc-clj.geometry.interface :as geo]))
 
 (def charmap
   {\| :pipe-v
