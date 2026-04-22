@@ -4,13 +4,15 @@
                        poly/util            {:local/root "components/util"}
                        poly/binary          {:local/root "components/binary"}
                        poly/digest          {:local/root "components/digest"}
-                       poly/math            {:local/root "components/math"}}}
+                       poly/math            {:local/root "components/math"}
+                       poly/vectors         {:local/root "components/vectors"}}}
 
   :test {:extra-paths []
-         :extra-deps  {poly/util   {:local/root "components/util"}
-                       poly/binary {:local/root "components/binary"}
-                       poly/digest {:local/root "components/digest"}
-                       poly/math   {:local/root "components/math"}}}
+         :extra-deps  {poly/util    {:local/root "components/util"}
+                       poly/binary  {:local/root "components/binary"}
+                       poly/digest  {:local/root "components/digest"}
+                       poly/math    {:local/root "components/math"}
+                       poly/vectors {:local/root "components/vectors"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}}}}}

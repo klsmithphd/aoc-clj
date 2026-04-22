@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day06
   "Solution to https://adventofcode.com/2018/day/6"
   (:require [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.vectors :as vec]))
+            [aoc-clj.vectors.interface :as vec]))
 
 ;; Constants
 (def distance-limit 10000)

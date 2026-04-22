@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2018/day/10"
   (:require [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def time-guess-span 100)

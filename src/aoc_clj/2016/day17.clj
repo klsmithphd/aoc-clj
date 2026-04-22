@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2016/day/17"
   (:require [aoc-clj.digest.interface :as dig]
             [aoc-clj.utils.graph :as g :refer [Graph]]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def directions

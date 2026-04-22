@@ -4,7 +4,7 @@
             [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.mapgrid :as mg]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Input parsing
 (def grid-charmap

@@ -1,7 +1,7 @@
 (ns aoc-clj.utils.geometry
   "Utility functions for dealing with polygonal geometry"
   (:require [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 (defn vertices->edges
   "Take an ordered collection of the vertices and return a collection of all 

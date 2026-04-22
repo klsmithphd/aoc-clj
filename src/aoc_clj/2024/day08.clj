@@ -3,7 +3,7 @@
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.util.interface :as u]
             [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def start-offset

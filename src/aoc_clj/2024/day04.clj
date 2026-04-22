@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/4"
   (:require [aoc-clj.utils.grid.core :refer [value]]
             [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def xmas-deltas

@@ -1,7 +1,7 @@
 (ns aoc-clj.utils.grid.core
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 (defprotocol Grid2D
   "A two-dimensional grid of values indexed by [row col]"

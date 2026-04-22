@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day14
   "Solution to https://adventofcode.com/2015/day/14"
-  (:require [aoc-clj.utils.vectors :as v]))
+  (:require [aoc-clj.vectors.interface :as v]))
 
 ;; Input parsing
 (defn parse-line

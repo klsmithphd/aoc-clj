@@ -1,6 +1,6 @@
-(ns aoc-clj.utils.vectors-test
+(ns aoc-clj.vectors.interface-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 (deftest scalar-mult-test
   (testing "Multiplication of a vector by a scalar"
@@ -19,7 +19,7 @@
     (is (= [6 8] (v/vec-add [2 10] [4 -2])))))
 
 (deftest manhattan-test
-  (testing "Demonstration of manhattan - computes the Manhattan distance 
+  (testing "Demonstration of manhattan - computes the Manhattan distance
             (L1 norm) between two vectors"
     (is (= 9 (v/manhattan [0 0] [4 5])))
     (is (= 4 (v/manhattan [-1 -1] [-2 -4])))

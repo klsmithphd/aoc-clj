@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def origin [0 0])

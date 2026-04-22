@@ -3,7 +3,7 @@
             [clojure.set :as set]
             [aoc-clj.utils.grid.core :as grid :refer [height width value]]
             [aoc-clj.utils.grid.vecgrid :as vg]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 (def charmap {\. :empty \# :galaxy})
 

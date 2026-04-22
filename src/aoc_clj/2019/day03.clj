@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2019/day/3"
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.vectors.interface :as v]))
 
 (defn parse-segment
   [segment]

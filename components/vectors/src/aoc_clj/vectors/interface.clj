@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.vectors
+(ns aoc-clj.vectors.interface
   "Utility functions for vector arithmetic"
   (:require [clojure.math :as m]))
 
