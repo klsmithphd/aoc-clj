@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day04
   "Solution to https://adventofcode.com/2015/day/4"
-  (:require [aoc-clj.utils.digest :as d]))
+  (:require [aoc-clj.digest.interface :as d]))
 
 ;; Input parsing
 (def parse first)

@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day17
   "Solution to https://adventofcode.com/2016/day/17"
-  (:require [aoc-clj.utils.digest :as dig]
+  (:require [aoc-clj.digest.interface :as dig]
             [aoc-clj.utils.graph :as g :refer [Graph]]
             [aoc-clj.utils.vectors :as v]))
 

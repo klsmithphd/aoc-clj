@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.digest
+(ns aoc-clj.digest.interface
   (:import java.security.MessageDigest)
   (:require [clojure.string :as str]))
 

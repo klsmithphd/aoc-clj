@@ -2,11 +2,13 @@
  {:dev  {:extra-paths []
          :extra-deps  {org.clojure/clojure {:mvn/version "1.12.4"}
                        poly/util            {:local/root "components/util"}
-                       poly/binary          {:local/root "components/binary"}}}
+                       poly/binary          {:local/root "components/binary"}
+                       poly/digest          {:local/root "components/digest"}}}
 
   :test {:extra-paths []
          :extra-deps  {poly/util   {:local/root "components/util"}
-                       poly/binary {:local/root "components/binary"}}}
+                       poly/binary {:local/root "components/binary"}
+                       poly/digest {:local/root "components/digest"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}}}}}

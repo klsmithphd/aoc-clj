@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2016/day/5"
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.digest :as d]))
+            [aoc-clj.digest.interface :as d]))
 
 ;; Constants
 (def cached-indices

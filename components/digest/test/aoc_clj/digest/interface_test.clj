@@ -1,6 +1,6 @@
-(ns aoc-clj.utils.digest-test
+(ns aoc-clj.digest.interface-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.digest :as d]))
+            [aoc-clj.digest.interface :as d]))
 
 (def s00 (byte-array (map byte [0 0  1 -128]))) ;; 0x000001ff
 (def s01 (byte-array (map byte [0 0 16 -128]))) ;; 0x000010ff

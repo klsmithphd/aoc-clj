@@ -82,12 +82,12 @@ The `binary` namespace contains the helper functions for converting to-and-from 
 27
 ```
 
-### aoc-clj.utils.digest
+### aoc-clj.digest.interface
 The `digest` namespace contains the helper functions for working with message digests (e.g. MD5)
 
 ```clojure
 (ns foo
-  (:require [aoc-clj.utils.digest :as d]))
+  (:require [aoc-clj.digest.interface :as d]))
 
 => (d/md5-str "hello")
 "5d41402abc4b2a76b9719d911017c592"
