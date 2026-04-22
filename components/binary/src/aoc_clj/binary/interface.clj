@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.binary
+(ns aoc-clj.binary.interface
   (:require [clojure.pprint :refer [cl-format]]))
 
 (defn bitstr->int

@@ -1,6 +1,6 @@
-(ns aoc-clj.utils.binary-test
+(ns aoc-clj.binary.interface-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.binary :as b]))
+            [aoc-clj.binary.interface :as b]))
 
 (deftest bitstr->int-test
   (testing "Demonstration of bitstr->int: converts a bit string into an integer"

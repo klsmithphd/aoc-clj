@@ -64,12 +64,12 @@ puzzle inputs (saved as files) plus a variety of small utility functions
 5
 ```
 
-### aoc-clj.utils.binary
+### aoc-clj.binary.interface
 The `binary` namespace contains the helper functions for converting to-and-from binary repesentations of numbers
 
 ```clojure
 (ns foo
-  (:require [aoc-clj.utils.binary :as b]))
+  (:require [aoc-clj.binary.interface :as b]))
 
 ;; Convert an int value into a binary string representation of 0s and 1s
 => (u/int->bitstr 2147483647)
