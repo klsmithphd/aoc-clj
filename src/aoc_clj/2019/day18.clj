@@ -3,7 +3,7 @@
   (:require [clojure.data.priority-map :refer [priority-map]]
             [clojure.set :as set]
             [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.graph :as g :refer [Graph
                                                map->MapGraph
                                                edges

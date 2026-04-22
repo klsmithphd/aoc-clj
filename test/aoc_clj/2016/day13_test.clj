@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day13-test
   (:require [clojure.test :refer [deftest is testing]] 
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2016.day13 :as d13]))
 
 (deftest shortest-path-length-test

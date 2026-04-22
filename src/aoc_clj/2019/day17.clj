@@ -1,7 +1,7 @@
 (ns aoc-clj.2019.day17
   "Solution to https://adventofcode.com/2019/day/17"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.intcode :as intcode]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]))

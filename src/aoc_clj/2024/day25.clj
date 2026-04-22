@@ -1,7 +1,7 @@
 (ns aoc-clj.2024.day25
   "Solution to https://adventofcode.com/2024/day/25"
   (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.grid.vecgrid :as vg]))
 
 ;; Input parsing

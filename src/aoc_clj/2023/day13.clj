@@ -1,5 +1,5 @@
 (ns aoc-clj.2023.day13
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 (defn parse
   [input]

@@ -5,7 +5,7 @@ A Clojure library of helper utilities for solving
 
 ## Usage
 
-### aoc-clj.utils.core
+### aoc-clj.util.interface
 The `core` namespace contains the main helper functions for loading the
 puzzle inputs (saved as files) plus a variety of small utility functions
  that tend to be needed across multiple puzzles
@@ -13,7 +13,7 @@ puzzle inputs (saved as files) plus a variety of small utility functions
 #### Managing puzzle inputs
 ```clojure
 (ns foo
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Save your puzzle input to the `resources` directory of your project and then
 ;; `puzzle-input` will return a seq, with an element for each row in the input file

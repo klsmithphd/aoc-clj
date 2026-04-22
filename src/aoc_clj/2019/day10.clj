@@ -1,6 +1,6 @@
 (ns aoc-clj.2019.day10
   "Solution to https://adventofcode.com/2019/day/10"
-  (:require [aoc-clj.utils.core :as u]
+  (:require [aoc-clj.util.interface :as u]
             [aoc-clj.utils.vectors :as v]))
 
 (defn parse

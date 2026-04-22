@@ -1,6 +1,6 @@
 (ns aoc-clj.utils.geometry
   "Utility functions for dealing with polygonal geometry"
-  (:require [aoc-clj.utils.core :as u]
+  (:require [aoc-clj.util.interface :as u]
             [aoc-clj.utils.vectors :as v]))
 
 (defn vertices->edges

@@ -1,7 +1,7 @@
 (ns aoc-clj.utils.maze
   (:require [aoc-clj.utils.graph :as graph :refer [Graph ->MapGraph]]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defn one-step
   [{:keys [pos heading] :as walker}]

@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2022/day/16"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.graph :as graph :refer [->MapGraph]]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;;;; Input parsing
 

@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day22
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defn parse-line
   [line]

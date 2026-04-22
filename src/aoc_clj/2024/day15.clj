@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.vectors :as v]))
 
 ;; Input parsing

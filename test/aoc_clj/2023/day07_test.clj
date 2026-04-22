@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day07-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2023.day07 :as t]))
 
 (def d07-s00-raw ["32T3K 765"

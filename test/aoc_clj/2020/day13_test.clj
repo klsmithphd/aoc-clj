@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day13-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2020.day13 :as t]))
 
 (def d13-s00 (t/parse ["939" "7,13,x,x,59,x,31,19"]))

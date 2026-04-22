@@ -1,6 +1,6 @@
 (ns aoc-clj.2017.day17
   "Solution to https://adventofcode.com/2017/day/17"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def part1-limit 2017)

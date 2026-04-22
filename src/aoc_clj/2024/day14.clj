@@ -3,7 +3,7 @@
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [aoc-clj.utils.vectors :as v]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def grid-width 101)

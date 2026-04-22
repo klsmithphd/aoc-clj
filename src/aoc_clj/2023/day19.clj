@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day19
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defn parse-rule
   [rule-str]

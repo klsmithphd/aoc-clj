@@ -1,6 +1,6 @@
 (ns aoc-clj.2017.day10
   "Solution to https://adventofcode.com/2017/day/10"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def loop-size 256)

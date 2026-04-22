@@ -1,6 +1,6 @@
 (ns aoc-clj.2019.day10-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2019.day10 :as t]))
 
 (def d10-s1 (t/parse

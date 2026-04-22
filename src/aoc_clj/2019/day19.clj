@@ -1,6 +1,6 @@
 (ns aoc-clj.2019.day19
   "Solution to https://adventofcode.com/2019/day/19"
-  (:require [aoc-clj.utils.core :as u]
+  (:require [aoc-clj.util.interface :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
 (def parse u/firstv)

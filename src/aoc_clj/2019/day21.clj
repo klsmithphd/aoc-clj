@@ -1,6 +1,6 @@
 (ns aoc-clj.2019.day21
   "Solution to https://adventofcode.com/2019/day/21"
-  (:require [aoc-clj.utils.core :as u]
+  (:require [aoc-clj.util.interface :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
 ;; FIXME Add code or documentation for where the springcode came from

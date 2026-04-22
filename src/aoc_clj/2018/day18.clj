@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2018/day/18"
   (:require [aoc-clj.utils.grid.core :as grid]
             [aoc-clj.utils.grid.vecgrid :as vg]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def part1-time 10)

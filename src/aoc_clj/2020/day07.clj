@@ -1,7 +1,7 @@
 (ns aoc-clj.2020.day07
   "Solution to https://adventofcode.com/2020/day/7"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defn keywordize
   [adj color]

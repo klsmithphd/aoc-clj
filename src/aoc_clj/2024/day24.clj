@@ -1,7 +1,7 @@
 (ns aoc-clj.2024.day24
   "Solution to https://adventofcode.com/2024/day/24"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [clojure.set :as set]))
 
 ;; Input parsing

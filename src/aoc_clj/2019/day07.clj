@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2019/day/7"
   (:require [clojure.math.combinatorics :as combo]
             [manifold.stream :as s]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.intcode :as intcode]))
 
 (def parse u/firstv)

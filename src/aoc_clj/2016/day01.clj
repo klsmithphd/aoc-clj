@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2016/day/1"
   (:require [clojure.string :as str]
             [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.vectors :as v]))
 
 ;; Constants

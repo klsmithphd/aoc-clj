@@ -3,7 +3,7 @@
             [aoc-clj.utils.grid.core :as grid :refer [width height in-grid?]]
             [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.utils.maze :as maze]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defn parse
   [input]

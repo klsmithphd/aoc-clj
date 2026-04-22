@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day16-test
   (:require [clojure.test :refer [deftest testing is]]
             [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2016.day16 :as d16]))
 
 (deftest fill-test

@@ -1,7 +1,7 @@
 (ns aoc-clj.utils.graph-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.utils.graph :as g :refer [without-vertex ->MapGraph]]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (def t1 (->MapGraph {:a {:b 1}
                      :b {:a 1 :c 2}

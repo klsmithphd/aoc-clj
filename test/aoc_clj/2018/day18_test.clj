@@ -1,6 +1,6 @@
 (ns aoc-clj.2018.day18-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.grid.vecgrid :as vg]
             [aoc-clj.2018.day18 :as d18]))
 

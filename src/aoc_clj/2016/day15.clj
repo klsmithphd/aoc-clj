@@ -2,7 +2,7 @@
    "Solution to https://adventofcode.com/2016/day/15"
   (:require [aoc-clj.utils.math :as math]
             [aoc-clj.utils.vectors :as vec]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Input parsing
 (defn parse-line

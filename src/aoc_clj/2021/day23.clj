@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day23
   "Solution to https://adventofcode.com/2021/day/23"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Position labeling scheme
 ;; h's are the hallway positions

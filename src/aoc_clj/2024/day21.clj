@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2024/day/20"
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.utils.graph :as graph :refer [Graph]]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def part1-layers 2)

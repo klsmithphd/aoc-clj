@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day12
   "Solution to https://adventofcode.com/2020/day/12"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 (defn parse-line
   [cmd]

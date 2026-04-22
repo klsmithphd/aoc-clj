@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day20
   "Solution to https://adventofcode.com/2015/day/20"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def house-limit 800000)

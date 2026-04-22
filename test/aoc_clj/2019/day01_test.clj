@@ -1,6 +1,6 @@
 (ns aoc-clj.2019.day01-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2019.day01 :as t]))
 
 (deftest fuel-test

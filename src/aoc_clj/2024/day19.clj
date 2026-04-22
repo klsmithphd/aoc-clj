@@ -1,7 +1,7 @@
 (ns aoc-clj.2024.day19
   "Solution to https://adventofcode.com/2024/day/19"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Input parsing
 (defn parse-towels

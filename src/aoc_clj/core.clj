@@ -2,7 +2,7 @@
   "Core command-line interface to AoC solutions"
   (:require [clojure.string :as str]
             [clojure.tools.cli :refer [parse-opts]]
-            [aoc-clj.utils.core :as u])
+            [aoc-clj.util.interface :as u])
   (:gen-class))
 
 (def cli-options

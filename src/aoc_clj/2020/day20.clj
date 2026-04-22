@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2020/day/20"
   (:require [clojure.string :as str]
             [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (def charmap  {\. 0 \# 1})
 (def sea-monster-pattern

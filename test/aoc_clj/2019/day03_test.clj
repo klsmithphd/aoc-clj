@@ -1,6 +1,6 @@
 (ns aoc-clj.2019.day03-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2019.day03 :as t]))
 
 (def path1-segs (t/parse-segments ["R8","U5","L5","D3"]))

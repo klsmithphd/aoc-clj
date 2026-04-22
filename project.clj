@@ -14,6 +14,8 @@
                  [net.mikera/core.matrix "0.63.0"]
                  [net.mikera/vectorz-clj "0.48.0"]]
   :profiles {:dev {:plugins [[com.github.clj-kondo/lein-clj-kondo "2026.04.15"]]}}
+  :source-paths ["src" "components/util/src"]
+  :test-paths   ["test" "components/util/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

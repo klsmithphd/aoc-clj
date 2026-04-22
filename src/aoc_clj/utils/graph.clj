@@ -1,7 +1,7 @@
 (ns aoc-clj.utils.graph
   (:require [clojure.set :as set]
             [clojure.data.priority-map :refer [priority-map]]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defprotocol Graph
   (vertices [this] "A collection of all the vertices in the graph")

@@ -1,7 +1,7 @@
 (ns aoc-clj.2021.day20
   "Solution to https://adventofcode.com/2021/day/20"
   (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (def char-map {\. 0 \# 1})
 

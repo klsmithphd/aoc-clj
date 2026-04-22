@@ -1,6 +1,6 @@
 (ns aoc-clj.utils.grid.core
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.vectors :as v]))
 
 (defprotocol Grid2D

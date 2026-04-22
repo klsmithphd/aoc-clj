@@ -1,6 +1,6 @@
 (ns aoc-clj.2024.day05
   "Solution to https://adventofcode.com/2024/day/5"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Input parsing
 (defn numbers

@@ -1,6 +1,6 @@
 (ns aoc-clj.2018.day16
   "Solution to https://adventofcode.com/2018/day/16"
-  (:require [aoc-clj.utils.core :as u]
+  (:require [aoc-clj.util.interface :as u]
             [clojure.set :as set]))
 
 ;; Input parsing

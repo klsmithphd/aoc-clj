@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day07
   "Solution to https://adventofcode.com/2018/day/7"
   (:require [clojure.set :as set]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def ascii-A 65)

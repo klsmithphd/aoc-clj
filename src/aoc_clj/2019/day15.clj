@@ -1,7 +1,7 @@
 (ns aoc-clj.2019.day15
   "Solution to https://adventofcode.com/2019/day/15"
   (:require [manifold.stream :as s]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.utils.intcode :as intcode]
             [aoc-clj.utils.graph :as g]
             [aoc-clj.utils.maze :as maze]))
