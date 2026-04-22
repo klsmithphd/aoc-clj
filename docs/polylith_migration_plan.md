@@ -52,7 +52,7 @@ aoc-clj/
 │   ├── digest/
 │   ├── assembunny/
 │   ├── intcode/
-│   ├── core-utils/              # currently `utils/core.clj` — scope TBD in Phase 0
+│   ├── util/                    # misc helpers from `utils/core.clj`
 │   ├── year-2015/               # year components
 │   ├── year-2016/
 │   ├── year-2017/
@@ -89,7 +89,7 @@ aoc-clj/
 | digest     | `src/aoc_clj/utils/digest.clj`                                |                           |
 | assembunny | `src/aoc_clj/utils/assembunny.clj`                            |                           |
 | intcode    | `src/aoc_clj/utils/intcode.clj` + `src/aoc_clj/utils/intcode/` | Package with subdirs      |
-| core-utils | `src/aoc_clj/utils/core.clj`                                  | Scope decision in Phase 0 |
+| util       | `src/aoc_clj/utils/core.clj`                                  | General misc helpers — I/O, map/coll utilities |
 
 ### Year components
 
@@ -140,21 +140,26 @@ passing before a phase fails after, the move is wrong, not the test.
 
 ### Phase 0 — Workspace scaffolding
 
-- Install `clojure` CLI and `poly` CLI (update devcontainer as needed)
-- Create skeleton `deps.edn`, `workspace.edn`, `development/` config
-- Run `poly info` — confirm the empty workspace is recognized
-- Resolve the `utils/core.clj` question: merge into an existing utility component
-  or stand up as its own `core-utils` component
+- Install `clojure` CLI in the devcontainer alongside the existing `lein` setup
+- Run Polylith via the `:poly` alias in `deps.edn` — no separate binary install
+- Create skeleton `deps.edn`, `workspace.edn`, `development/deps.edn`
+- Run `clojure -M:poly info` — confirm the empty workspace is recognized
 - Existing `src/` and `test/` trees untouched; `lein test` still works alongside
 
-**Exit criterion:** `poly info` succeeds; `lein test` still passes.
+**Resolved in Phase 0:** `utils/core.clj` becomes its own component named `util`
+(misc I/O + map/coll helpers that don't belong elsewhere).
+
+**Exit criterion:** `clojure -M:poly info` succeeds; `lein test` still passes.
 
 ### Phase 1 — Utility components (one at a time, bottom-up)
 
 Order follows the dependency graph, leaves first. Rough order (verify in Phase 0
 using `clj-kondo` analysis):
-`binary` → `digest` → `math` → `vectors` → `geometry` → `intervals` → `grid` →
-`graph` → `maze` → `assembunny` → `intcode` → `core-utils`
+`util` → `binary` → `digest` → `math` → `vectors` → `geometry` → `intervals` →
+`grid` → `graph` → `maze` → `assembunny` → `intcode`
+
+(`util` moves first because `puzzle-input` / `parse-puzzle-input` are consumed by
+every day file; getting it done early de-risks the rest.)
 
 For each component:
 
@@ -163,7 +168,7 @@ For each component:
 3. Create `interface.clj` re-exporting the public API
 4. Move tests into `components/<name>/test/aoc_clj/<name>/`
 5. Update all `(:require ...)` forms in consumer code to the new interface namespace
-6. Run `poly test :dev :project` (full sweep) — confirm nothing regressed
+6. Run `clojure -M:poly test :dev :project` (full sweep) — confirm nothing regressed
 7. Commit
 
 **Exit criterion (per component):** full test suite passes after the component move.
@@ -181,7 +186,7 @@ For each year:
    `aoc-clj.year-YYYY.dayNN`)
 4. Move tests
 5. Declare utility component dependencies in `components/year-YYYY/deps.edn`
-6. Run `poly test :dev :project`
+6. Run `clojure -M:poly test :dev :project`
 7. Commit
 
 **Exit criterion (per year):** that year's tests pass; all prior years' tests still pass.
@@ -203,7 +208,7 @@ previous `lein run` invocation for a sampled set of days.
 Replace the Leiningen-based workflow with Polylith-aware CI. Details in the next
 section.
 
-**Exit criterion:** CI green on the migration branch; `poly test :project` correctly
+**Exit criterion:** CI green on the migration branch; `clojure -M:poly test :project` correctly
 identifies affected components on a test PR.
 
 ### Phase 5 — Remove Leiningen
@@ -213,7 +218,7 @@ identifies affected components on a test PR.
 3. Update `CLAUDE.md` and `README.md` to describe the `deps.edn` / `poly` workflow
 4. Update devcontainer config to provision `clojure` + `poly` instead of `lein`
 
-**Exit criterion:** a fresh devcontainer rebuild can run `poly test :project`
+**Exit criterion:** a fresh devcontainer rebuild can run `clojure -M:poly test :project`
 successfully from a clean state.
 
 ## GitHub Actions changes
@@ -251,7 +256,7 @@ jobs:
             # Resolve deps (populates ~/.m2 cache)
             clojure -P
             # Incremental test — affected components only, since stable-main
-            poly test :project
+            clojure -M:poly test :project
 ```
 
 ### Stable-tag workflow
@@ -294,7 +299,7 @@ immutable release.
 ### First-run behavior
 
 On the first CI run after the migration merges, no `stable-main` tag exists yet.
-`poly test :project` falls back to running everything — equivalent to the current
+`clojure -M:poly test :project` falls back to running everything — equivalent to the current
 full-suite behavior. Once the tag is created, subsequent PRs get incremental
 selection.
 
