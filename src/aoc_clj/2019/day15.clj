@@ -4,7 +4,7 @@
             [aoc-clj.util.interface :as u]
             [aoc-clj.utils.intcode :as intcode]
             [aoc-clj.graph.interface :as g]
-            [aoc-clj.utils.maze :as maze]))
+            [aoc-clj.maze.interface :as maze]))
 
 (def parse u/firstv)
 

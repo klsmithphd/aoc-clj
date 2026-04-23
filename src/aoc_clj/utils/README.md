@@ -174,7 +174,7 @@ The `math` namespace contains helper functions, especially for modular arithmeti
 
 TODO: Add more documentation
 
-### aoc-clj.utils.maze
+### aoc-clj.maze.interface
 The `maze` namespace has functions that help with path-finding in a maze.
 
 ```clojure

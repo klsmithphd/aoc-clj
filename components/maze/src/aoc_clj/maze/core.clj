@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.maze
+(ns aoc-clj.maze.core
   (:require [aoc-clj.graph.interface :as graph :refer [Graph ->MapGraph]]
             [aoc-clj.grid.interface :as grid]
             [aoc-clj.util.interface :as u]))

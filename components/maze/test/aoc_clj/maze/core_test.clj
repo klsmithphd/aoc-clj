@@ -1,6 +1,6 @@
-(ns aoc-clj.utils.maze-test
+(ns aoc-clj.maze.core-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.maze :as m]))
+            [aoc-clj.maze.interface :as m]))
 
 (deftest next-move-attempt-test
   (testing "Tests the direction logic for selecting the next space to try"

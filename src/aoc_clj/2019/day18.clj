@@ -9,7 +9,7 @@
                                                edges
                                                vertices]]
             [aoc-clj.grid.interface :as mapgrid]
-            [aoc-clj.utils.maze :as maze :refer [map->Maze]]))
+            [aoc-clj.maze.interface :as maze :refer [map->Maze]]))
 ;; FIXME: This implementation is too complex and not sufficiently documented
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/19
 

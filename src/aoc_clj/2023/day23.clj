@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day23
   (:require [aoc-clj.graph.interface :as graph :refer [vertex]]
             [aoc-clj.grid.interface :as grid :refer [width height in-grid?]]
-            [aoc-clj.utils.maze :as maze]
+            [aoc-clj.maze.interface :as maze]
             [aoc-clj.util.interface :as u]))
 
 (defn parse

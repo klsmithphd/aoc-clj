@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
             [aoc-clj.graph.interface :as g :refer [Graph ->MapGraph without-vertex]]
-            [aoc-clj.utils.maze :as maze :refer [->Maze]]
+            [aoc-clj.maze.interface :as maze :refer [->Maze]]
             [aoc-clj.grid.interface :as mapgrid]))
 
 ;; TODO: 2019 Day 20 implementation is too complex and undocumented 

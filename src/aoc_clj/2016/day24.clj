@@ -4,7 +4,7 @@
             [aoc-clj.util.interface :as u]
             [aoc-clj.grid.interface :as mg]
             [aoc-clj.graph.interface :as g :refer [Graph]]
-            [aoc-clj.utils.maze :as maze]))
+            [aoc-clj.maze.interface :as maze]))
 
 ;; Constants
 (def charmap
