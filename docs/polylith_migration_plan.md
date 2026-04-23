@@ -176,20 +176,42 @@ For each component:
 ### Phase 2 — Year components (one year at a time)
 
 Years are independent (no cross-year requires), so chronological order is fine.
+Verified in the current tree: the only intra-year cross-day requires are
+`2015/day22 → day21`, `2017/day14 → day10`, `2017/day23 → day18`, and
+`2018/day21 → day19`. Step 3 below covers these.
 
 For each year:
 
 1. `poly create c name:year-YYYY`
 2. Move `src/aoc_clj/YYYY/*` → `components/year-YYYY/src/aoc_clj/year_YYYY/`
-   (note: file-system underscore vs. namespace hyphen)
+   (note: file-system underscore vs. namespace hyphen). Use `git mv` + scripted
+   `sed` to rewrite `ns` and `:require` forms rather than retyping by hand —
+   hand-retyping has previously dropped code during component migrations.
 3. Update `ns` forms and internal requires (`aoc-clj.YYYY.dayNN` →
-   `aoc-clj.year-YYYY.dayNN`)
-4. Move tests
-5. Declare utility component dependencies in `components/year-YYYY/deps.edn`
-6. Run `clojure -M:poly test :dev :project`
-7. Commit
+   `aoc-clj.year-YYYY.dayNN`) — same scripted rewrite covers both src and test.
+4. Move tests (`test/aoc_clj/YYYY/*` → `components/year-YYYY/test/aoc_clj/year_YYYY/`).
+5. Populate `components/year-YYYY/src/aoc_clj/year_YYYY/interface.clj`. The
+   public contract for a day is `parse`, `part1`, `part2`. The year interface
+   re-exports those three vars for each day (via `potemkin/import-vars` or
+   equivalent). This documents the contract and makes it available to future
+   consumers (e.g. the planned visualization project).
+6. Declare utility component dependencies in `components/year-YYYY/deps.edn` —
+   only those the year actually uses (derived by scanning the year's
+   `:require` forms).
+7. Add the new component to `development/deps.edn` under both `:dev` and
+   `:test` aliases: `poly/year-YYYY {:local/root "components/year-YYYY"}`.
+8. Run `clojure -M:poly test :dev :project`
+9. Commit
 
 **Exit criterion (per year):** that year's tests pass; all prior years' tests still pass.
+
+**Phase 2 finalization (after all years migrated):** update
+`src/aoc_clj/core.clj`'s dispatch string at line 33 from
+`"aoc-clj." year "." day-str` to `"aoc-clj.year-" year "." day-str` so `lein
+run` resolves the new namespaces. The CLI is expected to be broken for
+migrated years during Phase 2; there are no downstream consumers of it, and
+the test suite does not go through dispatch. Phase 3 later relocates this
+logic into the `cli` base.
 
 ### Phase 3 — CLI base and project
 
