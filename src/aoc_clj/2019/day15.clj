@@ -3,7 +3,7 @@
   (:require [manifold.stream :as s]
             [aoc-clj.util.interface :as u]
             [aoc-clj.utils.intcode :as intcode]
-            [aoc-clj.utils.graph :as g]
+            [aoc-clj.graph.interface :as g]
             [aoc-clj.utils.maze :as maze]))
 
 (def parse u/firstv)

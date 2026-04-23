@@ -4,7 +4,7 @@
             [clojure.set :as set]
             [clojure.string :as str]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.graph :as g :refer [Graph
+            [aoc-clj.graph.interface :as g :refer [Graph
                                                map->MapGraph
                                                edges
                                                vertices]]

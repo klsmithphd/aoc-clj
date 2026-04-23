@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2021/day/15"
   (:require [aoc-clj.util.interface :as u]
             [aoc-clj.grid.interface :as mapgrid]
-            [aoc-clj.utils.graph :as g]
+            [aoc-clj.graph.interface :as g]
             [aoc-clj.2021.gridgraph :refer [->GridGraph]]))
 
 (defn parse-line

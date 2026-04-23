@@ -23,7 +23,8 @@
                  "components/vectors/src"
                  "components/geometry/src"
                  "components/intervals/src"
-                 "components/grid/src"]
+                 "components/grid/src"
+                 "components/graph/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
@@ -32,7 +33,8 @@
                  "components/vectors/test"
                  "components/geometry/test"
                  "components/intervals/test"
-                 "components/grid/test"]
+                 "components/grid/test"
+                 "components/graph/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

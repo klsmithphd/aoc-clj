@@ -1,7 +1,7 @@
 (ns aoc-clj.2022.day12
   "Solution to https://adventofcode.com/2022/day/12"
   (:require [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.graph :as graph :refer [->MapGraph]]
+            [aoc-clj.graph.interface :as graph :refer [->MapGraph]]
             [aoc-clj.grid.interface :as grid]))
 
 ;;;; Input parsing

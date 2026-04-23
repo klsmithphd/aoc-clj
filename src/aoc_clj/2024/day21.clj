@@ -1,7 +1,7 @@
 (ns aoc-clj.2024.day21
   "Solution to https://adventofcode.com/2024/day/20"
   (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.graph :as graph :refer [Graph]]
+            [aoc-clj.graph.interface :as graph :refer [Graph]]
             [aoc-clj.util.interface :as u]))
 
 ;; Constants

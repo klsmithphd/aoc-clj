@@ -3,7 +3,7 @@
   (:require [clojure.math.combinatorics :as combo]
             [aoc-clj.util.interface :as u]
             [aoc-clj.grid.interface :as mg]
-            [aoc-clj.utils.graph :as g :refer [Graph]]
+            [aoc-clj.graph.interface :as g :refer [Graph]]
             [aoc-clj.utils.maze :as maze]))
 
 ;; Constants

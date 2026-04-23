@@ -93,14 +93,14 @@ The `digest` namespace contains the helper functions for working with message di
 "5d41402abc4b2a76b9719d911017c592"
 ```
 
-### aoc-clj.utils.graph
+### aoc-clj.graph.interface
 The `graph` namespace provides a couple of data structures for representing
 graphs (sets of nodes and edges), as well as classic graph algorithms like
 Dijkstra's algorithm.
 
 ```clojure
 (ns foo
-  (:require [aoc-clj.utils.graph :as graph]))
+  (:require [aoc-clj.graph.interface :as graph]))
 ```
 
 TODO: Add more documentation

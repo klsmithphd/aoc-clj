@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2019/day/20"
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.graph :as g :refer [Graph ->MapGraph without-vertex]]
+            [aoc-clj.graph.interface :as g :refer [Graph ->MapGraph without-vertex]]
             [aoc-clj.utils.maze :as maze :refer [->Maze]]
             [aoc-clj.grid.interface :as mapgrid]))
 

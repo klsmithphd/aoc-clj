@@ -1,7 +1,7 @@
 (ns aoc-clj.2019.day20-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.graph :as g :refer [edges]]
+            [aoc-clj.graph.interface :as g :refer [edges]]
             [aoc-clj.2019.day20 :as t]))
 
 (def d20-s00

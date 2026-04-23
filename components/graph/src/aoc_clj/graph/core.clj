@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.graph
+(ns aoc-clj.graph.core
   (:require [clojure.set :as set]
             [clojure.data.priority-map :refer [priority-map]]
             [aoc-clj.util.interface :as u]))
@@ -159,8 +159,8 @@
            (mapcat #(dfs graph finish? (conj path %) (conj visited %)))))))
 
 (defn all-paths-dfs
-  "Return a seq of all paths (if any) in a `graph` from `start` until 
-   reaching a vertex satisfying the `finish?` predicate by using a 
+  "Return a seq of all paths (if any) in a `graph` from `start` until
+   reaching a vertex satisfying the `finish?` predicate by using a
    Depth-First Search (DFS)"
   [graph start finish?]
   (dfs graph finish? [start] #{start}))
@@ -197,8 +197,8 @@
 (defn flood-fill
   "For a given `graph`, starting at vertex `start`, return a set of
    distinct vertices that are reachable through traversing the graph
-   edges. 
-   
+   edges.
+
    If the optional `:limit` is provided, the traversal will only go
    up to `limit` edge traversals from the start before terminating."
   [graph start & {:keys [limit]}]
@@ -251,7 +251,7 @@
   (partial a-star-allpath-update false))
 
 (defn all-shortest-paths
-  "Executes the A* algorithm to find the collection of all shortest paths 
+  "Executes the A* algorithm to find the collection of all shortest paths
    in `graph`, starting at `start`. The predicate `finish?` should return true
    when the destination vertex has been reached or false otherwise.
 
@@ -262,7 +262,7 @@
    equivalent to Dijkstra's algorithm. Effectively, `h` is treated as always
    returning 0, indicating it has no knowledge of the estimated distance
    to the finish vertex.
-   
+
    If the first argument, `all-paths?` is set to true, then all possible
    shortest paths from start to finish will be sought out and returned.
    If false, only a single shortest path will be returned."
@@ -302,7 +302,7 @@
          (recur next-vertex new-state))))))
 
 (def shortest-path
-  "Executes the A* algorithm to find **a** shortest path in `graph`, 
+  "Executes the A* algorithm to find **a** shortest path in `graph`,
    starting at `start`. The predicate `finish?` should return true when
    the destination vertex has been reached or false otherwise.
 
@@ -319,7 +319,7 @@
   "Returns the total distance of the path through the `graph`
    starting at `start` and terminating when the `finish?` condition
    returns true on any vertex.
-   
+
    An optional `h` heuristic function of any vertex should estimate
    that vertex's distance to the finish."
   ([graph start finish?]
