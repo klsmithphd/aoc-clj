@@ -1,0 +1,101 @@
+(ns aoc-clj.graph.core-test
+  (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.graph.interface :as g :refer [without-vertex ->MapGraph]]
+            [aoc-clj.util.interface :as u]))
+
+(def t1 (->MapGraph {:a {:b 1}
+                     :b {:a 1 :c 2}
+                     :c {:b 2 :d 3}
+                     :d {:c 3 :e 1}
+                     :e {:d 1}}))
+
+(def t2 (->MapGraph {:a {:b 1}
+                     :b {:a 1 :c 2 :f 4}
+                     :c {:b 2 :d 3}
+                     :d {:c 3 :e 1}
+                     :e {:d 1}
+                     :f {:b 4 :g 1}
+                     :g {:f 1}}))
+
+(def t3 (->MapGraph {:a {:b 7 :c 14 :d 9}
+                     :b {:a 7 :d 10 :e 15}
+                     :c {:a 14 :d 2 :f 9}
+                     :d {:a 9 :b 10 :c 2 :e 11}
+                     :e {:b 15 :d 11 :f 6}
+                     :f {:c 9 :e 6}}))
+
+(def t4 (->MapGraph {:a {:b 1.5 :e 2}
+                     :b {:c 2}
+                     :c {:d 3}
+                     :d {:g 4}
+                     :e {:f 3}
+                     :f {:g 2}}))
+
+(def t5 (->MapGraph {:a {:b 1 :c 1}
+                     :b {:d 1}
+                     :c {:d 1}}))
+
+(deftest without-vertex-test
+  (testing "Can return a new graph with a vertex (and its corresponding edges) removed"
+    (is (= (->MapGraph {:b {:c 2}, :c {:b 2, :d 3}, :d {:c 3, :e 1}, :e {:d 1}})
+           (without-vertex t1 :a)))))
+
+(deftest pruned-test
+  (testing "Can prune a graph of unnecessary branches"
+    (is (= (g/pruned t2 #{:a :g})
+           (->MapGraph {:a {:b 1}
+                        :b {:a 1 :f 4}
+                        :f {:b 4 :g 1}
+                        :g {:f 1}})))))
+
+(deftest single-path-test
+  (testing "Can traverse a graph until its end or a junction is reached"
+    (is (= [:a :b :c :d :e] (g/single-path t1 :a)))
+    (is (= [:a :b]          (g/single-path t2 :a)))
+    (is (= [:g :f :b]       (g/single-path t2 :g)))))
+
+(deftest all-paths-test
+  (testing "Can traverse a graph until its end or a junction is reached"
+    (is (= [[:b :a] [:b :c :d :e] [:b :f :g]]
+           (g/all-paths t2 :b)))
+    (is (= [[:g :f :b]]
+           (g/all-paths t2 :g)))))
+
+(def h5 {:a 6.5 :b 4 :c 2 :d 4 :e 4.5 :f 2 :g 0})
+
+(deftest shortest-path-test
+  (testing "Finds a shortest path between two vertices"
+    (is (= [:a :d :c :f] (g/shortest-path t3 :a (u/equals? :f))))
+    (is (= [:a :e :f :g] (g/shortest-path t4 :a (u/equals? :g) h5)))))
+
+(deftest all-shortest-paths-test
+  (testing "Finds all the shortest paths between two vertices"
+    (is (= #{[:a :b :d]
+             [:a :c :d]}
+           (set (g/all-shortest-paths true t5 :a (u/equals? :d)))))))
+
+(deftest all-paths-dfs-test
+  (testing "Finds all of the paths from start to finish using a depth-first
+            search"
+    (is (= [[:a :b :f :g]] (g/all-paths-dfs t2 :a (u/equals? :g))))
+    (is (= [[:a :b :c :d :g]
+            [:a :e :f :g]] (g/all-paths-dfs t4 :a (u/equals? :g))))
+    (is (= [[:a :b :d :c :f]
+            [:a :b :d :e :f]
+            [:a :b :e :d :c :f]
+            [:a :b :e :f]
+            [:a :c :d :b :e :f]
+            [:a :c :d :e :f]
+            [:a :c :f]
+            [:a :d :b :e :f]
+            [:a :d :c :f]
+            [:a :d :e :f]] (g/all-paths-dfs t3 :a (u/equals? :f))))))
+
+(deftest flood-fill-test
+  (testing "Returns the set of all distinct vertices in a graph reachable from a
+            starting vertex, up to an optional traversal count limit"
+    (is (= #{:a}                   (g/flood-fill t4 :a :limit 0)))
+    (is (= #{:a :b :e}             (g/flood-fill t4 :a :limit 1)))
+    (is (= #{:a :b :e :c :f}       (g/flood-fill t4 :a :limit 2)))
+    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t4 :a :limit 3)))
+    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t4 :a)))))

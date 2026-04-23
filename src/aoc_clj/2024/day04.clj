@@ -1,8 +1,7 @@
 (ns aoc-clj.2024.day04
   "Solution to https://adventofcode.com/2024/day/4"
-  (:require [aoc-clj.utils.grid.core :refer [value]]
-            [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.vectors :as v]))
+  (:require [aoc-clj.grid.interface :refer [value] :as grid]
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def xmas-deltas
@@ -29,7 +28,7 @@
 ;; Input parsing
 (defn parse
   [input]
-  (mg/ascii->MapGrid2D identity input))
+  (grid/ascii->MapGrid2D identity input))
 
 ;; Puzzle logic
 (defn char-positions

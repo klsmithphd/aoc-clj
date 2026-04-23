@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day25
   "Solution to https://adventofcode.com/2021/day/25"
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+  (:require [aoc-clj.grid.interface :as mapgrid]))
 
 (def charmap {\v :down \> :right \. :open})
 

@@ -2,8 +2,8 @@
   "Solution to https://adventofcode.com/2018/day/25"
   (:require [clojure.math.combinatorics :as combo]
             [clojure.set :as set]
-            [aoc-clj.utils.vectors :as vec]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.vectors.interface :as vec]
+            [aoc-clj.util.interface :as u]))
 
 ;; Input parsing
 (defn parse-line

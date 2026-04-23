@@ -1,8 +1,8 @@
 (ns aoc-clj.2019.day25
   "Solution to https://adventofcode.com/2019/day/25"
   (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.intcode :as intcode]))
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.intcode.interface :as intcode]))
 
 (def parse u/firstv)
 

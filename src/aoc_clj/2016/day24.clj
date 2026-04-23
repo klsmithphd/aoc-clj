@@ -1,10 +1,10 @@
 (ns aoc-clj.2016.day24
   "Solution to https://adventofcode.com/2016/day/24"
   (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.graph :as g :refer [Graph]]
-            [aoc-clj.utils.maze :as maze]))
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.grid.interface :as mg]
+            [aoc-clj.graph.interface :as g :refer [Graph]]
+            [aoc-clj.maze.interface :as maze]))
 
 ;; Constants
 (def charmap

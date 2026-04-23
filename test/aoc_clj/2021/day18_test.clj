@@ -1,6 +1,6 @@
 (ns aoc-clj.2021.day18-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2021.day18 :as t]))
 
 (def d18-s00-in  [[[[[9,8],1],2],3],4])

@@ -1,8 +1,8 @@
 (ns aoc-clj.2015.day22
   "Solution to https://adventofcode.com/2015/day/22"
   (:require [aoc-clj.2015.day21 :as d21]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.graph :as g :refer [Graph]]))
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.graph.interface :as g :refer [Graph]]))
 
 ;; Constants
 (def spell-cost

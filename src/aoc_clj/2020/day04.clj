@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2020/day/2"
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defn split-pair
   [pair]

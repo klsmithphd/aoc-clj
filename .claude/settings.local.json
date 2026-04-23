@@ -4,7 +4,13 @@
       "Bash(lein test *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(grep -v -e '^2' -e '\\\\.git$')"
+      "Bash(grep -v -e '^2' -e '\\\\.git$')",
+      "Bash(clojure -M:poly info)",
+      "Bash(grep -v '^src/aoc_clj/utils/binary\\\\.clj$')",
+      "Bash(grep -v '^test/aoc_clj/utils/binary_test\\\\.clj$')",
+      "Bash(xargs -I {} sed -i 's/aoc-clj\\\\.utils\\\\.binary/aoc-clj.binary.interface/g' {})",
+      "Bash(clojure -M:poly test :dev :project)",
+      "Bash(git rm *)"
     ]
   }
 }

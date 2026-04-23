@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day12
   "Solution to https://adventofcode.com/2016/day/12"
-  (:require [aoc-clj.utils.assembunny :as asmb]))
+  (:require [aoc-clj.assembunny.interface :as asmb]))
 
 ;; Input parsing
 (def parse asmb/parse)

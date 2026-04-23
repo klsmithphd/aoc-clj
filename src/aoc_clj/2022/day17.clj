@@ -1,6 +1,6 @@
 (ns aoc-clj.2022.day17
   "Solution to https://adventofcode.com/2022/day/17"
-  (:require [aoc-clj.utils.math :as math]))
+  (:require [aoc-clj.math.interface :as math]))
 
 ;;;; Constants
 

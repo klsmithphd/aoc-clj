@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day03
   "Solution to https://adventofcode.com/2015/day/3"
-  (:require [aoc-clj.utils.vectors :as v]))
+  (:require [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def dir-map {\^ [0 1] \v [0 -1] \> [1 0] \< [-1 0]})

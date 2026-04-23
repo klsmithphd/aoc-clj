@@ -1,7 +1,7 @@
 (ns aoc-clj.2017.day16
   "Solution to https://adventofcode.com/2017/day/16"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def programs ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"])

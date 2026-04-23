@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day21
   "Solution to https://adventofcode.com/2018/day/21"
   (:require [aoc-clj.2018.day19 :as d19]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def init-regs d19/init-regs)

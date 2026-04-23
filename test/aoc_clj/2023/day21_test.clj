@@ -1,7 +1,7 @@
 (ns aoc-clj.2023.day21-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.grid.vecgrid :as vg]
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.grid.interface :as vg]
             [aoc-clj.2023.day21 :as t]))
 
 (def d21-s00-raw

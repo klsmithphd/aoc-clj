@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day18
   "Solution to https://adventofcode.com/2016/day/18"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def trap \^)

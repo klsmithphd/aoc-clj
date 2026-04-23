@@ -2,8 +2,8 @@
   "Solution to https://adventofcode.com/2019/day/13"
   (:require [lanterna.screen :as scr]
             [manifold.stream :as s]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.intcode :as intcode]))
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.intcode.interface :as intcode]))
 
 (def parse u/firstv)
 

@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day06
   "Solution to https://adventofcode.com/2016/day/6"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Puzzle input
 (def parse identity)

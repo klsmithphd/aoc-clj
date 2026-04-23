@@ -1,6 +1,6 @@
 (ns aoc-clj.2018.day04
   "Solution to https://adventofcode.com/2018/day/4"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Input parsing
 (defn last-number

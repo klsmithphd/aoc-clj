@@ -1,7 +1,7 @@
 (ns aoc-clj.2022.day04
   "Solution to https://adventofcode.com/2022/day/4"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.intervals :as ivs]))
+            [aoc-clj.intervals.interface :as ivs]))
 
 ;;;; Input parsing
 

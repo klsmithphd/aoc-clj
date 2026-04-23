@@ -1,8 +1,8 @@
 (ns aoc-clj.2019.day22
   "Solution to https://adventofcode.com/2019/day/22"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.math :as math]))
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.math.interface :as math]))
 
 (defn parse-line
   [line]

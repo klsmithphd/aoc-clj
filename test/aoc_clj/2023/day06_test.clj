@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day06-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2023.day06 :as t]))
 
 (def d06-s00-raw ["Time:      7  15   30"

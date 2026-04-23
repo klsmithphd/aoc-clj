@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day20
   "Solution to https://adventofcode.com/2016/day/20"
-  (:require [aoc-clj.utils.intervals :as intervals]))
+  (:require [aoc-clj.intervals.interface :as intervals]))
 
 ;; Input parsing
 (defn parse-line

@@ -1,8 +1,8 @@
 (ns aoc-clj.2019.day23
   "Solution to https://adventofcode.com/2019/day/23"
   (:require ;; [manifold.stream :as s]
-   [aoc-clj.utils.core :as u]
-            ;; [aoc-clj.utils.intcode :as intcode]
+   [aoc-clj.util.interface :as u]
+            ;; [aoc-clj.intcode.interface :as intcode]
    ))
 
 ;; TODO Complete implementation and documentation

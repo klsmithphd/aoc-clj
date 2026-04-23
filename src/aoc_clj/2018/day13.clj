@@ -1,8 +1,7 @@
 (ns aoc-clj.2018.day13
   "Solution to https://adventofcode.com/2018/day/13"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]))
+            [aoc-clj.grid.interface :as grid]))
 
 ;; Constants
 (def cart-keys #{:cart-l :cart-r :cart-d :cart-u})
@@ -33,8 +32,8 @@
 
 (defn parse
   [input]
-  (let [{:keys [grid-map width height]} (mg/ascii->MapGrid2D charmap input)]
-    (mg/->MapGrid2D width height (into {} (remove #(nil? (val %)) grid-map)))))
+  (let [{:keys [grid-map width height]} (grid/ascii->MapGrid2D charmap input)]
+    (grid/->MapGrid2D width height (into {} (remove #(nil? (val %)) grid-map)))))
 
 ;; Puzzle logic
 (defn cart-map

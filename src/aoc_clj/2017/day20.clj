@@ -1,6 +1,6 @@
 (ns aoc-clj.2017.day20
   "Solution to https://adventofcode.com/2017/day/20"
-  (:require [aoc-clj.utils.vectors :as vec]))
+  (:require [aoc-clj.vectors.interface :as vec]))
 
 ;; Constants
 (def n-ticks

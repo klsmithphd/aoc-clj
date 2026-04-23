@@ -1,6 +1,6 @@
 (ns aoc-clj.2024.day13
   "Solution to https://adventofcode.com/2024/day/13"
-  (:require [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def a-cost 3)

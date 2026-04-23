@@ -1,10 +1,9 @@
 (ns aoc-clj.2024.day15
   "Solution to https://adventofcode.com/2024/day/15"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.grid.interface :as grid]
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Input parsing
 (def grid-charmap
@@ -27,7 +26,7 @@
 (defn parse
   [input]
   (let [[grid-str moves-str] (u/split-at-blankline input)
-        grid (mg/ascii->MapGrid2D grid-charmap grid-str)]
+        grid (grid/ascii->MapGrid2D grid-charmap grid-str)]
     {:robot (first (grid/find-nodes :robot grid))
      :walls (set (grid/find-nodes :wall grid))
      :boxes (set (grid/find-nodes :box grid))

@@ -2,8 +2,8 @@
   "Solution to https://adventofcode.com/2016/day/11"
   (:require [clojure.math.combinatorics :as combo]
             [clojure.set :as set]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.graph :as g :refer [Graph]]))
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.graph.interface :as g :refer [Graph]]))
 
 ;; Constants
 (def elevator-options

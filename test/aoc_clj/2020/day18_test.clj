@@ -1,6 +1,6 @@
 (ns aoc-clj.2020.day18-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2020.day18 :as t]))
 
 (def d18-s00 "1 + 2 * 3 + 4 * 5 + 6")

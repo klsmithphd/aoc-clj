@@ -1,8 +1,8 @@
 (ns aoc-clj.2016.day22
   "Solution to https://adventofcode.com/2016/day/22"
   (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.graph :as g :refer [Graph]]
-            [aoc-clj.utils.grid.core :as grid]))
+            [aoc-clj.graph.interface :as g :refer [Graph]]
+            [aoc-clj.grid.interface :as grid]))
 
 ;; Input parsing
 (defn parse-line

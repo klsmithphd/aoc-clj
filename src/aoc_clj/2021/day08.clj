@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2021/day/8"
   (:require [clojure.string :as str]
             [clojure.set :as set]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (def digit-mapping
   {"abcefg"  0 ; 6 chars

@@ -1,9 +1,9 @@
 (ns aoc-clj.2016.day13
   "Solution to https://adventofcode.com/2016/day/13"
-  (:require [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.binary :as b]
-            [aoc-clj.utils.graph :as g :refer [Graph]]
-            [aoc-clj.utils.grid.core :as grid]))
+  (:require [aoc-clj.util.interface :as u]
+            [aoc-clj.binary.interface :as b]
+            [aoc-clj.graph.interface :as g :refer [Graph]]
+            [aoc-clj.grid.interface :as grid]))
 
 ;; Constants
 (def start-pos [1 1])

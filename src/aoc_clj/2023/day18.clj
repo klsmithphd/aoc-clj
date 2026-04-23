@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day18
   (:require [clojure.string :as str]
-            [aoc-clj.utils.geometry :as geo]))
+            [aoc-clj.geometry.interface :as geo]))
 
 (defn parse-line
   [line]

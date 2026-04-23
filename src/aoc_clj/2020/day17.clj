@@ -1,7 +1,7 @@
 (ns aoc-clj.2020.day17
   "Solution to https://adventofcode.com/2020/day/17"
-  (:require [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.core :as u]))
+  (:require [aoc-clj.grid.interface :as mapgrid]
+            [aoc-clj.util.interface :as u]))
 
 (defn twod->threed
   [[row col]]

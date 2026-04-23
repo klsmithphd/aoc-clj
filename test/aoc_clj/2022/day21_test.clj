@@ -1,6 +1,6 @@
 (ns aoc-clj.2022.day21-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2022.day21 :as t]))
 
 (def d21-s00

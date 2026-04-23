@@ -1,10 +1,10 @@
 (ns aoc-clj.2019.day20
   "Solution to https://adventofcode.com/2019/day/20"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.graph :as g :refer [Graph ->MapGraph without-vertex]]
-            [aoc-clj.utils.maze :as maze :refer [->Maze]]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]))
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.graph.interface :as g :refer [Graph ->MapGraph without-vertex]]
+            [aoc-clj.maze.interface :as maze :refer [->Maze]]
+            [aoc-clj.grid.interface :as mapgrid]))
 
 ;; TODO: 2019 Day 20 implementation is too complex and undocumented 
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/21

@@ -1,6 +1,5 @@
 (ns aoc-clj.2023.day21
-  (:require [aoc-clj.utils.grid.core :refer [height width value neighbors-4]]
-            [aoc-clj.utils.grid.vecgrid :as vg]))
+  (:require [aoc-clj.grid.interface :refer [height width value neighbors-4] :as grid]))
 
 (def steps-part1 64)
 ;; (def steps-part2 26501365)
@@ -9,7 +8,7 @@
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input))
+  (grid/ascii->VecGrid2D charmap input))
 
 (defn start-pos
   "Find the position of the starting tile"

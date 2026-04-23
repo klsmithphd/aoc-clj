@@ -1,8 +1,6 @@
 (ns aoc-clj.2023.day10
-  (:require [aoc-clj.utils.grid.vecgrid :as vg]
-            [aoc-clj.utils.grid.core :as grid
-             :refer [height width value neighbors-4]]
-            [aoc-clj.utils.geometry :as geo]))
+  (:require [aoc-clj.grid.interface :as grid :refer [height width value neighbors-4]]
+            [aoc-clj.geometry.interface :as geo]))
 
 (def charmap
   {\| :pipe-v
@@ -16,7 +14,7 @@
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input))
+  (grid/ascii->VecGrid2D charmap input))
 
 (defn start
   "Returns the grid position of the starting tile"

@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2020/day/14"
   (:require [clojure.math.combinatorics :as combo]
             [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defn parse-mask
   [mask-str]

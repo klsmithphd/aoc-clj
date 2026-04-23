@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day15
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 (defn parse
   [input]

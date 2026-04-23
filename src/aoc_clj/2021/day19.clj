@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2021/day/19"
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Overall thoughts on the approach.
 ;;  * The relative position vector between any two beacons that can both be seen

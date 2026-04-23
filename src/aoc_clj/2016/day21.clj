@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2016/day/21"
   (:require [clojure.string :as str]
             [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Constants
 (def part1-str "abcdefgh")

@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day15
   "Solution to https://adventofcode.com/2015/day/15"
-  (:require [aoc-clj.utils.vectors :as v]))
+  (:require [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def max-teaspoons 100)

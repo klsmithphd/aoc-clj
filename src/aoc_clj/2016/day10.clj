@@ -1,7 +1,7 @@
 (ns aoc-clj.2016.day10
   "Solution to https://adventofcode.com/2016/day/10"
   (:require [clojure.string :as str]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Input parsing
 (defn parse-assignment

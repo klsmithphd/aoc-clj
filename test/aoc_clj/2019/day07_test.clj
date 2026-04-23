@@ -1,6 +1,6 @@
 (ns aoc-clj.2019.day07-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2019.day07 :as t]))
 
 (def p1 [3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0])

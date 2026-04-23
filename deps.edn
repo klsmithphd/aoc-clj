@@ -1,8 +1,32 @@
 {:aliases
  {:dev  {:extra-paths []
-         :extra-deps  {org.clojure/clojure {:mvn/version "1.12.4"}}}
+         :extra-deps  {org.clojure/clojure {:mvn/version "1.12.4"}
+                       poly/util            {:local/root "components/util"}
+                       poly/binary          {:local/root "components/binary"}
+                       poly/digest          {:local/root "components/digest"}
+                       poly/math            {:local/root "components/math"}
+                       poly/vectors         {:local/root "components/vectors"}
+                       poly/geometry        {:local/root "components/geometry"}
+                       poly/intervals       {:local/root "components/intervals"}
+                       poly/grid            {:local/root "components/grid"}
+                       poly/graph           {:local/root "components/graph"}
+                       poly/maze            {:local/root "components/maze"}
+                       poly/assembunny      {:local/root "components/assembunny"}
+                       poly/intcode         {:local/root "components/intcode"}}}
 
-  :test {:extra-paths []}
+  :test {:extra-paths []
+         :extra-deps  {poly/util       {:local/root "components/util"}
+                       poly/binary     {:local/root "components/binary"}
+                       poly/digest     {:local/root "components/digest"}
+                       poly/math       {:local/root "components/math"}
+                       poly/vectors    {:local/root "components/vectors"}
+                       poly/geometry   {:local/root "components/geometry"}
+                       poly/intervals  {:local/root "components/intervals"}
+                       poly/grid       {:local/root "components/grid"}
+                       poly/graph      {:local/root "components/graph"}
+                       poly/maze       {:local/root "components/maze"}
+                       poly/assembunny {:local/root "components/assembunny"}
+                       poly/intcode    {:local/root "components/intcode"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}}}}}

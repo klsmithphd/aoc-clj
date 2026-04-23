@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2015/day/9"
   (:require [clojure.string :as str]
             [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.core :as u]))
+            [aoc-clj.util.interface :as u]))
 
 ;; Input parsing
 (defn parse-line

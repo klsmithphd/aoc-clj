@@ -1,6 +1,6 @@
 (ns aoc-clj.2015.day24-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2015.day24 :as d24]))
 
 (def d24-s00-raw ["1" "2" "3" "4" "5" "7" "8" "9" "10" "11"])

@@ -1,8 +1,8 @@
 (ns aoc-clj.2022.day15
   "Solution to https://adventofcode.com/2022/day/15"
   (:require [clojure.math.combinatorics :as combo]
-            [aoc-clj.utils.intervals :as ivs]
-            [aoc-clj.utils.vectors :as v]))
+            [aoc-clj.intervals.interface :as ivs]
+            [aoc-clj.vectors.interface :as v]))
 
 ;;;; Input parsing
 

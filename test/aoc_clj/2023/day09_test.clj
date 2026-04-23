@@ -1,6 +1,6 @@
 (ns aoc-clj.2023.day09-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2023.day09 :as t]))
 
 (def d09-s00-raw ["0 3 6 9 12 15"

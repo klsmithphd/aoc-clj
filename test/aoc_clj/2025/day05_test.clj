@@ -1,6 +1,6 @@
 (ns aoc-clj.2025.day05-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2025.day05 :as d05]))
 
 (def day05-input (u/parse-puzzle-input d05/parse 2025 5))

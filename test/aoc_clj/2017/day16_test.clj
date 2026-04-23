@@ -1,6 +1,6 @@
 (ns aoc-clj.2017.day16-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2017.day16 :as d16]))
 
 (def d16-s00-raw ["s1,x3/4,pe/b"])

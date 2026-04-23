@@ -1,8 +1,7 @@
 (ns aoc-clj.2024.day20
   "Solution to https://adventofcode.com/2024/day/20"
-  (:require [aoc-clj.utils.grid.core :as grid]
-            [aoc-clj.utils.grid.mapgrid :as mg]
-            [aoc-clj.utils.vectors :as v]))
+  (:require [aoc-clj.grid.interface :as grid]
+            [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
 (def part1-savings 100)
@@ -17,7 +16,7 @@
 
 (defn parse
   [input]
-  (mg/ascii->MapGrid2D charmap input))
+  (grid/ascii->MapGrid2D charmap input))
 
 ;; Puzzle logic
 (def start-node (comp first (partial grid/find-nodes :start)))

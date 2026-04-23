@@ -1,7 +1,7 @@
 (ns aoc-clj.2018.day10-test
   (:require [clojure.string :as str]
             [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.core :as u]
+            [aoc-clj.util.interface :as u]
             [aoc-clj.2018.day10 :as d10]))
 
 (def d10-s00-raw

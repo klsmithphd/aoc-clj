@@ -3,13 +3,13 @@
   (:require [clojure.data.priority-map :refer [priority-map]]
             [clojure.set :as set]
             [clojure.string :as str]
-            [aoc-clj.utils.core :as u]
-            [aoc-clj.utils.graph :as g :refer [Graph
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.graph.interface :as g :refer [Graph
                                                map->MapGraph
                                                edges
                                                vertices]]
-            [aoc-clj.utils.grid.mapgrid :as mapgrid]
-            [aoc-clj.utils.maze :as maze :refer [map->Maze]]))
+            [aoc-clj.grid.interface :as mapgrid]
+            [aoc-clj.maze.interface :as maze :refer [map->Maze]]))
 ;; FIXME: This implementation is too complex and not sufficiently documented
 ;; https://github.com/Ken-2scientists/aoc-clj/issues/19
 
