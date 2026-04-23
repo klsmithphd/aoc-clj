@@ -182,7 +182,11 @@ Verified in the current tree: the only intra-year cross-day requires are
 
 For each year:
 
-1. `poly create c name:year-YYYY`
+1. `clojure -M:poly create component name:year-YYYY`, then remove the
+   auto-generated scaffold we don't want: the empty `resources/` directory
+   (and drop `"resources"` from `:paths` in the new `deps.edn`) and the
+   dummy `test/.../interface_test.clj`. None of the Phase-1 components
+   carry a `resources/` dir.
 2. Move `src/aoc_clj/YYYY/*` → `components/year-YYYY/src/aoc_clj/year_YYYY/`
    (note: file-system underscore vs. namespace hyphen). Use `git mv` + scripted
    `sed` to rewrite `ns` and `:require` forms rather than retyping by hand —
@@ -191,15 +195,23 @@ For each year:
    `aoc-clj.year-YYYY.dayNN`) — same scripted rewrite covers both src and test.
 4. Move tests (`test/aoc_clj/YYYY/*` → `components/year-YYYY/test/aoc_clj/year_YYYY/`).
 5. Populate `components/year-YYYY/src/aoc_clj/year_YYYY/interface.clj`. The
-   public contract for a day is `parse`, `part1`, `part2`. The year interface
-   re-exports those three vars for each day (via `potemkin/import-vars` or
-   equivalent). This documents the contract and makes it available to future
-   consumers (e.g. the planned visualization project).
+   public contract for a day is `parse`, `part1`, `part2`. Because all 25 days
+   share those three names, flat re-export (e.g. `potemkin/import-vars`) would
+   collide. Instead, the interface exposes:
+   - `solutions` — a map from day number to `{:parse _ :part1 _ :part2 _}`
+   - `solution-fns` — `(defn solution-fns [day] (get solutions day))`
+   Each day namespace is `:require`d at the top; day vars are referenced via
+   their alias (`d01/parse` etc.). This absorbs the per-day dispatch that
+   currently lives in `core.clj` and gives the future `cli` base a stable,
+   typed seam into each year. Note: day 25 is traditionally single-part in
+   Advent of Code — the day-25 map entry has only `:parse` and `:part1`.
 6. Declare utility component dependencies in `components/year-YYYY/deps.edn` —
    only those the year actually uses (derived by scanning the year's
    `:require` forms).
-7. Add the new component to `development/deps.edn` under both `:dev` and
-   `:test` aliases: `poly/year-YYYY {:local/root "components/year-YYYY"}`.
+7. Add the new component to the root `deps.edn` under both `:dev` and `:test`
+   aliases: `poly/year-YYYY {:local/root "components/year-YYYY"}`.
+   (`development/deps.edn` is empty in this workspace — the dev classpath is
+   configured at the root.)
 8. Run `clojure -M:poly test :dev :project`
 9. Commit
 

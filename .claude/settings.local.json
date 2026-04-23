@@ -10,7 +10,10 @@
       "Bash(grep -v '^test/aoc_clj/utils/binary_test\\\\.clj$')",
       "Bash(xargs -I {} sed -i 's/aoc-clj\\\\.utils\\\\.binary/aoc-clj.binary.interface/g' {})",
       "Bash(clojure -M:poly test :dev :project)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(clojure --version)",
+      "Bash(clojure -M:poly create c name:year-2015)",
+      "Bash(clojure -M:poly test :dev)"
     ]
   }
 }

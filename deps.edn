@@ -12,7 +12,8 @@
                        poly/graph           {:local/root "components/graph"}
                        poly/maze            {:local/root "components/maze"}
                        poly/assembunny      {:local/root "components/assembunny"}
-                       poly/intcode         {:local/root "components/intcode"}}}
+                       poly/intcode         {:local/root "components/intcode"}
+                       poly/year-2015       {:local/root "components/year-2015"}}}
 
   :test {:extra-paths []
          :extra-deps  {poly/util       {:local/root "components/util"}
@@ -26,7 +27,8 @@
                        poly/graph      {:local/root "components/graph"}
                        poly/maze       {:local/root "components/maze"}
                        poly/assembunny {:local/root "components/assembunny"}
-                       poly/intcode    {:local/root "components/intcode"}}}
+                       poly/intcode    {:local/root "components/intcode"}
+                       poly/year-2015  {:local/root "components/year-2015"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}}}}}
