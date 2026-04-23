@@ -2,7 +2,7 @@
   "Solution to https://adventofcode.com/2019/day/15"
   (:require [manifold.stream :as s]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.intcode :as intcode]
+            [aoc-clj.intcode.interface :as intcode]
             [aoc-clj.graph.interface :as g]
             [aoc-clj.maze.interface :as maze]))
 

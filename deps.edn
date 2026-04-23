@@ -11,7 +11,8 @@
                        poly/grid            {:local/root "components/grid"}
                        poly/graph           {:local/root "components/graph"}
                        poly/maze            {:local/root "components/maze"}
-                       poly/assembunny      {:local/root "components/assembunny"}}}
+                       poly/assembunny      {:local/root "components/assembunny"}
+                       poly/intcode         {:local/root "components/intcode"}}}
 
   :test {:extra-paths []
          :extra-deps  {poly/util       {:local/root "components/util"}
@@ -24,7 +25,8 @@
                        poly/grid       {:local/root "components/grid"}
                        poly/graph      {:local/root "components/graph"}
                        poly/maze       {:local/root "components/maze"}
-                       poly/assembunny {:local/root "components/assembunny"}}}
+                       poly/assembunny {:local/root "components/assembunny"}
+                       poly/intcode    {:local/root "components/intcode"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}}}}}

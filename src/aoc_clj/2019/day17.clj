@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
             [aoc-clj.grid.interface :as grid]
-            [aoc-clj.utils.intcode :as intcode]))
+            [aoc-clj.intcode.interface :as intcode]))
 
 (def parse u/firstv)
 

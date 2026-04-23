@@ -3,7 +3,7 @@
   (:require [clojure.math.combinatorics :as combo]
             [manifold.stream :as s]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.utils.intcode :as intcode]))
+            [aoc-clj.intcode.interface :as intcode]))
 
 (def parse u/firstv)
 

@@ -1,7 +1,7 @@
-(ns aoc-clj.utils.intcode
+(ns aoc-clj.intcode.core
   (:require [clojure.string :as str]
             [manifold.stream :as s]
-            [aoc-clj.utils.intcode.ops :as ops]))
+            [aoc-clj.intcode.ops :as ops]))
 
 (def opcodes
   {1  {:op ops/add           :width 4}

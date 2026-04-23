@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.intcode.ops
+(ns aoc-clj.intcode.ops
   (:require [manifold.stream :as s]))
 
 (defn read-parameter

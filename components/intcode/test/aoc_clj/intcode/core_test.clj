@@ -1,7 +1,7 @@
-(ns aoc-clj.utils.intcode-test
+(ns aoc-clj.intcode.core-test
   (:require [clojure.test :refer [deftest testing is]]
             [manifold.stream :as s]
-            [aoc-clj.utils.intcode :as intcode]))
+            [aoc-clj.intcode.interface :as intcode]))
 
 (def s1     [1 9 10  3 2 3 11 0 99 30 40 50])
 (def s1-it1 [1 9 10 70 2 3 11 0 99 30 40 50])
