@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day25
   "Solution to https://adventofcode.com/2016/day/25"
-  (:require [aoc-clj.utils.assembunny :as asmb]))
+  (:require [aoc-clj.assembunny.interface :as asmb]))
 
 ;; Input parsing
 ;; We take all but the last value of the program because the final command

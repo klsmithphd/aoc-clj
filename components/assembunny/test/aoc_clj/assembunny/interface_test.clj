@@ -1,6 +1,6 @@
-(ns aoc-clj.utils.assembunny-test
+(ns aoc-clj.assembunny.interface-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.utils.assembunny :as asmb]))
+            [aoc-clj.assembunny.interface :as asmb]))
 
 (def s00-raw
   ["cpy 41 a"

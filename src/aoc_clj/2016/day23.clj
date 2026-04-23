@@ -1,6 +1,6 @@
 (ns aoc-clj.2016.day23
   "Solution to https://adventofcode.com/2016/day/23"
-  (:require [aoc-clj.utils.assembunny :as asmb]))
+  (:require [aoc-clj.assembunny.interface :as asmb]))
 
 ;; Constants
 (def part1-value 7)

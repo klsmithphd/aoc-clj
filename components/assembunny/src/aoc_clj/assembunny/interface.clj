@@ -1,4 +1,4 @@
-(ns aoc-clj.utils.assembunny
+(ns aoc-clj.assembunny.interface
   "*Assembunny* helper utilities featured in 2016 AoC problems"
   (:require [clojure.string :as str]))
 

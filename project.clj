@@ -25,7 +25,8 @@
                  "components/intervals/src"
                  "components/grid/src"
                  "components/graph/src"
-                 "components/maze/src"]
+                 "components/maze/src"
+                 "components/assembunny/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
@@ -36,7 +37,8 @@
                  "components/intervals/test"
                  "components/grid/test"
                  "components/graph/test"
-                 "components/maze/test"]
+                 "components/maze/test"
+                 "components/assembunny/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}
