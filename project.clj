@@ -28,7 +28,8 @@
                  "components/maze/src"
                  "components/assembunny/src"
                  "components/intcode/src"
-                 "components/year-2015/src"]
+                 "components/year-2015/src"
+                 "components/year-2016/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
@@ -42,7 +43,8 @@
                  "components/maze/test"
                  "components/assembunny/test"
                  "components/intcode/test"
-                 "components/year-2015/test"]
+                 "components/year-2015/test"
+                 "components/year-2016/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

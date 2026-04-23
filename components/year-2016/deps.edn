@@ -1,0 +1,14 @@
+{:paths ["src"]
+ :deps  {poly/util                       {:local/root "../util"}
+         poly/assembunny                 {:local/root "../assembunny"}
+         poly/binary                     {:local/root "../binary"}
+         poly/digest                     {:local/root "../digest"}
+         poly/graph                      {:local/root "../graph"}
+         poly/grid                       {:local/root "../grid"}
+         poly/intervals                  {:local/root "../intervals"}
+         poly/math                       {:local/root "../math"}
+         poly/maze                       {:local/root "../maze"}
+         poly/vectors                    {:local/root "../vectors"}
+         org.clojure/math.combinatorics  {:mvn/version "0.1.6"}}
+ :aliases {:test {:extra-paths ["test"]
+                  :extra-deps {}}}}
