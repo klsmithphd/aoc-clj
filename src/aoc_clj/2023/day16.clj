@@ -1,6 +1,5 @@
 (ns aoc-clj.2023.day16
-  (:require [aoc-clj.grid.interface :as grid :refer [value width height]]
-            [aoc-clj.grid.interface :as vg]))
+  (:require [aoc-clj.grid.interface :as grid :refer [value width height]]))
 
 (def part1-start [[0 0] :R])
 
@@ -37,7 +36,7 @@
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input))
+  (grid/ascii->VecGrid2D charmap input))
 
 (defn next-cell
   "Returns the next cell from the position along the `heading` direction"

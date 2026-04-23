@@ -3,8 +3,7 @@
   (:require [clojure.string :as str]
             [aoc-clj.util.interface :as u]
             [aoc-clj.grid.interface :as grid]
-            [aoc-clj.utils.intcode :as intcode]
-            [aoc-clj.grid.interface :as mapgrid]))
+            [aoc-clj.utils.intcode :as intcode]))
 
 (def parse u/firstv)
 
@@ -20,7 +19,7 @@
 (defn scaffold-map
   [ascii]
   (let [lines (str/split (str/join (map char ascii)) #"\n")]
-    (:grid-map (mapgrid/ascii->MapGrid2D scaffold-mapping lines))))
+    (:grid-map (grid/ascii->MapGrid2D scaffold-mapping lines))))
 
 (defn day17-map
   [input]

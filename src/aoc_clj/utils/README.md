@@ -121,9 +121,7 @@ is particularly useful if the grid size does not remain static
 
 ```clojure
 (ns foo
-  (:require [aoc-clj.grid.interface :as grid :refer [width height value neighbors-4 neighbors-8]]
-            [aoc-clj.grid.interface :as mg]
-            [aoc-clj.grid.interface :as vg]))
+  (:require [aoc-clj.grid.interface :as grid :refer [width height value neighbors-4 neighbors-8]]))
 
 ;; Compute the adjacent coordinates for a given position
 => (grid/adj-coords-2d [0 0])
@@ -135,14 +133,14 @@ is particularly useful if the grid size does not remain static
             
 ;; ascii->MapGrid2D converts ASCII-art grids into a data structure
 ;; The keys of `:grid` are [x y] positions, indexed from the upper-left corner
-=> (mg/ascii->MapGrid2D {\. :space \# :wall} ["..#" ".#." "#.."]))
+=> (grid/ascii->MapGrid2D {\. :space \# :wall} ["..#" ".#." "#.."]))
 #MapGrid2D{:width 3 :height 3 :grid {[0 0] :space [1 0] :space [2 0] :wall
                                      [0 1] :space [1 1] :wall  [2 1] :wall
                                      [0 2] :wall  [1 2] :space [2 2] :space}}
 
 ;; Alternatively, ascii->VecGrid2D converts the same ASCII grids into the
 ;; VecGrid2D structure
-=> (def foo (vg/ascii->VecGrid2D {\. :space \# :wall} ["..#" ".#." "#.."])
+=> (def foo (grid/ascii->VecGrid2D {\. :space \# :wall} ["..#" ".#." "#.."])
 #VecGrid2D{:v [[:space :space :wall] 
                [:space :wall :space] 
                [:wall :space :space]]}

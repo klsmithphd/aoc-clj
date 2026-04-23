@@ -1,8 +1,8 @@
 (ns aoc-clj.grid.mapgrid-test
   (:require [clojure.test :refer [deftest testing is]]
-            [aoc-clj.grid.interface :refer
-             [width height value pos-seq val-seq slice neighbors-4 neighbors-8]]
-            [aoc-clj.grid.interface :as mg :refer [->MapGrid2D]]))
+            [aoc-clj.grid.interface :as mg
+             :refer [->MapGrid2D
+                     width height value pos-seq val-seq slice neighbors-4 neighbors-8]]))
 
 ;; A 2×3 grid (2 rows, 3 cols) in [row col] coordinates:
 ;;   row 0: 1 2 3

@@ -1,8 +1,7 @@
 (ns aoc-clj.2021.day11
   "Solution to https://adventofcode.com/2021/day/11"
   (:require [aoc-clj.util.interface :as u]
-            [aoc-clj.grid.interface :as grid]
-            [aoc-clj.grid.interface :as mapgrid]))
+            [aoc-clj.grid.interface :as grid]))
 
 (defn parse-line
   [line]
@@ -11,7 +10,7 @@
 (defn parse
   [input]
   (->> (map parse-line input)
-       mapgrid/lists->MapGrid2D
+       grid/lists->MapGrid2D
        :grid-map))
 
 (defn to-flash

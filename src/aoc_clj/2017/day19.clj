@@ -1,8 +1,7 @@
 (ns aoc-clj.2017.day19
   "Solution to https://adventofcode.com/2017/day/19"
   (:require [aoc-clj.util.interface :as u]
-            [aoc-clj.grid.interface :as grid :refer [value]]
-            [aoc-clj.grid.interface :as vg]))
+            [aoc-clj.grid.interface :as grid :refer [value]]))
 
 ;; Input parsing
 (defn charmap
@@ -16,7 +15,7 @@
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input))
+  (grid/ascii->VecGrid2D charmap input))
 
 ;; Puzzle logic
 (defn start

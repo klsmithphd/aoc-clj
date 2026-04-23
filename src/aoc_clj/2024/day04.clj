@@ -1,7 +1,6 @@
 (ns aoc-clj.2024.day04
   "Solution to https://adventofcode.com/2024/day/4"
-  (:require [aoc-clj.grid.interface :refer [value]]
-            [aoc-clj.grid.interface :as mg]
+  (:require [aoc-clj.grid.interface :refer [value] :as grid]
             [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
@@ -29,7 +28,7 @@
 ;; Input parsing
 (defn parse
   [input]
-  (mg/ascii->MapGrid2D identity input))
+  (grid/ascii->MapGrid2D identity input))
 
 ;; Puzzle logic
 (defn char-positions

@@ -2,8 +2,7 @@
     "Solution to https://adventofcode.com/2016/day/8"
     (:require [clojure.string :as str]
               [aoc-clj.util.interface :as u]
-              [aoc-clj.grid.interface :as grid]
-              [aoc-clj.grid.interface :as mg]))
+              [aoc-clj.grid.interface :as grid]))
 
 ;; Constants
 (def screen-width 50)
@@ -106,7 +105,7 @@
   ;; Print the grid so as to be able to read the block characters
   (println (grid/Grid2D->ascii
             {\  0 \# 1}
-            (mg/->MapGrid2D
+            (grid/->MapGrid2D
              screen-width
              screen-height
              (final-state screen-width screen-height input))))

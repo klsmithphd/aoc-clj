@@ -2,7 +2,6 @@
   "Solution to https://adventofcode.com/2022/day/24"
   (:require [aoc-clj.utils.graph :as graph :refer [Graph]]
             [aoc-clj.grid.interface :as grid]
-            [aoc-clj.grid.interface :as mapgrid]
             [aoc-clj.math.interface :as math]
             [aoc-clj.vectors.interface :as v]))
 
@@ -19,7 +18,7 @@
 (defn parse
   [input]
   (let [{:keys [width height grid-map]}
-        (mapgrid/ascii->MapGrid2D charmap input)]
+        (grid/ascii->MapGrid2D charmap input)]
     {:x-bound   (- width 2)
      :y-bound   (- height 2)
      :blizzards (blizzards grid-map)}))

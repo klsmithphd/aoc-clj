@@ -1,8 +1,7 @@
 (ns aoc-clj.2022.day23
   "Solution to https://adventofcode.com/2022/day/23"
   (:require [aoc-clj.util.interface :as u]
-            [aoc-clj.grid.interface :as grid]
-            [aoc-clj.grid.interface :as mapgrid]))
+            [aoc-clj.grid.interface :as grid]))
 
 ;;;; Constants
 
@@ -15,7 +14,7 @@
 
 (defn parse
   [input]
-  (->> (mapgrid/ascii->MapGrid2D charmap input)
+  (->> (grid/ascii->MapGrid2D charmap input)
        :grid-map
        (filter #(elf? (val %)))
        (map first)

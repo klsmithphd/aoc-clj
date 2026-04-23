@@ -2,14 +2,13 @@
   (:require [clojure.math.combinatorics :as combo]
             [clojure.set :as set]
             [aoc-clj.grid.interface :as grid :refer [height width value]]
-            [aoc-clj.grid.interface :as vg]
             [aoc-clj.vectors.interface :as v]))
 
 (def charmap {\. :empty \# :galaxy})
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D charmap input))
+  (grid/ascii->VecGrid2D charmap input))
 
 (defn galaxies
   "Find the location of the galaxies in the grid"

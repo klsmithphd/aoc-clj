@@ -2,8 +2,7 @@
   "Solution to https://adventofcode.com/2022/day/12"
   (:require [aoc-clj.util.interface :as u]
             [aoc-clj.utils.graph :as graph :refer [->MapGraph]]
-            [aoc-clj.grid.interface :as grid]
-            [aoc-clj.grid.interface :as mapgrid]))
+            [aoc-clj.grid.interface :as grid]))
 
 ;;;; Input parsing
 
@@ -15,7 +14,7 @@
 
 (defn parse
   [input]
-  (mapgrid/lists->MapGrid2D (map (partial map translate) input)))
+  (grid/lists->MapGrid2D (map (partial map translate) input)))
 
 ;;;; Puzzle logic
 

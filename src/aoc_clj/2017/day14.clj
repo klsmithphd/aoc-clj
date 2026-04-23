@@ -2,8 +2,7 @@
   "Solution to https://adventofcode.com/2017/day/14"
   (:require [aoc-clj.2017.day10 :as d10]
             [aoc-clj.binary.interface :as b]
-            [aoc-clj.grid.interface :as grid :refer [pos-seq value neighbors-4]]
-            [aoc-clj.grid.interface :as vg]))
+            [aoc-clj.grid.interface :as grid :refer [pos-seq value neighbors-4]]))
 
 ;; Input parsing
 (def parse first)
@@ -59,7 +58,7 @@
 (defn region-count
   "Returns the count of all connected regions"
   [key-str]
-  (let [grid (vg/ascii->VecGrid2D {\0 0 \1 1} (grid-squares key-str))]
+  (let [grid (grid/ascii->VecGrid2D {\0 0 \1 1} (grid-squares key-str))]
     (loop [regions #{} yet-ungrouped (ones grid)]
       (if-not (seq yet-ungrouped)
         (count regions)

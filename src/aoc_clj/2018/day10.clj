@@ -1,7 +1,6 @@
 (ns aoc-clj.2018.day10
   "Solution to https://adventofcode.com/2018/day/10"
   (:require [aoc-clj.grid.interface :as grid]
-            [aoc-clj.grid.interface :as mg]
             [aoc-clj.vectors.interface :as v]))
 
 ;; Constants
@@ -72,7 +71,7 @@
         positions             (positions-at-t lights time)
         [[mnx mxx] [mny mxy]] (bounds positions)
         shifted               (map (fn [[x y]] [(- y mny) (- x mnx)]) positions)
-        g                     (mg/->MapGrid2D
+        g                     (grid/->MapGrid2D
                                (inc (- mxx mnx)) (inc (- mxy mny))
                                (zipmap shifted (repeat :on)))]
     (grid/Grid2D->ascii {\# :on \  nil} g)))

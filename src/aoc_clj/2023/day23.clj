@@ -1,13 +1,12 @@
 (ns aoc-clj.2023.day23
   (:require [aoc-clj.utils.graph :as graph :refer [vertex]]
             [aoc-clj.grid.interface :as grid :refer [width height in-grid?]]
-            [aoc-clj.grid.interface :as vg]
             [aoc-clj.utils.maze :as maze]
             [aoc-clj.util.interface :as u]))
 
 (defn parse
   [input]
-  (vg/ascii->VecGrid2D identity input))
+  (grid/ascii->VecGrid2D identity input))
 
 (defn open?
   "Returns true if the cell is a valid neighbor to reach in the maze"
