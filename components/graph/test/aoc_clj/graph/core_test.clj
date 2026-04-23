@@ -97,4 +97,5 @@
     (is (= #{:a}                   (g/flood-fill t4 :a :limit 0)))
     (is (= #{:a :b :e}             (g/flood-fill t4 :a :limit 1)))
     (is (= #{:a :b :e :c :f}       (g/flood-fill t4 :a :limit 2)))
+    (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t4 :a :limit 3)))
     (is (= #{:a :b :e :c :f :d :g} (g/flood-fill t4 :a)))))
