@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,12 +16,27 @@ jobs:
       with:
         submodules: true
         token: ${{ secrets.AOC_INPUTS_TOKEN }}
+        fetch-depth: 0            # poly needs history to find stable-main
 
     - name: Build and run Dev Container tasks
       uses: devcontainers/ci@v0.3
-      with: 
+      with:
         runCmd: |
-          # Install dependencies
-          lein deps
-          # Run tests
-          lein test
+          # The host-mounted workspace has a UID mismatch inside the devcontainer,
+          # which triggers git's "dubious ownership" safety check. Without this,
+          # every git command (including poly's internal workspace analysis)
+          # fails silently and poly reports 0 tests.
+          git config --global --add safe.directory "$PWD"
+          # Resolve deps (populates ~/.m2 cache)
+          clojure -P
+          # with:default excludes ^:slow tests, matching pre-migration :test-selectors.
+          # Incremental mode (:project) requires the stable-main tag as a reference
+          # point. Until the tag-stable workflow creates it (after the first green
+          # main build), fall back to a full :all-bricks sweep.
+          if git rev-parse --verify --quiet refs/tags/stable-main >/dev/null; then
+            echo "stable-main tag found — running incremental tests"
+            clojure -M:poly test :project with:default
+          else
+            echo "no stable-main tag — running full brick sweep"
+            clojure -M:poly test :all-bricks with:default
+          fi

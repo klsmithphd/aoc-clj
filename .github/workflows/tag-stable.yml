@@ -1,0 +1,31 @@
+name: Tag stable
+
+# After a successful "Clojure CI" run on main, advance the stable-main tag
+# to that commit. Polylith compares HEAD against this tag to decide which
+# bricks/projects are affected on future runs.
+
+on:
+  workflow_run:
+    workflows: ["Clojure CI"]
+    branches: [main]
+    types: [completed]
+
+jobs:
+  tag:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.workflow_run.head_sha }}
+        fetch-depth: 0
+
+    - name: Move stable-main tag
+      run: |
+        git config user.name  "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -f stable-main ${{ github.event.workflow_run.head_sha }}
+        git push -f origin stable-main
