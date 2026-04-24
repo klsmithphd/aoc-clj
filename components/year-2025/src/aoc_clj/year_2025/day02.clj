@@ -1,4 +1,4 @@
-(ns aoc-clj.2025.day02
+(ns aoc-clj.year-2025.day02
   "Solution to https://adventofcode.com/2025/day/2"
   (:require [clojure.string :as str]))
 

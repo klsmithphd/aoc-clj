@@ -1,7 +1,7 @@
-(ns aoc-clj.2025.day01-test
+(ns aoc-clj.year-2025.day01-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.2025.day01 :as d01]))
+            [aoc-clj.year-2025.day01 :as d01]))
 
 (def d01-s00-raw
   ["L68"

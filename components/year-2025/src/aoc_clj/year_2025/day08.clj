@@ -1,5 +1,5 @@
-(ns aoc-clj.2025.day03
-  "Solution to https://adventofcode.com/2025/day/3")
+(ns aoc-clj.year-2025.day08
+  "Solution to https://adventofcode.com/2025/day/8")
 
 ;; Input parsing
 (defn parse

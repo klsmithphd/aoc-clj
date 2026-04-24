@@ -1,7 +1,7 @@
-(ns aoc-clj.2025.day04-test
+(ns aoc-clj.year-2025.day04-test
   (:require [clojure.test :refer [deftest testing is]]
             [aoc-clj.util.interface :as u]
-            [aoc-clj.2025.day04 :as d04]))
+            [aoc-clj.year-2025.day04 :as d04]))
 
 (def day04-input (u/parse-puzzle-input d04/parse 2025 4))
 
