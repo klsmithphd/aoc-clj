@@ -30,7 +30,8 @@
                  "components/intcode/src"
                  "components/year-2015/src"
                  "components/year-2016/src"
-                 "components/year-2017/src"]
+                 "components/year-2017/src"
+                 "components/year-2018/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
@@ -46,7 +47,8 @@
                  "components/intcode/test"
                  "components/year-2015/test"
                  "components/year-2016/test"
-                 "components/year-2017/test"]
+                 "components/year-2017/test"
+                 "components/year-2018/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

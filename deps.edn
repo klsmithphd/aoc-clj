@@ -15,7 +15,8 @@
                        poly/intcode         {:local/root "components/intcode"}
                        poly/year-2015       {:local/root "components/year-2015"}
                        poly/year-2016       {:local/root "components/year-2016"}
-                       poly/year-2017       {:local/root "components/year-2017"}}}
+                       poly/year-2017       {:local/root "components/year-2017"}
+                       poly/year-2018       {:local/root "components/year-2018"}}}
 
   :test {:extra-paths []
          :extra-deps  {poly/util       {:local/root "components/util"}
@@ -32,7 +33,8 @@
                        poly/intcode    {:local/root "components/intcode"}
                        poly/year-2015  {:local/root "components/year-2015"}
                        poly/year-2016  {:local/root "components/year-2016"}
-                       poly/year-2017  {:local/root "components/year-2017"}}}
+                       poly/year-2017  {:local/root "components/year-2017"}
+                       poly/year-2018  {:local/root "components/year-2018"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}
