@@ -35,7 +35,8 @@
                  "components/year-2019/src"
                  "components/year-2020/src"
                  "components/year-2021/src"
-                 "components/year-2022/src"]
+                 "components/year-2022/src"
+                 "components/year-2023/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
@@ -56,7 +57,8 @@
                  "components/year-2019/test"
                  "components/year-2020/test"
                  "components/year-2021/test"
-                 "components/year-2022/test"]
+                 "components/year-2022/test"
+                 "components/year-2023/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

@@ -1,0 +1,13 @@
+{:paths ["src"]
+ :deps  {poly/util                       {:local/root "../util"}
+         poly/geometry                   {:local/root "../geometry"}
+         poly/graph                      {:local/root "../graph"}
+         poly/grid                       {:local/root "../grid"}
+         poly/math                       {:local/root "../math"}
+         poly/maze                       {:local/root "../maze"}
+         poly/vectors                    {:local/root "../vectors"}
+         org.clojure/math.combinatorics  {:mvn/version "0.1.6"}
+         net.mikera/core.matrix          {:mvn/version "0.63.0"}
+         net.mikera/vectorz-clj          {:mvn/version "0.48.0"}}
+ :aliases {:test {:extra-paths ["test"]
+                  :extra-deps {}}}}
