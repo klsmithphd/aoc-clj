@@ -19,7 +19,8 @@
                        poly/year-2018       {:local/root "components/year-2018"}
                        poly/year-2019       {:local/root "components/year-2019"}
                        poly/year-2020       {:local/root "components/year-2020"}
-                       poly/year-2021       {:local/root "components/year-2021"}}}
+                       poly/year-2021       {:local/root "components/year-2021"}
+                       poly/year-2022       {:local/root "components/year-2022"}}}
 
   :test {:extra-paths []
          :extra-deps  {poly/util       {:local/root "components/util"}
@@ -40,7 +41,8 @@
                        poly/year-2018  {:local/root "components/year-2018"}
                        poly/year-2019  {:local/root "components/year-2019"}
                        poly/year-2020  {:local/root "components/year-2020"}
-                       poly/year-2021  {:local/root "components/year-2021"}}}
+                       poly/year-2021  {:local/root "components/year-2021"}
+                       poly/year-2022  {:local/root "components/year-2022"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}
