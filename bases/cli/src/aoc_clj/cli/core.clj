@@ -2,31 +2,23 @@
   "Command-line interface to AoC solutions"
   (:require [clojure.string :as str]
             [clojure.tools.cli :refer [parse-opts]]
-            [aoc-clj.util.interface :as u]
-            [aoc-clj.year-2015.interface :as y2015]
-            [aoc-clj.year-2016.interface :as y2016]
-            [aoc-clj.year-2017.interface :as y2017]
-            [aoc-clj.year-2018.interface :as y2018]
-            [aoc-clj.year-2019.interface :as y2019]
-            [aoc-clj.year-2020.interface :as y2020]
-            [aoc-clj.year-2021.interface :as y2021]
-            [aoc-clj.year-2022.interface :as y2022]
-            [aoc-clj.year-2023.interface :as y2023]
-            [aoc-clj.year-2024.interface :as y2024]
-            [aoc-clj.year-2025.interface :as y2025]))
+            [aoc-clj.util.interface :as u]))
 
-(def year->solution-fns
-  {2015 y2015/solution-fns
-   2016 y2016/solution-fns
-   2017 y2017/solution-fns
-   2018 y2018/solution-fns
-   2019 y2019/solution-fns
-   2020 y2020/solution-fns
-   2021 y2021/solution-fns
-   2022 y2022/solution-fns
-   2023 y2023/solution-fns
-   2024 y2024/solution-fns
-   2025 y2025/solution-fns})
+(def year->solution-fns-sym
+  "Fully-qualified `solution-fns` symbol per year. Resolved lazily so that
+   invoking the CLI for one year does not load the other years' namespaces
+   (and their transitive deps — e.g. core.matrix/vectorz via 2023 day 24)."
+  {2015 'aoc-clj.year-2015.interface/solution-fns
+   2016 'aoc-clj.year-2016.interface/solution-fns
+   2017 'aoc-clj.year-2017.interface/solution-fns
+   2018 'aoc-clj.year-2018.interface/solution-fns
+   2019 'aoc-clj.year-2019.interface/solution-fns
+   2020 'aoc-clj.year-2020.interface/solution-fns
+   2021 'aoc-clj.year-2021.interface/solution-fns
+   2022 'aoc-clj.year-2022.interface/solution-fns
+   2023 'aoc-clj.year-2023.interface/solution-fns
+   2024 'aoc-clj.year-2024.interface/solution-fns
+   2025 'aoc-clj.year-2025.interface/solution-fns})
 
 (def cli-options
   [["-i" "--input PATH" "Puzzle input file to use instead of default"]
@@ -48,8 +40,9 @@
 
 (defn- lookup-solution
   [year day]
-  (when-let [fns-for-year (year->solution-fns year)]
-    (fns-for-year day)))
+  (when-let [sym (year->solution-fns-sym year)]
+    (when-let [solution-fns (requiring-resolve sym)]
+      (solution-fns day))))
 
 (defn -main [& args]
   (let [{:keys [options arguments summary]} (parse-opts args cli-options)]

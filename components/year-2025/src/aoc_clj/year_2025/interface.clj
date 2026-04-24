@@ -15,18 +15,18 @@
             [aoc-clj.year-2025.day12 :as d12]))
 
 (def solutions
-  {1  {:parse d01/parse :part1 d01/part1 :part2 d01/part2}
-   2  {:parse d02/parse :part1 d02/part1 :part2 d02/part2}
-   3  {:parse d03/parse :part1 d03/part1 :part2 d03/part2}
-   4  {:parse d04/parse :part1 d04/part1 :part2 d04/part2}
-   5  {:parse d05/parse :part1 d05/part1 :part2 d05/part2}
-   6  {:parse d06/parse :part1 d06/part1 :part2 d06/part2}
-   7  {:parse d07/parse :part1 d07/part1 :part2 d07/part2}
-   8  {:parse d08/parse :part1 d08/part1 :part2 d08/part2}
-   9  {:parse d09/parse :part1 d09/part1 :part2 d09/part2}
-   10 {:parse d10/parse :part1 d10/part1 :part2 d10/part2}
-   11 {:parse d11/parse :part1 d11/part1 :part2 d11/part2}
-   12 {:parse d12/parse :part1 d12/part1 :part2 d12/part2}})
+  {1  {:parse #'d01/parse :part1 #'d01/part1 :part2 #'d01/part2}
+   2  {:parse #'d02/parse :part1 #'d02/part1 :part2 #'d02/part2}
+   3  {:parse #'d03/parse :part1 #'d03/part1 :part2 #'d03/part2}
+   4  {:parse #'d04/parse :part1 #'d04/part1 :part2 #'d04/part2}
+   5  {:parse #'d05/parse :part1 #'d05/part1 :part2 #'d05/part2}
+   6  {:parse #'d06/parse :part1 #'d06/part1 :part2 #'d06/part2}
+   7  {:parse #'d07/parse :part1 #'d07/part1 :part2 #'d07/part2}
+   8  {:parse #'d08/parse :part1 #'d08/part1 :part2 #'d08/part2}
+   9  {:parse #'d09/parse :part1 #'d09/part1 :part2 #'d09/part2}
+   10 {:parse #'d10/parse :part1 #'d10/part1 :part2 #'d10/part2}
+   11 {:parse #'d11/parse :part1 #'d11/part1 :part2 #'d11/part2}
+   12 {:parse #'d12/parse :part1 #'d12/part1 :part2 #'d12/part2}})
 
 (defn solution-fns
   "Solution fns for the given day of this year.
