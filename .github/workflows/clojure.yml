@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,12 +16,15 @@ jobs:
       with:
         submodules: true
         token: ${{ secrets.AOC_INPUTS_TOKEN }}
+        fetch-depth: 0            # poly needs history to find stable-main
 
     - name: Build and run Dev Container tasks
       uses: devcontainers/ci@v0.3
-      with: 
+      with:
         runCmd: |
-          # Install dependencies
-          lein deps
-          # Run tests
-          lein test
+          # Resolve deps (populates ~/.m2 cache)
+          clojure -P
+          # Incremental test — affected bricks + changed projects, since stable-main.
+          # First run (no tag yet) falls back to full sweep.
+          # with:default excludes ^:slow tests, matching pre-migration :test-selectors.
+          clojure -M:poly test :project with:default
