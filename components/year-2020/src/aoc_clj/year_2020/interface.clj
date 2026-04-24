@@ -1,61 +1,42 @@
 (ns aoc-clj.year-2020.interface
   "Solutions to the Advent of Code 2020 puzzles.
-   See https://adventofcode.com/2020"
-  (:require [aoc-clj.year-2020.day01 :as d01]
-            [aoc-clj.year-2020.day02 :as d02]
-            [aoc-clj.year-2020.day03 :as d03]
-            [aoc-clj.year-2020.day04 :as d04]
-            [aoc-clj.year-2020.day05 :as d05]
-            [aoc-clj.year-2020.day06 :as d06]
-            [aoc-clj.year-2020.day07 :as d07]
-            [aoc-clj.year-2020.day08 :as d08]
-            [aoc-clj.year-2020.day09 :as d09]
-            [aoc-clj.year-2020.day10 :as d10]
-            [aoc-clj.year-2020.day11 :as d11]
-            [aoc-clj.year-2020.day12 :as d12]
-            [aoc-clj.year-2020.day13 :as d13]
-            [aoc-clj.year-2020.day14 :as d14]
-            [aoc-clj.year-2020.day15 :as d15]
-            [aoc-clj.year-2020.day16 :as d16]
-            [aoc-clj.year-2020.day17 :as d17]
-            [aoc-clj.year-2020.day18 :as d18]
-            [aoc-clj.year-2020.day19 :as d19]
-            [aoc-clj.year-2020.day20 :as d20]
-            [aoc-clj.year-2020.day21 :as d21]
-            [aoc-clj.year-2020.day22 :as d22]
-            [aoc-clj.year-2020.day23 :as d23]
-            [aoc-clj.year-2020.day24 :as d24]
-            [aoc-clj.year-2020.day25 :as d25]))
+   See https://adventofcode.com/2020")
 
 (def solutions
-  {1  {:parse #'d01/parse :part1 #'d01/part1 :part2 #'d01/part2}
-   2  {:parse #'d02/parse :part1 #'d02/part1 :part2 #'d02/part2}
-   3  {:parse #'d03/parse :part1 #'d03/part1 :part2 #'d03/part2}
-   4  {:parse #'d04/parse :part1 #'d04/part1 :part2 #'d04/part2}
-   5  {:parse #'d05/parse :part1 #'d05/part1 :part2 #'d05/part2}
-   6  {:parse #'d06/parse :part1 #'d06/part1 :part2 #'d06/part2}
-   7  {:parse #'d07/parse :part1 #'d07/part1 :part2 #'d07/part2}
-   8  {:parse #'d08/parse :part1 #'d08/part1 :part2 #'d08/part2}
-   9  {:parse #'d09/parse :part1 #'d09/part1 :part2 #'d09/part2}
-   10 {:parse #'d10/parse :part1 #'d10/part1 :part2 #'d10/part2}
-   11 {:parse #'d11/parse :part1 #'d11/part1 :part2 #'d11/part2}
-   12 {:parse #'d12/parse :part1 #'d12/part1 :part2 #'d12/part2}
-   13 {:parse #'d13/parse :part1 #'d13/part1 :part2 #'d13/part2}
-   14 {:parse #'d14/parse :part1 #'d14/part1 :part2 #'d14/part2}
-   15 {:parse #'d15/parse :part1 #'d15/part1 :part2 #'d15/part2}
-   16 {:parse #'d16/parse :part1 #'d16/part1 :part2 #'d16/part2}
-   17 {:parse #'d17/parse :part1 #'d17/part1 :part2 #'d17/part2}
-   18 {:parse #'d18/parse :part1 #'d18/part1 :part2 #'d18/part2}
-   19 {:parse #'d19/parse :part1 #'d19/part1 :part2 #'d19/part2}
-   20 {:parse #'d20/parse :part1 #'d20/part1 :part2 #'d20/part2}
-   21 {:parse #'d21/parse :part1 #'d21/part1 :part2 #'d21/part2}
-   22 {:parse #'d22/parse :part1 #'d22/part1 :part2 #'d22/part2}
-   23 {:parse #'d23/parse :part1 #'d23/part1 :part2 #'d23/part2}
-   24 {:parse #'d24/parse :part1 #'d24/part1 :part2 #'d24/part2}
-   25 {:parse #'d25/parse :part1 #'d25/part1}})
+  {1  {:parse 'aoc-clj.year-2020.day01/parse :part1 'aoc-clj.year-2020.day01/part1 :part2 'aoc-clj.year-2020.day01/part2}
+   2  {:parse 'aoc-clj.year-2020.day02/parse :part1 'aoc-clj.year-2020.day02/part1 :part2 'aoc-clj.year-2020.day02/part2}
+   3  {:parse 'aoc-clj.year-2020.day03/parse :part1 'aoc-clj.year-2020.day03/part1 :part2 'aoc-clj.year-2020.day03/part2}
+   4  {:parse 'aoc-clj.year-2020.day04/parse :part1 'aoc-clj.year-2020.day04/part1 :part2 'aoc-clj.year-2020.day04/part2}
+   5  {:parse 'aoc-clj.year-2020.day05/parse :part1 'aoc-clj.year-2020.day05/part1 :part2 'aoc-clj.year-2020.day05/part2}
+   6  {:parse 'aoc-clj.year-2020.day06/parse :part1 'aoc-clj.year-2020.day06/part1 :part2 'aoc-clj.year-2020.day06/part2}
+   7  {:parse 'aoc-clj.year-2020.day07/parse :part1 'aoc-clj.year-2020.day07/part1 :part2 'aoc-clj.year-2020.day07/part2}
+   8  {:parse 'aoc-clj.year-2020.day08/parse :part1 'aoc-clj.year-2020.day08/part1 :part2 'aoc-clj.year-2020.day08/part2}
+   9  {:parse 'aoc-clj.year-2020.day09/parse :part1 'aoc-clj.year-2020.day09/part1 :part2 'aoc-clj.year-2020.day09/part2}
+   10 {:parse 'aoc-clj.year-2020.day10/parse :part1 'aoc-clj.year-2020.day10/part1 :part2 'aoc-clj.year-2020.day10/part2}
+   11 {:parse 'aoc-clj.year-2020.day11/parse :part1 'aoc-clj.year-2020.day11/part1 :part2 'aoc-clj.year-2020.day11/part2}
+   12 {:parse 'aoc-clj.year-2020.day12/parse :part1 'aoc-clj.year-2020.day12/part1 :part2 'aoc-clj.year-2020.day12/part2}
+   13 {:parse 'aoc-clj.year-2020.day13/parse :part1 'aoc-clj.year-2020.day13/part1 :part2 'aoc-clj.year-2020.day13/part2}
+   14 {:parse 'aoc-clj.year-2020.day14/parse :part1 'aoc-clj.year-2020.day14/part1 :part2 'aoc-clj.year-2020.day14/part2}
+   15 {:parse 'aoc-clj.year-2020.day15/parse :part1 'aoc-clj.year-2020.day15/part1 :part2 'aoc-clj.year-2020.day15/part2}
+   16 {:parse 'aoc-clj.year-2020.day16/parse :part1 'aoc-clj.year-2020.day16/part1 :part2 'aoc-clj.year-2020.day16/part2}
+   17 {:parse 'aoc-clj.year-2020.day17/parse :part1 'aoc-clj.year-2020.day17/part1 :part2 'aoc-clj.year-2020.day17/part2}
+   18 {:parse 'aoc-clj.year-2020.day18/parse :part1 'aoc-clj.year-2020.day18/part1 :part2 'aoc-clj.year-2020.day18/part2}
+   19 {:parse 'aoc-clj.year-2020.day19/parse :part1 'aoc-clj.year-2020.day19/part1 :part2 'aoc-clj.year-2020.day19/part2}
+   20 {:parse 'aoc-clj.year-2020.day20/parse :part1 'aoc-clj.year-2020.day20/part1 :part2 'aoc-clj.year-2020.day20/part2}
+   21 {:parse 'aoc-clj.year-2020.day21/parse :part1 'aoc-clj.year-2020.day21/part1 :part2 'aoc-clj.year-2020.day21/part2}
+   22 {:parse 'aoc-clj.year-2020.day22/parse :part1 'aoc-clj.year-2020.day22/part1 :part2 'aoc-clj.year-2020.day22/part2}
+   23 {:parse 'aoc-clj.year-2020.day23/parse :part1 'aoc-clj.year-2020.day23/part1 :part2 'aoc-clj.year-2020.day23/part2}
+   24 {:parse 'aoc-clj.year-2020.day24/parse :part1 'aoc-clj.year-2020.day24/part1 :part2 'aoc-clj.year-2020.day24/part2}
+   25 {:parse 'aoc-clj.year-2020.day25/parse :part1 'aoc-clj.year-2020.day25/part1}})
+
+(defn- resolve-fns
+  [fn-map]
+  (when fn-map
+    (update-vals fn-map requiring-resolve)))
 
 (defn solution-fns
   "Solution fns for the given day of this year.
-   Returns {:parse _ :part1 _ :part2 _}, or nil if day is out of range."
+   Returns {:parse _ :part1 _ :part2 _} with each Var resolved on first call
+   (days are loaded lazily), or nil if `day` is out of range."
   [day]
-  (get solutions day))
+  (resolve-fns (get solutions day)))
