@@ -23,6 +23,20 @@ this is a git subtree within the `inputs` directory.
 
 This repository is configured to run in a devcontainer so that no dependencies need end up on my laptop.
 
+## Toolchain
+
+The project is organized as a [Polylith](https://polylith.gitbook.io/polylith)
+workspace built on `deps.edn` + `tools.build` + `poly`. Utility components and
+year-specific solution components live under `components/`; the CLI entry
+point is the `cli` base under `bases/`; everything composes into the single
+deployable project at `projects/aoc-clj`.
+
+Common commands:
+
+- `clojure -M:aoc <year> <day>` — run a day's solution (replaces the old `lein run`)
+- `clojure -M:poly test :project with:default` — incremental test sweep (excludes `^:slow`)
+- `clojure -M:poly info` — workspace / dependency-graph inspection
+
 ## Key constraints
 
 - **Never solve the puzzles for me** Part of the fun of solving the puzzle is to design and implement a
