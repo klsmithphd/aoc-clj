@@ -12,7 +12,18 @@
                        poly/graph           {:local/root "components/graph"}
                        poly/maze            {:local/root "components/maze"}
                        poly/assembunny      {:local/root "components/assembunny"}
-                       poly/intcode         {:local/root "components/intcode"}}}
+                       poly/intcode         {:local/root "components/intcode"}
+                       poly/year-2015       {:local/root "components/year-2015"}
+                       poly/year-2016       {:local/root "components/year-2016"}
+                       poly/year-2017       {:local/root "components/year-2017"}
+                       poly/year-2018       {:local/root "components/year-2018"}
+                       poly/year-2019       {:local/root "components/year-2019"}
+                       poly/year-2020       {:local/root "components/year-2020"}
+                       poly/year-2021       {:local/root "components/year-2021"}
+                       poly/year-2022       {:local/root "components/year-2022"}
+                       poly/year-2023       {:local/root "components/year-2023"}
+                       poly/year-2024       {:local/root "components/year-2024"}
+                       poly/year-2025       {:local/root "components/year-2025"}}}
 
   :test {:extra-paths []
          :extra-deps  {poly/util       {:local/root "components/util"}
@@ -26,7 +37,20 @@
                        poly/graph      {:local/root "components/graph"}
                        poly/maze       {:local/root "components/maze"}
                        poly/assembunny {:local/root "components/assembunny"}
-                       poly/intcode    {:local/root "components/intcode"}}}
+                       poly/intcode    {:local/root "components/intcode"}
+                       poly/year-2015  {:local/root "components/year-2015"}
+                       poly/year-2016  {:local/root "components/year-2016"}
+                       poly/year-2017  {:local/root "components/year-2017"}
+                       poly/year-2018  {:local/root "components/year-2018"}
+                       poly/year-2019  {:local/root "components/year-2019"}
+                       poly/year-2020  {:local/root "components/year-2020"}
+                       poly/year-2021  {:local/root "components/year-2021"}
+                       poly/year-2022  {:local/root "components/year-2022"}
+                       poly/year-2023  {:local/root "components/year-2023"}
+                       poly/year-2024  {:local/root "components/year-2024"}
+                       poly/year-2025  {:local/root "components/year-2025"}}}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
-         :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}}}}}
+         :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}
+                      io.github.seancorfield/polylith-external-test-runner
+                      {:git/tag "v0.8.0" :git/sha "2ad770c" :deps/root "projects/runner"}}}}}

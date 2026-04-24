@@ -27,7 +27,18 @@
                  "components/graph/src"
                  "components/maze/src"
                  "components/assembunny/src"
-                 "components/intcode/src"]
+                 "components/intcode/src"
+                 "components/year-2015/src"
+                 "components/year-2016/src"
+                 "components/year-2017/src"
+                 "components/year-2018/src"
+                 "components/year-2019/src"
+                 "components/year-2020/src"
+                 "components/year-2021/src"
+                 "components/year-2022/src"
+                 "components/year-2023/src"
+                 "components/year-2024/src"
+                 "components/year-2025/src"]
   :test-paths   ["test"
                  "components/util/test"
                  "components/binary/test"
@@ -40,7 +51,18 @@
                  "components/graph/test"
                  "components/maze/test"
                  "components/assembunny/test"
-                 "components/intcode/test"]
+                 "components/intcode/test"
+                 "components/year-2015/test"
+                 "components/year-2016/test"
+                 "components/year-2017/test"
+                 "components/year-2018/test"
+                 "components/year-2019/test"
+                 "components/year-2020/test"
+                 "components/year-2021/test"
+                 "components/year-2022/test"
+                 "components/year-2023/test"
+                 "components/year-2024/test"
+                 "components/year-2025/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
   :repl-options {:init-ns aoc-clj.core}

@@ -176,20 +176,54 @@ For each component:
 ### Phase 2 — Year components (one year at a time)
 
 Years are independent (no cross-year requires), so chronological order is fine.
+Verified in the current tree: the only intra-year cross-day requires are
+`2015/day22 → day21`, `2017/day14 → day10`, `2017/day23 → day18`, and
+`2018/day21 → day19`. Step 3 below covers these.
 
 For each year:
 
-1. `poly create c name:year-YYYY`
+1. `clojure -M:poly create component name:year-YYYY`, then remove the
+   auto-generated scaffold we don't want: the empty `resources/` directory
+   (and drop `"resources"` from `:paths` in the new `deps.edn`) and the
+   dummy `test/.../interface_test.clj`. None of the Phase-1 components
+   carry a `resources/` dir.
 2. Move `src/aoc_clj/YYYY/*` → `components/year-YYYY/src/aoc_clj/year_YYYY/`
-   (note: file-system underscore vs. namespace hyphen)
+   (note: file-system underscore vs. namespace hyphen). Use `git mv` + scripted
+   `sed` to rewrite `ns` and `:require` forms rather than retyping by hand —
+   hand-retyping has previously dropped code during component migrations.
 3. Update `ns` forms and internal requires (`aoc-clj.YYYY.dayNN` →
-   `aoc-clj.year-YYYY.dayNN`)
-4. Move tests
-5. Declare utility component dependencies in `components/year-YYYY/deps.edn`
-6. Run `clojure -M:poly test :dev :project`
-7. Commit
+   `aoc-clj.year-YYYY.dayNN`) — same scripted rewrite covers both src and test.
+4. Move tests (`test/aoc_clj/YYYY/*` → `components/year-YYYY/test/aoc_clj/year_YYYY/`).
+5. Populate `components/year-YYYY/src/aoc_clj/year_YYYY/interface.clj`. The
+   public contract for a day is `parse`, `part1`, `part2`. Because all 25 days
+   share those three names, flat re-export (e.g. `potemkin/import-vars`) would
+   collide. Instead, the interface exposes:
+   - `solutions` — a map from day number to `{:parse _ :part1 _ :part2 _}`
+   - `solution-fns` — `(defn solution-fns [day] (get solutions day))`
+   Each day namespace is `:require`d at the top; day vars are referenced via
+   their alias (`d01/parse` etc.). This absorbs the per-day dispatch that
+   currently lives in `core.clj` and gives the future `cli` base a stable,
+   typed seam into each year. Note: day 25 is traditionally single-part in
+   Advent of Code — the day-25 map entry has only `:parse` and `:part1`.
+6. Declare utility component dependencies in `components/year-YYYY/deps.edn` —
+   only those the year actually uses (derived by scanning the year's
+   `:require` forms).
+7. Add the new component to the root `deps.edn` under both `:dev` and `:test`
+   aliases: `poly/year-YYYY {:local/root "components/year-YYYY"}`.
+   (`development/deps.edn` is empty in this workspace — the dev classpath is
+   configured at the root.)
+8. Run `clojure -M:poly test :dev :project`
+9. Commit
 
 **Exit criterion (per year):** that year's tests pass; all prior years' tests still pass.
+
+**Phase 2 finalization (after all years migrated):** update
+`src/aoc_clj/core.clj`'s dispatch string at line 33 from
+`"aoc-clj." year "." day-str` to `"aoc-clj.year-" year "." day-str` so `lein
+run` resolves the new namespaces. The CLI is expected to be broken for
+migrated years during Phase 2; there are no downstream consumers of it, and
+the test suite does not go through dispatch. Phase 3 later relocates this
+logic into the `cli` base.
 
 ### Phase 3 — CLI base and project
 

@@ -1,0 +1,77 @@
+(ns aoc-clj.year-2019.day11
+  "Solution to https://adventofcode.com/2019/day/11"
+  (:require [manifold.stream :as s]
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.grid.interface :as grid :refer [->VecGrid2D]]
+            [aoc-clj.intcode.interface :as intcode]))
+
+(def parse u/firstv)
+
+(defn turn-left-and-move
+  [{:keys [direction] [row col] :position}]
+  (case direction
+    :up    {:position [row (dec col)] :direction :left}
+    :left  {:position [(inc row) col] :direction :down}
+    :down  {:position [row (inc col)] :direction :right}
+    :right {:position [(dec row) col] :direction :up}))
+
+(defn turn-right-and-move
+  [{:keys [direction] [row col] :position}]
+  (case direction
+    :up    {:position [row (inc col)] :direction :right}
+    :right {:position [(inc row) col] :direction :down}
+    :down  {:position [row (dec col)] :direction :left}
+    :left  {:position [(dec row) col] :direction :up}))
+
+(defn move-and-paint
+  [{:keys [hull position] :as state} paint turn]
+  (assoc (case turn
+           0 (turn-left-and-move state)
+           1 (turn-right-and-move state))
+         :hull (assoc hull position paint)))
+
+(defn robot-step
+  [in out {:keys [hull position] :as state}]
+  (let [_ (s/put! in (get hull position 0))
+        paint @(s/take! out)
+        turn  @(s/take! out)]
+    (if (and paint turn)
+      (move-and-paint state paint turn)
+      state)))
+
+(defn paint-bot
+  [intcode start-panel]
+  (let [in (s/stream)
+        out (s/stream)
+        stepper (partial robot-step in out)
+        program (future (intcode/intcode-exec intcode in out))]
+    (loop [state {:hull {[0,0] start-panel} :position [0,0] :direction :up}]
+      (if (realized? program)
+        state
+        (recur (stepper state))))))
+
+(defn part1
+  [input]
+  (count (keys (:hull (paint-bot input 0)))))
+
+(defn- derive-part2
+  [input]
+  (->> (paint-bot input 1)
+       :hull
+       grid/mapgrid->vectors
+       ->VecGrid2D
+       (grid/Grid2D->ascii {\  0 \* 1})
+       print))
+
+(defn part2
+  [input]
+  (comment
+    (derive-part2 input)
+    "Prints out:
+      **** *    **** ***  *  *   ** ***   **    
+         * *    *    *  * * *     * *  * *  *   
+        *  *    ***  ***  **      * *  * *  *   
+       *   *    *    *  * * *     * ***  ****   
+      *    *    *    *  * * *  *  * * *  *  *   
+      **** **** **** ***  *  *  **  *  * *  *   ")
+  "ZLEBKJRA")
