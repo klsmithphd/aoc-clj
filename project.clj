@@ -15,8 +15,7 @@
                  [net.mikera/vectorz-clj "0.48.0"]
                  [potemkin "0.4.7"]]
   :profiles {:dev {:plugins [[com.github.clj-kondo/lein-clj-kondo "2026.04.15"]]}}
-  :source-paths ["src"
-                 "components/util/src"
+  :source-paths ["components/util/src"
                  "components/binary/src"
                  "components/digest/src"
                  "components/math/src"
@@ -39,8 +38,7 @@
                  "components/year-2023/src"
                  "components/year-2024/src"
                  "components/year-2025/src"]
-  :test-paths   ["test"
-                 "components/util/test"
+  :test-paths   ["components/util/test"
                  "components/binary/test"
                  "components/digest/test"
                  "components/math/test"
@@ -65,6 +63,4 @@
                  "components/year-2025/test"]
   :test-selectors {:default (complement :slow)
                    :slow :slow}
-  :repl-options {:init-ns aoc-clj.core}
-  :jvm-opts ["-Xmx4g"]
-  :main aoc-clj.core)
+  :jvm-opts ["-Xmx4g"])

@@ -1,0 +1,31 @@
+{:deps {org.clojure/clojure {:mvn/version "1.12.4"}
+
+        poly/cli             {:local/root "../../bases/cli"}
+
+        poly/util            {:local/root "../../components/util"}
+        poly/binary          {:local/root "../../components/binary"}
+        poly/digest          {:local/root "../../components/digest"}
+        poly/math            {:local/root "../../components/math"}
+        poly/vectors         {:local/root "../../components/vectors"}
+        poly/geometry        {:local/root "../../components/geometry"}
+        poly/intervals       {:local/root "../../components/intervals"}
+        poly/grid            {:local/root "../../components/grid"}
+        poly/graph           {:local/root "../../components/graph"}
+        poly/maze            {:local/root "../../components/maze"}
+        poly/assembunny      {:local/root "../../components/assembunny"}
+        poly/intcode         {:local/root "../../components/intcode"}
+
+        poly/year-2015       {:local/root "../../components/year-2015"}
+        poly/year-2016       {:local/root "../../components/year-2016"}
+        poly/year-2017       {:local/root "../../components/year-2017"}
+        poly/year-2018       {:local/root "../../components/year-2018"}
+        poly/year-2019       {:local/root "../../components/year-2019"}
+        poly/year-2020       {:local/root "../../components/year-2020"}
+        poly/year-2021       {:local/root "../../components/year-2021"}
+        poly/year-2022       {:local/root "../../components/year-2022"}
+        poly/year-2023       {:local/root "../../components/year-2023"}
+        poly/year-2024       {:local/root "../../components/year-2024"}
+        poly/year-2025       {:local/root "../../components/year-2025"}}
+
+ :aliases {:test {:extra-paths []
+                  :extra-deps  {}}}}

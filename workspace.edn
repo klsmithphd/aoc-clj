@@ -6,7 +6,8 @@
        :auto-add false}
  :tag-patterns {:stable "stable-*"
                 :release "v[0-9]*"}
- :projects {"development" {:alias "dev"}}
+ :projects {"development" {:alias "dev"}
+            "aoc-clj"     {:alias "aoc-clj"}}
  :test {:create-test-runner [org.corfield.external-test-runner.interface/create]}
  :test-configs {:default {:org.corfield/external-test-runner
                           {:focus {:exclude [:slow]}}}
