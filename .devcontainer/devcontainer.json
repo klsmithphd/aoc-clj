@@ -2,11 +2,15 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-    "customizations": {
+  "customizations": {
     "vscode": {
       "extensions": [
-        "betterthantomorrow.calva"
+        "anthropic.claude-code",
+        "betterthantomorrow.calva",
+        "github.vscode-github-actions",
+        "github.vscode-pull-request-github",
+        "ms-vscode-remote.remote-containers"
       ]
     }
-  }  
+  }
 }
