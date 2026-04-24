@@ -1,6 +1,7 @@
 {:aliases
  {:dev  {:extra-paths []
          :extra-deps  {org.clojure/clojure {:mvn/version "1.12.4"}
+                       poly/cli             {:local/root "bases/cli"}
                        poly/util            {:local/root "components/util"}
                        poly/binary          {:local/root "components/binary"}
                        poly/digest          {:local/root "components/digest"}
@@ -49,6 +50,9 @@
                        poly/year-2023  {:local/root "components/year-2023"}
                        poly/year-2024  {:local/root "components/year-2024"}
                        poly/year-2025  {:local/root "components/year-2025"}}}
+
+  :aoc  {:extra-deps {poly/aoc-clj {:local/root "projects/aoc-clj"}}
+         :main-opts  ["-m" "aoc-clj.cli.core"]}
 
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}
