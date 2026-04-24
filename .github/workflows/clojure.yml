@@ -22,14 +22,22 @@ jobs:
       uses: devcontainers/ci@v0.3
       with:
         runCmd: |
+          set -x
+          # Diagnostics — confirm git state and whether stable-main is visible
+          # inside the devcontainer.
+          pwd
+          ls -la .git 2>&1 | head -5 || echo "(no .git dir)"
+          git rev-parse HEAD
+          git log --oneline -3
+          echo "--- Tags visible here:"
+          git tag -l
+          echo "---"
           # Resolve deps (populates ~/.m2 cache)
           clojure -P
           # with:default excludes ^:slow tests, matching pre-migration :test-selectors.
           # Incremental mode (:project) requires the stable-main tag as a reference
           # point. Until the tag-stable workflow creates it (after the first green
-          # main build), fall back to a full :all-bricks sweep. On PR merge commits
-          # especially, poly without a tag finds no changed bricks and exits with
-          # zero tests — so don't rely on its implicit fallback.
+          # main build), fall back to a full :all-bricks sweep.
           if git rev-parse --verify --quiet refs/tags/stable-main >/dev/null; then
             echo "stable-main tag found — running incremental tests"
             clojure -M:poly test :project with:default
