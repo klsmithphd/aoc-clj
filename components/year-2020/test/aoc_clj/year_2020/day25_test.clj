@@ -1,0 +1,18 @@
+(ns aoc-clj.year-2020.day25-test
+  (:require [clojure.test :refer [deftest testing is]]
+            [aoc-clj.util.interface :as u]
+            [aoc-clj.year-2020.day25 :as t]))
+
+(def day25-sample [5764801 17807724])
+
+(deftest finds-loop-size
+  (testing "Can find the loop-size"
+    (is (= 8 (t/loop-size (first day25-sample))))
+    (is (= 11 (t/loop-size (second day25-sample))))
+    (is (= 14897079 (t/encryption-key day25-sample)))))
+
+(def day25-input (u/parse-puzzle-input t/parse 2020 25))
+
+(deftest part1-test
+  (testing "Reproduces the answer for day25, part1"
+    (is (= 6421487 (t/part1 day25-input)))))

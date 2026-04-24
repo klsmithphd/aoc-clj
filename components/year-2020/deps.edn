@@ -1,0 +1,7 @@
+{:paths ["src"]
+ :deps  {poly/util                       {:local/root "../util"}
+         poly/grid                       {:local/root "../grid"}
+         poly/math                       {:local/root "../math"}
+         org.clojure/math.combinatorics  {:mvn/version "0.1.6"}}
+ :aliases {:test {:extra-paths ["test"]
+                  :extra-deps {}}}}
