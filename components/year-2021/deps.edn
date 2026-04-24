@@ -1,0 +1,6 @@
+{:paths ["src"]
+ :deps  {poly/util  {:local/root "../util"}
+         poly/graph {:local/root "../graph"}
+         poly/grid  {:local/root "../grid"}}
+ :aliases {:test {:extra-paths ["test"]
+                  :extra-deps {}}}}
