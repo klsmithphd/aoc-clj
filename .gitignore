@@ -12,3 +12,4 @@ pom.xml.asc
 /.lsp
 .cpcache/
 /.m2-cache/
+/.claude/settings.local.json
