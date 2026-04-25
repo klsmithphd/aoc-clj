@@ -43,13 +43,13 @@
    thread in the round finds a match. Bounded wasted work — at most
    `nthreads * batch-size` candidates past the answer."
   ([pred] (find-first-int pred 100000))
-  ([pred batch-size]
+  ([pred ^long batch-size]
    (let [nthreads (.. Runtime getRuntime availableProcessors)
-         step     (* nthreads (long batch-size))]
+         step     (* nthreads batch-size)]
      (loop [round-start 0]
        (let [futures (mapv (fn [i]
-                             (let [s (+ round-start (* i (long batch-size)))]
-                               (future (search-batch pred s (+ s (long batch-size))))))
+                             (let [s (+ round-start (* i batch-size))]
+                               (future (search-batch pred s (+ s batch-size)))))
                            (range nthreads))
              hits    (keep deref futures)]
          (if (seq hits)
