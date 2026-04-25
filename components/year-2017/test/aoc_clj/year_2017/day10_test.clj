@@ -3,7 +3,7 @@
             [aoc-clj.util.interface :as u]
             [aoc-clj.year-2017.day10 :as d10]))
 
-(def d10-s00-raw "3,4,1,5")
+;; (def d10-s00-raw "3,4,1,5")
 (def d10-s00 [3 4 1 5])
 
 (deftest twist-test

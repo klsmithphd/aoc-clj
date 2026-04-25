@@ -1,5 +1,28 @@
 {:aliases
- {:dev  {:extra-paths []
+ {:dev  {:extra-paths ["bases/cli/test"
+                       "components/assembunny/test"
+                       "components/binary/test"
+                       "components/digest/test"
+                       "components/geometry/test"
+                       "components/graph/test"
+                       "components/grid/test"
+                       "components/intcode/test"
+                       "components/intervals/test"
+                       "components/math/test"
+                       "components/maze/test"
+                       "components/util/test"
+                       "components/vectors/test"
+                       "components/year-2015/test"
+                       "components/year-2016/test"
+                       "components/year-2017/test"
+                       "components/year-2018/test"
+                       "components/year-2019/test"
+                       "components/year-2020/test"
+                       "components/year-2021/test"
+                       "components/year-2022/test"
+                       "components/year-2023/test"
+                       "components/year-2024/test"
+                       "components/year-2025/test"]
          :extra-deps  {org.clojure/clojure {:mvn/version "1.12.4"}
                        criterium/criterium  {:mvn/version "0.4.6"}
                        poly/cli             {:local/root "bases/cli"}
