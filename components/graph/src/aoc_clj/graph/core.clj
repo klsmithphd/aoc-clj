@@ -41,13 +41,24 @@
     [_]
     (keys subg))
 
+  (vertex
+    [_ v]
+    (graph v))
+
   (edges
     [_ v]
     (subg v))
 
   (distance
     [_ v1 v2]
-    (get-in graph [v1 v2])))
+    (get-in graph [v1 v2]))
+
+  (without-vertex
+    [g v]
+    (let [neighbors (edges g v)
+          newgraph (-> (reduce #(update %1 %2 dissoc v) graph neighbors)
+                       (dissoc v))]
+      (assoc g :graph newgraph))))
 
 (defn degree
   "The degree of a vertex is the number of edges it has"
