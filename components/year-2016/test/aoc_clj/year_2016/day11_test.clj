@@ -10,11 +10,7 @@
    "The fourth floor contains nothing relevant."])
 
 (def d11-s00
-  {:e 1
-   1 #{[:m "hydrogen"] [:m "lithium"]}
-   2 #{[:g "hydrogen"]}
-   3 #{[:g "lithium"]}
-   4 #{}})
+  [0 {[0 1] 1 [0 2] 1}])
 
 (deftest parse-test
   (testing "Correctly parses the input"
@@ -22,12 +18,7 @@
 
 (deftest endstate-test
   (testing "Defines the desired endstate (with all objects on the fourth floor), given the initial state"
-    (is (= {:e 4
-            1 #{}
-            2 #{}
-            3 #{}
-            4 #{[:m "hydrogen"] [:m "lithium"] [:g "hydrogen"] [:g "lithium"]}}
-           (d11/endstate d11-s00)))))
+    (is (= [3 {[3 3] 2}] (d11/endstate d11-s00)))))
 
 (deftest move-count
   (testing "Counts the minimum number of moves "
@@ -36,12 +27,10 @@
 
 (def day11-input (u/parse-puzzle-input d11/parse 2016 11))
 
-;; FIXME: Implementation is too slow
-;; https://github.com/klsmithphd/aoc-clj/issues/31
-(deftest ^:slow part1
+(deftest part1
   (testing "Reproduces the answer for day11, part1"
     (is (= 31 (d11/part1 day11-input)))))
 
-(deftest ^:slow part2
+(deftest  part2
   (testing "Reproduces the answer for day11, part2"
     (is (= 55 (d11/part2 day11-input)))))
