@@ -58,4 +58,8 @@
   :poly {:main-opts  ["-m" "polylith.clj.core.poly-cli.core"]
          :extra-deps {polylith/clj-poly {:mvn/version "0.3.32"}
                       io.github.seancorfield/polylith-external-test-runner
-                      {:git/tag "v0.8.0" :git/sha "2ad770c" :deps/root "projects/runner"}}}}}
+                      {:git/tag "v0.8.0" :git/sha "2ad770c" :deps/root "projects/runner"}}}
+
+  :lint {:replace-deps {clj-kondo/clj-kondo {:mvn/version "2026.04.15"}}
+         :main-opts    ["-m" "clj-kondo.main"
+                        "--lint" "components" "bases" "projects"]}}}
