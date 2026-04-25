@@ -9,8 +9,7 @@
 (defn first-integer
   "The first integer that satifies the supplied `pred` given the `secret`"
   [pred secret]
-  (let [passing-hash? #(pred (d/md5-digest (str secret %)))]
-    (first (filter passing-hash? (range)))))
+  (d/find-first-int #(pred (d/md5-digest (str secret %)))))
 
 (def first-five-zero-int (partial first-integer d/five-zero-start?))
 (def first-six-zero-int (partial first-integer d/six-zero-start?))

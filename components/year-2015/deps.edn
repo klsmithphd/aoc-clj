@@ -1,5 +1,6 @@
 {:paths ["src"]
  :deps  {poly/util                       {:local/root "../util"}
+         poly/digest                     {:local/root "../digest"}
          poly/graph                      {:local/root "../graph"}
          poly/grid                       {:local/root "../grid"}
          cheshire/cheshire               {:mvn/version "5.10.0"}

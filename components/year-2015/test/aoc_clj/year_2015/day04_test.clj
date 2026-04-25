@@ -18,6 +18,6 @@
   (testing "Reproduces the answer for day04, part1"
     (is (= 282749 (d04/part1 day04-input)))))
 
-(deftest ^:slow part2-test
+(deftest part2-test
   (testing "Reproduces the answer for day04, part2"
     (is (= 9962624 (d04/part2 day04-input)))))
