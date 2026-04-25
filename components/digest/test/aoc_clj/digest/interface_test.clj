@@ -30,3 +30,18 @@
   (testing "Determines whether the byte array starts with six zeros"
     (is (= true (d/six-zero-start? s02)))
     (is (= false (d/six-zero-start? s00)))))
+
+(deftest find-first-int-test
+  (testing "Finds the smallest non-negative int satisfying the predicate"
+    (is (= 0     (d/find-first-int #(= 0 %))))
+    (is (= 7     (d/find-first-int #(= 7 %))))
+    (is (= 1024  (d/find-first-int #(= 1024 %)))))
+  (testing "Honors a small batch-size (covers cross-round answers)"
+    ;; batch-size of 10 with N cores means a round covers 10*N candidates;
+    ;; an answer past the first round exercises the loop/recur path.
+    (is (= 137   (d/find-first-int #(= 137 %) 10)))
+    (is (= 1234  (d/find-first-int #(= 1234 %) 10))))
+  (testing "Takes min when multiple threads find hits in the same round"
+    ;; Predicate matches many candidates; smallest must win regardless of
+    ;; which thread happens to find which.
+    (is (= 50    (d/find-first-int #(<= 50 % 200) 10)))))
