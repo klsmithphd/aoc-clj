@@ -1,6 +1,7 @@
 {:aliases
  {:dev  {:extra-paths []
          :extra-deps  {org.clojure/clojure {:mvn/version "1.12.4"}
+                       criterium/criterium  {:mvn/version "0.4.6"}
                        poly/cli             {:local/root "bases/cli"}
                        poly/util            {:local/root "components/util"}
                        poly/binary          {:local/root "components/binary"}
