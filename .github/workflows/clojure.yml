@@ -54,7 +54,12 @@ jobs:
         refFilterForPush: refs/heads/main
         env: |
           CLJ_CACHE_DIR=/workspaces/aoc-clj/.m2-cache
-          JAVA_TOOL_OPTIONS=-Xss32m
+          # JAVA_TOOL_OPTIONS is honored by the parent JVM running poly,
+          # but Sean Corfield's polylith-external-test-runner forks per-project
+          # test JVMs and explicitly reads JVM args from POLY_TEST_JVM_OPTS.
+          # Both are needed: parent + forked children get the bumped stack.
+          JAVA_TOOL_OPTIONS=-Xss16m
+          POLY_TEST_JVM_OPTS=-Xss16m
         runCmd: |
           # The host-mounted workspace has a UID mismatch inside the devcontainer,
           # which triggers git's "dubious ownership" safety check. Without this,
