@@ -160,21 +160,36 @@
 
 
 (defn- dfs
-  "Helper function for performing a depth-first search (DFS) of a `graph`"
-  [graph finish? path visited]
-  (let [node (peek path)]
-    (if (finish? node)
-      [path]
-      (->> (edges graph node)
-           (remove visited)
-           (mapcat #(dfs graph finish? (conj path %) (conj visited %)))))))
+  "Iterative depth-first search of `graph` from `start`. Returns a vector
+   of every simple path ending at a vertex satisfying `finish?`. Uses an
+   explicit work-stack of `[path visited]` frames so memory grows with
+   the number of in-flight paths rather than path depth — the prior
+   recursive-mapcat formulation built one nested LazySeq layer per level
+   and overflowed the JVM stack when realized on long paths."
+  [graph finish? start]
+  (loop [stack   [[[start] #{start}]]
+         results []]
+    (if-let [frame (peek stack)]
+      (let [[path visited] frame
+            stack'         (pop stack)
+            node           (peek path)]
+        (if (finish? node)
+          (recur stack' (conj results path))
+          (recur (->> (edges graph node)
+                      (remove visited)
+                      ;; Reverse so the first-returned child is popped
+                      ;; first — preserves the original DFS ordering.
+                      reverse
+                      (map (fn [n] [(conj path n) (conj visited n)]))
+                      (into stack'))
+                 results)))
+      results)))
 
 (defn all-paths-dfs
-  "Return a seq of all paths (if any) in a `graph` from `start` until
-   reaching a vertex satisfying the `finish?` predicate by using a
-   Depth-First Search (DFS)"
+  "Return a vector of all simple paths in `graph` from `start` to any
+   vertex satisfying `finish?`, found via depth-first search."
   [graph start finish?]
-  (dfs graph finish? [start] #{start}))
+  (dfs graph finish? start))
 
 (defn- unroll
   [[start nodes]]
